@@ -109,23 +109,26 @@ const MultiLineChart: React.FC<MultiLineChartProps> = ({
 
       const dataForHour = selections.reduce((acc, sel) => {
         const relevantData = filteredData.filter(
-          price =>
+          (price) =>
             price.varietyId === sel.varietyId &&
             price.regionId === sel.regionId &&
             new Date(price.datetime) >= hourStart &&
             new Date(price.datetime) < hourEnd
         );
-
+      
         // 해당 시간대의 평균 가격 계산
         if (relevantData.length > 0) {
-          const avgPrice = relevantData.reduce((sum, item) => sum + item.price, 0) / relevantData.length;
+          const avgPrice =
+            relevantData.reduce((sum, item) => sum + item.price, 0) /
+            relevantData.length;
           acc[`price_${sel.varietyId}_${sel.regionId}`] = avgPrice;
         } else {
           acc[`price_${sel.varietyId}_${sel.regionId}`] = null;
         }
-
+      
         return acc;
-      }, {});
+      }, {} as Record<string, number | null>);
+      
 
       return {
         datetime: timePoint.toISOString(),

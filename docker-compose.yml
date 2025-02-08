@@ -1,78 +1,49 @@
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
+  mariadb:
+    image: mariadb:10.6
+    container_name: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: bomnet_db
     ports:
-      - "3306:3306"
+      - "3307:3306"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 5
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
     networks:
       - bomnet
 
   auth-server:
-    build: ./backend/auth_server
+    build: ./backend/auth
     container_name: auth-server
     ports:
       - "8080:8080"
     depends_on:
-      - mysql
+      - mariadb
     networks:
-      - fintech
+      - bomnet
 
   core-server:
-    build: ./backend/core_server
+    build: ./backend/core
     container_name: core-server
     ports:
       - "8081:8081"
     depends_on:
-      - mysql
-    networks:
-      - bomnet
-  bridge-server:
-    build: ./backend/bridge-server
-    container_name: bridge-server
-    ports:
-      - "8082:8082"
-    depends_on:
-      - mysql
-    networks:
-      - bomnet
-
-  llm-server:
-    build: ./backend/llm_server
-    container_name: llm-server
-    ports:
-      - "8083:8083"
-    depends_on:
-      - mysql
+      - mariadb
     networks:
       - bomnet
 
   notification-server:
     build: ./backend/notification
-    container_name: notification
+    container_name: notification-server
     ports:
       - "8084:8084"
     depends_on:
-      - mysql
-    networks:
-      - bomnet
-
-  data-server:
-    build: ./backend/data_server
-    container_name: data_server
-    ports:
-      - "8084:8084"
-    depends_on:
-      - mysql
+      - mariadb
     networks:
       - bomnet
 
@@ -98,14 +69,14 @@ services:
       - bomnet
 
 volumes:
-  mysql_data:
+  mariadb_data:
 
 networks:
-  fintech:
+  bomnet:
+    name: bomnet
     driver: bridge
 
 # docker rmi -f $(docker images -q) - 모든이미지 삭제
-# docker images | grep msa | awk '{print $3}' | xargs docker rmi -f - msa가 이름에 포함된 이미지 삭제
 # docker rm $(docker ps -aq) - 모든 컨테이너 삭제
 # docker network prune -f - 기본 네트워크 제외 모든 네트워크 삭제
 # docker-compose up -d --build -  빌드 후 실행
