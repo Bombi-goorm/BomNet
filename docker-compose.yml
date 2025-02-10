@@ -67,6 +67,28 @@ services:
         condition: service_started
     networks:
       - bomnet
+  llm-server:
+    build: ./backend/llm
+    container_name: llm-server
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mariadb
+    networks:
+      - bomnet
+    volumes:
+      - ./backend/llm:/app
+  bridge-server:
+    build: ./backend/bridge
+    container_name: bridge-server
+    ports:
+      - "8100:8100"
+    depends_on:
+      - mariadb
+    networks:
+      - bomnet
+    volumes:
+      - ./backend/bridge:/app
 
 volumes:
   mariadb_data:
