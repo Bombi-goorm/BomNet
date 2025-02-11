@@ -1,26 +1,38 @@
 MSA 프로젝트
 ----------------
-### 프론트엔드<br/>
-웹: React.js<br/>
+### 프론트엔드
+Web: React<br/>
 
-### 백엔드<br/>
-인증서버: Java SpringBoot<br/>
-코어서버: Java SpringBoot<br/>
-알림서버: Java SpringBoot<br/>
-LLM서버: FastAPI<br/>
-브릿지서버: FastAPI<br/>
-데이터 수집 서버: FastAPI<br/>
+### 백엔드
+Auth: Java SpringBoot<br/>
+Core: Java SpringBoot<br/>
+Notification: Java SpringBoot<br/>
+LLM: FastAPI<br/>
+Bridge: FastAPI<br/>
+Data: FastAPI<br/>
+Notification Queue: RabbitMQ<br/>
 
-### 데이터 분석<br/>
-GCP BigQuery
-AirFlow
+### 데이터 분석
+GCP BigQuery<br/>
+AirFlow<br/>
 
 ### DB
-MySQL<br/>
-Redis
+AWS RDS<br/>
+GCP CloudSQL
 
-### CD/CI<br/>
-Jenkins, ArgoCD
+### CD/CI
+Github<br/>
+Jenkins<br/>
+ArgoCD<br/>
+fluentbit<br/>
+ElasticSearch<br/>
+Kibana<br/>
+Slack<br/>
+Kubernetes<br/>
+Helm<br/>
 
-### 형상관리<br/>
-Github
+### Cloud Infra
+AWS EC2, ELB, S3<br/>
+InternetGateway, Route53
+
+
