@@ -7,5 +7,5 @@ RUN gradle build --no-daemon
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar auth-server.jar
-EXPOSE 8080
+EXPOSE 8180
 ENTRYPOINT ["java", "-jar", "auth-server.jar"]

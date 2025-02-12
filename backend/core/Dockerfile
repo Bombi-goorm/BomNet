@@ -7,5 +7,5 @@ RUN gradle build --no-daemon
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar core-server.jar
-EXPOSE 8081
+EXPOSE 8181
 ENTRYPOINT ["java", "-jar", "core-server.jar"]

@@ -7,5 +7,5 @@ RUN gradle build --no-daemon
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar notification-server.jar
-EXPOSE 8084
+EXPOSE 8184
 ENTRYPOINT ["java", "-jar", "notification-server.jar"]
