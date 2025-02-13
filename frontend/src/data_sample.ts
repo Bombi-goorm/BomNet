@@ -1,3 +1,5 @@
+import { InterestItem } from "./components/myinfo/InterestsList";
+
 // 품목 데이터 (식별자, 이름)
 export const items = [
     { id: 1, name: "사과" },
@@ -156,7 +158,7 @@ export const recommendedProducts = [
   { id: 2, name: "배", reason: "기후 적합도 높음" },
   { id: 3, name: "딸기", reason: "수익성 높음" },
   { id: 4, name: "감자", reason: "지역 수요 높음" },
-  { id: 5, name: "고구마", reason: "정부 보조금 대상 품목" },
+  { id: 5, name: "고구마", reason: "계절성" },
 ];
 
 
@@ -170,12 +172,6 @@ export const farmData = {
   polices: "일반",
 };
 
-
-// 정부 정책 정보
-export const governmentPolicies = {
-  subsidies: ["딸기", "마늘", "감자"],
-  restrictions: ["바나나", "두리안", "옥수수"],
-};
 
 // 추천 지역 거래 정보 샘플 데이터
 export const regionStats = [
@@ -197,5 +193,26 @@ export const cultivationInfo = {
     sunlight: "6-8시간",
   },
 };
+
+// 사용자 정보 데이터
+export const user = {
+  email: "john.doe@example.com",
+  legalCode: "1234567890",
+  pnuCode: "0987654321",
+  joinDate: "2023-01-01",
+};
+
+// 관심 품목 데이터
+export const interestItems: InterestItem[] = [
+  { name: "사과", variety: "후지", price: "1,000원", isSelected: false },
+  { name: "바나나", variety: "캐번디시", price: "1,200원", isSelected: true },
+  { name: "포도", variety: "샤인머스캣", price: "2,500원", isSelected: false },
+  { name: "딸기", variety: "설향", price: "3,000원", isSelected: false },
+  { name: "배", variety: "신고", price: "1,500원", isSelected: true },
+  { name: "오렌지", variety: "발렌시아", price: "1,800원", isSelected: false },
+  { name: "수박", variety: "참외", price: "2,000원", isSelected: false },
+  { name: "키위", variety: "헤이즐", price: "2,200원", isSelected: false },
+];
+
 
 

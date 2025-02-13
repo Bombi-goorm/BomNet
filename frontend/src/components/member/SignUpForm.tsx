@@ -57,29 +57,13 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ reload, setReload }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {errorMessage && <div className="text-red-600 text-sm">{errorMessage}</div>}
+      {errorMessage && <div className="text-red-600 text-sm">{errorMessage}</div>}     
       <div>
-        <label htmlFor="name" className="block text-gray-700">이름</label>
-        <input type="text" name="name" id="name" placeholder="Enter your name" value={formData.name} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <label htmlFor="farmAddress" className="block text-gray-700">농지 법정동 코드(Option)</label>
+        <input type="text" name="farmAddress" id="farmAddress" placeholder="Enter your farm address" value={formData.farmAddress} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
       </div>
       <div>
-        <label htmlFor="email" className="block text-gray-700">이메일</label>
-        <input type="email" name="email" id="email" placeholder="Enter your email" value={formData.email} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
-      <div>
-        <label htmlFor="password" className="block text-gray-700">비밀번호</label>
-        <input type="password" name="password" id="password" placeholder="Enter your password" value={formData.password} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
-      <div>
-        <label htmlFor="phone" className="block text-gray-700">전화번호</label>
-        <input type="tel" name="phone" id="phone" placeholder="Enter your phone number" value={formData.phone} onChange={handleChange} pattern="[0-9]{11}" required className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
-      <div>
-        <label htmlFor="birthdate" className="block text-gray-700">생년월일</label>
-        <input type="date" name="birthdate" id="birthdate" value={formData.birthdate} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
-      <div>
-        <label htmlFor="farmAddress" className="block text-gray-700">농장 주소(Option)</label>
+        <label htmlFor="farmAddress" className="block text-gray-700">농지 PNU 코드(Option)</label>
         <input type="text" name="farmAddress" id="farmAddress" placeholder="Enter your farm address" value={formData.farmAddress} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
       </div>
       <div>
