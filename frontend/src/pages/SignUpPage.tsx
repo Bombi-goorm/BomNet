@@ -2,6 +2,43 @@ import { useState } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 
+interface TooltipProps {
+  content: string;
+  link?: string;
+  linkText?: string;
+}
+
+const Tooltip: React.FC<TooltipProps> = ({ content, link, linkText }) => {
+  const [visible, setVisible] = useState(false);
+
+  return (
+    <span
+      className="relative inline-block"
+      onMouseEnter={() => setVisible(true)}
+      onMouseLeave={() => setVisible(false)}
+    >
+      <span className="ml-1 inline-block w-5 h-5 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center cursor-pointer">
+        ?
+      </span>
+      {visible && (
+        <div className="absolute z-10 p-2 bg-gray-700 text-white text-xs rounded w-72 left-0 bottom-full mb-0">
+          <p>{content}</p>
+          {link && (
+            <a
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-blue-300"
+            >
+              {linkText || "자세히 보기"}
+            </a>
+          )}
+        </div>
+      )}
+    </span>
+  );
+};
+
 function SignupPage() {
   const navigate = useNavigate();
   const [additionalInfo1, setAdditionalInfo1] = useState("");
@@ -59,12 +96,17 @@ function SignupPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 농지 법정동 코드
+                <Tooltip
+                  content="법정동 코드는 행정 구역을 식별하기 위한 코드입니다."
+                  link="https://example.com/legal-code-info"
+                  linkText="법정동 코드 확인하기"
+                />
               </label>
               <input
                 type="text"
                 value={additionalInfo1}
                 onChange={(e) => setAdditionalInfo1(e.target.value)}
-                placeholder="예: 1234567890"
+                placeholder="예: 1111010100"
                 required
                 className="w-full border border-gray-300 p-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -72,12 +114,15 @@ function SignupPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 농지 PNU 코드
+                <Tooltip
+                  content="PNU 코드는 필지고유번호로, 토지 및 건물의 정보를 관리하기 위한 고유 식별자입니다."
+                />
               </label>
               <input
                 type="text"
                 value={additionalInfo2}
                 onChange={(e) => setAdditionalInfo2(e.target.value)}
-                placeholder="예: 0987654321"
+                placeholder="예: 1111018300101970001"
                 required
                 className="w-full border border-gray-300 p-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />

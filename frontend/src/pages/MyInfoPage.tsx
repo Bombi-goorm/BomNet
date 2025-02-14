@@ -1,12 +1,17 @@
 import { useState } from "react";
 import Header from "../components/Header";
-import InterestsVarietiesSettings, { InterestItem } from "../components/myinfo/InterestsList";
+import InterestItemsSettings, { InterestItem } from "../components/myinfo/InterestsList";
 import UserInformation from "../components/myinfo/UserInformation";
-import { interestItems } from "../data_sample";
+import PriceAlertList, { PriceAlertItem } from "../components/myinfo/PriceAlertList";
+import { interestItems, priceAlertItems, user } from "../data_sample";
 
 const MyInfoPage = () => {
+  // 관심 품목 상태 (가격 정보 없이)
   const [interests, setInterests] = useState<InterestItem[]>(interestItems);
+  // 가격 알림 상태 (가격 정보 포함)
+  const [alarms, setAlarms] = useState<PriceAlertItem[]>(priceAlertItems);
 
+  // 관심 품목 선택 토글 (최대 5개 선택 제한)
   const handleInterestsCheck = (index: number) => {
     setInterests((prevInterests) => {
       const newItems = prevInterests.map((item) => ({ ...item }));
@@ -24,23 +29,37 @@ const MyInfoPage = () => {
     });
   };
 
+  // 관심 품목 삭제
   const handleInterestsDelete = (index: number) => {
     setInterests((prevInterests) =>
       prevInterests.filter((_, i) => i !== index)
     );
   };
 
+  // 가격 알림 삭제
+  const handleAlarmsDelete = (index: number) => {
+    setAlarms((prevAlarms) => prevAlarms.filter((_, i) => i !== index));
+  };
+
   return (
     <>
       <Header />
       <div className="container mx-auto p-4 space-y-8 max-w-lg">
-        <UserInformation />
+        <UserInformation user={user} />
       </div>
       <div className="container mx-auto p-4 space-y-8 max-w-[60rem]">
-        <InterestsVarietiesSettings
+        {/* 관심 품목 설정 (가격 정보 없이) */}
+        <InterestItemsSettings
           items={interests}
           handleCheck={handleInterestsCheck}
           handleDelete={handleInterestsDelete}
+        />
+      </div>
+      <div className="container mx-auto p-4 space-y-8 max-w-[60rem]">
+        {/* 가격 알림 설정 (품목, 품종, 가격 정보 포함) */}
+        <PriceAlertList
+          alerts={alarms}
+          handleDelete={handleAlarmsDelete}
         />
       </div>
     </>

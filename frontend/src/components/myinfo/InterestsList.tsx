@@ -3,7 +3,6 @@ import React from "react";
 export interface InterestItem {
   name: string;
   variety: string;
-  price: string;
   isSelected: boolean;
 }
 
@@ -29,7 +28,6 @@ const InterestsVarietiesSettings: React.FC<InterestsListProps> = ({
             <tr>
               <th className="py-2 px-4 text-gray-800">품목</th>
               <th className="py-2 px-4 text-gray-800">품종</th>
-              <th className="py-2 px-4 text-gray-800">가격</th>
               <th className="py-2 px-4 text-gray-800">대표 품목 선택</th>
               <th className="py-2 px-4 text-gray-800">삭제</th>
             </tr>
@@ -39,7 +37,6 @@ const InterestsVarietiesSettings: React.FC<InterestsListProps> = ({
               <tr key={index} className="border-t">
                 <td className="py-2 px-4 text-gray-800">{item.name}</td>
                 <td className="py-2 px-4 text-gray-800">{item.variety}</td>
-                <td className="py-2 px-4 text-gray-800">{item.price}</td>
                 <td className="py-2 px-4">
                   <input
                     type="checkbox"

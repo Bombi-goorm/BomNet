@@ -110,71 +110,9 @@ services:
     networks:
       - bomnet
 
-  # Jenkins Service
-  jenkins:
-    image: jenkins/jenkins:lts
-    container_name: jenkins
-    ports:
-      - "8888:8080"
-      - "50000:50000"
-    volumes:
-      - jenkins_home:/var/jenkins_home
-    networks:
-      - bomnet
-
-  # Fluent Bit Service
-  fluent-bit:
-    image: fluent/fluent-bit:latest
-    container_name: fluent-bit
-    depends_on:
-      - elasticsearch
-    volumes:
-      - ./fluent_bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
-    networks:
-      - bomnet
-
-  # Elasticsearch Service
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.5.0
-    container_name: elasticsearch
-    environment:
-      - discovery.type=single-node
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    networks:
-      - bomnet
-
-  # Kibana Service
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.5.0
-    container_name: kibana
-    depends_on:
-      - elasticsearch
-    ports:
-      - "5601:5601"
-    networks:
-      - bomnet
-
-  # Airflow Service
-  airflow:
-    image: apache/airflow:2.5.1
-    container_name: airflow
-    ports:
-      - "8080:8080"
-    environment:
-      AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__CORE__SQL_ALCHEMY_CONN: mysql+pymysql://root:1234@mariadb:3306/bomnet_db
-      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
-    volumes:
-      - airflow_data:/opt/airflow
-    networks:
-      - bomnet
-
 volumes:
   mariadb_data:
   jenkins_home:
-  airflow_data:
 
 networks:
   bomnet:

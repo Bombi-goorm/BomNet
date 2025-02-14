@@ -1,4 +1,5 @@
 import { InterestItem } from "./components/myinfo/InterestsList";
+import { PriceAlertItem } from "./components/myinfo/PriceAlertList";
 
 // 품목 데이터 (식별자, 이름)
 export const items = [
@@ -204,15 +205,22 @@ export const user = {
 
 // 관심 품목 데이터
 export const interestItems: InterestItem[] = [
-  { name: "사과", variety: "후지", price: "1,000원", isSelected: false },
-  { name: "바나나", variety: "캐번디시", price: "1,200원", isSelected: true },
-  { name: "포도", variety: "샤인머스캣", price: "2,500원", isSelected: false },
-  { name: "딸기", variety: "설향", price: "3,000원", isSelected: false },
-  { name: "배", variety: "신고", price: "1,500원", isSelected: true },
-  { name: "오렌지", variety: "발렌시아", price: "1,800원", isSelected: false },
-  { name: "수박", variety: "참외", price: "2,000원", isSelected: false },
-  { name: "키위", variety: "헤이즐", price: "2,200원", isSelected: false },
+  { name: "사과", variety: "후지", isSelected: false },
+  { name: "바나나", variety: "캐번디시", isSelected: true },
+  { name: "포도", variety: "샤인머스캣", isSelected: false },
+  { name: "딸기", variety: "설향", isSelected: false },
+  { name: "배", variety: "신고", isSelected: true },
+  { name: "오렌지", variety: "발렌시아", isSelected: false },
+  { name: "수박", variety: "참외", isSelected: false },
+  { name: "키위", variety: "헤이즐", isSelected: false },
 ];
 
-
+// 가격 알림 데이터 (품목, 품종, 가격 정보 포함)
+export const priceAlertItems: PriceAlertItem[] = [
+  { name: "사과", variety: "후지", price: "1,200원" },
+  { name: "바나나", variety: "캐번디시", price: "900원" },
+  { name: "포도", variety: "샤인머스캣", price: "3,500원" },
+  { name: "딸기", variety: "설향", price: "2,000원" },
+  { name: "배", variety: "신고", price: "1,500원" },
+];
 

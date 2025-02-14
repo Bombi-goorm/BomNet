@@ -1,4 +1,4 @@
-import { farmData, governmentPolicies } from "../../data_sample";
+import { farmData } from "../../data_sample";
 
 const FarmAssessment = () => {
   return (

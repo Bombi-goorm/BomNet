@@ -2,9 +2,7 @@ import Header from "../components/Header";
 
 function LoginPage() {
   const handleProviderLogin = (provider: string) => {
-    if (provider === "google") {
-      window.location.href = `${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/google`;
-    } else if (provider === "kakao") {
+    if (provider === "kakao") {
       window.location.href = `${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/kakao`;
     } else if (provider === "naver") {
       window.location.href = `${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/naver`;
@@ -20,12 +18,6 @@ function LoginPage() {
             <h2 className="text-2xl font-bold mb-6 text-center">로그인</h2>
             <div className="mt-6">
               <div className="space-y-2">
-                <button
-                  onClick={() => handleProviderLogin("google")}
-                  className="w-full flex items-center justify-center space-x-2 bg-red-600 hover:bg-red-700 text-white p-2 rounded"
-                >
-                  <span>Google Login</span>
-                </button>
                 <button
                   onClick={() => handleProviderLogin("kakao")}
                   className="w-full flex items-center justify-center space-x-2 bg-yellow-400 hover:bg-yellow-500 text-black p-2 rounded"
