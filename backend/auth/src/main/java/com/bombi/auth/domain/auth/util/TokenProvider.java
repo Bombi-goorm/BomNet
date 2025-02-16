@@ -21,6 +21,7 @@ import com.bombi.auth.domain.auth.service.TokenService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -31,8 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class TokenProvider {
 
-	private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 1L;
-	private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 1L;
+	private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 10L;
+	private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L * 24 * 7;
 	private static final String TOKEN_PREFIX = "Bearer";
 	private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -68,7 +69,8 @@ public class TokenProvider {
 		Date now = new Date();
 		Date expiredDate = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME);
 
-		return randomString + Jwts.builder()
+		return Jwts.builder()
+			.claim("refresh", randomString)
 			.setIssuedAt(now)
 			.setExpiration(expiredDate)
 			.signWith(key, SignatureAlgorithm.HS256)
@@ -98,7 +100,10 @@ public class TokenProvider {
 			Claims claims = parseClaimsFromToken(accessToken);
 			String username = claims.getSubject();
 
-			return tokenService.validateToken(username, refreshToken);
+			Claims refreshTokenClaims = parseClaimsFromToken(refreshToken);
+			String refreshTokenString = refreshTokenClaims.get("refresh", String.class);
+
+			return tokenService.validateToken(username, refreshTokenString);
 		}
 
 		return false;
@@ -141,12 +146,18 @@ public class TokenProvider {
 		} catch (ExpiredJwtException e) {
 			log.info("토큰 만료");
 			return e.getClaims();
-		} catch (SecurityException e) {
+		} catch (JwtException | IllegalArgumentException e) {
+			log.info("잘못된 토큰");
 			throw new TokenException("invalid token");
 		}
 	}
 
 	private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
 		return Collections.singletonList(new SimpleGrantedAuthority(claims.get("role").toString()));
+	}
+
+	public String extractClaim(String refreshToken) {
+		Claims claims = parseClaimsFromToken(refreshToken);
+		return claims.get("refresh", String.class);
 	}
 }

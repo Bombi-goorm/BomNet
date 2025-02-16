@@ -10,19 +10,18 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.bombi.auth.domain.auth.filter.TokenAuthenticationFilter;
 import com.bombi.auth.domain.auth.filter.TokenExceptionFilter;
+import com.bombi.auth.domain.auth.handler.CustomAccessDeniedHandler;
+import com.bombi.auth.domain.auth.handler.CustomAuthenticationEntryPoint;
 import com.bombi.auth.domain.auth.handler.OAuth2SuccessHandler;
 import com.bombi.auth.domain.auth.service.CustomOAuth2UserService;
 import com.bombi.auth.domain.auth.service.TokenService;
 import com.bombi.auth.domain.auth.util.TokenProvider;
-import com.bombi.auth.domain.member.MemberRole;
 
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -60,6 +59,7 @@ public class SecurityConfig {
 
         http
             .oauth2Login(oauth2 -> oauth2
+                .defaultSuccessUrl("/home")
                 .userInfoEndpoint(userInfo -> userInfo.userService(oauth2UserService))
                 .successHandler(oauth2SuccessHandler())
             );
@@ -68,22 +68,21 @@ public class SecurityConfig {
             .addFilterBefore(tokenExceptionFilter(), TokenAuthenticationFilter.class);
 
         http.exceptionHandling((exceptions) -> exceptions
-            .authenticationEntryPoint(customAuthenticationEntryPoint())
-            .accessDeniedHandler(customAccessDeniedHandler())
+            .authenticationEntryPoint(authenticationEntryPoint())
+            .accessDeniedHandler(accessDeniedHandler())
         );
-
 
         return http.build();
     }
 
     @Bean
-    public AccessDeniedHandler customAccessDeniedHandler() {
-        return null;
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
     }
 
     @Bean
-    public AuthenticationEntryPoint customAuthenticationEntryPoint() {
-        return null;
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new CustomAuthenticationEntryPoint();
     }
 
     @Bean
@@ -98,10 +97,7 @@ public class SecurityConfig {
 
     @Bean
     public TokenExceptionFilter tokenExceptionFilter() {
-        return new TokenExceptionFilter();
+        return new TokenExceptionFilter(authenticationEntryPoint());
     }
-
-
-
 
 }

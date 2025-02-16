@@ -25,7 +25,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login";
+        return "redirect:/login.html";
     }
 
     @ResponseBody

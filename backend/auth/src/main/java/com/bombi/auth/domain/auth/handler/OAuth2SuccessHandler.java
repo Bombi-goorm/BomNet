@@ -1,8 +1,6 @@
 package com.bombi.auth.domain.auth.handler;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -29,8 +27,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 		Authentication authentication) throws IOException, ServletException {
 		String accessToken = tokenProvider.generateAccessToken(authentication);
 		String refreshToken = tokenProvider.generateRefreshToken();
+		String refreshTokenString = tokenProvider.extractClaim(refreshToken);
 
-		tokenService.save(authentication.getName(), refreshToken);
+		tokenService.save(authentication.getName(), refreshTokenString);
 
 		addTokenInCookie(accessToken, "Authorization", response);
 		addTokenInCookie(refreshToken, "refreshToken", response);
@@ -39,15 +38,13 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 	}
 
 	private void addTokenInCookie(String token, String cookieName, HttpServletResponse response) {
-		String encodedToken =
-			Base64.getUrlEncoder().withoutPadding().encodeToString(token.getBytes(StandardCharsets.UTF_8));
+		Cookie cookie = new Cookie(cookieName, token);
 
-		Cookie tokenCookie = new Cookie(cookieName, encodedToken);
-		tokenCookie.setHttpOnly(true);
-		tokenCookie.setSecure(true);
-		tokenCookie.setPath("/");
-		tokenCookie.setMaxAge(3600);
+		cookie.setHttpOnly(true);
+		cookie.setSecure(true);
+		cookie.setPath("/");
+		cookie.setMaxAge(3600);
 
-		response.addCookie(tokenCookie);
+		response.addCookie(cookie);
 	}
 }
