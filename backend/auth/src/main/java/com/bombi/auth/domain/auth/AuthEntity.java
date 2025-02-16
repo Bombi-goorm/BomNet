@@ -1,4 +1,4 @@
-package com.bombi.auth;
+package com.bombi.auth.domain.auth;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
