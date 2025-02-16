@@ -98,7 +98,7 @@ function SignupPage() {
                 농지 법정동 코드
                 <Tooltip
                   content="법정동 코드는 행정 구역을 식별하기 위한 코드입니다."
-                  link="https://example.com/legal-code-info"
+                  link="https://www.code.go.kr/stdcode/regCodeL.do"
                   linkText="법정동 코드 확인하기"
                 />
               </label>

@@ -2,11 +2,12 @@ import Header from "../components/Header";
 
 function LoginPage() {
   const handleProviderLogin = (provider: string) => {
-    if (provider === "kakao") {
-      window.location.href = `${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/kakao`;
-    } else if (provider === "naver") {
-      window.location.href = `${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/naver`;
-    }
+    console.log(provider)
+    // if (provider === "kakao") {
+      window.location.href = `http://localhost:8180/oauth2/authorization/kakao`;
+    // } else if (provider === "naver") {
+    //   window.location.href = `${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/naver`;
+    // }
   };
 
   return (
@@ -24,12 +25,12 @@ function LoginPage() {
                 >
                   <span>Kakao Login</span>
                 </button>
-                <button
+                {/* <button
                   onClick={() => handleProviderLogin("naver")}
                   className="w-full flex items-center justify-center space-x-2 bg-green-500 hover:bg-green-600 text-white p-2 rounded"
                 >
                   <span>Naver Login</span>
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

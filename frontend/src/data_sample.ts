@@ -1,5 +1,196 @@
 import { InterestItem } from "./components/myinfo/InterestsList";
 import { PriceAlertItem } from "./components/myinfo/PriceAlertList";
+import { HomeDto } from "./types/types";
+
+// 홈화면 샘플 데이터
+export const data: HomeDto =  {
+  bestItems:  // 5개
+    {
+      products: [ //7일
+        {
+          productId: 1,
+          productName: "딸기",
+          imgUrl:
+            "https://your-s3-bucket.s3.amazonaws.com/products/strawberry.jpg",
+          dayPrice: [
+            { date: "01/31", price: "8,537원" },
+            { date: "02/01", price: "8,400원" },
+            { date: "02/02", price: "8,600원" },
+            { date: "02/03", price: "8,600원" },
+            { date: "02/04", price: "8,600원" },
+            { date: "02/05", price: "8,600원" },
+            { date: "02/06", price: "8,600원" },
+          ],
+        },
+        {
+          productId: 2,
+          productName: "사과",
+          imgUrl:
+            "https://your-s3-bucket.s3.amazonaws.com/products/apple.jpg",
+          dayPrice: [
+            { date: "01/31", price: "2,000원" },
+            { date: "02/01", price: "2,050원" },
+            { date: "02/02", price: "2,100원" },
+            { date: "02/03", price: "8,600원" },
+            { date: "02/04", price: "8,600원" },
+            { date: "02/05", price: "8,600원" },
+            { date: "02/06", price: "8,600원" },
+          ],
+        },
+        {
+          productId: 3,
+          productName: "배",
+          imgUrl:
+            "https://your-s3-bucket.s3.amazonaws.com/products/pear.jpg",
+          dayPrice: [
+            { date: "01/31", price: "8,000원" },
+            { date: "02/01", price: "7,900원" },
+            { date: "02/02", price: "8,100원" },
+            { date: "02/03", price: "8,600원" },
+            { date: "02/04", price: "8,600원" },
+            { date: "02/05", price: "8,600원" },
+            { date: "02/06", price: "8,600원" },
+          ],
+        },
+        {
+          productId: 4,
+          productName: "감자",
+          imgUrl:
+            "https://your-s3-bucket.s3.amazonaws.com/products/potato.jpg",
+          dayPrice: [
+            { date: "01/31", price: "2,000원" },
+            { date: "02/01", price: "1,950원" },
+            { date: "02/02", price: "2,100원" },
+            { date: "02/03", price: "8,600원" },
+            { date: "02/04", price: "8,600원" },
+            { date: "02/05", price: "8,600원" },
+            { date: "02/06", price: "8,600원" },
+          ],
+        },
+        {
+          productId: 5,
+          productName: "고구마",
+          imgUrl:
+            "https://your-s3-bucket.s3.amazonaws.com/products/gogu.jpg",
+          dayPrice: [
+            { date: "01/31", price: "5,000원" },
+            { date: "02/01", price: "5,200원" },
+            { date: "02/02", price: "4,800원" },
+            { date: "02/03", price: "8,600원" },
+            { date: "02/04", price: "8,600원" },
+            { date: "02/05", price: "8,600원" },
+            { date: "02/06", price: "8,600원" },
+          ],
+        },
+      ],
+    },
+  weatherNotice: [ // 6개만
+    {
+      dateTime: "2023-02-01T08:00:00Z",
+      location: "서울",
+      content: "강풍 주의보 발령",
+    },
+    {
+      dateTime: "2023-02-01T09:00:00Z",
+      location: "부산",
+      content: "폭우 경보 발령",
+    },
+    {
+      dateTime: "2023-02-01T09:00:00Z",
+      location: "부산",
+      content: "폭우 경보 발령",
+    },
+    {
+      dateTime: "2023-02-01T09:00:00Z",
+      location: "부산",
+      content: "폭우 경보 발령",
+    },
+    {
+      dateTime: "2023-02-01T09:00:00Z",
+      location: "부산",
+      content: "폭우 경보 발령",
+    },
+    {
+      dateTime: "2023-02-01T09:00:00Z",
+      location: "부산",
+      content: "폭우 경보 발령",
+    },
+  ],
+  weatherExpect:  // 6개
+    {
+      location: "서울",
+      weatherInfo: [
+        {
+          weather: "맑음",
+          temperature: "5°C",
+          humidity: "30%",
+          wind: "10km/h",
+          dateTime: "2023-02-01T12:00:00Z",
+        },
+        {
+          weather: "눈",
+          temperature: "-7°C",
+          humidity: "75%",
+          wind: "2km/h",
+          dateTime: "2023-02-01T14:00:00Z",
+        },
+        {
+          weather: "비",
+          temperature: "7°C",
+          humidity: "35%",
+          wind: "8km/h",
+          dateTime: "2023-02-01T15:00:00Z",
+        },
+        {
+          weather: "천둥",
+          temperature: "3°C",
+          humidity: "50%",
+          wind: "22km/h",
+          dateTime: "2023-02-01T16:00:00Z",
+        },
+        {
+          weather: "맑음",
+          temperature: "3°C",
+          humidity: "50%",
+          wind: "22km/h",
+          dateTime: "2023-02-01T16:00:00Z",
+        },
+        {
+          weather: "구름",
+          temperature: "3°C",
+          humidity: "50%",
+          wind: "22km/h",
+          dateTime: "2023-02-01T16:00:00Z",
+        },
+      ],
+    },
+  news: [
+    {
+      title: "농업 혁신, 새로운 시대를 열다",
+      content: "농업 기술의 발전이 새로운 도약을 예고합니다.",
+      dateTime: "2023-02-01T10:00:00Z",
+      newsLink: "https://news.example.com/article/1",
+    },
+    {
+      title: "기후 변화, 농업에 미치는 영향",
+      content: "기후 변화가 농업에 미치는 영향에 대한 심도 있는 분석.",
+      dateTime: "2023-02-01T11:00:00Z",
+      newsLink: "https://news.example.com/article/2",
+    },
+    {
+      title: "기후 변화, 농업에 미치는 영향",
+      content: "기후 변화가 농업에 미치는 영향에 대한 심도 있는 분석.",
+      dateTime: "2023-02-01T11:00:00Z",
+      newsLink: "https://news.example.com/article/2",
+    },
+    {
+      title: "기후 변화, 농업에 미치는 영향",
+      content: "기후 변화가 농업에 미치는 영향에 대한 심도 있는 분석.",
+      dateTime: "2023-02-01T11:00:00Z",
+      newsLink: "https://news.example.com/article/2",
+    },
+  ],
+}
 
 // 품목 데이터 (식별자, 이름)
 export const items = [
