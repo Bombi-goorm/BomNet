@@ -1,5 +1,6 @@
 import requests
 
+
 class APIClient:
     def __init__(self, base_url, api_key, api_url, start_index, end_index, params=None):
         self.url = f"{base_url}/{api_key}/json/{api_url}/{start_index}/{end_index}"

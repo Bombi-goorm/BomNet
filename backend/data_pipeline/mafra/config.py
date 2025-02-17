@@ -14,3 +14,5 @@ OUTPUT_PATH = "../outputs/output.jsonl"
 
 DATASET_ID = "mafra"
 TABLE_ID = "auction"
+
+BUCKET_NAME = "bomnet-gcs"
