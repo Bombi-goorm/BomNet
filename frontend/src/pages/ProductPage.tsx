@@ -14,9 +14,11 @@ const ProductPage = () => {
         {/* 상품 관련 정보 */}
         <div className="space-y-8">
           {/* 상품 검색 */}
-          <ProductSearch />          
+          <ProductSearch onSearch={function (data: { item: string; variety: string | null; pnu: string; }): void {
+            throw new Error("Function not implemented.");
+          } } />          
           {/* 생산 조건 */}
-          <ProductConditions />  
+          <ProductConditions productId={1}/>  
           {/* 시장 데이터 */}
           <MarketData />
           {/* 추천 거래 지역 정보 */}

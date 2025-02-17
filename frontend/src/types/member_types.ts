@@ -9,7 +9,6 @@ export interface CommonResponseDto<T> {
 
 // 등록 요청
 export interface SignupRequestDto {
-    BJD?: string,
     PNU?: string,
 }
 
@@ -18,7 +17,6 @@ export interface SignupRequestDto {
 export interface InfoResponseDto {
     memberId: string,
     email: string,
-    BJD?: string,
     PNU?: string,
     myFarm: MyFarmInfo,
     recommendedProducts: RecommendedProducts[],

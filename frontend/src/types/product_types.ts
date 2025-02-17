@@ -34,9 +34,13 @@ export interface Product {
 
 // 작물 재배 정보
 export interface CultivationInfo {
-    cultivationContent: string, // 종합 작물 재배 정보
-    conditions: Conditions, // 생산 조건
-}
+    productId: number, // 상품ID
+    cropName: string; // 작물명
+    variety: string | null; // 품종명 (품종이 없으면 null)
+    conditions: Conditions; // 생산 조건
+    cultivationFeatures: string; // 재배 특징 설명
+    managementTips: string; // 관리 팁
+  }
 
 // 생산 조건
 export interface Conditions {

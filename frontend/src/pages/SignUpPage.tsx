@@ -93,7 +93,7 @@ function SignupPage() {
             농업인이시라면 추가 정보를 입력하신 후 맞춤형 정보를 받아보세요.
           </p>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium text-gray-700">
                 농지 법정동 코드
                 <Tooltip
@@ -110,11 +110,13 @@ function SignupPage() {
                 required
                 className="w-full border border-gray-300 p-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-            </div>
+            </div> */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 농지 PNU 코드
                 <Tooltip
+                  link="https://plprice.netlify.app/"
+                  linkText="PNU 코드 확인하기"
                   content="PNU 코드는 필지고유번호로, 토지 및 건물의 정보를 관리하기 위한 고유 식별자입니다."
                 />
               </label>
