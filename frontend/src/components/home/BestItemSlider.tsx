@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
 import { useQueryClient } from "@tanstack/react-query";
-import { BestItems, Product, ProductPrice } from "../../types/types";
+import { BestItems, Product, ProductPrice } from "../../types/member_types";
 
 const BestItemSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);

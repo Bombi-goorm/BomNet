@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CommonResponseDto, HomeDto, InfoResponseDto } from "../types/types";
+import { CommonResponseDto, HomeDto, InfoResponseDto } from "../types/member_types";
 import { data } from "../data_sample";
 
 // Axios 인스턴스 생성

@@ -4,6 +4,8 @@ import InterestItemsSettings, { InterestItem } from "../components/myinfo/Intere
 import UserInformation from "../components/myinfo/UserInformation";
 import PriceAlertList, { PriceAlertItem } from "../components/myinfo/PriceAlertList";
 import { interestItems, priceAlertItems, user } from "../data_sample";
+import FarmAssessment from "../components/product/FarmAssessment";
+import RecommendedProducts from "../components/product/RecommendedProducts";
 
 const MyInfoPage = () => {
   // 관심 품목 상태 (가격 정보 없이)
@@ -47,6 +49,13 @@ const MyInfoPage = () => {
       <div className="container mx-auto p-4 space-y-8 max-w-lg">
         <UserInformation user={user} />
       </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[60rem] mx-auto">
+          {/* 내 농장 정보 */}
+          <FarmAssessment />
+          {/* 추천 생산품 */}
+          <RecommendedProducts />
+      </div>
+      
       <div className="container mx-auto p-4 space-y-8 max-w-[60rem]">
         {/* 관심 품목 설정 (가격 정보 없이) */}
         <InterestItemsSettings

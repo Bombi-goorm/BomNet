@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { items } from "../../data_sample";
+import { FiHelpCircle } from "react-icons/fi";
 
 const ProductSearch = () => {
   const [query, setQuery] = useState("");
@@ -47,6 +48,7 @@ const ProductSearch = () => {
         </ul>
       )}
       <div className="mt-4">
+      
         <input
           type="text"
           value={legalQuery}
@@ -54,6 +56,18 @@ const ProductSearch = () => {
           placeholder="법정동코드 입력"
           className="w-full border border-gray-300 rounded-lg px-4 py-2"
         />
+      </div>
+
+      <div className="mt-2 text-sm text-blue-500 flex items-center gap-1">
+        <FiHelpCircle className="text-lg" /> {/* 물음표 아이콘 */}
+        <a
+          href="https://www.code.go.kr/stdcode/regCodeL.do"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:underline"
+        >
+          법정동 코드 찾기
+        </a>
       </div>
     </div>
   );

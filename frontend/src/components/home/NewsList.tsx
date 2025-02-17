@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { News } from "../../types/types";
+import { News } from "../../types/member_types";
 
 const NewsList = () => {
   const queryClient = useQueryClient();
@@ -13,7 +13,6 @@ const NewsList = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto mt-8">
-      <h2 className="text-lg font-bold mb-4 text-center">뉴스</h2>
       <ul className="space-y-6">
         {news.map((article, index) => (
           <li

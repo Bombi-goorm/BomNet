@@ -1,10 +1,8 @@
 import Header from "../components/Header";
-import FarmAssessment from "../components/product/FarmAssessment";
 import MarketData from "../components/product/MarketData";
 import PersonalizedAssessment from "../components/product/PersonalizedAssessment";
 import ProductConditions from "../components/product/ProductConditions";
 import ProductSearch from "../components/product/ProductSearch";
-import RecommendedProducts from "../components/product/RecommendedProducts";
 import RegionStatsTable from "../components/product/RegionStatsTable";
 
 const ProductPage = () => {
@@ -12,15 +10,6 @@ const ProductPage = () => {
     <div className="bg-gray-50 min-h-screen">
       <Header />
       <main className="max-w-6xl mx-auto p-4 space-y-8">
-
-        {/* 검색창 및 추천 상품 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* 내 농장 정보 */}
-          <FarmAssessment />
-          {/* 추천 생산품 */}
-          <RecommendedProducts />
-        </div>
-   
 
         {/* 상품 관련 정보 */}
         <div className="space-y-8">

@@ -1,24 +1,3 @@
-// 공통 응답 타입
-export interface CommonResponseDto<T> {
-    status: string, // 응답 코드 
-    message: string, // 응답 메세지
-    data: T, // DTO 객체
-}
-
-// 회원가입 요청
-export interface SignupRequestDto {
-    BJD?: string,
-    PNU?: string,
-}
-
-// 사용자 정보 응답 
-export interface InfoResponseDto {
-    memberId: string,
-    email: string,
-    BJD?: string,
-    PNU?: string,
-}
-
 // 홈화면 정보 응답
 export interface HomeDto {
     bestItems: BestItems,
@@ -29,11 +8,11 @@ export interface HomeDto {
 
 // 인기/관심 상품
 export interface BestItems {
-    products: Product[]
+    products: HomeProduct[]
 }
 
 // 상품 객체
-export interface Product {
+export interface HomeProduct {
     productId: number,
     productName: string,
     imgUrl: string,
@@ -74,11 +53,4 @@ export interface News {
     content: string,
     dateTime: string,
     newsLink: string,
-}
-
-
-// 챗봇 요청
-export interface ChatbotRequestDto {
-    type: string,
-    input: string,
 }

@@ -20,12 +20,12 @@ function App() {
       <Route path="/500" element={<ERR500 />} />
 
 
-      <Route element={<ProtectedRoute />}>
+      {/* <Route element={<ProtectedRoute />}> */}
         <Route path="/price" element={<PricePage />} />
         <Route path="/product" element={<ProductPage />} />
         <Route path="/info" element={<MyInfoPage />} />
         <Route path="/alarm" element={<AlarmListPage />} />
-      </Route>
+      {/* </Route> */}
     </Routes>
   );
 }

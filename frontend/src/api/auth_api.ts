@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CommonResponseDto, SignupRequestDto } from "../types/types";
+import { CommonResponseDto, SignupRequestDto } from "../types/member_types";
 
 // Axios 인스턴스 생성
 const api = axios.create({

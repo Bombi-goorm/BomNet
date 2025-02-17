@@ -1,6 +1,6 @@
 import { InterestItem } from "./components/myinfo/InterestsList";
 import { PriceAlertItem } from "./components/myinfo/PriceAlertList";
-import { HomeDto } from "./types/types";
+import { HomeDto } from "./types/member_types";
 
 // 홈화면 샘플 데이터
 export const data: HomeDto =  {
