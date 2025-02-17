@@ -1,4 +1,4 @@
-package com.bombi.auth;
+package com.bombi.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;
