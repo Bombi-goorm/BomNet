@@ -1,4 +1,4 @@
-import { farmData, governmentPolicies, nationwideTradeInfo } from "../../data_sample";
+import { farmData, nationwideTradeInfo } from "../../data_sample";
 
 const getSuitabilityColor = (condition: string) => {
   switch (condition) {
@@ -20,7 +20,6 @@ const PersonalizedAssessment = () => {
     averageTemperature: "평균", // 평균 기온 적합도
     annualRainfall: "적합", // 연간 강수량 적합도
     tradeVolume: nationwideTradeInfo.totalVolume > 1500 ? "적합" : "부적합", // 거래량 기준
-    policies: governmentPolicies.subsidies.includes("사과") ? "적합" : "부적합", // 정부 보조금 정책
   };
 
   return (
@@ -52,12 +51,6 @@ const PersonalizedAssessment = () => {
           <span>거래량: {nationwideTradeInfo.totalVolume}톤</span>{" "}
           <span className={getSuitabilityColor(suitability.tradeVolume)}>
             ({suitability.tradeVolume})
-          </span>
-        </li>
-        <li>
-          <span>정책: 보조금 대상 - {governmentPolicies.subsidies.join(", ")}</span>{" "}
-          <span className={getSuitabilityColor(suitability.policies)}>
-            ({suitability.policies})
           </span>
         </li>
       </ul>

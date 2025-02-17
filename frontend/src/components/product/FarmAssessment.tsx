@@ -1,4 +1,4 @@
-import { farmData, governmentPolicies } from "../../data_sample";
+import { farmData } from "../../data_sample";
 
 const FarmAssessment = () => {
   return (
@@ -9,7 +9,6 @@ const FarmAssessment = () => {
         <li>토양 유형: {farmData.soilType}</li>
         <li>평균 기온: {farmData.averageTemperature}</li>
         <li>연간 강수량: {farmData.annualRainfall}</li>
-        <li>보조금 대상 품목: {governmentPolicies.subsidies.join(", ")}</li>
       </ul>
     </div>
   );

@@ -1,25 +1,30 @@
-// components/UserInformation.tsx
+import React from "react";
 
-const UserInformation = () => {
+interface User {
+  email: string;
+  legalCode: string;
+  pnuCode: string;
+  joinDate: string;
+}
+
+interface UserInformationProps {
+  user: User;
+}
+
+const UserInformation: React.FC<UserInformationProps> = ({ user }) => {
   return (
-    <div className="lg:col-span-4 space-y-4">
+    <div className="space-y-4">
       <h2 className="text-2xl font-semibold text-gray-700">나의 정보</h2>
       <div className="bg-white border rounded-lg shadow-sm p-4">
-        <div className="flex justify-between">
-          <span className="text-gray-600 font-medium">Name:</span>
-          <span className="text-gray-800">John Doe</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-600 font-medium">Email:</span>
-          <span className="text-gray-800">john.doe@example.com</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-600 font-medium">Phone:</span>
-          <span className="text-gray-800">+123 456 7890</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-600 font-medium">나의 농장:</span>
-          <span className="text-gray-800">경기도 성남시</span>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="text-gray-600 font-medium">이메일:</div>
+          <div className="text-gray-800">{user.email}</div>
+          <div className="text-gray-600 font-medium">법정동코드:</div>
+          <div className="text-gray-800">{user.legalCode}</div>
+          <div className="text-gray-600 font-medium">PNU코드:</div>
+          <div className="text-gray-800">{user.pnuCode}</div>
+          <div className="text-gray-600 font-medium">가입일:</div>
+          <div className="text-gray-800">{user.joinDate}</div>
         </div>
       </div>
     </div>

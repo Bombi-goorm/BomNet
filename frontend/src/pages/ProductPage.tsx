@@ -1,6 +1,5 @@
 import Header from "../components/Header";
 import FarmAssessment from "../components/product/FarmAssessment";
-import GovernmentPolicies from "../components/product/GovernmentPolicies";
 import MarketData from "../components/product/MarketData";
 import PersonalizedAssessment from "../components/product/PersonalizedAssessment";
 import ProductConditions from "../components/product/ProductConditions";
@@ -26,9 +25,7 @@ const ProductPage = () => {
         {/* 상품 관련 정보 */}
         <div className="space-y-8">
           {/* 상품 검색 */}
-          <ProductSearch />   
-          {/* 정부 정책 정보 */}
-          <GovernmentPolicies />         
+          <ProductSearch />          
           {/* 생산 조건 */}
           <ProductConditions />  
           {/* 시장 데이터 */}

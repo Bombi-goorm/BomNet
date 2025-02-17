@@ -89,6 +89,7 @@ const PricePage = () => {
     regionId: regions.find((r) => r.name === selected.region)?.id || 0,
   }));
 
+
   return (
     <>
       <Header />
