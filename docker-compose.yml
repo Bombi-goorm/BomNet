@@ -1,4 +1,16 @@
 services:
+
+  # Frontend
+  frontend:
+    build: ./frontend
+    container_name: front
+    ports:
+      - "5173:5173"
+    networks:
+      - bomnet
+
+  # Database
+
   mariadb:
     image: mariadb:10.6
     container_name: mariadb
@@ -8,7 +20,7 @@ services:
     ports:
       - "3307:3306"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -17,11 +29,12 @@ services:
     networks:
       - bomnet
 
+  # Backend
   auth-server:
     build: ./backend/auth
     container_name: auth-server
     ports:
-      - "8080:8080"
+      - "8180:8180"
     depends_on:
       - mariadb
     networks:
@@ -31,27 +44,43 @@ services:
     build: ./backend/core
     container_name: core-server
     ports:
-      - "8081:8081"
+      - "8181:8181"
     depends_on:
       - mariadb
     networks:
       - bomnet
+
+  llm-server:
+    build: ./backend/llm
+    container_name: llm-server
+    ports:
+      - "8182:8182"
+    depends_on:
+      - mariadb
+    networks:
+      - bomnet
+    volumes:
+      - ./backend/llm:/app
+
+  bridge-server:
+    build: ./backend/bridge
+    container_name: bridge-server
+    ports:
+      - "8183:8183"
+    depends_on:
+      - mariadb
+    networks:
+      - bomnet
+    volumes:
+      - ./backend/bridge:/app
 
   notification-server:
     build: ./backend/notification
     container_name: notification-server
     ports:
-      - "8084:8084"
+      - "8184:8184"
     depends_on:
       - mariadb
-    networks:
-      - bomnet
-
-  frontend:
-    build: ./frontend
-    container_name: front
-    ports:
-      - "5173:5173"
     networks:
       - bomnet
 
@@ -67,31 +96,23 @@ services:
         condition: service_started
     networks:
       - bomnet
-  llm-server:
-    build: ./backend/llm
-    container_name: llm-server
+
+  # RabbitMQ Service
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
     ports:
-      - "8000:8000"
-    depends_on:
-      - mariadb
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
     networks:
       - bomnet
-    volumes:
-      - ./backend/llm:/app
-  bridge-server:
-    build: ./backend/bridge
-    container_name: bridge-server
-    ports:
-      - "8100:8100"
-    depends_on:
-      - mariadb
-    networks:
-      - bomnet
-    volumes:
-      - ./backend/bridge:/app
 
 volumes:
   mariadb_data:
+  jenkins_home:
 
 networks:
   bomnet:

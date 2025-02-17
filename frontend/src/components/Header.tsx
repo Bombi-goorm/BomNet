@@ -13,8 +13,17 @@ const Header = () => {
         <a href="/product" className="hover:text-green-500">
           생산품정보
         </a>
-        <a href="#!" className="hover:text-green-500">
+        <a href="/login" className="hover:text-green-500">
           로그인
+        </a>
+        <a href="/signup" className="hover:text-green-500">
+          등록
+        </a>
+        <a href="/info" className="hover:text-green-500">
+          사용자 정보
+        </a>
+        <a href="/alarm" className="hover:text-green-500">
+          알림 목록
         </a>
       </nav>
     </header>

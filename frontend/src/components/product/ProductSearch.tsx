@@ -3,20 +3,28 @@ import { items } from "../../data_sample";
 
 const ProductSearch = () => {
   const [query, setQuery] = useState("");
+  const [legalQuery, setLegalQuery] = useState("");
   const [filteredItems, setFilteredItems] = useState(items);
+
+  // 상품명 기준으로 아이템을 필터링하는 함수
+  const filterItems = (prodQuery: string) => {
+    setFilteredItems(
+      items.filter((item) =>
+        prodQuery ? item.name.toLowerCase().includes(prodQuery) : true
+      )
+    );
+  };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value.toLowerCase();
     setQuery(input);
+    filterItems(input);
+  };
 
-    // 입력값이 있을 때만 필터링 수행
-    if (input) {
-      setFilteredItems(
-        items.filter((item) => item.name.toLowerCase().includes(input))
-      );
-    } else {
-      setFilteredItems([]);
-    }
+  const handleLegalCodeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value.toLowerCase();
+    setLegalQuery(input);
+    // 법정동코드는 필터링에 사용하지 않고 상태에 저장만 합니다.
   };
 
   return (
@@ -27,10 +35,10 @@ const ProductSearch = () => {
         value={query}
         onChange={handleSearch}
         placeholder="예: 사과"
-        className="w-full border border-gray-300 rounded-lg px-4 py-2"
+        className="w-full border border-gray-300 rounded-t-lg px-4 py-2"
       />
-      {query && (
-        <ul className="mt-4 max-h-40 overflow-y-auto border border-gray-300 rounded-lg">
+      {(query || legalQuery) && (
+        <ul className="max-h-40 overflow-y-auto border border-t-0 border-gray-300 rounded-b-lg">
           {filteredItems.map((item) => (
             <li key={item.id} className="p-2 hover:bg-gray-100 cursor-pointer">
               {item.name}
@@ -38,6 +46,15 @@ const ProductSearch = () => {
           ))}
         </ul>
       )}
+      <div className="mt-4">
+        <input
+          type="text"
+          value={legalQuery}
+          onChange={handleLegalCodeSearch}
+          placeholder="법정동코드 입력"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2"
+        />
+      </div>
     </div>
   );
 };
