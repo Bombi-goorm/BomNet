@@ -1,6 +1,6 @@
 package com.bombi.core.common.exception;
 
-import com.almagest_dev.tacobank_core_server.common.dto.CoreResponseDto;
+import com.bombi.core.common.dto.CoreResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

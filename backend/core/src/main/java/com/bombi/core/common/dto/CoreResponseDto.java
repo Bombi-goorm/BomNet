@@ -18,4 +18,12 @@ public class CoreResponseDto<T> {
         this.status = status;
         this.message = message;
     }
+
+    public static <T> CoreResponseDto<T> of(String status, String message, T data) {
+        return new CoreResponseDto<>(status, message, data);
+    }
+
+    public static <T> CoreResponseDto<T> ofSuccess(String message, T data) {
+        return of("SUCCESS", message, data);
+    }
 }

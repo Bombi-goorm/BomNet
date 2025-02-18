@@ -1,22 +1,33 @@
 package com.bombi.core.domain.notification.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.Comment;
+
+import com.bombi.core.domain.base.model.BaseEntity;
+import com.bombi.core.domain.member.model.Member;
+
 @Entity
 @Getter
-@NoArgsConstructor
-public class Notification {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Notification extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "notification_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", columnDefinition = "BIGINT NOT NULL COMMENT '멤버 ID'")
+    @JoinColumn(name = "member_id", columnDefinition = "VARCHAR(40) NOT NULL")
+    @Comment("멤버 ID")
     private Member member;
+
+    @Column(columnDefinition = "VARCHAR(255) COMMENT '알림 제목'")
+    private String title;
 
     @Column(columnDefinition = "VARCHAR(255) COMMENT '알림 내용'")
     private String message;
@@ -24,26 +35,5 @@ public class Notification {
     @Column(columnDefinition = "VARCHAR(1) COMMENT '알림 확인 여부'")
     private String isRead;
 
-    @Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT '등록일자'")
-    private LocalDateTime createdDate;
 
-    @Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT '수정일자'")
-    private LocalDateTime updatedDate;
-
-    @PrePersist
-    public void prePersist() {
-        this.createdDate = LocalDateTime.now();
-        this.updatedDate = LocalDateTime.now();
-    }
-    @PreUpdate
-    public void preUpdate() {
-        this.updatedDate = LocalDateTime.now();
-    }
-
-    public void saveMember(Member member) {this.member = member;}
-    public void saveMessage(String message) {this.message = message;}
-    public void updateIsRead(String isRead) {
-        this.isRead = isRead;
-        this.updatedDate = LocalDateTime.now();
-    }
 }

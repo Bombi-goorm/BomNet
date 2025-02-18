@@ -1,6 +1,7 @@
 package com.bombi.core.infrastructure.security.handler;
 
-import com.almagest_dev.tacobank_core_server.common.exception.ExceptionResponseWriter;
+import com.bombi.core.common.exception.ExceptionResponseWriter;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
