@@ -26,8 +26,17 @@ public class Member extends BaseEntity {
 	@Column(name = "member_id")
 	private UUID id;
 
+	// 소셜로그인 매체
 	private String platform;
+
+	// 소셜로그인 이메일
 	private String authEmail;
+
+	// 인증 후 등록 전
+	private String isEnabled;
+
+	// 탈퇴, 이용정지
+	private String isBanned;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "role_id")
@@ -37,6 +46,9 @@ public class Member extends BaseEntity {
 		this.platform = platform;
 		this.authEmail = authEmail;
 		this.role = role;
+//		this.isEnabled = "F";
+		this.isEnabled = "T"; // 추후 코어서버에서 등록시 변경하도록 수정 필요
+		this.isBanned = "F";
 	}
 
 	public static Member of(String platform, String authEmail, Role role) {

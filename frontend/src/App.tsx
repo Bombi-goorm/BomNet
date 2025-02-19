@@ -6,7 +6,6 @@ import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import MyInfoPage from "./pages/MyInfoPage";
 import AlarmListPage from "./pages/AlarmListPage";
-import ProtectedRoute from "./conntext_api/ProtectedRoute";
 import ERR404 from "./pages/err/ERR404";
 import ERR500 from "./pages/err/ERR500";
 
@@ -22,6 +21,7 @@ function App() {
 
       <Route path="/404" element={<ERR404 />} />
       <Route path="/500" element={<ERR500 />} />
+
 
 
 

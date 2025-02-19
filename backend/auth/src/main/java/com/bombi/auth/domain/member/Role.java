@@ -21,20 +21,5 @@ public class Role {
 	@Column(name = "role_id")
 	private Long id;
 
-	@Enumerated(value = EnumType.STRING)
-	private MemberRole roleName;
-
-	private Role(MemberRole memberRole) {
-		this.roleName = memberRole;
-	}
-
-	public static Role ofUser() {
-		return new Role(MemberRole.USER);
-	}
-
-	public static Role ofFarmer() {
-		return new Role(MemberRole.FARMER);
-	}
-
-
+	private String roleName;
 }

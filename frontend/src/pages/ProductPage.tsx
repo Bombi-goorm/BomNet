@@ -14,7 +14,7 @@ const ProductPage = () => {
         {/* 상품 관련 정보 */}
         <div className="space-y-8">
           {/* 상품 검색 */}
-          <ProductSearch onSearch={function (data: { item: string; variety: string | null; pnu: string; }): void {
+          <ProductSearch onSearch={function (): void {
             throw new Error("Function not implemented.");
           } } />          
           {/* 생산 조건 */}

@@ -1,6 +1,7 @@
 import axios from "axios";
-import { CommonResponseDto, HomeDto, InfoResponseDto } from "../types/member_types";
+import { CommonResponseDto, InfoResponseDto, SignupRequestDto } from "../types/member_types";
 import { data } from "../data_sample";
+import { HomeDto } from "../types/home_types";
 
 // Axios 인스턴스 생성
 const api = axios.create({
@@ -11,6 +12,14 @@ const api = axios.create({
       'Content-Type': 'application/json',
     },
 });
+
+
+// 신규등록
+export const signup = async (data: SignupRequestDto): Promise<CommonResponseDto<null>> => {
+    const response = await api.post<CommonResponseDto<null>>(`/auth/member/signup`, data);
+    return response.data;
+};
+
 
 // 사용자 정보 요청
 export const memberInfo = async (): Promise<CommonResponseDto<InfoResponseDto>> => {

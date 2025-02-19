@@ -41,8 +41,7 @@ const Tooltip: React.FC<TooltipProps> = ({ content, link, linkText }) => {
 
 function SignupPage() {
   const navigate = useNavigate();
-  const [additionalInfo1, setAdditionalInfo1] = useState("");
-  const [additionalInfo2, setAdditionalInfo2] = useState("");
+  const [additionalInfo, setAdditionalInfo] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -55,7 +54,7 @@ function SignupPage() {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ additionalInfo1, additionalInfo2 }),
+        body: JSON.stringify({ additionalInfo }),
       });
 
       if (response.ok) {
@@ -73,7 +72,7 @@ function SignupPage() {
   };
 
   // 두 입력창 모두 채워졌는지 확인 (공백 제거)
-  const isFilled = additionalInfo1.trim() !== "" && additionalInfo2.trim() !== "";
+  const isFilled = additionalInfo.trim() !== "";
 
   // 버튼 문구: 두 입력창 모두 입력되었으면 "농업인 등록하기", 아니면 "일반 사용자 등록하기"
   const buttonText =
@@ -122,8 +121,8 @@ function SignupPage() {
               </label>
               <input
                 type="text"
-                value={additionalInfo2}
-                onChange={(e) => setAdditionalInfo2(e.target.value)}
+                value={additionalInfo}
+                onChange={(e) => setAdditionalInfo(e.target.value)}
                 placeholder="예: 1111018300101970001"
                 required
                 className="w-full border border-gray-300 p-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"

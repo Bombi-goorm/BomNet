@@ -7,12 +7,11 @@ import MyLocalWeather from "../components/home/MyLocalWeather";
 import { useEffect, useState } from "react";
 import { homeInfo, memberInfo } from "../api/core_api";
 import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
 
 const HomePage = () => {
   const [loading, setLoading] = useState(true);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -49,7 +48,7 @@ const HomePage = () => {
         // API 응답이 성공적이면 세션스토리지에 저장
         if (memberResponse.status === '200') {
           sessionStorage.setItem("bomnet_user", JSON.stringify(memberResponse.data.memberId));
-          sessionStorage.setItem("bomnet_bjd", JSON.stringify(memberResponse.data.BJD));
+          sessionStorage.setItem("bomnet_pnu", JSON.stringify(memberResponse.data.PNU));
         }
       } catch (error) {
         console.error("Error fetching home info:", error);

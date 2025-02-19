@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { News } from "../../types/member_types";
+import { News } from "../../types/home_types";
 
 const NewsList = () => {
   const queryClient = useQueryClient();
