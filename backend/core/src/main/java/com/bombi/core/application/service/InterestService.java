@@ -17,6 +17,7 @@ import com.bombi.core.domain.product.ProductRepository;
 import com.bombi.core.domain.product.model.Product;
 import com.bombi.core.presentation.dto.interest.InterestProductResponseDto;
 import com.bombi.core.presentation.dto.interest.RegisterInterestRequestDto;
+import com.bombi.core.presentation.dto.interest.RemoveInterestRequestDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +32,10 @@ public class InterestService {
 	@Transactional(readOnly = true)
 	public InterestProductResponseDto findInterestProducts(String username) {
 		// 관심품목 찾기
-		List<Product> products = interestProductRepository.findByMemberId(UUID.fromString(username));
+		List<Product> products = interestProductRepository.findByMemberId(UUID.fromString(username))
+			.stream()
+			.map(InterestProduct::getProduct)
+			.collect(Collectors.toList());
 
 		// 소분류, 중분류 추출
 		List<Category> lowCategories = products.stream().map(Product::getCategory).collect(Collectors.toList());
@@ -49,5 +53,11 @@ public class InterestService {
 
 		InterestProduct interestProduct = new InterestProduct(member, product);
 		interestProductRepository.saveAndFlush(interestProduct);
+	}
+
+	@Transactional
+	public void removeProduct(RemoveInterestRequestDto requestDto, String username) {
+		UUID memberId = UUID.fromString(username);
+		interestProductRepository.deleteByMemberIdAndProductId(memberId, requestDto.getProductId());
 	}
 }

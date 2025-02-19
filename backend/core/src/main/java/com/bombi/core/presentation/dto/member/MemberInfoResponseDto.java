@@ -24,7 +24,7 @@ public class MemberInfoResponseDto {
 	public MemberInfoResponseDto(MemberInfo memberInfo, RegionWeather regionWeather,
 		BridgeRecommendProductResponseDto responseDto) {
 		this.memberId = memberInfo.getMember().getId().toString();
-		this.email = memberInfo.getMember().getEmail();
+		this.email = memberInfo.getMember().getAuthEmail();
 		this.pnuCode = memberInfo.getPnu();
 		this.farmInfoResponseDto = new FarmInfoResponseDto(regionWeather);
 		this.recommendedProducts = responseDto.getRecommendProducts()

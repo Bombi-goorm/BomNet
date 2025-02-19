@@ -46,4 +46,9 @@ public class Category extends BaseEntity {
 
 	@OneToMany(mappedBy = "parent")
 	private List<Category> children = new ArrayList<>();
+
+	public Category(Long level, String name) {
+		this.level = level;
+		this.name = name;
+	}
 }

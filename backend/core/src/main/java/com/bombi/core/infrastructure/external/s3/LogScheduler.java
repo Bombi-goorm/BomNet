@@ -8,16 +8,16 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LogScheduler {
 
-    private final S3Uploader s3Uploader;
-
-    public LogScheduler(S3Uploader s3Uploader) {
-        this.s3Uploader = s3Uploader;
-    }
+    // private final S3Uploader s3Uploader;
+    //
+    // public LogScheduler(S3Uploader s3Uploader) {
+    //     this.s3Uploader = s3Uploader;
+    // }
 
     @Scheduled(cron = "0 0 5 * * ?") // 매일 새벽 5시 실행
     public void scheduleLogUpload() {
         log.info("Starting daily log upload to S3...");
-        s3Uploader.uploadLogsToS3();
+        // s3Uploader.uploadLogsToS3();
         log.info("Daily log upload to S3 completed.");
     }
 }

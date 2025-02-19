@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,6 +41,13 @@ public class Product extends BaseEntity {
 	@JoinColumn(name = "category_id", columnDefinition = "BIGINT NOT NULL")
 	@Comment("카테고리 ID")
 	private Category category;
+
+	@Builder
+	private Product(String description, String imageUrl, Category category) {
+		this.description = description;
+		this.imageUrl = imageUrl;
+		this.category = category;
+	}
 
 
 }
