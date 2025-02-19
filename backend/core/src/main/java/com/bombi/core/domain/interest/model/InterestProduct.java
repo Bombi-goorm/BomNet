@@ -38,4 +38,9 @@ public class InterestProduct extends BaseEntity {
 	@JoinColumn(name = "product_id", columnDefinition = "BIGINT NOT NULL")
 	@Comment("작물 ID")
 	private Product product;
+
+	public InterestProduct(Member member, Product product) {
+		this.member = member;
+		this.product = product;
+	}
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/taco/core/members")
+@RequestMapping("/core/members")
 public class MemberController {
 
     private final MemberService memberService;

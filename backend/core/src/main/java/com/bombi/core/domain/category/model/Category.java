@@ -2,6 +2,9 @@ package com.bombi.core.domain.category.model;
 
 import static jakarta.persistence.FetchType.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.annotations.Comment;
 
 import com.bombi.core.domain.base.model.BaseEntity;
@@ -14,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,5 +42,8 @@ public class Category extends BaseEntity {
 
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "parent_id", referencedColumnName = "category_id")
-	private Category parentCategory;
+	private Category parent;
+
+	@OneToMany(mappedBy = "parent")
+	private List<Category> children = new ArrayList<>();
 }

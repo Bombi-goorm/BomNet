@@ -1,4 +1,4 @@
-package com.bombi.core.domain.region;
+package com.bombi.core.domain.region.model;
 
 import org.hibernate.annotations.Comment;
 
@@ -22,24 +22,20 @@ public class Region {
 	private Long id;
 
 	@Column(columnDefinition = "VARCHAR(20) NOT NULL")
-	@Comment("시도 이름")
-	private String sidoName;
-
-	@Column(columnDefinition = "VARCHAR(30) NOT NULL")
-	@Comment("시군구 이름")
-	private String destrictName;
-
-	@Column(columnDefinition = "VARCHAR(20) NOT NULL")
-	@Comment("시도 코드")
-	private String sidoCode;
-
-	@Column(columnDefinition = "VARCHAR(20) NOT NULL")
 	@Comment("기상청 시도 코드")
 	private String kmaSidoCode;
 
 	@Column(columnDefinition = "VARCHAR(20) NOT NULL")
 	@Comment("기상청 시군구 코드")
 	private String kmaDestrictCode;
+
+	@Column(columnDefinition = "VARCHAR(20) NOT NULL")
+	@Comment("시도 이름")
+	private String sidoName;
+
+	@Column(columnDefinition = "VARCHAR(30) NOT NULL")
+	@Comment("시군구 이름")
+	private String destrictName;
 
 	@Column(columnDefinition = "VARCHAR(10) NOT NULL")
 	@Comment("관측지점 번호")

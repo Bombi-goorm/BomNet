@@ -1,9 +1,7 @@
 package com.bombi.core.presentation.controller;
 
-import com.bombi.core.application.service.HomeService;
+// import com.bombi.core.application.service.HomeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,16 +10,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final HomeService homeService;
-
-    /**
-     * 사용자 계좌 및 거래 내역 조회
-     */
-    @GetMapping
-    public ResponseEntity<AccountMemberReponseDto> getUserAccounts() {
-        AccountMemberReponseDto responseDto = homeService.getMemberHome();
-        return ResponseEntity.ok(responseDto);
-    }
+    // private final HomeService homeService;
+    //
+    // /**
+    //  * 사용자 계좌 및 거래 내역 조회
+    //  */
+    // @GetMapping
+    // public ResponseEntity<AccountMemberReponseDto> getUserAccounts() {
+    //     AccountMemberReponseDto responseDto = homeService.getMemberHome();
+    //     return ResponseEntity.ok(responseDto);
+    // }
 
 
 }

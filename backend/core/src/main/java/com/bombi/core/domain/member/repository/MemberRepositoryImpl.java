@@ -4,7 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.persistence.EntityManager;
 
-public class MemberRepositoryImpl {
+public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
 
