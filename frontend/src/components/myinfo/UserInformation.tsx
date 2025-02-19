@@ -2,7 +2,6 @@ import React from "react";
 
 interface User {
   email: string;
-  legalCode: string;
   pnuCode: string;
   joinDate: string;
 }
@@ -19,8 +18,6 @@ const UserInformation: React.FC<UserInformationProps> = ({ user }) => {
         <div className="grid grid-cols-2 gap-4">
           <div className="text-gray-600 font-medium">이메일:</div>
           <div className="text-gray-800">{user.email}</div>
-          <div className="text-gray-600 font-medium">법정동코드:</div>
-          <div className="text-gray-800">{user.legalCode}</div>
           <div className="text-gray-600 font-medium">PNU코드:</div>
           <div className="text-gray-800">{user.pnuCode}</div>
           <div className="text-gray-600 font-medium">가입일:</div>

@@ -10,6 +10,7 @@ import com.bombi.auth.domain.member.Member;
 
 public interface MemberRepository extends JpaRepository<Member, UUID> {
 
-	@EntityGraph(attributePaths = "role")
 	Optional<Member> findByAuthEmail(String authEmail);
+
+	boolean existsByAuthEmail(String kakaoEmail);
 }

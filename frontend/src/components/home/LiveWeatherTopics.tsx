@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { WeatherNotice } from "../../types/types";
+import { WeatherNotice } from "../../types/home_types";
 
 const LiveWeatherTopics = () => {
   const queryClient = useQueryClient();

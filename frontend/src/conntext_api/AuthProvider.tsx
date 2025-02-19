@@ -44,11 +44,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             );
             sessionStorage.setItem(
               "bomnet_bjd",
-              JSON.stringify(response.data.BJD)
+              JSON.stringify(response.data.PNU)
             );
             setBomnetUser({
               memberId: response.data.memberId || null,
-              BJD: response.data.BJD || null,
+              BJD: response.data.PNU || null,
             });
             setIsAuthenticated(true);
           } else {

@@ -41,8 +41,7 @@ const Tooltip: React.FC<TooltipProps> = ({ content, link, linkText }) => {
 
 function SignupPage() {
   const navigate = useNavigate();
-  const [additionalInfo1, setAdditionalInfo1] = useState("");
-  const [additionalInfo2, setAdditionalInfo2] = useState("");
+  const [additionalInfo, setAdditionalInfo] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -55,7 +54,7 @@ function SignupPage() {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ additionalInfo1, additionalInfo2 }),
+        body: JSON.stringify({ additionalInfo }),
       });
 
       if (response.ok) {
@@ -73,7 +72,7 @@ function SignupPage() {
   };
 
   // 두 입력창 모두 채워졌는지 확인 (공백 제거)
-  const isFilled = additionalInfo1.trim() !== "" && additionalInfo2.trim() !== "";
+  const isFilled = additionalInfo.trim() !== "";
 
   // 버튼 문구: 두 입력창 모두 입력되었으면 "농업인 등록하기", 아니면 "일반 사용자 등록하기"
   const buttonText =
@@ -93,7 +92,7 @@ function SignupPage() {
             농업인이시라면 추가 정보를 입력하신 후 맞춤형 정보를 받아보세요.
           </p>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium text-gray-700">
                 농지 법정동 코드
                 <Tooltip
@@ -110,18 +109,20 @@ function SignupPage() {
                 required
                 className="w-full border border-gray-300 p-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-            </div>
+            </div> */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 농지 PNU 코드
                 <Tooltip
+                  link="https://plprice.netlify.app/"
+                  linkText="PNU 코드 확인하기"
                   content="PNU 코드는 필지고유번호로, 토지 및 건물의 정보를 관리하기 위한 고유 식별자입니다."
                 />
               </label>
               <input
                 type="text"
-                value={additionalInfo2}
-                onChange={(e) => setAdditionalInfo2(e.target.value)}
+                value={additionalInfo}
+                onChange={(e) => setAdditionalInfo(e.target.value)}
                 placeholder="예: 1111018300101970001"
                 required
                 className="w-full border border-gray-300 p-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
