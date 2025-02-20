@@ -1,17 +1,33 @@
 package com.bombi.core.application.service;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
+
+import com.bombi.core.domain.notification.model.Notification;
+import com.bombi.core.domain.notification.repository.NotificationRepository;
+import com.bombi.core.presentation.dto.notification.NotificationResponseDto;
 
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
 
-    // private final NotificationRepository notificationRepository;
+	private final NotificationRepository notificationRepository;
+
+	public List<NotificationResponseDto> getNotifications(Pageable pageable, String username) {
+		UUID memberId = UUID.fromString(username);
+		Page<Notification> notificationPage = notificationRepository.findNotificationsByMember_IdOrderByCreatedDateDesc(
+			memberId, pageable);
+
+		return notificationPage.map(NotificationResponseDto::new).getContent();
+	}
+
+
     //
     // /**
     //  * 알림 생성하고 저장하기

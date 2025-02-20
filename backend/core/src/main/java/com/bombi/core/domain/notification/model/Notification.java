@@ -26,6 +26,11 @@ public class Notification extends BaseEntity {
     @Comment("멤버 ID")
     private Member member;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(20) NOT NULL")
+    @Comment("알림 종류")
+    private NotificationType notificationType;
+
     @Column(columnDefinition = "VARCHAR(255) COMMENT '알림 제목'")
     private String title;
 
