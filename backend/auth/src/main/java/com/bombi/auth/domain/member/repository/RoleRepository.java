@@ -9,5 +9,5 @@ import com.bombi.auth.domain.member.Role;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
-	Optional<Role> findByRoleName(MemberRole memberRole);
+	Optional<Role> findByRoleName(String memberRole);
 }

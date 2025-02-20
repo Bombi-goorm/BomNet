@@ -1,6 +1,7 @@
 import { InterestItem } from "./components/myinfo/InterestsList";
 import { PriceAlertItem } from "./components/myinfo/PriceAlertList";
-import { HomeDto } from "./types/types";
+import { HomeDto } from "./types/home_types";
+import { CultivationInfo, Product } from "./types/product_types";
 
 // 홈화면 샘플 데이터
 export const data: HomeDto =  {
@@ -372,24 +373,12 @@ export const regionStats = [
   { id: 3, region: "일본", tradeVolume: 200, tradeValue: 800000000 }, // 8억 원
 ];
 
-// 재배 정보 데이터
-export const cultivationInfo = {
-  title: "가지 재배 정보",
-  description:
-    "가지는 고온성 작물로 25-30°C가 적정 생육온도이며, 서리 피해와 저온 피해가 크기 때문에 수확기 후 작형 전환 시기에 신경을 써야 합니다. 재배지역의 일조량은 최소 10시간 이상이어야 합니다. 병충해 예방을 위해서는 적정 온도 유지와 주기적인 방제 작업이 필수입니다.",
-    imageUrl: "/src/assets/eggplant.jpg",
-  conditions: {
-    temperature: "20-25°C",
-    soil: "양토",
-    rainfall: "1000-1500mm",
-    sunlight: "6-8시간",
-  },
-};
+
+
 
 // 사용자 정보 데이터
 export const user = {
   email: "john.doe@example.com",
-  legalCode: "1234567890",
   pnuCode: "0987654321",
   joinDate: "2023-01-01",
 };
@@ -415,3 +404,231 @@ export const priceAlertItems: PriceAlertItem[] = [
   { name: "배", variety: "신고", price: "1,500원" },
 ];
 
+
+// 상품 정보 데이터
+export const sampleProductData: Product[] = [
+  {
+    productId: 1,
+    bigId: 100,
+    bigName: "과일",
+    midId: 101,
+    midName: "사과",
+    smallId: 102,
+    smallName: "홍옥",
+    imgUrl: "https://s3.amazonaws.com/my-bucket/products/apple_hongok.jpg"
+  },
+  {
+    productId: 2,
+    bigId: 100,
+    bigName: "과일",
+    midId: 101,
+    midName: "사과",
+    smallId: 103,
+    smallName: "후지",
+    imgUrl: "https://s3.amazonaws.com/my-bucket/products/apple_fuji.jpg"
+  },
+  {
+    productId: 3,
+    bigId: 100,
+    bigName: "과일",
+    midId: 101,
+    midName: "사과",
+    smallId: 104,
+    smallName: "아오리",
+    imgUrl: "https://s3.amazonaws.com/my-bucket/products/apple_aori.jpg"
+  },
+  {
+    productId: 4,
+    bigId: 200,
+    bigName: "채소",
+    midId: 201,
+    midName: "배추",
+    smallId: 202,
+    smallName: "월동배추",
+    imgUrl: "https://s3.amazonaws.com/my-bucket/products/cabbage_winter.jpg"
+  },
+  {
+    productId: 5,
+    bigId: 200,
+    bigName: "채소",
+    midId: 201,
+    midName: "배추",
+    smallId: 203,
+    smallName: "고랭지배추",
+    imgUrl: "https://s3.amazonaws.com/my-bucket/products/cabbage_highland.jpg"
+  },
+  {
+    productId: 6,
+    bigId: 300,
+    bigName: "채소",
+    midId: 301,
+    midName: "양파",
+    smallId: 302,
+    smallName: "양파(일반)",
+    imgUrl: "https://s3.amazonaws.com/my-bucket/products/onion_normal.jpg"
+  },
+  {
+    productId: 7,
+    bigId: 300,
+    bigName: "채소",
+    midId: 301,
+    midName: "양파",
+    smallId: 303,
+    smallName: "양파(수입)",
+    imgUrl: "https://s3.amazonaws.com/my-bucket/products/onion_import.jpg"
+  },
+  {
+    productId: 8,
+    bigId: 400,
+    bigName: "채소",
+    midId: 401,
+    midName: "상추",
+    smallId: 402,
+    smallName: "적상추",
+    imgUrl: "https://s3.amazonaws.com/my-bucket/products/lettuce_red.jpg"
+  },
+  {
+    productId: 9,
+    bigId: 500,
+    bigName: "채소",
+    midId: 501,
+    midName: "파프리카",
+    smallId: 502,
+    smallName: "파프리카",
+    imgUrl: "https://s3.amazonaws.com/my-bucket/products/paprika.jpg"
+  },
+  {
+    productId: 10,
+    bigId: 600,
+    bigName: "채소",
+    midId: 601,
+    midName: "아스파라거스",
+    smallId: 602,
+    smallName: "녹색",
+    imgUrl: "https://s3.amazonaws.com/my-bucket/products/asparagus_green.jpg"
+  }
+];
+
+// 재배 정보 데이터
+export const sampleCultivationData: CultivationInfo[] = [
+  {
+    productId: 1,
+    cropName: "사과",
+    variety: "홍옥",
+    conditions: {
+      overwintering: "T", // 월동 가능
+      avgTemperatureC: "10.0",
+      minTemperatureC: "-20.0",
+      maxTemperatureC: "35.0",
+      annualRainfallMM: "1100.0",
+      sunlightHours: "2000.0",
+      drainage: "양호",
+      soilDepth: "80.0",
+      pH: "6.2"
+    },
+    cultivationFeatures:
+      "온대성 과수로서 15-24°C가 적정 생육온도이며, 겨울철 -20°C 이하에서도 내한성이 강한 품종이 있음. 개화기에는 서리 피해에 주의해야 하며, 일조량이 많을수록 착색이 우수함.",
+    managementTips:
+      "겨울 전정으로 착과 수를 조절하고, 여름철 가지 유인을 통해 통풍과 광합성을 극대화해야 함. 병충해 방지를 위해 적절한 방제 및 봉지 씌우기에 신경 써야 함."
+  },
+  {
+    productId: 4,
+    cropName: "배추",
+    variety: "월동배추",
+    conditions: {
+      overwintering: "T",
+      avgTemperatureC: "4.0",
+      minTemperatureC: "-15.0",
+      maxTemperatureC: "22.0",
+      annualRainfallMM: "900.0",
+      sunlightHours: "1600.0",
+      drainage: "양호-약간양호",
+      soilDepth: "50.0",
+      pH: "6.5"
+    },
+    cultivationFeatures:
+      "냉량성 작물로, 월동배추는 -10°C 이하에서도 생육 가능. 발아 적온은 20-25°C이며, 고온기(여름철)에는 생육이 억제될 수 있음.",
+    managementTips:
+      "충분한 시비 관리로 결구율을 높이고, 생리장해 예방 필요. 진딧물 및 노린재 방제 필수. 장마철 습해 방지를 위해 배수로 정비 철저."
+  },
+  {
+    productId: 6,
+    cropName: "양파",
+    variety: "양파(일반)",
+    conditions: {
+      overwintering: "F",
+      avgTemperatureC: "12.0",
+      minTemperatureC: "-3.0",
+      maxTemperatureC: "30.0",
+      annualRainfallMM: "1000.0",
+      sunlightHours: "1600.0",
+      drainage: "양호-약간불량",
+      soilDepth: "50.0",
+      pH: "6.2"
+    },
+    cultivationFeatures:
+      "온대 및 온난 지역에서 재배 가능하며, 발아 적온은 15-25°C. 생육 최적 온도는 17°C이며, 배수가 잘되는 토양이 필요함.",
+    managementTips:
+      "생육 초기에 충분한 관수 필요. 파밤나방, 총채벌레 방제 필수. 수확 후 0-4°C의 저온 저장 필요."
+  },
+  {
+    productId: 8,
+    cropName: "상추",
+    variety: "적상추",
+    conditions: {
+      overwintering: "F",
+      avgTemperatureC: "16.5",
+      minTemperatureC: "0.0",
+      maxTemperatureC: "28.0",
+      annualRainfallMM: "1100.0",
+      sunlightHours: "1750.0",
+      drainage: "양호-약간양호",
+      soilDepth: "50.0",
+      pH: "6.3"
+    },
+    cultivationFeatures:
+      "냉량성 작물로 15-20°C에서 생육이 가장 활발하며, 30°C 이상에서는 생육 저해 및 화아분화(꽃대 올라옴) 발생.",
+    managementTips:
+      "여름철 고온기에는 차광망을 이용한 온도 조절이 필수. 수확 전 질소 과다 시비를 피해야 질산염 농도 증가 방지 가능. 진딧물 및 노린재 방제 필요."
+  },
+  {
+    productId: 9,
+    cropName: "파프리카",
+    variety: "파프리카",
+    conditions: {
+      overwintering: "F",
+      avgTemperatureC: "19.5",
+      minTemperatureC: "5.0",
+      maxTemperatureC: "32.0",
+      annualRainfallMM: "1300.0",
+      sunlightHours: "2200.0",
+      drainage: "양호-약간양호",
+      soilDepth: "50.0",
+      pH: "6.1"
+    },
+    cultivationFeatures:
+      "재배 기간이 길며, 토양 pH 6.0-6.5에서 잘 자라고, 배수가 잘 되는 유기물 함량이 높은 토양이 적합함.",
+    managementTips:
+      "병해충(흰가루병, 탄저병) 예방을 위해 환기 및 습도 조절 필수. 적절한 줄기 유인 및 가지치기로 광합성 효율을 극대화해야 함."
+  },
+  {
+    productId: 10,
+    cropName: "아스파라거스",
+    variety: "녹색",
+    conditions: {
+      overwintering: "T",
+      avgTemperatureC: "15.5",
+      minTemperatureC: "-5.0",
+      maxTemperatureC: "30.0",
+      annualRainfallMM: "1200.0",
+      sunlightHours: "2000.0",
+      drainage: "양호-약간양호",
+      soilDepth: "50.0",
+      pH: "6.5"
+    },
+    cultivationFeatures:
+      "다년생 작물로, 첫 수확까지 2-3년이 필요하며, 최적 생육 온도는 16-20°C.",
+    managementTips:
+      "봄철 새순이 나오기 전에는 덮개 관리 및 보온이 중요. 과습에 약하므로 배수 관리를 철저히 해야 함."
+  }
+];

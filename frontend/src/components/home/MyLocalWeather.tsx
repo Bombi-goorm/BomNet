@@ -1,6 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { WeatherExpections, WeatherInfo } from "../../types/types";
+import {  } from "../../types/member_types";
 import { WiDaySunny, WiCloudy, WiRain, WiSnow, WiThunderstorm } from "react-icons/wi";
+import { WeatherExpections, WeatherInfo } from "../../types/home_types";
 
 // 날씨 상태에 따른 아이콘 반환 함수
 const weatherIcon = (weather: string) => {

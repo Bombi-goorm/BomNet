@@ -1,5 +1,6 @@
 import axios from "axios";
-import { ChatbotRequestDto, CommonResponseDto } from "../types/types";
+import { CommonResponseDto } from "../types/member_types";
+import { ChatbotRequestDto } from "../types/chatbot_types";
 
 // Axios 인스턴스 생성
 const api = axios.create({
