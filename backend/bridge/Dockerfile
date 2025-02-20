@@ -8,6 +8,6 @@ RUN pip install --upgrade -r requirements.txt
 
 COPY . .
 
-EXPOSE 8182
+EXPOSE 8183
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8100"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8183"]
