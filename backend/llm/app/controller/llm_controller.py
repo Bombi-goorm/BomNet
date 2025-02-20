@@ -1,9 +1,44 @@
-from fastapi import FastAPI
+import json
+
+import openai
 from fastapi import APIRouter
 from pydantic import BaseModel
-import openai
-import json
+from sqlalchemy import create_engine, text
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import sessionmaker
+
 from app.config import OPENAI_API_KEY
+
+router = APIRouter()
+
+# Database connection setup
+DATABASE_URL = "mysql+pymysql://root:1234@mariadb:3306/bomnet_db"
+
+# Create SQLAlchemy engine and session
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+class UserInput(BaseModel):
+    user_input: str
+
+
+@router.get("/health")
+def health():
+    return {"LLM :: Healthy"}
+
+
+@router.get("/ping")
+def ping_db():
+    try:
+        db = SessionLocal()
+        db.execute(text('SELECT 1'))  # Simple query to check DB connection
+        return {"message": "Database connection successful"}
+    except SQLAlchemyError as e:
+        return {"error": str(e)}
+    finally:
+        db.close()
+
 
 # Initialize FastAPI
 # app = FastAPI()
@@ -14,14 +49,15 @@ openai.api_key = OPENAI_API_KEY
 
 # 품목-품종 매핑
 ITEM_VARIETY_MAP = {
-    "부사": "Apple", 
-    "홍로": "Apple", 
-    "샤인머스켓": "Grape", 
+    "부사": "Apple",
+    "홍로": "Apple",
+    "샤인머스켓": "Grape",
     "캠벨": "Grape",
-    "청상추": "Lettuce", 
-    "적상추": "Lettuce", 
+    "청상추": "Lettuce",
+    "적상추": "Lettuce",
     "대파": "Green Onion"
 }
+
 
 # @app.post("/category")
 # async def process_input(request: Request):
@@ -41,8 +77,6 @@ ITEM_VARIETY_MAP = {
 
 #     return button_map
 
-class UserInput(BaseModel):
-    user_input: str
 
 @router.post("/alarm")
 def extract_price_info(user_input: UserInput):
@@ -77,7 +111,7 @@ def extract_price_info(user_input: UserInput):
     item = function_response.get("Item")
     variety = function_response.get("Variety")
     price = function_response.get("Price")
-    
+
     result = {"Variety": variety}
     if item:
         result["Item"] = item
@@ -85,6 +119,7 @@ def extract_price_info(user_input: UserInput):
         result["Price"] = price
 
     return result
+
 
 @router.post("/weather")
 async def get_seoul_weather():
@@ -102,17 +137,18 @@ async def get_seoul_weather():
     except Exception as e:
         return {"error": str(e)}
 
+
 @router.post("/other")
 async def ask_agriculture_question(user_input: UserInput):
     """
     Asks a question related to agriculture using GPT API and returns the response.
-    
+
     :param user_input: UserInput model containing the user's agriculture-related question
     :return: JSON response containing the AI's answer
     """
     try:
         client = openai.OpenAI(api_key=OPENAI_API_KEY)
-        
+
         prompt = f"You are an expert in agriculture. Answer the following question:\n\n{user_input.user_input}\n\nAnswer:"
 
         response = client.chat.completions.create(
@@ -124,23 +160,24 @@ async def ask_agriculture_question(user_input: UserInput):
         )
 
         answer = response.choices[0].message.content.strip()
-        
+
         return {
             "status": "success",
             "answer": answer
         }
-        
+
     except Exception as e:
         return {
             "status": "error",
             "message": str(e)
         }
 
+
 @router.post("/price")
 async def extract_varieties(user_input: UserInput):
     try:
         client = openai.OpenAI(api_key=OPENAI_API_KEY)
-        
+
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -170,17 +207,18 @@ async def extract_varieties(user_input: UserInput):
             function_response = json.loads(function_call.arguments)
             item = function_response.get("Item")
             variety = function_response.get("Variety")
-            
+
             result = {"Variety": variety}
             if item:
                 result["Item"] = item
-            
+
             return result
         else:
             return {"error": "Failed to extract variety information"}
 
     except Exception as e:
         return {"error": str(e)}
+
 
 @router.post("/recommend")
 def extract_crop_recommendation(user_input: UserInput):
@@ -197,15 +235,17 @@ def extract_crop_recommendation(user_input: UserInput):
 
     return {"intent": "crop_recommendation", "message": response.choices[0].message.content}
 
+
 @router.post("/pest")
-def extract_pest_info(user_input: UserInput):  
+def extract_pest_info(user_input: UserInput):
     """사용자 입력에서 작물명을 추출하고 GPT를 통해 병해충 정보를 가져옴"""
     crop_name = user_input.user_input.replace("에 잘 생기는 병해충 알려줘", "").strip()
     if not crop_name:
         return {"intent": "pest_info", "message": "어떤 작물의 병해충 정보를 원하시나요?"}
-    
+
     pests = get_pest_info(crop_name)
     return {"intent": "pest_info", "crop": crop_name, "pests": pests}
+
 
 def get_pest_info(crop_name):
     """GPT를 사용하여 병해충 정보 제공"""
@@ -219,4 +259,3 @@ def get_pest_info(crop_name):
     )
     pests_info = response.choices[0].message.content.split("\n")
     return pests_info
-
