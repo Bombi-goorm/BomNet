@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL) // 필드가 null이면 직렬화에서 제외
-public class CoreResponseDto<T> {
+public class CommonResponseDto<T> {
     private String status;
     private String message;
     private T data; // 요청별 응답 데이터
 
-    public CoreResponseDto(String status, String message) {
+    public CommonResponseDto(String status, String message) {
         this.status = status;
         this.message = message;
     }

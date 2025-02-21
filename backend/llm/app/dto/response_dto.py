@@ -1,9 +1,5 @@
-import datetime
-
 from pydantic import BaseModel
 
-
-# 응답
 
 class ChatbotResponseDto(BaseModel):
     product_id: int
@@ -11,4 +7,10 @@ class ChatbotResponseDto(BaseModel):
     availability: int
 
 
+class PriceResponseDto(BaseModel):
+    crop: str
+    price: int
 
+
+class OtherResponseDto(BaseModel):
+    answer: str

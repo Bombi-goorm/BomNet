@@ -5,6 +5,16 @@ import MultiLineChart from "../components/price/MultiLineChart";
 import Header from "../components/Header";
 import { items, varieties, regions, pupularProducts } from "../data_sample";
 
+// 품목 및 품종 매핑 데이터셋
+export const ITEM_VARIETY_MAP = [
+  { item: "사과", itemCode: "1001", variety: "부사", varietyCode: "2001" },
+  { item: "사과", itemCode: "1001", variety: "홍로", varietyCode: "2002" },
+  { item: "배추", itemCode: "1002", variety: "고랭지배추", varietyCode: "2003" },
+  { item: "배추", itemCode: "1002", variety: "월동배추", varietyCode: "2004" },
+  { item: "상추", itemCode: "1003", variety: "청상추", varietyCode: "2005" },
+  { item: "상추", itemCode: "1003", variety: "적상추", varietyCode: "2006" },
+];
+
 
 
 // SearchBar에서 전달받는 데이터 타입 (문자열 기반)

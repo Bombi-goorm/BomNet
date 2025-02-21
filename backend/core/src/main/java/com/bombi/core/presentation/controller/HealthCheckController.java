@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/taco/core/health")
+@RequestMapping("/core")
 public class HealthCheckController {
 
-    @GetMapping
+    @GetMapping("/health")
     public String healthCheck() {
-        return "OK";
+        return "Core :: Healthy";
     }
 }

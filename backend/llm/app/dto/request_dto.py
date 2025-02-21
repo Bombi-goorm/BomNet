@@ -1,7 +1,12 @@
 from pydantic import BaseModel
 
 
-# 요청
-
 class ChatbotRequestDto(BaseModel):
     input: str
+    item: str
+    mid_id: int
+    small_id: int
+    price: int
+
+
+

@@ -8,17 +8,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/taco/core/home")
+@RequestMapping("/core")
 @RequiredArgsConstructor
 public class HomeController {
 
     private final HomeService homeService;
 
     /**
-     * 사용자 계좌 및 거래 내역 조회
+     * 홈 화면 데이터
+     * - Best5 or 관심품목5
+     * - 특보목록
+     * - 예보데이터
+     * - 뉴스목록
+     * - 챗봇 공지사항
      */
-    @GetMapping
-    public ResponseEntity<AccountMemberReponseDto> getUserAccounts() {
+    @GetMapping("/home")
+    public ResponseEntity<Comm> getUserAccounts() {
         AccountMemberReponseDto responseDto = homeService.getMemberHome();
         return ResponseEntity.ok(responseDto);
     }
