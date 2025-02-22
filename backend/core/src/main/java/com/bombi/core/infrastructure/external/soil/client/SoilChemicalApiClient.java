@@ -3,7 +3,9 @@ package com.bombi.core.infrastructure.external.soil.client;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -43,6 +45,8 @@ public class SoilChemicalApiClient {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
+		HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
+
 		log.info("SoilChemicalApiClient::sendSoilChemical Headers - {}", headers);
 
 		// parameter 추가
@@ -56,7 +60,7 @@ public class SoilChemicalApiClient {
 			.toUri();
 
 		try {
-			ResponseEntity<String> response = restTemplate.getForEntity(uri, String.class);
+			ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, String.class);
 
 			if (isErrorResultCode(response) || response.getBody() == null) {
 				throw new SoilCharacterApiException("응답이 null이거나 유효하지 않습니다.");
