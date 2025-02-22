@@ -48,7 +48,7 @@ public class MemberService {
 			.orElseThrow(() -> new IllegalArgumentException("회원 지역 정보를 찾을 수 없습니다."));
 
 		// 지점별 기후 정보 api
-		String stationId = regionWeather.getRegion().getStationId();
+		String stationId = regionWeather.getRegion().getStationNumber();
 		EnvWeatherResponseDto envWeatherResponseDto = envWeatherInfoApiClient.sendWeatherInfo(stationId);
 
 		// 토양 정보 api 호출
@@ -58,7 +58,6 @@ public class MemberService {
 		// 토양 코드, 평균 기온, 평균 강수량을 포함해 BigQuery로 api 요청 필요
 		BigQueryRecommendProductRequestDto requestDto = new BigQueryRecommendProductRequestDto(
 			pnuCode, sidoCode, soilCharacterResponse, soilChemicalResponse);
-
 		BigQueryRecommendProductResponseDto responseDto = bigQueryRecommendProductApiClient.callRecommendProduct(requestDto);
 
 		return new MemberInfoResponseDto(memberInfo, regionWeather, responseDto);

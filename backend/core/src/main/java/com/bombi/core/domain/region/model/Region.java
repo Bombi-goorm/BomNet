@@ -29,33 +29,37 @@ public class Region {
 	@Comment("기상청 시군구 코드")
 	private String kmaDestrictCode;
 
-	@Column(columnDefinition = "VARCHAR(20) NOT NULL")
-	@Comment("시도 이름")
-	private String sidoName;
-
 	@Column(columnDefinition = "VARCHAR(30) NOT NULL")
-	@Comment("시군구 이름")
-	private String destrictName;
+	@Comment("시군구 코드")
+	private String destrictCode;
+
+	// @Column(columnDefinition = "VARCHAR(20) NOT NULL")
+	// @Comment("시도 이름")
+	// private String sidoName;
+	//
+	// @Column(columnDefinition = "VARCHAR(30) NOT NULL")
+	// @Comment("시군구 이름")
+	// private String destrictName;
 
 	@Column(columnDefinition = "VARCHAR(10) NOT NULL")
 	@Comment("관측지점 번호")
-	private String stationId;
+	private String stationNumber;
 
 	@Column(columnDefinition = "VARCHAR(20) NOT NULL")
 	@Comment("관측 지점명")
 	private String stationName;
 
 	@Column(columnDefinition = "VARCHAR(20) NOT NULL")
-	@Comment("예보 구역명")
-	private String forecastRegionId;
+	@Comment("예보 구역코드")
+	private String forecastZoneCode;
 
 	@Column(columnDefinition = "VARCHAR(20) NOT NULL")
 	@Comment("특보 구역코드")
-	private String warningRegionId;
+	private String warningZoneCode;
 
 	@Column(columnDefinition = "VARCHAR(40) NOT NULL")
 	@Comment("특보 구역명")
-	private String warningRegionName;
+	private String warningZoneName;
 
 
 }

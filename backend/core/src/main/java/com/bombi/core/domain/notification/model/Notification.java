@@ -22,7 +22,8 @@ public class Notification extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", columnDefinition = "VARCHAR(40) NOT NULL")
+    // @JoinColumn(name = "member_id", columnDefinition = "VARCHAR(40) NOT NULL")
+    @JoinColumn(name = "member_id")
     @Comment("멤버 ID")
     private Member member;
 
