@@ -1,6 +1,7 @@
 package com.bombi.core.common.exception;
 
-import com.almagest_dev.tacobank_core_server.common.dto.CoreResponseDto;
+import com.bombi.core.common.dto.CoreResponseDto;
+
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -87,19 +88,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-    @ExceptionHandler(SmsSendFailedException.class) // SMS 전송시 예외처리
-    public ResponseEntity<?> handleSmsSendFailedException(SmsSendFailedException ex) {
-        log.warn("SmsSendFailedException - " + ex.getMessage());
-        CoreResponseDto response = new CoreResponseDto(ex.getStatus(), ex.getMessage());
-        return ResponseEntity.status(ex.getHttpStatus()).body(response);
-    }
-    @ExceptionHandler(OcrFailedException.class) // OCR 인식시 예외처리
-    public ResponseEntity<?> handleOcrSendFailedException(OcrFailedException ex) {
-        log.warn("OcrSendFailedException - {}", ex.getMessage());
-        CoreResponseDto response = new CoreResponseDto(ex.getStatus(), "영수증 인식이 실패했습니다. 다시 시도해주세요.");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-    }
-
     // Redis Session 예외처리
     @ExceptionHandler(RedisSessionException.class)
     public ResponseEntity<?> handleRedisSessionException(RedisSessionException ex) {
@@ -111,52 +99,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(response);
     }
 
-    // 네이버 API 예외처리
-    @ExceptionHandler(NaverApiException.class)
-    public ResponseEntity<?> handleNaverApiException(NaverApiException ex) {
-        log.warn("NaverApiException - " + ex.getMessage());
-
-        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-
-        // 발생 원인에 따른 상태 코드 설정
-        if (ex.getCause() instanceof UnsupportedEncodingException ||
-                ex.getCause() instanceof NoSuchAlgorithmException ||
-                ex.getCause() instanceof InvalidKeyException) {
-            httpStatus = HttpStatus.BAD_REQUEST;
-        }
-        CoreResponseDto response = new CoreResponseDto(ex.getStatus(), "요청이 실패했습니다. 관리자에게 문의해주세요.");
-        return ResponseEntity.status(httpStatus).body(response);
-    }
-
-    // 테스트베드 API 예외처리
-    @ExceptionHandler(TestbedApiException.class)
-    public ResponseEntity<?> handleTestbedApiException(TestbedApiException ex) {
-        log.warn("TestbedApiException - " + ex.getMessage());
-        CoreResponseDto response = new CoreResponseDto(ex.getStatus(), ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-    }
-
-    // 인증 관련 예외 처리
-    @ExceptionHandler(InvalidVerificationException.class)
-    public ResponseEntity<?> handleInvalidVerificationException(InvalidVerificationException ex) {
-        log.warn("InvalidVerificationException - " + ex.getMessage());
-        CoreResponseDto response = new CoreResponseDto(ex.getStatus(), ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-    }
-    // 출금 비밀번호 예외 처리
-    @ExceptionHandler(TransferPasswordValidationException.class)
-    public ResponseEntity<?> handleTransferPasswordValidationException(TransferPasswordValidationException ex) {
-        log.warn("TransferPasswordValidationException - " + ex.getMessage());
-        CoreResponseDto response = new CoreResponseDto(ex.getStatus(), ex.getMessage());
-        return ResponseEntity.status(ex.getHttpStatus()).body(response);
-    }
-    // 송금 예외 처리
-    @ExceptionHandler(TransferException.class)
-    public ResponseEntity<?> handleTransferException(TransferException ex) {
-        log.warn("TransferException - " + ex.getMessage());
-        CoreResponseDto response = new CoreResponseDto(ex.getStatus(), ex.getMessage());
-        return ResponseEntity.status(ex.getHttpStatus()).body(response);
-    }
+    // // 네이버 API 예외처리
+    // @ExceptionHandler(NaverApiException.class)
+    // public ResponseEntity<?> handleNaverApiException(NaverApiException ex) {
+    //     log.warn("NaverApiException - " + ex.getMessage());
+    //
+    //     HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+    //
+    //     // 발생 원인에 따른 상태 코드 설정
+    //     if (ex.getCause() instanceof UnsupportedEncodingException ||
+    //             ex.getCause() instanceof NoSuchAlgorithmException ||
+    //             ex.getCause() instanceof InvalidKeyException) {
+    //         httpStatus = HttpStatus.BAD_REQUEST;
+    //     }
+    //     CoreResponseDto response = new CoreResponseDto(ex.getStatus(), "요청이 실패했습니다. 관리자에게 문의해주세요.");
+    //     return ResponseEntity.status(httpStatus).body(response);
+    // }
 
     // 멤버 인증 예외
     @ExceptionHandler(MemberAuthException.class)

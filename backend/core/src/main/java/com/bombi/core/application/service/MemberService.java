@@ -1,64 +1,70 @@
 package com.bombi.core.application.service;
 
-import com.bombi.core.domain.member.model.Member;
-import com.bombi.core.domain.member.repository.MemberRepository;
-import com.bombi.core.presentation.dto.member.MemberResponseDto;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.bombi.core.domain.member.model.MemberInfo;
+import com.bombi.core.domain.member.repository.MemberInfoRepository;
+import com.bombi.core.domain.region.model.RegionWeather;
+import com.bombi.core.domain.region.repository.RegionWeatherRepository;
+import com.bombi.core.infrastructure.external.bigquery.client.BigQueryRecommendProductApiClient;
+import com.bombi.core.infrastructure.external.bigquery.dto.BigQueryRecommendProductRequestDto;
+import com.bombi.core.infrastructure.external.bigquery.dto.BigQueryRecommendProductResponseDto;
+import com.bombi.core.infrastructure.external.weather.client.EnvWeatherInfoApiClient;
+import com.bombi.core.infrastructure.external.weather.dto.EnvWeatherResponseDto;
+import com.bombi.core.infrastructure.external.soil.client.SoilCharacterApiClient;
+import com.bombi.core.infrastructure.external.soil.client.SoilChemicalApiClient;
+import com.bombi.core.infrastructure.external.soil.dto.SoilCharacterResponseDto;
+import com.bombi.core.infrastructure.external.soil.dto.SoilChemicalResponseDto;
+import com.bombi.core.presentation.dto.member.MemberInfoResponseDto;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-    private final MemberRepository memberRepository;
 
-    /**
-     * ID로 Member 조회
-     */
-    public MemberResponseDto findMemberById(Long id) {
-        if (id == null || id < 1) {
-            throw new IllegalArgumentException("회원 정보가 없습니다.");
-        }
-        Member member = memberRepository.findByIdAndDeleted(id, "N")
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+	private final MemberInfoRepository memberInfoRepository;
+	private final RegionWeatherRepository regionWeatherRepository;
+	private final EnvWeatherInfoApiClient envWeatherInfoApiClient;
+	private final SoilCharacterApiClient soilCharacterApiClient;
+	private final SoilChemicalApiClient soilChemicalApiClient;
+	private final BigQueryRecommendProductApiClient bigQueryRecommendProductApiClient;
 
-        return new MemberResponseDto(
-                member.getId(),
-                member.getEmail(),
-        );
+	@Transactional(readOnly = true)
+	public MemberInfoResponseDto findMemberInfo(String memberId) {
+		UUID memberIdUUID = UUID.fromString(memberId);
+		MemberInfo memberInfo = memberInfoRepository.findMemberInfoByMemberId(memberIdUUID);
 
-    /**
-     * 회원정보 수정
-     */
-    public void updateMemberTel(Long memberId, UpdateMemberRequestDto requestDto) {
-        if (memberId == null || memberId < 1) {
-            throw new IllegalArgumentException("회원 정보가 없습니다.");
-        }
-        // 회원 정보 확인
-        Member member = memberRepository.findByIdAndDeleted(memberId, "N")
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
-        // 문자 인증 성공 세션 확인
-        if (!smsAuthUtil.isVerificationSuccessful(requestDto.getTel(), "tel", memberId)) {
-            throw new IllegalArgumentException("본인 인증 성공 내역이 없습니다. 본인 인증이 완료되어야 전화번호 수정이 가능합니다.");
-        }
+		String sidoCode = findSidoCodeFrom(memberInfo);
+		String pnuCode = memberInfo.getPnu();
 
-        memberRepository.save(member);
-    }
+		// 평균 기온, 평균 강수량
+		RegionWeather regionWeather = regionWeatherRepository.findWeatherInfoByPNU(sidoCode)
+			.orElseThrow(() -> new IllegalArgumentException("회원 지역 정보를 찾을 수 없습니다."));
 
-    /**
-     * 회원 탈퇴
-     */
-    public void deactivateMember(Long id){
-            if (id == null || id < 1) {
-                throw new IllegalArgumentException("회원 정보가 없습니다.");
-            }
-            Member member = memberRepository.findByIdAndDeleted(id, "N")
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않거나 이미 탈퇴한 회원입니다."));
+		// 지점별 기후 정보 api
+		String stationId = regionWeather.getRegion().getStationNumber();
+		EnvWeatherResponseDto envWeatherResponseDto = envWeatherInfoApiClient.sendWeatherInfo(stationId);
 
-            member.deactivate(); // 회원상태 비활성화
-            memberRepository.save(member);
-    }
+		// 토양 정보 api 호출
+		SoilCharacterResponseDto soilCharacterResponse = soilCharacterApiClient.sendSoilCharacter(pnuCode);
+		SoilChemicalResponseDto soilChemicalResponse = soilChemicalApiClient.sendSoilChemical(pnuCode);
+
+		// 토양 코드, 평균 기온, 평균 강수량을 포함해 BigQuery로 api 요청 필요
+		BigQueryRecommendProductRequestDto requestDto = new BigQueryRecommendProductRequestDto(
+			pnuCode, sidoCode, soilCharacterResponse, soilChemicalResponse);
+		BigQueryRecommendProductResponseDto responseDto = bigQueryRecommendProductApiClient.callRecommendProduct(requestDto);
+
+		return new MemberInfoResponseDto(memberInfo, regionWeather, responseDto);
+	}
+
+	private String findSidoCodeFrom(MemberInfo memberInfo) {
+		String pnuCode = memberInfo.getPnu();
+		return pnuCode.substring(0, 2);
+	}
 }

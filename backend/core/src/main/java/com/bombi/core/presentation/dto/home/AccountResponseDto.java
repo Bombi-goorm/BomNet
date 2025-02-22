@@ -14,7 +14,7 @@ public class AccountResponseDto {
     private String bankName; // 은행 이름
     private String bankCode;
     private Double balance; // 잔액
-    @Setter
-    private List<TransactionResponseDto2> transactionList; // 거래 내역 리스트
+    // @Setter
+    // private List<TransactionResponseDto2> transactionList; // 거래 내역 리스트
 
 }
