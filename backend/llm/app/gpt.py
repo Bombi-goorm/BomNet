@@ -54,7 +54,9 @@ def extract_price_info(user_input: UserInput):
         model="gpt-4-turbo",
         messages=[
             {"role": "system", "content": "Extract item, variety, and price from user input."},
+
             {"role": "user", "content": user_input.user_input}
+
         ],
         functions=[
             {
@@ -75,6 +77,7 @@ def extract_price_info(user_input: UserInput):
     )
 
     function_response = json.loads(response.choices[0].message.function_call.arguments)
+
     
     # JSON 응답 생성
     response_data = {
@@ -93,18 +96,22 @@ def extract_price_info(user_input: UserInput):
     # JSONResponse를 사용하여 JSON 형식으로 반환
     return JSONResponse(content=response_data)
 
+
 @router.post("/weather")
 async def get_seoul_weather():
     try:
         client = openai.OpenAI(api_key=OPENAI_API_KEY)
         response = client.chat.completions.create(
+
             model="gpt-4-turbo",
+
             messages=[
                 {"role": "system", "content": "You are a weather assistant."},
                 {"role": "user", "content": "서울의 현재 날씨를 알려줘."}
             ]
         )
         weather_info = response.choices[0].message.content
+
         return JSONResponse(content={
             "status": "success",
             "data": {"weather": weather_info}
@@ -117,6 +124,7 @@ async def get_seoul_weather():
 
 @router.post("/other")
 async def ask_agriculture_question(user_input: UserInput):
+
     try:
         client = openai.OpenAI(api_key=OPENAI_API_KEY)
         
@@ -131,7 +139,7 @@ async def ask_agriculture_question(user_input: UserInput):
         )
 
         answer = response.choices[0].message.content.strip()
-        
+
         return JSONResponse(content={
             "status": "success",
             "data": {"answer": answer}
@@ -146,6 +154,7 @@ async def ask_agriculture_question(user_input: UserInput):
             }
         )
 
+
 @router.post("/price")
 async def extract_varieties(user_input: UserInput):
     try:
@@ -157,7 +166,9 @@ async def extract_varieties(user_input: UserInput):
                 {"role": "system", "content": "You are an AI that extracts crop variety names from user input."},
                 {"role": "user", "content": user_input.user_input}
             ],
+
             functions=[
+
                 {
                     "name": "extract_variety",
                     "description": "Extract item and variety from the user's input",
@@ -171,15 +182,17 @@ async def extract_varieties(user_input: UserInput):
                     }
                 }
             ],
+
             function_call={"name": "extract_variety"}
         )
+
 
         function_call = response.choices[0].message.function_call
         if function_call:
             function_response = json.loads(function_call.arguments)
             item = function_response.get("Item")
             variety = function_response.get("Variety")
-            
+
             result = {
                 "status": "success",
                 "data": {"Variety": variety}
@@ -205,6 +218,7 @@ async def extract_varieties(user_input: UserInput):
                 "message": str(e)
             }
         )
+
 
 @router.post("/recommend")
 def extract_crop_recommendation(user_input: UserInput):

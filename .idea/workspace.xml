@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="218060a4-012f-4962-98f6-4c4b7b1da468" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/application/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/application/exception/ResponseWriter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/application/exception/e400/AuthFailureException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/application/exception/e400/BadRequestException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/application/exception/e401/InvalidTokenException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/application/exception/e500/RedisSessionException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/application/jwt/TokenProvider.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/application/util/GenerateCodeUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/application/util/JwtFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/infrastructure/Constants.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/infrastructure/RedisService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/infrastructure/initchecker/DatabaseConnectionChecker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/infrastructure/initchecker/RedisConnectionChecker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/infrastructure/initchecker/S3ConnectionChecker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/infrastructure/security/CustomUserDetails.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/infrastructure/security/auth/handler/OAuth2SuccessHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/infrastructure/security/auth/service/CustomUserDetailsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/presentation/controller/MemberController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/presentation/dto/CommonResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/api/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/presentation/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/config/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/infrastructure/config/CorsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/config/RedisConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/infrastructure/config/RedisConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/infrastructure/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/auth/AuthEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/auth/CustomOAuth2User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/infrastructure/security/CustomOAuth2User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/auth/exception/TokenException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/auth/filter/TokenAuthenticationFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/auth/filter/TokenExceptionFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/auth/handler/CustomAccessDeniedHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/infrastructure/security/auth/handler/CustomAccessDeniedHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/auth/handler/CustomAuthenticationEntryPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/infrastructure/security/auth/handler/CustomAuthenticationEntryPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/auth/handler/OAuth2SuccessHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/auth/repository/AuthRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/auth/service/AuthService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/auth/service/CustomOAuth2UserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/auth/service/TokenService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/auth/util/TokenProvider.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/member/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/member/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/member/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/member/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/member/repository/MemberRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/member/repository/MemberRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/member/repository/RoleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/auth/src/main/java/com/bombi/auth/domain/member/repository/RoleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/auth/src/main/resources/static/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/api/auth_api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/auth_api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/api/chat_api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/chat_api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/api/core_api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/core_api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/HomePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/HomePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/LoginPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/LoginPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/SignUpPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/SignUpPage.tsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="dev" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2suvl1gmSpTa6PEhPP864mx9QtE" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;JK-Frontend-API__set&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/IdeaProjects/BomNet&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.11967778&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/backend/notification/src/main/resources" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="DjangoTestsConfigurationType">
+      <module name="BomNet" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="TARGET" value="" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="BomNet" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="BomNet" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="PyBehaveRunConfigurationType" factoryName="Behave">
+      <module name="BomNet" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="BomNet" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Python.FlaskServer">
+      <module name="BomNet" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <module name="BomNet" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="218060a4-012f-4962-98f6-4c4b7b1da468" name="Changes" comment="" />
+      <created>1739318424392</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1739318424392</updated>
+      <workItem from="1739318425644" duration="9765000" />
+      <workItem from="1739754026957" duration="621000" />
+      <workItem from="1739754765730" duration="47000" />
+      <workItem from="1739911759005" duration="241000" />
+      <workItem from="1739912017378" duration="944000" />
+      <workItem from="1739998525922" duration="38000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
