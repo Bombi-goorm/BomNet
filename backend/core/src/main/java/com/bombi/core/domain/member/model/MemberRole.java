@@ -16,8 +16,8 @@ public enum MemberRole {
 		return MemberRole.valueOf(role).getDescription();
 	}
 
-	public static boolean isFarmer(Member member) {
-		return FARMER.equals(member.getRole().getRoleName());
-	}
+	// public static boolean isFarmer(Member member) {
+	// 	return FARMER.equals(member.getRole().getRoleName());
+	// }
 }
 

@@ -1,6 +1,6 @@
 package com.bombi.core.presentation.dto.member;
 
-import com.bombi.core.infrastructure.external.bridge.dto.RecommendProduct;
+import com.bombi.core.infrastructure.external.bigquery.dto.RecommendProduct;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

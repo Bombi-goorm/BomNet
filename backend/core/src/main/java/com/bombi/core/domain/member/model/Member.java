@@ -31,6 +31,12 @@ public class Member extends BaseEntity {
     @Comment("이메일")
     private String authEmail;
 
+    // 인증 후 등록 전
+    private String isEnabled;
+
+    // 탈퇴, 이용정지
+    private String isBanned;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", columnDefinition = "BIGINT COMMENT '권한 ID'")
     private Role role;

@@ -1,4 +1,4 @@
-package com.bombi.core.infrastructure.external.bridge.dto;
+package com.bombi.core.infrastructure.external.bigquery.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
