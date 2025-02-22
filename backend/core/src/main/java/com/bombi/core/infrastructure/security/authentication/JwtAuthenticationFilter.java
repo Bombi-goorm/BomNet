@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,9 +25,18 @@ import java.util.stream.Collectors;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
 
+    private static final List<String> EXCLUDED_PATHS = Arrays.asList(
+        "/core/health"
+    );
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("JwtAuthenticationFilter::doFilterInternal");
+
+        if (EXCLUDED_PATHS.stream().anyMatch(request.getServletPath()::contains)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         // 토큰 추출
         String token = getTokenFromCookies(request.getCookies());
