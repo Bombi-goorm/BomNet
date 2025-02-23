@@ -30,4 +30,4 @@ public class CoreResponseDto<T> {
     public static <T> CoreResponseDto<T> ofSuccess(String message) {
         return ofSuccess(message, null);
     }
-
+}
