@@ -39,3 +39,4 @@ out/
 ### Local profile ###
 /src/main/resources/application-local.yml
 bomnet-bigquery-llm.json
+goorm-bomnet-20b400302eed.json
