@@ -15,14 +15,15 @@ openai.api_key = OPENAI_API_KEY
 
 # 품목-품종 매핑
 ITEM_VARIETY_MAP = {
-    "부사": "Apple", 
-    "홍로": "Apple", 
-    "샤인머스켓": "Grape", 
+    "부사": "Apple",
+    "홍로": "Apple",
+    "샤인머스켓": "Grape",
     "캠벨": "Grape",
-    "청상추": "Lettuce", 
-    "적상추": "Lettuce", 
+    "청상추": "Lettuce",
+    "적상추": "Lettuce",
     "대파": "Green Onion"
 }
+
 
 # @app.post("/category")
 # async def process_input(request: Request):
@@ -44,6 +45,7 @@ ITEM_VARIETY_MAP = {
 
 class UserInput(BaseModel):
     user_input: str
+
 
 @router.post("/alarm")
 def extract_price_info(user_input: UserInput):
@@ -77,24 +79,16 @@ def extract_price_info(user_input: UserInput):
     )
 
     function_response = json.loads(response.choices[0].message.function_call.arguments)
+    item = function_response.get("Item")
+    variety = function_response.get("Variety")
+    price = function_response.get("Price")
 
-    
-    # JSON 응답 생성
-    response_data = {
-        "status": "success",
-        "data": {
-            "Variety": function_response.get("Variety")
-        }
-    }
+    result = {"Variety": variety}
+    if item:
+        result["Item"] = item
+    if price:
+        result["Price"] = price
 
-    # 선택적 필드 추가
-    if function_response.get("Item"):
-        response_data["data"]["Item"] = function_response.get("Item")
-    if function_response.get("Price"):
-        response_data["data"]["Price"] = function_response.get("Price")
-
-    # JSONResponse를 사용하여 JSON 형식으로 반환
-    return JSONResponse(content=response_data)
 
 
 @router.post("/weather")
@@ -122,12 +116,18 @@ async def get_seoul_weather():
             content={"status": "error", "message": str(e)}
         )
 
+
 @router.post("/other")
 async def ask_agriculture_question(user_input: UserInput):
+    """
+    Asks a question related to agriculture using GPT API and returns the response.
 
+    :param user_input: UserInput model containing the user's agriculture-related question
+    :return: JSON response containing the AI's answer
+    """
     try:
         client = openai.OpenAI(api_key=OPENAI_API_KEY)
-        
+
         prompt = f"You are an expert in agriculture. Answer the following question:\n\n{user_input.user_input}\n\nAnswer:"
 
         response = client.chat.completions.create(
@@ -140,11 +140,11 @@ async def ask_agriculture_question(user_input: UserInput):
 
         answer = response.choices[0].message.content.strip()
 
-        return JSONResponse(content={
+        return {
             "status": "success",
-            "data": {"answer": answer}
-        })
-        
+            "answer": answer
+        }
+
     except Exception as e:
         return JSONResponse(
             status_code=500,
@@ -155,11 +155,12 @@ async def ask_agriculture_question(user_input: UserInput):
         )
 
 
+
 @router.post("/price")
 async def extract_varieties(user_input: UserInput):
     try:
         client = openai.OpenAI(api_key=OPENAI_API_KEY)
-        
+
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -193,14 +194,12 @@ async def extract_varieties(user_input: UserInput):
             item = function_response.get("Item")
             variety = function_response.get("Variety")
 
-            result = {
-                "status": "success",
-                "data": {"Variety": variety}
-            }
+            result = {"Variety": variety}
             if item:
-                result["data"]["Item"] = item
-            
-            return JSONResponse(content=result)
+                result["Item"] = item
+
+            return result
+
         else:
             return JSONResponse(
                 status_code=400,
@@ -220,6 +219,7 @@ async def extract_varieties(user_input: UserInput):
         )
 
 
+
 @router.post("/recommend")
 def extract_crop_recommendation(user_input: UserInput):
     """GPT를 활용하여 지역 기반 작물 추천"""
@@ -235,15 +235,17 @@ def extract_crop_recommendation(user_input: UserInput):
 
     return {"intent": "crop_recommendation", "message": response.choices[0].message.content}
 
+
 @router.post("/pest")
-def extract_pest_info(user_input: UserInput):  
+def extract_pest_info(user_input: UserInput):
     """사용자 입력에서 작물명을 추출하고 GPT를 통해 병해충 정보를 가져옴"""
     crop_name = user_input.user_input.replace("에 잘 생기는 병해충 알려줘", "").strip()
     if not crop_name:
         return {"intent": "pest_info", "message": "어떤 작물의 병해충 정보를 원하시나요?"}
-    
+
     pests = get_pest_info(crop_name)
     return {"intent": "pest_info", "crop": crop_name, "pests": pests}
+
 
 def get_pest_info(crop_name):
     """GPT를 사용하여 병해충 정보 제공"""
@@ -257,4 +259,3 @@ def get_pest_info(crop_name):
     )
     pests_info = response.choices[0].message.content.split("\n")
     return pests_info
-
