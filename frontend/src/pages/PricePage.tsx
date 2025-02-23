@@ -1,37 +1,25 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import SearchBar from "../components/price/SearchBar";
 import SelectedItems from "../components/price/SelectedItems";
 import MultiLineChart from "../components/price/MultiLineChart";
 import Header from "../components/Header";
-import { items, varieties, regions, pupularProducts } from "../data_sample";
-
-// 품목 및 품종 매핑 데이터셋
-export const ITEM_VARIETY_MAP = [
-  { item: "사과", itemCode: "1001", variety: "부사", varietyCode: "2001" },
-  { item: "사과", itemCode: "1001", variety: "홍로", varietyCode: "2002" },
-  { item: "배추", itemCode: "1002", variety: "고랭지배추", varietyCode: "2003" },
-  { item: "배추", itemCode: "1002", variety: "월동배추", varietyCode: "2004" },
-  { item: "상추", itemCode: "1003", variety: "청상추", varietyCode: "2005" },
-  { item: "상추", itemCode: "1003", variety: "적상추", varietyCode: "2006" },
-];
-
-
+import { ITEM_VARIETY_MAP, REGIONS } from "../data_sample";
 
 // SearchBar에서 전달받는 데이터 타입 (문자열 기반)
 interface SelectedDataString {
-  item: string;
-  variety: string;
+  midName: string;
+  smallName: string;
   region: string;
 }
 
 // MultiLineChart가 기대하는 데이터 타입 (id 기반)
 interface SelectedData {
-  itemId: number;
-  varietyId: number;
+  smallId: string;
   regionId: number;
 }
 
-// 기본 날짜 계산 함수 (SearchBar와 동일한 로직)
+// 기본 날짜 계산 함수
 const getDefaultDates = () => {
   const today = new Date();
   const oneWeekAgo = new Date();
@@ -47,35 +35,68 @@ const getDefaultDates = () => {
 
 const PricePage = () => {
   const { today, oneWeekAgo } = getDefaultDates();
+  const location = useLocation(); // 챗봇에서 전달된 데이터 확인
+  const chatbotData = location.state; // 챗봇에서 보낸 품목/품종 데이터
 
-  // 선택된 데이터를 문자열 기반으로 저장
+  // ✅ 임시 저장 목록 (메모리에서 관리)
   const [selectedItems, setSelectedItems] = useState<SelectedDataString[]>([]);
   const [startDate, setStartDate] = useState<string>(oneWeekAgo);
   const [endDate, setEndDate] = useState<string>(today);
 
-  // 가장 인기있는 상품을 샘플로 항상 제공
+  // 🔹 **기본 추천 상품 or 챗봇에서 넘어온 상품 처리**
   useEffect(() => {
-    const defaultProduct = pupularProducts[0];
-    if (defaultProduct) {
-      const defaultVariety = varieties.find((v) => v.id === defaultProduct.varietyId);
-      const defaultItemName = defaultVariety
-        ? items.find((i) => i.id === defaultVariety.itemId)?.name || ""
-        : "";
-      const defaultVarietyName = defaultVariety ? defaultVariety.name : "";
-      // 기본 지역
-      const defaultRegionName = regions[0].name;
-      
+    if (chatbotData) {
+      // 챗봇에서 넘어온 데이터가 있을 경우, 이를 기반으로 설정
       setSelectedItems([
         {
-          item: defaultItemName,
-          variety: defaultVarietyName,
-          region: defaultRegionName,
+          midName: chatbotData.midName,
+          smallName: chatbotData.smallName,
+          region: "서울", // 기본 지역
         },
       ]);
+    } else {
+      // 기본 추천 품목 설정
+      fetchRecommendedProducts();
     }
-  }, []);
+  }, [chatbotData]);
 
+  // 🔹 **기본 추천 상품을 DB에서 불러오기**
+  const fetchRecommendedProducts = async () => {
+    try {
+      // API 요청 (예시: "/api/recommendations")
+      const response = await fetch("/core/recommendations");
+
+      const data = ITEM_VARIETY_MAP
+
+      if (data.length > 0) {
+        setSelectedItems([
+          {
+            midName: data[0].midName,
+            smallName: data[0].smallName,
+            region: "서울", // 기본 지역
+          },
+        ]);
+      }
+    } catch (error) {
+      console.error("추천 상품 불러오기 실패:", error);
+    }
+  };
+
+  // 🔹 **필터 변경 처리 (품목, 품종, 지역 선택)**
   const handleFilterChange = (selectedData: SelectedDataString) => {
+    // 🔍 중복 검사 (midName, smallName, region이 같은 항목이 있는지 체크)
+    const isDuplicate = selectedItems.some(
+      (item) =>
+        item.midName === selectedData.midName &&
+        item.smallName === selectedData.smallName &&
+        item.region === selectedData.region
+    );
+  
+    if (isDuplicate) {
+      alert("⚠️ 이미 추가된 품목입니다!");
+      return;
+    }
+  
     if (selectedItems.length < 5) {
       setSelectedItems((prev) => [...prev, selectedData]);
     } else {
@@ -83,22 +104,30 @@ const PricePage = () => {
     }
   };
 
+  // 🔹 **선택 품목 제거**
   const handleRemoveItem = (index: number) => {
     setSelectedItems((prev) => prev.filter((_, i) => i !== index));
   };
 
+  // 🔹 **날짜 변경 처리**
   const handleDateChange = (start: string, end: string) => {
     setStartDate(start);
     setEndDate(end);
   };
 
-  // MultiLineChart에 전달하기 전에 선택 데이터를 id 기반으로 변환
-  const selectionsWithIds: SelectedData[] = selectedItems.map((selected) => ({
-    itemId: items.find((i) => i.name === selected.item)?.id || 0,
-    varietyId: varieties.find((v) => v.name === selected.variety)?.id || 0,
-    regionId: regions.find((r) => r.name === selected.region)?.id || 0,
-  }));
+  // 🔹 **선택 데이터를 id 기반으로 변환하여 MultiLineChart에 전달**
+  const selectionsWithIds: SelectedData[] = selectedItems.map((selected) => {
+    const matchedVariety = ITEM_VARIETY_MAP.find(
+      (entry) =>
+        entry.midName === selected.midName && entry.smallName === selected.smallName
+    );
+    const matchedRegion = REGIONS.find((r) => r.name === selected.region);
 
+    return {
+      smallId: matchedVariety ? matchedVariety.smallId : "00",
+      regionId: matchedRegion ? matchedRegion.regionId : 1, // 기본 서울
+    };
+  });
 
   return (
     <>

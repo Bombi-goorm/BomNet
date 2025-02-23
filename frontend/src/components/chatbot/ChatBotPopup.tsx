@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import { fetchWeather, fetchAlert, fetchPrice, fetchOther } from "../../api/chat_api";
 import { CommonResponseDto } from "../../types/member_types";
-import { ChatbotResponseDto } from "../../types/chatbot_types";
+import { ChatbotRequestDto, ChatbotResponseDto } from "../../types/chatbot_types";
 import { useNavigate } from "react-router-dom";
-import { ITEM_VARIETY_MAP } from "../../pages/PricePage";
+import { ITEM_VARIETY_MAP } from "../../data_sample";
+import { WeatherInfo } from "../../types/home_types";
+
+
 
 const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
 
@@ -43,10 +46,10 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
         initialMessage = "🔔 알람을 받고 싶은 품목, 품종과 가격을 입력해주세요! (예: 사과 부사 2000)";
         break;
       case "weather":
-        initialMessage = "🌦️ 조회할 지역의 날씨 정보를 입력해주세요. (예: 서울)";
+        initialMessage = "🌦️ 조회할 지역의 날씨 정보를 입력해주세요! (예: 서울)";
         break;
       case "price":
-        initialMessage = "💰 가격을 알고 싶은 품목, 품종과 가격을 입력해주세요! (예: 배추 고랭지배추)";
+        initialMessage = "💰 가격을 알고 싶은 품목을 입력해주세요! (예: 배추)";
         break;
       case "other":
         initialMessage = "🌾 궁금한 농업 관련 질문을 입력해주세요 ~~ !! (예: 사과 병충해 목록)";
@@ -58,124 +61,190 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
     setMessages([{ type: "bot", content: initialMessage }]);
   };
 
-  // 사용자 입력 처리 (메뉴별 API 요청)
+  //  사용자 입력 처리 (API 요청)
   const handleUserInputSubmit = async () => {
     if (!userInput.trim()) return;
 
-    // 사용자 메시지 추가
     setMessages([...messages, { type: "user", content: userInput }]);
 
-    let response: CommonResponseDto<ChatbotResponseDto>;
-
     try {
-        switch (screen) {
-            case "alert":
-                response = await handleAlertInput()
-                break;
-            case "weather":
-                response = await handleWeatherInput()
-                break;
-            case "price":
-                await handlePriceInputSubmit()
-                break;
-            case "other":
-                response = await handleOtherInput()
-                break;
-            default:
-                throw new Error("⛔ 유효하지 않은 요청입니다.");
-        }
+      let response: CommonResponseDto<ChatbotResponseDto> | undefined;
 
-        if (response.status == '200') {
-            setMessages((prevMessages) => [
-                ...prevMessages,
-                { type: "user", content: response.message },
-                { type: "user", content: response.data ? JSON.stringify(response.data, null, 2) : "✅ 요청이 처리되었습니다." },
-            ]);
-        } else {
-            setMessages((prevMessages) => [
-                ...prevMessages,
-                { type: "user", content: `⚠️ ${response.message}` },
-            ]);
-        }
+      switch (screen) {
+        case "alert":
+          response = await handleAlertInput();
+          break;
+        case "weather":
+          response = await handleWeatherInput();
+          break;
+        case "price":
+          response = await handlePriceInputSubmit();
+          break;
+        case "other":
+          response = await handleOtherInput();
+          break;
+        default:
+          throw new Error("⛔ 유효하지 않은 요청입니다.");
+      }
     } catch (error) {
-        console.error("API 요청 실패:", error);
-        setMessages((prevMessages) => [
-            ...prevMessages,
-            { type: "user", content: "⛔ 요청을 처리하는 중 오류가 발생했습니다." },
-        ]);
+      console.error("API 요청 실패:", error);
+      setMessages((prev) => [...prev, { type: "bot", content: "⛔ 요청 처리 중 오류가 발생했습니다." }]);
     }
 
     setUserInput(""); // 입력 필드 초기화
   };
 
-  // ✅ 알람 설정 처리
+  //  알람 설정 처리
   const handleAlertInput = async () => {
     const response = await fetchAlert({ input: userInput });
     return response;
   };
 
-  // ✅ 날씨 조회 처리
+  //  날씨 조회 처리
   const handleWeatherInput = async () => {
-    const response = await fetchWeather({ input: userInput });
-    return response;
-  };
-
-  // ✅ 기타 질문 처리
-  const handleOtherInput = async () => {
-    const response = await fetchOther({ input: userInput });
-    return response;
-  };
-
-  // 가격 입력 처리
-  const handlePriceInputSubmit = async () => {
     if (!userInput.trim()) return;
-  
-    setMessages((prevMessages) => [...prevMessages, { type: "user", content: userInput }]);
-  
-  
+
     try {
-      // 사용자 입력을 "품목 품종" 형태로 파싱
-      const [item, variety] = userInput.split(" ");
-  
-      // ITEM_VARIETY_MAP에서 품목과 품종 찾기
-      const matchedItem = ITEM_VARIETY_MAP.find(
-        (entry) => entry.item === item && entry.variety === variety
-      );
-  
-      if (!matchedItem) {
-        setMessages((prev) => [...prev, { type: "bot", content: "⚠️ 해당 품목 또는 품종 정보를 찾을 수 없습니다." }]);
-        return;
-      }
-  
-      // 서버에 가격 정보 요청 (기본 지역: 서울)
-      const requestData = {
-        itemCode: matchedItem.itemCode,
-        varietyCode: matchedItem.varietyCode,
-        region: "서울",
-      };
-  
-      const response = await fetchPrice(requestData);
-  
-      if (response.status === "200") {
-        // ✅ 200 응답이면 가격 페이지로 이동
-        navigate("/price", { state: requestData });
-      } else {
-        // 오류 메시지를 챗봇에 출력
+      const response: CommonResponseDto<ChatbotResponseDto> = await fetchWeather({ input: userInput });
+
+      if (response.status === "200" && response.data) {
+        const { location, weatherInfo } = response.data;
+
+        if (!weatherInfo) {
+          setMessages((prev) => [
+            ...prev,
+            { type: "bot", content: `⚠️ '${userInput}' 지역의 날씨 정보를 찾을 수 없습니다.` },
+          ]);
+          return;
+        }
+
+        const formattedWeather = formatWeatherMessage(location ?? '서울', weatherInfo);
+        
         setMessages((prev) => [
           ...prev,
-          { type: "bot", content: `❌ 조회 실패: ${response.message}` },
+          { type: "bot", content: formattedWeather },
         ]);
+        return response;
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          { type: "bot", content: `❌ 날씨 조회 실패: ${response.message || "알 수 없는 오류 발생"}` },
+        ]);
+        return response;
       }
     } catch (error) {
       console.error("API 요청 실패:", error);
       setMessages((prev) => [
         ...prev,
-        { type: "bot", content: "⛔ 서버 오류로 인해 조회에 실패했습니다." },
+        { type: "bot", content: "⛔ 서버 오류로 인해 날씨 정보를 가져오지 못했습니다." },
       ]);
+      
     }
-  
-    setUserInput(""); // 입력 필드 초기화
   };
+
+  const formatWeatherMessage = (location: string, weatherInfo: WeatherInfo): string => {
+    return `📍 ${location} 지역 날씨 정보\n\n`
+      + `📅 시간: ${new Date(weatherInfo.dateTime ?? new Date().toISOString()).toLocaleTimeString("ko-KR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      })}\n`
+      + `🌦️ 날씨: ${weatherInfo.weather}\n`
+      + `🌡️ 온도: ${weatherInfo.temperature}\n`
+      + `💧 습도: ${weatherInfo.humidity}\n`
+      + `🌬️ 바람: ${weatherInfo.wind}`;
+  };
+  
+  //  가격 조회 요청
+  const handlePriceInputSubmit = async () => {
+    if (!userInput.trim()) return;
+
+    try {
+      // ✅ 품목 이름을 midName 기준으로 검색
+      const matchedItems = ITEM_VARIETY_MAP.filter((entry) => entry.midName === userInput);
+
+      if (matchedItems.length === 0) {
+        setMessages((prev) => [...prev, { type: "bot", content: "⚠️ 해당 품목 정보를 찾을 수 없습니다." }]);
+        return;
+      }
+
+      // 품종 중 하나를 랜덤 선택
+      const randomVariety = matchedItems[Math.floor(Math.random() * matchedItems.length)];
+
+      setMessages((prev) => [
+        ...prev,
+        { type: "bot", content: `🔍 ${userInput}의 품종 중 '${randomVariety.smallName}'를 선택하였습니다.` },
+      ]);
+
+      // ✅ API 요청 데이터 수정 (bigId, midId, smallId)
+      const requestData: ChatbotRequestDto = {
+        bigId: randomVariety.bigId,
+        midId: randomVariety.midId,
+        smallId: randomVariety.smallId,
+      };
+
+      const response = await fetchPrice(requestData);
+
+      if (response.status === "200") {
+        navigate("/price", { state: response.data });
+        return response;
+      } else {
+        setMessages((prev) => [...prev, { type: "bot", content: `❌ 조회 실패: ${response.message}` }]);
+        return response;
+      }
+    } catch (error) {
+      console.error("API 요청 실패:", error);
+      setMessages((prev) => [...prev, { type: "bot", content: "⛔ 서버 오류로 인해 조회에 실패했습니다." }]);
+    }
+  };
+
+  //  기타 질문 처리
+  const handleOtherInput = async () => {
+    try {
+      const response = await fetchOther({ input: userInput });
+  
+      if (!response || !response.data) {
+        setMessages((prev) => [...prev, { type: "bot", content: "⛔ 응답을 가져올 수 없습니다." }]);
+        return;
+      }
+  
+      // ✅ GPT 응답을 사용자 채팅에 추가
+      handleBotResponse(response.data);
+  
+      return response;
+    } catch (error) {
+      console.error("GPT API 오류:", error);
+      setMessages((prev) => [...prev, { type: "bot", content: "⛔ 서버 오류로 인해 요청을 처리할 수 없습니다." }]);
+    }
+  };
+
+// ✅ GPT 응답을 사용자에게 보기 좋게 출력
+const handleBotResponse = (data: ChatbotResponseDto) => {
+  let formattedContent = "";
+
+  console.log("🔍 GPT 응답 데이터 확인:", data); // 🔎 디버깅용
+
+  // ✅ 'intent'가 있을 경우, 보기 좋게 변환
+  const intentText = data.intent?.replace(/[_']/g, " ").trim() || "정보";
+
+  formattedContent = `📌 **${intentText}**\n\n`;
+
+  // ✅ `response_data` 확인 후 출력
+  if (data.response_data?.content) {
+    formattedContent += data.response_data.content;
+  } else {
+    formattedContent += "📎 응답을 가져올 수 없습니다.";
+  }
+
+  setMessages((prev) => [...prev, { type: "bot", content: formattedContent }]);
+};
+
+
+
+
+
+  
+
 
   return (
     <div className="fixed bottom-20 right-6 w-96 h-[520px] bg-gradient-to-r from-green-50 to-green-100 shadow-xl rounded-2xl p-4 flex flex-col">
@@ -203,6 +272,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
             className={`p-3 rounded-lg w-fit max-w-xs ${
               msg.type === "user" ? "bg-green-500 text-white self-end ml-auto" : "bg-gray-200 text-gray-800 self-start"
             }`}
+            style={{ whiteSpace: "pre-line" }}
           >
             {msg.content}
           </div>

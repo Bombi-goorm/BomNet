@@ -22,7 +22,7 @@ export interface HomeProduct {
 // 상품 가격 추이
 export interface ProductPrice {
     date: string,
-    price: string,
+    price: number,
 }
 
 // 기상 특보

@@ -1,8 +1,10 @@
+from fastapi import APIRouter
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import sessionmaker
 
-from main import router
+base_router = APIRouter()
+
 
 DATABASE_URL = "mysql+pymysql://root:1234@localhost:3306/bomnet_db"
 
@@ -11,13 +13,12 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-
-@router.get("/health")
+@base_router.get("/health")
 def health():
     return {"LLM :: Healthy"}
 
 
-@router.get("/ping")
+@base_router.get("/ping")
 def ping_db():
     try:
         db = SessionLocal()

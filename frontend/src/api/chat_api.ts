@@ -15,35 +15,49 @@ const api = axios.create({
 
 export const chatHealth = async (): Promise<string> => {
   const response = await api.get<string>(`/llm/health`);
-  return response.data;
-};
-
-export const chatDB = async (): Promise<string> => {
-  const response = await api.get<string>(`/llm/ping`);
-  return response.data;
+  return response.data; 
 };
 
 // 날씨 검색 요청
+// export const fetchWeather = async (data: ChatbotRequestDto): Promise<CommonResponseDto<ChatbotResponseDto>> => {
+//   const response = await api.post<CommonResponseDto<ChatbotResponseDto>>(`/llm/weather/info`, data);
+//   return response.data;
+// };
+
 export const fetchWeather = async (data: ChatbotRequestDto): Promise<CommonResponseDto<ChatbotResponseDto>> => {
-  const response = await axios.post<CommonResponseDto<ChatbotResponseDto>>(`/llm/weather`, data);
-  return response.data;
+  return {
+    status: "200",
+    message: "날씨 정보 조회 성공",
+    data: {
+      location: "서울",
+      weatherInfo: {
+        weather: "맑음",
+        temperature: "5°C",
+        humidity: "30%",
+        wind: "10km/h",
+        dateTime: "2023-02-01T12:00:00Z",
+      },
+    },
+  };
 };
+
 
 // 가격 조회 요청
 export const fetchPrice = async (data: ChatbotRequestDto): Promise<CommonResponseDto<ChatbotResponseDto>> => {
-  console.log('11111')
-  const response = await axios.post<CommonResponseDto<ChatbotResponseDto>>(`/llm/price`, data);
+  const response = await api.post<CommonResponseDto<ChatbotResponseDto>>(`/llm/price/info`, data);
   return response.data;
 };
 
 // 알람 설정 요청
 export const fetchAlert = async (data: ChatbotRequestDto): Promise<CommonResponseDto<ChatbotResponseDto>> => {
-  const response = await axios.post<CommonResponseDto<ChatbotResponseDto>>(`/llm/alert`, data);
+  const response = await api.post<CommonResponseDto<ChatbotResponseDto>>(`/llm/alert/set`, data);
   return response.data;
 };
 
 // 기타 질문 요청 (GPT)
 export const fetchOther = async (data: ChatbotRequestDto): Promise<CommonResponseDto<ChatbotResponseDto>> => {
-  const response = await axios.post<CommonResponseDto<ChatbotResponseDto>>(`/llm/other`, data);
+  const response = await api.post<CommonResponseDto<ChatbotResponseDto>>(`/llm/other/request`, data);
   return response.data;
 };
+
+

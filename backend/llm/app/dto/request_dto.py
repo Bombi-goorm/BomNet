@@ -2,11 +2,9 @@ from pydantic import BaseModel
 
 
 class ChatbotRequestDto(BaseModel):
-    input: str
-    item: str
-    mid_id: int
-    small_id: int
-    price: int
-
-
-
+    input: str = None
+    bigId: str = None
+    midId: str = None
+    smallId: str = None
+    region: str = None
+    price: int = None
