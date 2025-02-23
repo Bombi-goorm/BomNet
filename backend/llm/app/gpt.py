@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi import APIRouter
 from pydantic import BaseModel
 import openai
+from fastapi.responses import JSONResponse
 import json
 from app.config import OPENAI_API_KEY
 
@@ -55,7 +56,9 @@ def extract_price_info(user_input: UserInput):
         model="gpt-4-turbo",
         messages=[
             {"role": "system", "content": "Extract item, variety, and price from user input."},
-            {"role": "user", "content": user_input.user_input}  # Corrected access
+
+            {"role": "user", "content": user_input.user_input}
+
         ],
         functions=[
             {
@@ -86,7 +89,6 @@ def extract_price_info(user_input: UserInput):
     if price:
         result["Price"] = price
 
-    return result
 
 
 @router.post("/weather")
@@ -94,16 +96,25 @@ async def get_seoul_weather():
     try:
         client = openai.OpenAI(api_key=OPENAI_API_KEY)
         response = client.chat.completions.create(
-            model="gpt-4-turbo",  # Use the correct model
+
+            model="gpt-4-turbo",
+
             messages=[
                 {"role": "system", "content": "You are a weather assistant."},
                 {"role": "user", "content": "서울의 현재 날씨를 알려줘."}
             ]
         )
         weather_info = response.choices[0].message.content
-        return {"weather": weather_info}
+
+        return JSONResponse(content={
+            "status": "success",
+            "data": {"weather": weather_info}
+        })
     except Exception as e:
-        return {"error": str(e)}
+        return JSONResponse(
+            status_code=500,
+            content={"status": "error", "message": str(e)}
+        )
 
 
 @router.post("/other")
@@ -135,10 +146,14 @@ async def ask_agriculture_question(user_input: UserInput):
         }
 
     except Exception as e:
-        return {
-            "status": "error",
-            "message": str(e)
-        }
+        return JSONResponse(
+            status_code=500,
+            content={
+                "status": "error",
+                "message": str(e)
+            }
+        )
+
 
 
 @router.post("/price")
@@ -152,7 +167,9 @@ async def extract_varieties(user_input: UserInput):
                 {"role": "system", "content": "You are an AI that extracts crop variety names from user input."},
                 {"role": "user", "content": user_input.user_input}
             ],
-            functions=[  # 'functions'로 수정 (이전의 'function'에서)
+
+            functions=[
+
                 {
                     "name": "extract_variety",
                     "description": "Extract item and variety from the user's input",
@@ -166,10 +183,11 @@ async def extract_varieties(user_input: UserInput):
                     }
                 }
             ],
-            function_call={"name": "extract_variety"}  # function_call 파라미터 추가
+
+            function_call={"name": "extract_variety"}
         )
 
-        # 응답 처리
+
         function_call = response.choices[0].message.function_call
         if function_call:
             function_response = json.loads(function_call.arguments)
@@ -181,11 +199,25 @@ async def extract_varieties(user_input: UserInput):
                 result["Item"] = item
 
             return result
+
         else:
-            return {"error": "Failed to extract variety information"}
+            return JSONResponse(
+                status_code=400,
+                content={
+                    "status": "error",
+                    "message": "Failed to extract variety information"
+                }
+            )
 
     except Exception as e:
-        return {"error": str(e)}
+        return JSONResponse(
+            status_code=500,
+            content={
+                "status": "error",
+                "message": str(e)
+            }
+        )
+
 
 
 @router.post("/recommend")

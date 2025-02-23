@@ -1,47 +1,55 @@
 package com.bombi.core.domain.member.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.UUID;
+
+import org.hibernate.annotations.Comment;
+
+import com.bombi.core.domain.base.model.BaseEntity;
 
 @Entity
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "member")
-public class Member {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Member extends BaseEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "member_id")
+    private UUID id;
 
-    @Column(columnDefinition = "VARCHAR(100) NOT NULL COMMENT '이메일'")
-    private String email;
+    @Column(columnDefinition = "VARCHAR(10) NOT NULL")
+    @Comment("소셜로그인")
+    private String platform;
 
-    @Column(columnDefinition = "VARCHAR(1) DEFAULT 'N' NOT NULL COMMENT '탈퇴 여부(탈퇴시, Y)'")
-    private String deleted;
+    @Column(columnDefinition = "VARCHAR(100) NOT NULL")
+    @Comment("이메일")
+    private String authEmail;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    // 인증 후 등록 전
+    private String isEnabled;
+
+    // 탈퇴, 이용정지
+    private String isBanned;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", columnDefinition = "BIGINT COMMENT '권한 ID'")
     private Role role;
 
-    @Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT '가입일자'")
-    private LocalDateTime createdDate;
-
-    @Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT '수정일자'")
-    private LocalDateTime updatedDate;
-
-    /**
-     * 관련 메서드
-     */
-
-    // 회원 탈퇴 처리(비활성화)
-    public void deactivate() {
-        this.deleted = "Y";
-        this.email = this.email + "_OUT";
+    @Builder
+    private Member(String platform, String authEmail, Role role) {
+        this.platform = platform;
+        this.authEmail = authEmail;
+        this.role = role;
     }
+
+    public static Member of(String platform, String authEmail, Role role) {
+        return new Member(platform, authEmail, role);
+    }
+
 }

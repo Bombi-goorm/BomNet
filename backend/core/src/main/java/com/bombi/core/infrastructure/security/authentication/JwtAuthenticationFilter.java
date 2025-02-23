@@ -1,7 +1,5 @@
 package com.bombi.core.infrastructure.security.authentication;
 
-import com.almagest_dev.tacobank_core_server.common.exception.ExceptionResponseWriter;
-import com.almagest_dev.tacobank_core_server.infrastructure.persistence.TokenBlackList;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,11 +24,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
-    private final TokenBlackList tokenBlackList;
+
+    private static final List<String> EXCLUDED_PATHS = Arrays.asList(
+        "/core/health"
+    );
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("JwtAuthenticationFilter::doFilterInternal");
+
+        if (EXCLUDED_PATHS.stream().anyMatch(request.getServletPath()::contains)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         // 토큰 추출
         String token = getTokenFromCookies(request.getCookies());
@@ -37,13 +44,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 토큰 유효성 검증
         if (token != null && jwtProvider.validateToken(token)) {
-            // 블랙리스트 확인
-            if (tokenBlackList.isTokenBlacklisted(token)) {
-                log.warn("JwtAuthenticationFilter::doFilterInternal - 블랙리스트 토큰 (token: {})", token);
-                ExceptionResponseWriter.writeExceptionResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "FAILURE", "인증 정보가 유효하지 않습니다. 다시 로그인해주세요.");
-                return;
-            }
-
             String username = jwtProvider.getUsernameFromToken(token); // 클레임에서 사용자 정보 추출
             Long memberId = jwtProvider.getMemberIdFromToken(token); // 클레임에서 멤버 ID 추출
             log.info("JwtAuthenticationFilter::doFilterInternal - username: {}, memberId: {}", username, memberId);
