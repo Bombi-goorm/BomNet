@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="218060a4-012f-4962-98f6-4c4b7b1da468" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/core/src/main/java/com/bombi/core/application/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/src/main/java/com/bombi/core/application/service/MemberService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/core/src/main/resources/application-local.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/core/src/main/resources/application-local.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +36,7 @@
     "WebServerToolWindowFactoryState": "false",
     "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "JK-LLM-toFront",
-    "last_opened_file_path": "E:/IdeaProjects/BomNet",
+    "last_opened_file_path": "/Users/klolarion/IdeaProjects/BomNet",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -76,19 +74,6 @@
       <option name="USE_OPTIONS" value="false" />
       <option name="OPTIONS" value="" />
       <method v="2" />
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="BomNet" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="BomNet" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
     </configuration>
     <configuration default="true" type="PyBehaveRunConfigurationType" factoryName="Behave">
       <module name="BomNet" />
@@ -150,6 +135,19 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <method v="2" />
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="BomNet" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="BomNet" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -166,6 +164,7 @@
       <workItem from="1739912017378" duration="944000" />
       <workItem from="1739998525922" duration="38000" />
       <workItem from="1739998883066" duration="1173000" />
+      <workItem from="1740354861458" duration="1226000" />
     </task>
     <servers />
   </component>

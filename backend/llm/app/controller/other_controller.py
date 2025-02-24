@@ -1,12 +1,11 @@
-import json
+from typing import Optional
+
 from fastapi import APIRouter
 from openai import OpenAI
 from pydantic import BaseModel
-from typing import List, Optional
 
 from app.dto.common_response_dto import CommonResponseDto
 from app.dto.request_dto import ChatbotRequestDto
-from app.dto.response_dto import OtherResponseDto
 from config import OPENAI_API_KEY
 
 other_router = APIRouter()

@@ -29,8 +29,12 @@ public class Cultivation extends BaseEntity {
 	private Long id;
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	@Comment("재배 방법")
-	private String cultivationMethod;
+	@Comment("재배 특정")
+	private String cultivationFeatures;
+
+	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
+	@Comment("재배 팁")
+	private String cultivationTip;
 
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "product_id", columnDefinition = "BIGINT NOT NULL")

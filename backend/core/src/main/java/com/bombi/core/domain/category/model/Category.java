@@ -40,6 +40,10 @@ public class Category extends BaseEntity {
 	@Comment("카테고리 이름")
 	private String name;
 
+	@Column(columnDefinition = "VARCHAR(10) NOT NULL")
+	@Comment("카테고리 코드")
+	private String code;
+
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "parent_id", referencedColumnName = "category_id")
 	private Category parent;
