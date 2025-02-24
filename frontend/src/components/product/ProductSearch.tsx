@@ -1,40 +1,49 @@
 import React, { useState } from "react";
-import { items, varieties } from "../../data_sample";
+import { ITEM_VARIETY_MAP } from "../../data_sample";
 import { FiHelpCircle } from "react-icons/fi";
 
-const ProductSearch = ({ onSearch }: { onSearch: (data: { item: string; variety: string | null; pnu: string }) => void }) => {
+const ProductSearch = ({
+  onSearch,
+}: {
+  onSearch: (data: { item: string; variety: string | null; pnu: string }) => void;
+}) => {
   const [query, setQuery] = useState("");
-  const [filteredItems, setFilteredItems] = useState(items);
+  const [filteredItems, setFilteredItems] = useState(
+    Array.from(new Set(ITEM_VARIETY_MAP.map((item) => item.midName))) // 중복 제거
+  );
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [selectedVariety, setSelectedVariety] = useState<string | null>(null);
   const [pnuCode, setPnuCode] = useState("");
 
-  // 품목 필터링 함수
+  // 품목 검색 처리
   const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     setQuery(input);
 
-    // 품목 목록 필터링
-    setFilteredItems(
-      items.filter((item) =>
-        item.name.toLowerCase().includes(input.toLowerCase())
+    // 품목 필터링 (중복 제거)
+    const filtered = Array.from(
+      new Set(
+        ITEM_VARIETY_MAP.map((item) => item.midName).filter((name) =>
+          name.toLowerCase().includes(input.toLowerCase())
+        )
       )
+    );
+    setFilteredItems(filtered);
+  };
+
+  // 품목 선택 시 품종 필터링
+  const getVarietyOptions = (itemName: string) => {
+    return ITEM_VARIETY_MAP.filter((item) => item.midName === itemName).map(
+      (item) => item.smallName
     );
   };
 
-  // 품목 선택 시
+  // 품목 선택
   const handleItemSelect = (itemName: string) => {
     setSelectedItem(itemName);
     setSelectedVariety(null); // 품종 초기화
     setQuery(itemName); // 입력창에도 표시
     setFilteredItems([]); // 목록 숨기기
-  };
-
-  // 품종 필터링 함수
-  const getVarietyOptions = (itemName: string) => {
-    const item = items.find((i) => i.name === itemName);
-    if (!item) return [];
-    return varieties.filter((v) => v.itemId === item.id);
   };
 
   // 검색 실행
@@ -67,13 +76,13 @@ const ProductSearch = ({ onSearch }: { onSearch: (data: { item: string; variety:
         {/* 검색 결과 목록 */}
         {query && (
           <ul className="absolute bg-white border border-gray-300 rounded-lg mt-1 w-full max-h-40 overflow-y-auto shadow-lg">
-            {filteredItems.map((item) => (
+            {filteredItems.map((item, index) => (
               <li
-                key={item.id}
-                onClick={() => handleItemSelect(item.name)}
+                key={index}
+                onClick={() => handleItemSelect(item)}
                 className="p-2 cursor-pointer hover:bg-gray-100"
               >
-                {item.name}
+                {item}
               </li>
             ))}
           </ul>
@@ -93,9 +102,9 @@ const ProductSearch = ({ onSearch }: { onSearch: (data: { item: string; variety:
             className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-2"
           >
             <option value="">전체</option>
-            {getVarietyOptions(selectedItem).map((variety) => (
-              <option key={variety.id} value={variety.name}>
-                {variety.name}
+            {getVarietyOptions(selectedItem).map((variety, index) => (
+              <option key={index} value={variety}>
+                {variety}
               </option>
             ))}
           </select>

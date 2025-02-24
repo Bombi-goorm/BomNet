@@ -62,23 +62,11 @@ services:
     volumes:
       - ./backend/llm:/app
 
-  bridge-server:
-    build: ./backend/bridge
-    container_name: bridge-server
-    ports:
-      - "8183:8183"
-    depends_on:
-      - mariadb
-    networks:
-      - bomnet
-    volumes:
-      - ./backend/bridge:/app
-
   notification-server:
     build: ./backend/notification
     container_name: notification-server
     ports:
-      - "8184:8184"
+      - "8183:8183"
     depends_on:
       - mariadb
     networks:
