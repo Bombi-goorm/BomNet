@@ -38,16 +38,21 @@ public class NaverNewsApiUtil {
         return headers;
     }
 
-    public URI createNewsUri() {
+    public URI createNewsUri(String display, String start) {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.set("query", "농산물");
-        queryParams.set("display", "10");
-        queryParams.set("start", "1");
+        queryParams.set("display", display);
+        queryParams.set("start", start);
         queryParams.set("sort", "sim");
 
         return UriComponentsBuilder
-            .fromUriString(NAVER_OCR_API_URL)
-            .queryParams(queryParams)
+            .fromUriString("https://openapi.naver.com")
+            .path("/v1/search/news.json")
+            // .queryParams(queryParams)
+            .queryParam("query", "농산물")
+            .queryParam("sort", "sim")
+            .queryParam("display", 10)
+            .queryParam("start", 1)
             .encode()
             .build()
             .toUri();
