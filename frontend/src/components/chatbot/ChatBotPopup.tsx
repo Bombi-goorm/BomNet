@@ -207,32 +207,34 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
     if (!userInput.trim()) return;
 
     try {
-      // ✅ 품목 이름을 midName 기준으로 검색
-      const matchedItems = ITEM_VARIETY_MAP.filter((entry) => entry.midName === userInput);
+      // // ✅ 품목 이름을 midName 기준으로 검색
+      // const matchedItems = ITEM_VARIETY_MAP.filter((entry) => entry.midName === userInput);
 
-      if (matchedItems.length === 0) {
-        setMessages((prev) => [...prev, { type: "bot", content: "⚠️ 해당 품목 정보를 찾을 수 없습니다." }]);
-        return;
-      }
+      // if (matchedItems.length === 0) {
+      //   setMessages((prev) => [...prev, { type: "bot", content: "⚠️ 해당 품목 정보를 찾을 수 없습니다." }]);
+      //   return;
+      // }
 
-      // 품종 중 하나를 랜덤 선택
-      const randomVariety = matchedItems[Math.floor(Math.random() * matchedItems.length)];
+      // // 품종 중 하나를 랜덤 선택
+      // const randomVariety = matchedItems[Math.floor(Math.random() * matchedItems.length)];
 
-      setMessages((prev) => [
-        ...prev,
-        { type: "bot", content: `🔍 ${userInput}의 품종 중 '${randomVariety.smallName}'를 선택하였습니다.` },
-      ]);
+      // setMessages((prev) => [
+      //   ...prev,
+      //   { type: "bot", content: `🔍 ${userInput}의 품종 중 '${randomVariety.smallName}'를 선택하였습니다.` },
+      // ]);
 
-      // ✅ API 요청 데이터 수정 (bigId, midId, smallId)
+      // ✅ API 요청 데이터 (input)
       const requestData: ChatbotRequestDto = {
-        bigId: randomVariety.bigId,
-        midId: randomVariety.midId,
-        smallId: randomVariety.smallId,
+        input: userInput,
       };
 
       const response = await fetchPrice(requestData);
 
       if (response.status === "200") {
+          setMessages((prev) => [
+          ...prev,
+          { type: "bot", content: `🔍 ${userInput}의 품종 중 '${response.data.smallName}'를 선택하였습니다.` },
+        ]);
         navigate("/price", { state: response.data });
         return response;
       } else {

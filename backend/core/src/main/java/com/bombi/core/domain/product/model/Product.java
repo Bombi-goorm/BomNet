@@ -30,10 +30,6 @@ public class Product extends BaseEntity {
 	private Long id;
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	@Comment("작물 설명")
-	private String description;
-
-	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
 	@Comment("작물 이미지 URL")
 	private String imageUrl;
 
@@ -43,8 +39,7 @@ public class Product extends BaseEntity {
 	private Category category;
 
 	@Builder
-	private Product(String description, String imageUrl, Category category) {
-		this.description = description;
+	private Product(String imageUrl, Category category) {
 		this.imageUrl = imageUrl;
 		this.category = category;
 	}
