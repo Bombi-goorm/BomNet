@@ -19,6 +19,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,6 +37,10 @@ public class Category extends BaseEntity {
 	@Comment("카테고리 레벨")
 	private Long level;
 
+	@Column(columnDefinition = "VARCHAR(10) NOT NULL")
+	@Comment("카테고리 코드")
+	private String code;
+
 	@Column(columnDefinition = "VARCHAR(40) NOT NULL")
 	@Comment("카테고리 이름")
 	private String name;
@@ -51,8 +56,11 @@ public class Category extends BaseEntity {
 	@OneToMany(mappedBy = "parent")
 	private List<Category> children = new ArrayList<>();
 
-	public Category(Long level, String name) {
+	@Builder
+	private Category(Long level, String code, String name, Category parent) {
 		this.level = level;
+		this.code = code;
 		this.name = name;
+		this.parent = parent;
 	}
 }

@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,16 +30,24 @@ public class Cultivation extends BaseEntity {
 	private Long id;
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	@Comment("재배 특정")
+	@Comment("재배 특징")
 	private String cultivationFeatures;
 
 	@Column(columnDefinition = "VARCHAR(255) NOT NULL")
-	@Comment("재배 팁")
-	private String cultivationTip;
+	@Comment("관리 팁")
+	private String cultivationTips;
+
 
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "product_id", columnDefinition = "BIGINT NOT NULL")
 	@Comment("작물 ID")
 	private Product product;
 
+	@Builder
+	private Cultivation(String cultivationFeatures, String cultivationTips,
+		Product product) {
+		this.cultivationFeatures = cultivationFeatures;
+		this.cultivationTips = cultivationTips;
+		this.product = product;
+	}
 }

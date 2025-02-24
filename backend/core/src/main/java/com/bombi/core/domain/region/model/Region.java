@@ -66,12 +66,10 @@ public class Region {
 	private String y;
 
 	@Column(columnDefinition = "VARCHAR(5) NOT NULL")
-	@Comment("계산된 위도")
+	@Comment("위도 보정값")
 	private String xx;
 
 	@Column(columnDefinition = "VARCHAR(5) NOT NULL")
-	@Comment("계산된 경도")
+	@Comment("경도 보정값")
 	private String yy;
-
-
 }

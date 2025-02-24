@@ -22,7 +22,7 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private static final String[] PUBLIC_API_URL = { // 인증 없이도 접근 가능한 경로
-            "/core/health"
+            "/core/health", "/bigquery/data", "/gcs/data", "/weather/special", "/naver/news", "/best/price", "/core/home"
     };
 
     @Bean
