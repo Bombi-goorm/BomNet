@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 ENV PYTHONPATH="/app"
 
 # 컨테이너에서 사용할 포트
-EXPOSE 8183
+EXPOSE 8182
 
 # FastAPI 앱 실행
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8182"]

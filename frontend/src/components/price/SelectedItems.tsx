@@ -2,7 +2,7 @@ const SelectedItems = ({
   items,
   onRemoveItem,
 }: {
-  items: { item: string; variety: string; region: string }[];
+  items: { midName: string; smallName: string; region: string }[];
   onRemoveItem: (index: number) => void;
 }) => {
   return (
@@ -15,7 +15,7 @@ const SelectedItems = ({
             className="flex justify-between items-center border-b pb-2"
           >
             <span>
-              {item.item} ({item.variety}, {item.region})
+              {item.midName} ({item.smallName}, {item.region})
             </span>
             <button
               onClick={() => onRemoveItem(index)}

@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { items, varieties, regions } from "../../data_sample";
+import { ITEM_VARIETY_MAP, REGIONS } from "../../data_sample";
 
 const SearchBar = ({
   onFilterChange,
   onDateChange,
 }: {
   onFilterChange: (selectedData: {
-    item: string;
-    variety: string;
+    midName: string;
+    smallName: string;
     region: string;
   }) => void;
   onDateChange: (startDate: string, endDate: string) => void;
@@ -27,56 +27,60 @@ const SearchBar = ({
 
   const { today, oneWeekAgo } = getDefaultDates();
   const [query, setQuery] = useState("");
-  const [filteredItems, setFilteredItems] = useState(items); // `items` 데이터 사용
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
-  const [selectedVariety, setSelectedVariety] = useState<string | null>(null);
+  const [filteredItems, setFilteredItems] = useState(
+    Array.from(new Set(ITEM_VARIETY_MAP.map((item) => item.midName))) // 중복 제거
+  );
+  const [selectedMidName, setSelectedMidName] = useState<string | null>(null);
+  const [selectedSmallName, setSelectedSmallName] = useState<string | null>(null);
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [startDate, setStartDate] = useState(oneWeekAgo);
   const [endDate, setEndDate] = useState(today);
 
+  // 검색어 입력 처리
   const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     setQuery(input);
 
     // 품목 필터링
-    setFilteredItems(
-      items.filter((item) =>
-        item.name.toLowerCase().includes(input.toLowerCase())
-      )
+    const filtered = Array.from(new Set(
+      ITEM_VARIETY_MAP
+        .map((item) => item.midName)
+        .filter((name) => name.toLowerCase().includes(input.toLowerCase()))
+    ));
+    setFilteredItems(filtered);
+  };
+
+  // 품목 선택 시 품종 필터링
+  const getVarietyOptions = (midName: string) => {
+    return ITEM_VARIETY_MAP.filter((item) => item.midName === midName).map(
+      (item) => item.smallName
     );
   };
 
+  // 선택한 데이터 추가
   const handleAdd = () => {
-    if (selectedItem && selectedVariety && selectedRegion) {
+    if (selectedMidName && selectedSmallName && selectedRegion) {
       onFilterChange({
-        item: selectedItem,
-        variety: selectedVariety,
+        midName: selectedMidName,
+        smallName: selectedSmallName,
         region: selectedRegion,
       });
 
       // 초기화
       setQuery("");
-      setFilteredItems(items); // 초기화 시 전체 품목 목록 복원
-      setSelectedItem(null);
-      setSelectedVariety(null);
+      setFilteredItems(Array.from(new Set(ITEM_VARIETY_MAP.map((item) => item.midName))));
+      setSelectedMidName(null);
+      setSelectedSmallName(null);
       setSelectedRegion(null);
     } else {
       alert("품목, 품종, 지역을 모두 선택해주세요!");
     }
   };
 
+  // 날짜 변경 처리
   const handleDateChange = () => {
     console.log("Date Changed:", { startDate, endDate });
     onDateChange(startDate, endDate);
-  };
-
-  const getVarietyOptions = (itemName: string) => {
-    const item = items.find((i) => i.name === itemName);
-    if (!item) {
-      console.log(`Item not found for ${itemName}`);
-      return [];
-    }
-    return varieties.filter((v) => v.itemId === item.id);
   };
 
   return (
@@ -130,15 +134,15 @@ const SearchBar = ({
           {/* 검색 결과 */}
           {query && (
             <ul className="bg-white border border-gray-300 rounded-lg mt-2 max-h-40 overflow-y-auto">
-              {filteredItems.map((item) => (
+              {filteredItems.map((item, index) => (
                 <li
-                  key={item.id}
-                  onClick={() => setSelectedItem(item.name)}
+                  key={index}
+                  onClick={() => setSelectedMidName(item)}
                   className={`p-2 cursor-pointer hover:bg-gray-100 ${
-                    selectedItem === item.name ? "bg-green-100" : ""
+                    selectedMidName === item ? "bg-green-100" : ""
                   }`}
                 >
-                  {item.name}
+                  {item}
                 </li>
               ))}
             </ul>
@@ -146,21 +150,21 @@ const SearchBar = ({
         </div>
 
         {/* 품종 선택 */}
-        {selectedItem && (
+        {selectedMidName && (
           <div>
             <label htmlFor="variety-select" className="text-sm text-gray-700">
               품종 선택:
             </label>
             <select
               id="variety-select"
-              value={selectedVariety || ""}
-              onChange={(e) => setSelectedVariety(e.target.value)}
+              value={selectedSmallName || ""}
+              onChange={(e) => setSelectedSmallName(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-2"
             >
               <option value="">품종을 선택하세요</option>
-              {getVarietyOptions(selectedItem).map((variety) => (
-                <option key={variety.id} value={variety.name}>
-                  {variety.name}
+              {getVarietyOptions(selectedMidName).map((variety, index) => (
+                <option key={index} value={variety}>
+                  {variety}
                 </option>
               ))}
             </select>
@@ -179,8 +183,8 @@ const SearchBar = ({
             className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-2"
           >
             <option value="">지역을 선택하세요</option>
-            {regions.map((region) => (
-              <option key={region.id} value={region.name}>
+            {REGIONS.map((region) => (
+              <option key={region.regionId} value={region.name}>
                 {region.name}
               </option>
             ))}
