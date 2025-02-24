@@ -57,13 +57,19 @@ public class Region {
 	@Comment("특보 구역명")
 	private String specialZoneName;
 
-	@Column(columnDefinition = "VARCHAR(5) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(15) NOT NULL")
 	@Comment("위도")
 	private String x;
 
-	@Column(columnDefinition = "VARCHAR(5) NOT NULL")
+	@Column(columnDefinition = "VARCHAR(15) NOT NULL")
 	@Comment("경도")
 	private String y;
 
+	@Column(columnDefinition = "VARCHAR(5) NOT NULL")
+	@Comment("위도 보정값")
+	private String xx;
 
+	@Column(columnDefinition = "VARCHAR(5) NOT NULL")
+	@Comment("경도 보정값")
+	private String yy;
 }

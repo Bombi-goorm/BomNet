@@ -9,9 +9,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductPriceResponse {
 
-	private long productId;
+	private Long productId;
 	private String productName;
 	private String imageUrl;
 	private List<ProductPriceInfo> productPrices;
 
+	public ProductPriceResponse(String productName, List<ProductPriceInfo> productPriceInfos) {
+		this.productId = null;
+		this.imageUrl = null;
+		this.productName = productName;
+		this.productPrices = productPriceInfos;
+	}
 }

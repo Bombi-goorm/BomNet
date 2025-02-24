@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WeatherForecastApiClient {
 
-	private static final String BUCKET_NAME = "bomnet_forecast";
+	private static final String BUCKET_NAME = "kma_short";
 	private static final String JSON_FILE_FORMAT = ".jsonl";
 
 	private final Storage storage;

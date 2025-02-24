@@ -18,9 +18,9 @@ public class HomeController {
 
 	private final HomeService homeService;
 
-	@GetMapping("/core/hoem")
+	@GetMapping("/core/home")
 	public ResponseEntity<CoreResponseDto<?>> home(@AuthenticationPrincipal UserDetails userDetails) {
-		HomeResponseDto responseDto = homeService.homeInfo(userDetails.getUsername());
+		HomeResponseDto responseDto = homeService.homeInfo();
 		return ResponseEntity.ok(CoreResponseDto.of("200", "홈화면 응답", responseDto));
 	}
 

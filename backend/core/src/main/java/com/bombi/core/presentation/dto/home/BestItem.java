@@ -11,4 +11,8 @@ import lombok.NoArgsConstructor;
 public class BestItem {
 
 	private List<ProductPriceResponse> products;
+
+	public BestItem(List<ProductPriceResponse> productPriceResponses) {
+		this.products = productPriceResponses;
+	}
 }

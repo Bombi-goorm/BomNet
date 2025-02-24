@@ -20,10 +20,11 @@ public class HomeResponseDto {
 	private List<NewsResponseDto> news; // 뉴스
 
 	public HomeResponseDto(
+		List<ProductPriceResponse> productPriceResponses,
 		SpecialWeatherReportResponse specialWeatherReport,
 		WeatherForecastResponse weatherForecast,
 		NaverNewsResponse naverNewsResponse) {
-		this.bestItems = null;
+		this.bestItems = new BestItem(productPriceResponses);
 		this.weatherNotice = specialWeatherReport.getItem().stream()
 			.map(WeatherNoticeResponseDto::new)
 			.toList();
