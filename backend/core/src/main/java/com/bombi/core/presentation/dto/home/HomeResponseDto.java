@@ -3,7 +3,7 @@ package com.bombi.core.presentation.dto.home;
 import java.util.List;
 
 import com.bombi.core.infrastructure.external.gcs.dto.SpecialWeatherReportResponse;
-import com.bombi.core.infrastructure.external.gcs.dto.WeatherForecastResponse;
+import com.bombi.core.infrastructure.external.weather.dto.WeatherForecastResponse;
 import com.bombi.core.infrastructure.external.naver.dto.news.NaverNewsResponse;
 import com.bombi.core.presentation.dto.weather.WeatherNoticeResponseDto;
 
@@ -28,7 +28,7 @@ public class HomeResponseDto {
 		this.weatherNotice = specialWeatherReport.getItem().stream()
 			.map(WeatherNoticeResponseDto::new)
 			.toList();
-		this.weatherExpection = null;
+		this.weatherExpection = new WeatherExpection(weatherForecast.getForecastResponseMap());
 		this.news = naverNewsResponse.getItems()
 			.stream()
 			.map(NewsResponseDto::new)
