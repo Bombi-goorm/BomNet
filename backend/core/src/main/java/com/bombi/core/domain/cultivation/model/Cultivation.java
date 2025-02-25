@@ -37,6 +37,7 @@ public class Cultivation extends BaseEntity {
 	@Comment("관리 팁")
 	private String cultivationTips;
 
+
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "product_id", columnDefinition = "BIGINT NOT NULL")
 	@Comment("작물 ID")

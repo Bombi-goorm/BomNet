@@ -43,7 +43,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
 
     switch (action) {
       case "alert":
-        initialMessage = "🔔 알람을 받고 싶은 품목, 품종과 가격을 입력해주세요! (예: 사과 부사 2000)";
+        initialMessage = "🔔 알람을 받고 싶은 품목, 품종과 가격을 입력해주세요! (예: 사과 홍옥 2000)";
         break;
       case "weather":
         initialMessage = "🌦️ 조회할 지역의 날씨 정보를 입력해주세요! (예: 서울)";
@@ -96,9 +96,56 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
 
   //  알람 설정 처리
   const handleAlertInput = async () => {
-    const response = await fetchAlert({ input: userInput });
-    return response;
+    if (!userInput.trim()) return;
+
+    // 사용자 입력에서 품목, 품종, 가격 추출
+    const match = userInput.match(/(\S+)\s+(\S+)\s+(\d+)/);
+
+    if (!match) {
+      setMessages((prev) => [...prev, { type: "bot", content: "⚠️ 입력 형식이 올바르지 않습니다. (예: '사과 홍옥 3000')" }]);
+      return;
+    }
+
+    console.log(match)
+
+    const [_, midName, smallName, price] = match;
+
+    // ✅ ITEM_VARIETY_MAP에서 해당 품목과 품종을 검색
+    const matchedItem = ITEM_VARIETY_MAP.find(
+      (item) => item.midName === midName && item.smallName === smallName
+    );
+
+    if (!matchedItem) {
+      setMessages((prev) => [...prev, { type: "bot", content: `❌ '${midName} - ${smallName}' 품목을 찾을 수 없습니다.` }]);
+      return;
+    }
+
+    try {
+      // ✅ 서버에 알림 등록 요청
+      const response: CommonResponseDto<ChatbotResponseDto> = await fetchAlert({
+        bigId: matchedItem.bigId,
+        midId: matchedItem.midId,
+        smallId: matchedItem.smallId,
+        price: Number(price),
+      });
+
+      // ✅ 응답 처리
+      if (response.status === "200") {
+        if (response.message === "ALREADY_REGISTERED") {
+          setMessages((prev) => [...prev, { type: "bot", content: `⚠️ '${midName}-${smallName}-${price}원'은 이미 등록된 상품입니다.` }]);
+        } else {
+          setMessages((prev) => [...prev, { type: "bot", content: `✅ '${midName}-${smallName}-${price}원' 알림이 등록되었습니다.` }]);
+        }
+      } else {
+        setMessages((prev) => [...prev, { type: "bot", content: `❌ 알림 등록 실패: ${response.message || "서버 오류 발생"}` }]);
+      }
+    } catch (error) {
+      console.error("API 요청 실패:", error);
+      setMessages((prev) => [...prev, { type: "bot", content: "⛔ 서버 오류로 인해 알림 등록에 실패했습니다." }]);
+    }
   };
+
+
 
   //  날씨 조회 처리
   const handleWeatherInput = async () => {
@@ -141,7 +188,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
       
     }
   };
-
+  
   const formatWeatherMessage = (location: string, weatherInfo: WeatherInfo): string => {
     return `📍 ${location} 지역 날씨 정보\n\n`
       + `📅 시간: ${new Date(weatherInfo.dateTime ?? new Date().toISOString()).toLocaleTimeString("ko-KR", {
@@ -160,32 +207,34 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
     if (!userInput.trim()) return;
 
     try {
-      // ✅ 품목 이름을 midName 기준으로 검색
-      const matchedItems = ITEM_VARIETY_MAP.filter((entry) => entry.midName === userInput);
+      // // ✅ 품목 이름을 midName 기준으로 검색
+      // const matchedItems = ITEM_VARIETY_MAP.filter((entry) => entry.midName === userInput);
 
-      if (matchedItems.length === 0) {
-        setMessages((prev) => [...prev, { type: "bot", content: "⚠️ 해당 품목 정보를 찾을 수 없습니다." }]);
-        return;
-      }
+      // if (matchedItems.length === 0) {
+      //   setMessages((prev) => [...prev, { type: "bot", content: "⚠️ 해당 품목 정보를 찾을 수 없습니다." }]);
+      //   return;
+      // }
 
-      // 품종 중 하나를 랜덤 선택
-      const randomVariety = matchedItems[Math.floor(Math.random() * matchedItems.length)];
+      // // 품종 중 하나를 랜덤 선택
+      // const randomVariety = matchedItems[Math.floor(Math.random() * matchedItems.length)];
 
-      setMessages((prev) => [
-        ...prev,
-        { type: "bot", content: `🔍 ${userInput}의 품종 중 '${randomVariety.smallName}'를 선택하였습니다.` },
-      ]);
+      // setMessages((prev) => [
+      //   ...prev,
+      //   { type: "bot", content: `🔍 ${userInput}의 품종 중 '${randomVariety.smallName}'를 선택하였습니다.` },
+      // ]);
 
-      // ✅ API 요청 데이터 수정 (bigId, midId, smallId)
+      // ✅ API 요청 데이터 (input)
       const requestData: ChatbotRequestDto = {
-        bigId: randomVariety.bigId,
-        midId: randomVariety.midId,
-        smallId: randomVariety.smallId,
+        input: userInput,
       };
 
       const response = await fetchPrice(requestData);
 
       if (response.status === "200") {
+          setMessages((prev) => [
+          ...prev,
+          { type: "bot", content: `🔍 ${userInput}의 품종 중 '${response.data.smallName}'를 선택하였습니다.` },
+        ]);
         navigate("/price", { state: response.data });
         return response;
       } else {
@@ -198,7 +247,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
-  //  기타 질문 처리
+  //  기타 질문 처리 ( 병충해 등 )
   const handleOtherInput = async () => {
     try {
       const response = await fetchOther({ input: userInput });
@@ -208,7 +257,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
         return;
       }
   
-      // ✅ GPT 응답을 사용자 채팅에 추가
+      //  GPT 응답을 사용자 채팅에 추가
       handleBotResponse(response.data);
   
       return response;
@@ -218,18 +267,18 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
-// ✅ GPT 응답을 사용자에게 보기 좋게 출력
+//  GPT 응답을 사용자에게 보기 좋게 출력
 const handleBotResponse = (data: ChatbotResponseDto) => {
   let formattedContent = "";
 
   console.log("🔍 GPT 응답 데이터 확인:", data); // 🔎 디버깅용
 
-  // ✅ 'intent'가 있을 경우, 보기 좋게 변환
+  //  'intent'가 있을 경우, 보기 좋게 변환
   const intentText = data.intent?.replace(/[_']/g, " ").trim() || "정보";
 
   formattedContent = `📌 **${intentText}**\n\n`;
 
-  // ✅ `response_data` 확인 후 출력
+  //  `response_data` 확인 후 출력
   if (data.response_data?.content) {
     formattedContent += data.response_data.content;
   } else {
