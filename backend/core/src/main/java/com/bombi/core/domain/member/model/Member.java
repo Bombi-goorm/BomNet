@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.Comment;
@@ -40,6 +42,9 @@ public class Member extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", columnDefinition = "BIGINT COMMENT '권한 ID'")
     private Role role;
+
+    @OneToMany(mappedBy = "member")
+    private List<PushSubscription> pushSubscriptions = new ArrayList<>();
 
     @Builder
     private Member(String platform, String authEmail, Role role) {
