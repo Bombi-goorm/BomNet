@@ -25,6 +25,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 	@Query("select p from Product p join fetch p.category sc"
 		+ " join fetch sc.parent mc"
+		+ " join fetch mc.parent lc"
+		+ " join fetch p.cultivation culti"
+		+ " join fetch culti.productionCondition"
+		+ " where mc.id = :midCategoryId and sc.id = :smallCategoryId")
+	Optional<Product> findProductInfoByCategoryId(Long midCategoryId, Long smallCategoryId);
+
+	@Query("select p from Product p join fetch p.category sc"
+		+ " join fetch sc.parent mc"
 		+ " join fetch mc.parent lc")
 	List<Product> findTop5ByCategoryId(Pageable pageable);
 }

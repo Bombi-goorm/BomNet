@@ -16,7 +16,7 @@ public class ProductSearchResponseDto {
 
 	public ProductSearchResponseDto(Product product) {
 		this.product = new ProductInfo(product);
-		this.cultivationInfo = null;
+		this.cultivationInfo = new CultivationInfo(product.getCultivation());
 		this.sales = null;
 		this.farmSuitability = null;
 	}

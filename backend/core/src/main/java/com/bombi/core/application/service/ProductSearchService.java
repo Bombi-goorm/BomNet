@@ -23,15 +23,16 @@ public class ProductSearchService {
 	@Transactional(readOnly = true)
 	public ProductSearchResponseDto search(Long midId, Long smallId, String memberId) {
 		//상품 정보 ProductInfo -> categoryid, categoryName, imageUrl, productId
-		Product product = productRepository.findOneByCategoryId(midId, smallId)
-			.orElseThrow(() -> new IllegalArgumentException("상품 정보를 찾을 수 없습니다."));
+		//상품 재배 정보 CultivationInfo
+		Product product = productRepository.findProductInfoByCategoryId(midId, smallId)
+			.orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
 
-		//상품 재배 정보 CultivationInfo -> db
+		//상품 판매량 ProductSales
+		//사용자
 
 
-		//상품 판매량 ProductSales -> bigquery
-
-		//농장 적합도 FarmSuitability -> 사용자 정보를 기반으로 빅쿼리에 요청
+		//농장 적합도 FarmSuitability
+		//pnu코드와 api를 호출해 농장 상태(토양, 기온)를 가져온 후 작물의 생산조건과 비교해 응답
 
 		return new ProductSearchResponseDto(product);
 	}

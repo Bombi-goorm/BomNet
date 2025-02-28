@@ -6,6 +6,7 @@ import org.hibernate.annotations.Comment;
 
 import com.bombi.core.domain.base.model.BaseEntity;
 import com.bombi.core.domain.product.model.Product;
+import com.bombi.core.domain.productionCondition.model.ProductionCondition;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,11 +38,13 @@ public class Cultivation extends BaseEntity {
 	@Comment("관리 팁")
 	private String cultivationTips;
 
-
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "product_id", columnDefinition = "BIGINT NOT NULL")
 	@Comment("작물 ID")
 	private Product product;
+
+	@OneToOne(mappedBy = "cultivation", fetch = LAZY)
+	private ProductionCondition productionCondition;
 
 	@Builder
 	private Cultivation(String cultivationFeatures, String cultivationTips,
