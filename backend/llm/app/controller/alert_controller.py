@@ -10,7 +10,7 @@ from app.dto.request_dto import ChatbotRequestDto
 alert_router = APIRouter()
 
 # ✅ 데이터베이스 연결
-DATABASE_URL = "mysql+pymysql://root:123123@localhost:3306/bomnet_db"
+DATABASE_URL = "mysql+pymysql://root:1234@localhost:3306/bomnet_db"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

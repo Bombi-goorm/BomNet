@@ -1,5 +1,4 @@
 
-from fastapi import APIRouter
 from typing import Optional
 
 from fastapi import APIRouter
@@ -44,16 +43,16 @@ async def ask_other_question(data: ChatbotRequestDto):
         # ✅ 2. Intent에 따라 세부 응답 생성
         if intent == "disease_pest_info":
             # 🌿 병충해 정보 조회
-            response_message = "작물의 병충해 정보를 카테고리별로 정리해 주세요."
+            response_message = "작물의 병충해 정보를 간단히 정리해 주세요."
         elif intent == "cultivation_method":
             # 🌱 재배법 정보 조회
-            response_message = "작물의 재배 방법을 단계별로 설명해 주세요."
+            response_message = "작물의 재배 방법을 50자 이내로 설명해 주세요."
         elif intent == "variety_list":
             # 🍎 품종 목록 조회
-            response_message = "작물의 품종 목록을 정리해 주세요."
+            response_message = "작물의 품종 목록을 5개 이내로 정리해 주세요."
         else:
             # 🤖 일반적인 질문 (기타 농업 정보)
-            response_message = "사용자의 질문에 대한 자세한 정보를 제공해 주세요."
+            response_message = "사용자의 질문에 대한 자세한 정보를 50자 이내로 요약해서 제공해 주세요."
 
         # ✅ 3. OpenAI API를 호출하여 실제 응답 생성
         gpt_response = client.chat.completions.create(

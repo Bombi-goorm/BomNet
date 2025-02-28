@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 # ✅ MySQL 데이터베이스 연결 설정
-DATABASE_URL = "mysql+pymysql://root:1234@localhost:3306/bomnet_db"
+DATABASE_URL = "mysql+pymysql://admin:test1234@bomnet.cbq4a82eqmkx.ap-northeast-2.rds.amazonaws.com:3306/bomnet_db"
 
 # ✅ SQLAlchemy 엔진 및 세션 팩토리 생성
 engine = create_engine(DATABASE_URL, pool_recycle=3600, pool_size=10)
