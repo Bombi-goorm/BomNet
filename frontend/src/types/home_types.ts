@@ -1,3 +1,11 @@
+// 홈화면 정보 요청
+export interface HomeRequestDto {
+    device: string, // 장비 ( 웹/모바일 )
+    endpoint: string, // 푸시 서버
+    p256dh: string, // 암호화 키 
+    auth: string, // 인증 키
+}
+
 // 홈화면 정보 응답
 export interface HomeDto {
     bestItems: BestItems,

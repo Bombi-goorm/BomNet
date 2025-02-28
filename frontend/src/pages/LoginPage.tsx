@@ -4,7 +4,6 @@ function LoginPage() {
   const KAKAO_AUTH_URL = "http://localhost:8180/oauth2/authorization/kakao"; 
 
   const handleProviderLogin = (provider: string) => {
-    console.log(provider)
     // if (provider === "kakao") {
       window.location.href = KAKAO_AUTH_URL;
     // } else if (provider === "naver") {
