@@ -19,7 +19,12 @@ public class EnvWeatherInfoApiClient {
 	private static final String REQUEST_PATH = "/user/openapi/api.call.do";
 	private final RestTemplate restTemplate;
 
-	public EnvWeatherResponseDto sendWeatherInfo(String stationId) {
+	/**
+	 * pnu를 가져와 region테이블에서 조회한 후 stationName을 기준으로 작업
+	 * @param stationName
+	 * @return
+	 */
+	public EnvWeatherResponseDto sendWeatherInfo(String stationName) {
 		log.info("EnvWeatherInfoApiClient::sendWeatherInfo START");
 
 		// HttpHeaders 생성

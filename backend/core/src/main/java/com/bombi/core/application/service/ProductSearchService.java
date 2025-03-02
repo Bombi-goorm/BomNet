@@ -18,6 +18,7 @@ public class ProductSearchService {
 	private final ProductRepository productRepository;
 	private final ProductionConditionRepository productionConditionRepository;
 	private final MemberInfoRepository memberInfoRepository;
+	private final FarmInformationManager farmInformationManager;
 
 
 	@Transactional(readOnly = true)
@@ -33,6 +34,8 @@ public class ProductSearchService {
 
 		//농장 적합도 FarmSuitability
 		//pnu코드와 api를 호출해 농장 상태(토양, 기온)를 가져온 후 작물의 생산조건과 비교해 응답
+		String pnuCode = "";
+		farmInformationManager.analyzeSuitability(pnuCode, product);
 
 		return new ProductSearchResponseDto(product);
 	}

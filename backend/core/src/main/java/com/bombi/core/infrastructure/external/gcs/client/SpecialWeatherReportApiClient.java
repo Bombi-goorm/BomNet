@@ -25,6 +25,10 @@ public class SpecialWeatherReportApiClient {
 	private final Storage storage;
 	private final ObjectMapper objectMapper;
 
+	/**
+	 * pnu코드를 기반으로 region테이블에서 stationId을 기반으로 조회
+	 * @return
+	 */
 	public SpecialWeatherReportResponse sendSpecialWeatherReport() {
 		String objectName = createObjectName();
 

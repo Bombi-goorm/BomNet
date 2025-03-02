@@ -16,6 +16,6 @@ public class CultivationInfo {
 
 	public CultivationInfo(Cultivation cultivation) {
 		this.cultivationContent = cultivation.getCultivationFeatures();
-		this.conditions = new ProductionConditionResponse(cultivation.getProductionCondition())
+		this.conditions = new ProductionConditionResponse(cultivation.getProductionCondition());
 	}
 }
