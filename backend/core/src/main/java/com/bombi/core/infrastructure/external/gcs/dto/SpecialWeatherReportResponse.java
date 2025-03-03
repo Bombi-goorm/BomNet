@@ -9,4 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SpecialWeatherReportResponse {
 	private List<SpecialWeatherReport> item;
+
+	public SpecialWeatherReportResponse(List<SpecialWeatherReport> reports) {
+		this.item = reports;
+	}
 }

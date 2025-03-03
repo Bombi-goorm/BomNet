@@ -45,7 +45,7 @@ public class HomeService {
 		List<ProductPriceResponse> productPriceResponses = bestProductApiClient.callBestProductPrice(midCategoryNames);
 
 		// 기상 특보
-		SpecialWeatherReportResponse specialWeatherReportResponse = specialWeatherReportApiClient.sendSpecialWeatherReport();
+		SpecialWeatherReportResponse specialWeatherReportResponse = specialWeatherReportApiClient.sendSpecialWeatherReport("108");
 
 		// 기상 예보 -> bigquery
 		WeatherForecastResponse weatherForecastResponse = weatherForecastApiClient.sendWeatherForecast();
