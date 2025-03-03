@@ -1,20 +1,22 @@
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.auth.jwt_filter import JwtFilter
 from app.controller.alert_controller import alert_router
 from app.controller.base_controller import base_router
 from app.controller.other_controller import other_router
 from app.controller.price_controller import price_router
 from app.controller.weather_controller import weather_router
-from database import Base, engine
+from app.database import engine, Base
 
 # FastAPI 앱 생성
 app = FastAPI()
 
+# 토큰 검증 필터
+# app.add_middleware(JwtFilter)
 
 # DB 테이블 생성
 Base.metadata.create_all(bind=engine)
-
 
 # 공통 라우터 생성
 router = APIRouter(prefix="/llm")
@@ -28,7 +30,6 @@ router.include_router(alert_router, prefix="/alert", tags=["Alert"])
 # 공통 라우터 등록
 app.include_router(router)
 
-
 # CORS 설정
 app.add_middleware(
     CORSMiddleware,
@@ -38,11 +39,10 @@ app.add_middleware(
     allow_headers=["*"],  # 모든 헤더 허용
 )
 
-
 app.include_router(router, prefix="/llm", tags=["llm"])
 
-
 # FastAPI 실행
+# uvicorn app.main:app --host 0.0.0.0 --port 8182 --reload
 if __name__ == "__main__":
     import uvicorn
 

@@ -10,24 +10,21 @@ import ERR404 from "./pages/err/ERR404";
 import ERR500 from "./pages/err/ERR500";
 import { useEffect } from "react";
 
-const registerServiceWorker = async () => {
-  if ("serviceWorker" in navigator) {
-    try {
-      const registration = await navigator.serviceWorker.register("/sw.js"); // ✅ `.ts` → `.js`
-      console.log("✅ Service Worker Registered:", registration);
-    } catch (error) {
-      console.error("❌ Service Worker Registration Failed:", error);
-    }
-  } else {
-    console.warn("⚠️ 서비스 워커를 지원하지 않는 브라우저입니다.");
-  }
-};
+
 
 function App() {
-  // ✅ useEffect는 반드시 함수 컴포넌트 내부에서 실행해야 함
   useEffect(() => {
-    registerServiceWorker();
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("/service-worker.js")      
+          .catch((error) => {
+            console.error("Service Worker registration failed:", error);
+          });
+      });
+    }
   }, []);
+
 
   return (
     <Routes>
