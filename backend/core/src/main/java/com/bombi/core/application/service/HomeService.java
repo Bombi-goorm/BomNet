@@ -8,7 +8,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bombi.core.domain.category.model.Category;
 import com.bombi.core.domain.product.ProductRepository;
 import com.bombi.core.domain.product.model.Product;
 import com.bombi.core.infrastructure.external.bigquery.client.BestProductPriceApiClient;
@@ -48,6 +47,7 @@ public class HomeService {
 		SpecialWeatherReportResponse specialWeatherReportResponse = specialWeatherReportApiClient.sendSpecialWeatherReport("108");
 
 		// 기상 예보 -> bigquery
+		// WeatherForecastResponse weatherForecastResponse = weatherForecastApiClient.sendWeatherForecast();
 		WeatherForecastResponse weatherForecastResponse = weatherForecastApiClient.sendWeatherForecast();
 
 		// 농산물 뉴스

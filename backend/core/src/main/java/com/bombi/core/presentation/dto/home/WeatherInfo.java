@@ -21,30 +21,12 @@ public class WeatherInfo {
 	private String humidity; // 습도
 	private String wind; // 풍속
 
-	public WeatherInfo(LocalDateTime forecastTime, List<ForecastInfoDto> forecastInfo) {
+	public WeatherInfo(LocalDateTime forecastTime, String skyStatus, String temperature, String humidity,
+		String windSpeed) {
 		this.forecastTime = forecastTime;
-		for (ForecastInfoDto dto : forecastInfo) {
-			switch (dto.getForecastType()) {
-				case "TMP": {
-					this.temperature = dto.getForecastDescription();
-					break;
-				}
-				case "WSD": {
-					this.wind = dto.getForecastDescription();
-					break;
-				}
-				case "SKY": {
-					this.weather = dto.getForecastDescription();
-					break;
-				}
-				case "REH": {
-					this.humidity = dto.getForecastDescription();
-					break;
-				}
-				default: {
-					break;
-				}
-			}
-		}
+		this.weather = skyStatus;
+		this.temperature = temperature;
+		this.humidity = humidity;
+		this.wind = windSpeed;
 	}
 }

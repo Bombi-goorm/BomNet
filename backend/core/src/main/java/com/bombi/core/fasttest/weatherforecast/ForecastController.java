@@ -1,9 +1,5 @@
 package com.bombi.core.fasttest.weatherforecast;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,9 +18,7 @@ public class ForecastController {
 
 	@GetMapping("/weather/forecast")
 	ResponseEntity<?> forecast() {
-		WeatherForecastResponse weatherForecastResponse = client.sendWeatherForecast();
-
-		Map<LocalDateTime, List<ForecastInfoDto>> response = weatherForecastResponse.getForecastResponseMap();
+		WeatherForecastResponse response = client.sendWeatherForecast();
 		WeatherExpection weatherExpection = new WeatherExpection(response);
 
 		return ResponseEntity.ok(weatherExpection);

@@ -1,10 +1,8 @@
 package com.bombi.core.infrastructure.external.weather.dto;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
-import com.bombi.core.fasttest.weatherforecast.ForecastInfoDto;
+import com.bombi.core.presentation.dto.home.WeatherInfo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class WeatherForecastResponse {
 
-	private Map<LocalDateTime, List<ForecastInfoDto>> forecastResponseMap;
+	private List<WeatherInfo> weatherInfos;
 
-	public WeatherForecastResponse(Map<LocalDateTime, List<ForecastInfoDto>> forecastResponseMap) {
-		this.forecastResponseMap = forecastResponseMap;
+	public WeatherForecastResponse(List<WeatherInfo> weatherInfos) {
+		this.weatherInfos = weatherInfos;
 	}
 }
