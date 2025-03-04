@@ -64,7 +64,7 @@ const PricePage = () => {
   const fetchRecommendedProducts = async () => {
     try {
       // API 요청 (예시: "/api/recommendations")
-      const response = await fetch("/core/recommendations");
+      await fetch("/core/recommendations");
 
       const data = ITEM_VARIETY_MAP
 
