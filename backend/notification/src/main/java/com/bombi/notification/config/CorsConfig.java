@@ -1,4 +1,4 @@
-package com.bombi.notification;
+package com.bombi.notification.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;

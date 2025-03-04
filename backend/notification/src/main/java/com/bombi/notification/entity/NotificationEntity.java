@@ -1,4 +1,4 @@
-package com.bombi.notification;
+package com.bombi.notification.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
