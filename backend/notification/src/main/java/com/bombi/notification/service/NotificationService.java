@@ -1,5 +1,7 @@
-package com.bombi.notification;
+package com.bombi.notification.service;
 
+import com.bombi.notification.entity.NotificationEntity;
+import com.bombi.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
