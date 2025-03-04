@@ -1,6 +1,5 @@
 import axios from "axios";
 import { CommonResponseDto, InfoResponseDto, SignupRequestDto } from "../types/member_types";
-import { data } from "../data_sample";
 import { HomeDto, HomeRequestDto } from "../types/home_types";
 
 // Axios 인스턴스 생성
@@ -29,15 +28,15 @@ export const memberInfo = async (): Promise<CommonResponseDto<InfoResponseDto>> 
 
 
 // 홈화면 정보 요청
-// export const homeInfo = async (data: HomeRequestDto): Promise<CommonResponseDto<HomeDto>> => {
-//     const response = await api.post<CommonResponseDto<HomeDto>>(`/core/home`, data);
-//     return response.data;
-// };
+export const homeInfo = async (data: HomeRequestDto): Promise<CommonResponseDto<HomeDto>> => {
+    const response = await api.post<CommonResponseDto<HomeDto>>(`/core/home`, data);
+    return response.data;
+};
 
 // 홈화면 테스트
-export const homeInfo = (): HomeDto => {
-  return data;
-};
+// export const homeInfo = (): HomeDto => {
+//   return data;
+// };
 
 
 // 인증 갱신

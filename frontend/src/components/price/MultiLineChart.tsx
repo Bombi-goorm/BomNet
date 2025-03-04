@@ -24,8 +24,6 @@ interface MultiLineChartProps {
 
 const MultiLineChart: React.FC<MultiLineChartProps> = ({
   selections,
-  startDate,
-  endDate,
 }) => {
   const [timeRange, setTimeRange] = useState<"year" | "month" | "day">("month");
 

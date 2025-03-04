@@ -3,7 +3,6 @@ import { fetchWeather, fetchAlert, fetchPrice, fetchOther } from "../../api/chat
 import { CommonResponseDto } from "../../types/member_types";
 import { ChatbotRequestDto, ChatbotResponseDto } from "../../types/chatbot_types";
 import { useNavigate } from "react-router-dom";
-import { ITEM_VARIETY_MAP } from "../../data_sample";
 import { WeatherInfo } from "../../types/home_types";
 
 
@@ -69,23 +68,28 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
 
     try {
       let response: CommonResponseDto<ChatbotResponseDto> | undefined;
-
-      switch (screen) {
-        case "alert":
-          response = await handleAlertInput();
-          break;
-        case "weather":
-          response = await handleWeatherInput();
-          break;
-        case "price":
-          response = await handlePriceInputSubmit();
-          break;
-        case "other":
-          response = await handleOtherInput();
-          break;
-        default:
-          throw new Error("⛔ 유효하지 않은 요청입니다.");
+      
+      if(response?.status === "200"){
+        switch (screen) {
+          case "alert":
+            await handleAlertInput();
+            break;
+          case "weather":
+            response = await handleWeatherInput();
+            break;
+          case "price":
+            response = await handlePriceInputSubmit();
+            break;
+          case "other":
+            response = await handleOtherInput();
+            break;
+          default:
+            throw new Error("⛔ 유효하지 않은 요청입니다.");
+        }
+      } else{
+        throw new Error("⛔ 유효하지 않은 요청입니다.");
       }
+     
     } catch (error) {
       console.error("API 요청 실패:", error);
       setMessages((prev) => [...prev, { type: "bot", content: "⛔ 요청 처리 중 오류가 발생했습니다." }]);
@@ -228,7 +232,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
       if (response.status === "200") {
           setMessages((prev) => [
           ...prev,
-          { type: "bot", content: `🔍 ${userInput}의 품종 중 '${response.data.smallName}'를 선택하였습니다.` },
+          { type: "bot", content: `🔍 ${userInput}의 품종 중 '${response.data.crop}'를 선택하였습니다.` },
         ]);
         navigate("/price", { state: response.data });
         return response;

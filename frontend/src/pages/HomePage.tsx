@@ -15,7 +15,7 @@ const VAPID_PUBLIC_KEY =
 
 const HomePage = () => {
   const [loading, setLoading] = useState(true);
-  const [subscription, setSubscription] = useState<HomeRequestDto>();
+  const [, setSubscription] = useState<HomeRequestDto>();
 
   // const navigate = useNavigate();
   const queryClient = useQueryClient();
