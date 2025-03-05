@@ -1,19 +1,20 @@
 from fastapi import APIRouter, HTTPException
 from google.cloud import bigquery
 
+from app.config import settings
 from app.dto.common_response_dto import CommonResponseDto
 from app.dto.request_dto import ChatbotRequestDto
 from app.dto.response_dto import WeatherResponseDto, WeatherInfo
 
 weather_router = APIRouter()
 
-# BigQuery 클라이언트 설정
-client = bigquery.Client()
+# BigQuery 클라이언트 설정: 프로젝트 ID를 settings를 통해 전달
+client = bigquery.Client(project=settings.GCP_PROJECT_ID)
 
-# GCP 프로젝트 및 BigQuery 데이터셋, 테이블 정보
-GCP_PROJECT_ID = "your-gcp-project-id"
-DATASET_ID = "your_dataset_id"
-TABLE_ID = "weather_data"
+# GCP 프로젝트 및 BigQuery 데이터셋, 테이블 정보는 settings에서 읽어옴
+GCP_PROJECT_ID = settings.GCP_PROJECT_ID
+DATASET_ID = settings.DATASET_ID
+TABLE_ID = settings.TABLE_ID
 
 
 @weather_router.post("/info", response_model=CommonResponseDto[WeatherResponseDto])

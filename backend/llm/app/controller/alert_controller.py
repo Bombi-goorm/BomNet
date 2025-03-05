@@ -2,7 +2,7 @@ import json, re
 from fastapi import APIRouter, Depends
 from openai import OpenAI
 from sqlalchemy.orm import Session
-from app.config import OPENAI_API_KEY
+from app.config import settings
 from app.database import get_db
 from app.dto.common_response_dto import CommonResponseDto
 from app.dto.request_dto import ChatbotRequestDto
@@ -10,7 +10,7 @@ from app.model.NotificationCondition import NotificationCondition
 from app.model.Category import Category
 
 alert_router = APIRouter()
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 # 상수 멤버 ID (예시)
 MEMBER_ID = "f74b3c18-c418-4b3e-9f3d-8a6c30f27adf"
