@@ -42,7 +42,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
 
     switch (action) {
       case "alert":
-        initialMessage = "🔔 알람을 받고 싶은 품종과 가격을 입력해주세요!";
+        initialMessage = "🔔 알람을 받고 싶은 품종과 가격, 지역을 입력해주세요!";
         break;
       case "weather":
         initialMessage = "🌦️ 조회할 지역의 날씨 정보를 입력해주세요! (예: 서울)";
@@ -69,7 +69,6 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
     try {
       let response: CommonResponseDto<ChatbotResponseDto> | undefined;
       
-      if(response?.status === "200"){
         switch (screen) {
           case "alert":
             await handleAlertInput();
@@ -86,9 +85,6 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
           default:
             throw new Error("⛔ 유효하지 않은 요청입니다.");
         }
-      } else{
-        throw new Error("⛔ 유효하지 않은 요청입니다.");
-      }
      
     } catch (error) {
       console.error("API 요청 실패:", error);

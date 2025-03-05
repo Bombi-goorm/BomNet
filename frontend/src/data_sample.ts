@@ -360,17 +360,19 @@ export const nationwideTradeInfo = {
 
 // 추천 생산품
 export const recommendedProducts = [
-  { id: 1, name: "사과", reason: "토양 적합도 높음" },
-  { id: 2, name: "배", reason: "기후 적합도 높음" },
-  { id: 3, name: "딸기", reason: "수익성 높음" },
-  { id: 4, name: "감자", reason: "지역 수요 높음" },
-  { id: 5, name: "고구마", reason: "계절성" },
+  { id: 1, name: "사과", reason: "추천" },
+  { id: 2, name: "배", reason: "추천" },
+  { id: 3, name: "딸기", reason: "추천" },
+  { id: 4, name: "감자", reason: "유통량 상승" },
+  { id: 5, name: "고구마", reason: "가격 상승" },
 ];
 
 
 // 내 농장 정보
 export const farmData = {
   soilType: "양토",
+  chemData: "마그네슘 풍부",
+  phyData: "배수불량",
   averageTemperature: "10°C",
   annualRainfall: "1200mm",
   tradeAmount: "월 550T",
@@ -395,22 +397,22 @@ export const user = {
 // 관심 품목 데이터
 export const interestItems: InterestItem[] = [
   { name: "사과", variety: "후지", isSelected: false },
-  { name: "바나나", variety: "캐번디시", isSelected: true },
-  { name: "포도", variety: "샤인머스캣", isSelected: false },
-  { name: "딸기", variety: "설향", isSelected: false },
-  { name: "배", variety: "신고", isSelected: true },
-  { name: "오렌지", variety: "발렌시아", isSelected: false },
-  { name: "수박", variety: "참외", isSelected: false },
-  { name: "키위", variety: "헤이즐", isSelected: false },
+  { name: "사과", variety: "혹옥", isSelected: true },
+  { name: "사과", variety: "아오리", isSelected: false },
+  { name: "배추", variety: "월동배추", isSelected: false },
+  { name: "배추", variety: "고랭지배추", isSelected: true },
+  { name: "양파", variety: "양파(일반)", isSelected: false },
+  { name: "파프리카", variety: "파프리카", isSelected: false },
+  { name: "아스파라거스", variety: "아스파라거스", isSelected: false },
 ];
 
 // 가격 알림 데이터 (품목, 품종, 가격 정보 포함)
 export const priceAlertItems: PriceAlertItem[] = [
-  { name: "사과", variety: "후지", price: "1,200원" },
-  { name: "바나나", variety: "캐번디시", price: "900원" },
-  { name: "포도", variety: "샤인머스캣", price: "3,500원" },
-  { name: "딸기", variety: "설향", price: "2,000원" },
-  { name: "배", variety: "신고", price: "1,500원" },
+  { name: "사과", variety: "후지", markets: "가락시장", price: "1,200원" },
+  { name: "사과", variety: "홍옥", markets: "가락시장, 강서시장", price: "900원" },
+  { name: "배추", variety: "고랭지배추", markets: "안양시장", price: "3,500원" },
+  { name: "상추", variety: "적상추", markets: "강릉시장", price: "2,000원" },
+  { name: "아스파라거스", variety: "아스파라거스", markets: "포항시장, 창원시장, 울산시장", price: "1,500원" },
 ];
 
 
