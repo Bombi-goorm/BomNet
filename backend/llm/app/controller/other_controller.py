@@ -4,10 +4,10 @@ from openai import OpenAI
 from pydantic import BaseModel
 from app.dto.common_response_dto import CommonResponseDto
 from app.dto.request_dto import ChatbotRequestDto
-from app.config import OPENAI_API_KEY
+from app.config import settings
 
 other_router = APIRouter()
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 
 # GPT 응답 모델
