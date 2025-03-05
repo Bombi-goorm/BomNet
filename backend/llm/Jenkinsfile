@@ -59,18 +59,17 @@ pipeline {
                       docker.image("${IMAGE_NAME}:${currentBuild.number}").push()
                       docker.image("${IMAGE_NAME}:latest").push()
                     }
-
                 }
             }
             post {
                 failure {
-                    sh "docker image rm -f ${IMAGE_NAME}:${currentBuild.number}"
-                    sh "docker image rm -f ${IMAGE_NAME}:latest"
+                    // sh "docker image rm -f ${IMAGE_NAME}:${currentBuild.number}"
+                    // sh "docker image rm -f ${IMAGE_NAME}:latest"
                     sh "echo push failed"
                 }
                 success {
-                    sh "docker image rm -f ${IMAGE_NAME}:${currentBuild.number}"
-                    sh "docker image rm -f ${IMAGE_NAME}:latest"
+                    // sh "docker image rm -f ${IMAGE_NAME}:${currentBuild.number}"
+                    // sh "docker image rm -f ${IMAGE_NAME}:latest"
                     sh "echo push success"
                 }
             }
