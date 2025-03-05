@@ -17,7 +17,6 @@ class Product(Base):
     category = relationship("Category", back_populates="product", uselist=False)
 
     notifications = relationship("Notification", back_populates="product")
-    notification_conditions = relationship("NotificationCondition", back_populates="product")
 
     def __repr__(self):
         return f"<Product(id={self.id}, image_url='{self.image_url}', category_id={self.category_id})>"

@@ -1,24 +1,12 @@
-package com.bombi.core.domain.notificationcondition.model;
+package com.bombi.notification.entity;
 
-import static jakarta.persistence.FetchType.*;
-
-import org.hibernate.annotations.Comment;
-
-import com.bombi.core.domain.base.model.BaseEntity;
-import com.bombi.core.domain.member.model.Member;
-import com.bombi.core.domain.product.model.Product;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -43,11 +31,6 @@ public class NotificationCondition extends BaseEntity {
 	@JoinColumn(name = "member_id")
 	@Comment("멤버 ID")
 	private Member member;
-
-//	@ManyToOne(fetch = LAZY)
-//	@JoinColumn(name = "product_id", columnDefinition = "BIGINT NOT NULL")
-//	@Comment("작물 ID")
-//	private Product product;
 
 	// 가격알림용 임시속성
 	private String category;

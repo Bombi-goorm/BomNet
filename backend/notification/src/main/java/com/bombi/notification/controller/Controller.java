@@ -1,6 +1,5 @@
 package com.bombi.notification.controller;
 
-import com.bombi.notification.entity.NotificationEntity;
 import com.bombi.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +17,5 @@ public class Controller {
     @GetMapping("/noti/health")
     public ResponseEntity<?> notificationHealth(){
         return ResponseEntity.ok("Notification :: Healthy");
-    }
-
-    @PostMapping("/noti")
-    public ResponseEntity<?> notificationEntityList(){
-        List<NotificationEntity> notificationEntity = notificationService.getNotificationEntity();
-        return ResponseEntity.ok(notificationEntity);
     }
 }
