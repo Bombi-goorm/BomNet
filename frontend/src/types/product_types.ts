@@ -1,13 +1,13 @@
 // 상품 검색 요청 
 export interface ProductRequestDto {
-    startDate: string, // 검색시작일
-    endDate: string, // 검색종료일
-    midId: number, // 품목ID
-    midName: string, // 품목
-    smallId: number, // 품종ID
-    smallName: string, // 품종
-    location: string, // 지역
-    BJD: string // 법정동코드
+    startDate?: string, // 검색시작일
+    endDate?: string, // 검색종료일
+    midId?: number, // 품목ID
+    midName?: string, // 품목
+    smallId?: number, // 품종ID
+    smallName?: string, // 품종
+    location?: string, // 지역
+    BJD?: string // 법정동코드
 }
 
 

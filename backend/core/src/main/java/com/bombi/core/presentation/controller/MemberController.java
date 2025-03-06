@@ -3,6 +3,7 @@ package com.bombi.core.presentation.controller;
 import com.bombi.core.application.service.MemberService;
 import com.bombi.core.common.dto.CoreResponseDto;
 import com.bombi.core.presentation.dto.member.MemberInfoResponseDto;
+import com.bombi.core.presentation.dto.member.MemberRequestDto;
 import com.bombi.core.presentation.dto.member.MemberResponseDto;
 
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,12 @@ public class MemberController {
     public ResponseEntity<CoreResponseDto<?>> memberInfo(@AuthenticationPrincipal UserDetails userDetails) {
         MemberInfoResponseDto memberInfoResponseDto = memberService.findMemberInfo(userDetails.getUsername());
         return ResponseEntity.ok(CoreResponseDto.ofSuccess("사용자 조회 성공", memberInfoResponseDto));
+    }
+
+    @PostMapping
+    public ResponseEntity<?> registerMember(
+            @RequestBody MemberRequestDto requestDto,
+            @AuthenticationPrincipal UserDetails userDetails){
+        memberService.registerMember(requestDto, userDetails.);
     }
 }
