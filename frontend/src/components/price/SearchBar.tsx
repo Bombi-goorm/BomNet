@@ -1,206 +1,83 @@
 import { useState } from "react";
-import { ITEM_VARIETY_MAP, REGIONS } from "../../data_sample";
 
-const SearchBar = ({
-  onFilterChange,
-  onDateChange,
-}: {
-  onFilterChange: (selectedData: {
-    midName: string;
-    smallName: string;
-    region: string;
-  }) => void;
-  onDateChange: (startDate: string, endDate: string) => void;
-}) => {
-  const getDefaultDates = () => {
-    const today = new Date();
-    const oneWeekAgo = new Date();
-    oneWeekAgo.setDate(today.getDate() - 7);
+interface SearchBarProps {
+  onSelect: (item: string) => void; // 선택 시 부모에게 전달할 콜백
+}
 
-    const formatDate = (date: Date) => date.toISOString().split("T")[0];
+// 예시 기본 품목 목록
+const defaultSuggestions = ["사과", "배추", "상추", "양파", "파프리카", "아스파라거스"];
 
-    return {
-      today: formatDate(today),
-      oneWeekAgo: formatDate(oneWeekAgo),
-    };
-  };
-
-  const { today, oneWeekAgo } = getDefaultDates();
+const SearchBar: React.FC<SearchBarProps> = ({ onSelect }) => {
   const [query, setQuery] = useState("");
-  const [filteredItems, setFilteredItems] = useState(
-    Array.from(new Set(ITEM_VARIETY_MAP.map((item) => item.midName))) // 중복 제거
-  );
-  const [selectedMidName, setSelectedMidName] = useState<string | null>(null);
-  const [selectedSmallName, setSelectedSmallName] = useState<string | null>(null);
-  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
-  const [startDate, setStartDate] = useState(oneWeekAgo);
-  const [endDate, setEndDate] = useState(today);
+  const [suggestions, setSuggestions] = useState(defaultSuggestions);
+  const [showSuggestions, setShowSuggestions] = useState(false); // 리스트 표시 상태 추가
 
   // 검색어 입력 처리
   const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     setQuery(input);
+    setShowSuggestions(input.trim() !== ""); // 입력이 있을 때만 리스트 표시
 
-    // 품목 필터링
-    const filtered = Array.from(new Set(
-      ITEM_VARIETY_MAP
-        .map((item) => item.midName)
-        .filter((name) => name.toLowerCase().includes(input.toLowerCase()))
-    ));
-    setFilteredItems(filtered);
-  };
-
-  // 품목 선택 시 품종 필터링
-  const getVarietyOptions = (midName: string) => {
-    return ITEM_VARIETY_MAP.filter((item) => item.midName === midName).map(
-      (item) => item.smallName
-    );
-  };
-
-  // 선택한 데이터 추가
-  const handleAdd = () => {
-    if (selectedMidName && selectedSmallName && selectedRegion) {
-      onFilterChange({
-        midName: selectedMidName,
-        smallName: selectedSmallName,
-        region: selectedRegion,
-      });
-
-      // 초기화
-      setQuery("");
-      setFilteredItems(Array.from(new Set(ITEM_VARIETY_MAP.map((item) => item.midName))));
-      setSelectedMidName(null);
-      setSelectedSmallName(null);
-      setSelectedRegion(null);
+    if (input.trim() === "") {
+      setSuggestions(defaultSuggestions);
     } else {
-      alert("품목, 품종, 지역을 모두 선택해주세요!");
+      const filtered = defaultSuggestions.filter((name) =>
+        name.toLowerCase().includes(input.toLowerCase())
+      );
+      setSuggestions(filtered);
     }
   };
 
-  // 날짜 변경 처리
-  const handleDateChange = () => {
-    console.log("Date Changed:", { startDate, endDate });
-    onDateChange(startDate, endDate);
+  // 품목 선택 시: 입력창에 반영 + 리스트 닫기
+  const handleItemSelect = (item: string) => {
+    setQuery(item);
+    setShowSuggestions(false); // 리스트 닫기
+    onSelect(item);
+  };
+
+  // 검색 버튼 클릭 시: 현재 입력값으로 검색 실행 + 리스트 닫기
+  const handleSearch = () => {
+    if (query.trim() !== "") {
+      onSelect(query);
+      setQuery("");
+      setShowSuggestions(false);
+    }
   };
 
   return (
     <div className="bg-white p-4 rounded-lg shadow mb-6">
-      {/* 날짜 선택 */}
-      <div className="flex items-center space-x-4 mb-4">
-        <div>
-          <label htmlFor="start-date" className="text-sm text-gray-700">
-            시작 날짜:
-          </label>
-          <input
-            type="date"
-            id="start-date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            onBlur={handleDateChange}
-            className="border border-gray-300 rounded-lg px-4 py-2 ml-2"
-          />
-        </div>
-        <span className="text-gray-600">~</span>
-        <div>
-          <label htmlFor="end-date" className="text-sm text-gray-700">
-            종료 날짜:
-          </label>
-          <input
-            type="date"
-            id="end-date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            onBlur={handleDateChange}
-            className="border border-gray-300 rounded-lg px-4 py-2 ml-2"
-          />
-        </div>
+      <div className="relative flex items-center">
+        <input
+          type="text"
+          id="item-search"
+          value={query}
+          onChange={handleQueryChange}
+          onFocus={() => setShowSuggestions(true)} // 포커스 시 리스트 표시
+          placeholder="예: 사과"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2"
+        />
+        <button
+          onClick={handleSearch}
+          className="absolute right-2 top-2 bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600"
+        >
+          검색
+        </button>
       </div>
 
-      {/* 검색 필터 */}
-      <div className="flex flex-col space-y-4">
-        {/* 품목 검색 */}
-        <div>
-          <label htmlFor="item-search" className="text-sm text-gray-700">
-            품목 검색:
-          </label>
-          <input
-            type="text"
-            id="item-search"
-            value={query}
-            onChange={handleQueryChange}
-            placeholder="예: 사과"
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-2"
-          />
-          {/* 검색 결과 */}
-          {query && (
-            <ul className="bg-white border border-gray-300 rounded-lg mt-2 max-h-40 overflow-y-auto">
-              {filteredItems.map((item, index) => (
-                <li
-                  key={index}
-                  onClick={() => setSelectedMidName(item)}
-                  className={`p-2 cursor-pointer hover:bg-gray-100 ${
-                    selectedMidName === item ? "bg-green-100" : ""
-                  }`}
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        {/* 품종 선택 */}
-        {selectedMidName && (
-          <div>
-            <label htmlFor="variety-select" className="text-sm text-gray-700">
-              품종 선택:
-            </label>
-            <select
-              id="variety-select"
-              value={selectedSmallName || ""}
-              onChange={(e) => setSelectedSmallName(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-2"
+      {/* 리스트 팝업창: 검색어가 있고, 리스트가 보일 때만 표시 */}
+      {showSuggestions && suggestions.length > 0 && (
+        <ul className="absolute bg-white border border-gray-300 rounded-lg mt-2 w-full max-h-40 overflow-y-auto">
+          {suggestions.map((item, index) => (
+            <li
+              key={index}
+              onClick={() => handleItemSelect(item)}
+              className="p-2 cursor-pointer hover:bg-gray-100"
             >
-              <option value="">품종을 선택하세요</option>
-              {getVarietyOptions(selectedMidName).map((variety, index) => (
-                <option key={index} value={variety}>
-                  {variety}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-
-        {/* 지역 선택 */}
-        <div>
-          <label htmlFor="region-select" className="text-sm text-gray-700">
-            지역 선택:
-          </label>
-          <select
-            id="region-select"
-            value={selectedRegion || ""}
-            onChange={(e) => setSelectedRegion(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-2"
-          >
-            <option value="">지역을 선택하세요</option>
-            {REGIONS.map((region) => (
-              <option key={region.regionId} value={region.name}>
-                {region.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* 추가 버튼 */}
-        <div className="text-center">
-          <button
-            onClick={handleAdd}
-            className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition"
-          >
-            추가
-          </button>
-        </div>
-      </div>
+              {item}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

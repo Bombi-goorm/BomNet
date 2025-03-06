@@ -46,8 +46,7 @@ public class Member extends BaseEntity {
 		this.platform = platform;
 		this.authEmail = authEmail;
 		this.role = role;
-//		this.isEnabled = "F";
-		this.isEnabled = "T"; // 추후 코어서버에서 등록시 변경하도록 수정 필요
+		this.isEnabled = "F";
 		this.isBanned = "F";
 	}
 
