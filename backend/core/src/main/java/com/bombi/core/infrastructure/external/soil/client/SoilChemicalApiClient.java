@@ -79,12 +79,14 @@ public class SoilChemicalApiClient {
 		try {
 			JsonNode root = xmlMapper.readTree(response.getBody());
 
-			String pH = root.path("ACID").asText();
-			String vldphaMgPerKg = root.path("VLDPHA").asText(); // 유효인산
-			String organicMatterGPerKg = root.path("OM").asText(); // 유기물
-			String posifertKCMolPerKg = root.path("POSIFERT_K").asText(); // 칼륨
-			String posifertCaCMolPerKg = root.path("POSIFERT_CA").asText(); // 칼슘
-			String posifertMgCMolPerKg = root.path("POSIFERT_MG").asText(); // 마그네슘
+			JsonNode bodyJsonNode = root.get("body").get("items").get("item");
+
+			String pH = bodyJsonNode.path("ACID").asText();
+			String vldphaMgPerKg = bodyJsonNode.path("VLDPHA").asText(); // 유효인산
+			String organicMatterGPerKg = bodyJsonNode.path("OM").asText(); // 유기물
+			String posifertKCMolPerKg = bodyJsonNode.path("POSIFERT_K").asText(); // 칼륨
+			String posifertCaCMolPerKg = bodyJsonNode.path("POSIFERT_CA").asText(); // 칼슘
+			String posifertMgCMolPerKg = bodyJsonNode.path("POSIFERT_MG").asText(); // 마그네슘
 
 			return new SoilChemicalResponseDto(pH, vldphaMgPerKg, organicMatterGPerKg, posifertKCMolPerKg,
 				posifertCaCMolPerKg, posifertMgCMolPerKg);
@@ -94,6 +96,6 @@ public class SoilChemicalApiClient {
 	}
 
 	private boolean isErrorResultCode(ResponseEntity<String> response) {
-		return !("200".equals(response.getHeaders().get("Result_Code")));
+		return !response.getStatusCode().is2xxSuccessful();
 	}
 }

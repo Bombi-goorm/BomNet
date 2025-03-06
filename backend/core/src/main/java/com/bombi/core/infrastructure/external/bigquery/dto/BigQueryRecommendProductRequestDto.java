@@ -23,6 +23,6 @@ public class BigQueryRecommendProductRequestDto {
 		this.soilTypeCode = soilCharacterResponse.getSoilTypeCode();
 		this.vldsoildepCode = soilCharacterResponse.getVldsoildepCode();
 		this.soildraCode = soilCharacterResponse.getSoildraCode();
-		this.acid = soilChemicalResponse.getpH();
+		this.acid = soilChemicalResponse.getPH();
 	}
 }
