@@ -35,8 +35,8 @@ public class SoilChemicalApiClient {
 	private final RestTemplate restTemplate;
 	private final XmlMapper xmlMapper = new XmlMapper();
 
-	// @Value("${api.soil.serviceKey}")
-	private String serviceKey = "";
+	@Value("${api.soil.serviceKey}")
+	private String serviceKey;
 
 	public SoilChemicalResponseDto sendSoilChemical(String pnuCode) {
 		log.info("SoilChemicalApiClient::sendSoilChemical START");
@@ -79,9 +79,15 @@ public class SoilChemicalApiClient {
 		try {
 			JsonNode root = xmlMapper.readTree(response.getBody());
 
-			String acid = root.path("ACID").asText();
+			String pH = root.path("ACID").asText();
+			String vldphaMgPerKg = root.path("VLDPHA").asText(); // 유효인산
+			String organicMatterGPerKg = root.path("OM").asText(); // 유기물
+			String posifertKCMolPerKg = root.path("POSIFERT_K").asText(); // 칼륨
+			String posifertCaCMolPerKg = root.path("POSIFERT_CA").asText(); // 칼슘
+			String posifertMgCMolPerKg = root.path("POSIFERT_MG").asText(); // 마그네슘
 
-			return new SoilChemicalResponseDto(acid);
+			return new SoilChemicalResponseDto(pH, vldphaMgPerKg, organicMatterGPerKg, posifertKCMolPerKg,
+				posifertCaCMolPerKg, posifertMgCMolPerKg);
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException("Xml 매핑 실패", e);
 		}

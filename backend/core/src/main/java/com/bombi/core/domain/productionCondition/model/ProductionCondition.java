@@ -9,7 +9,6 @@ import com.bombi.core.domain.cultivation.model.Cultivation;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -51,6 +50,7 @@ public class ProductionCondition extends BaseEntity {
 	@Comment("경사도")
 	private String slopeDegree; // 경사도
 
+	@Comment("산도")
 	private String ph; // pH
 
 	@Comment("토성")
@@ -71,4 +71,51 @@ public class ProductionCondition extends BaseEntity {
 	@Comment("마그네슘")
 	private String mgMgPerKg; // 마그네슘
 
+	public boolean isSoilTextureSuitable(String surttureCode) {
+		return false;
+	}
+
+	public boolean isSoilDepthSuitable(String vldsoildepCode) {
+		return false;
+	}
+
+	public boolean isDrainageSuitable(String soildraCode) {
+		return false;
+	}
+
+	public boolean isPHSuitable(String ph) {
+		return false;
+	}
+
+	public boolean isOrganicMatterSuitable(String organicMatterGPerKg) {
+		return false;
+	}
+
+	public boolean isPhosphorusSuitable(String availablePhosphorus) {
+		return false;
+	}
+
+	public boolean isPotassiumSuitable(String kcMolPerKg) {
+		return false;
+	}
+
+	public boolean isCalciumSuitable(String caCMolPerKg) {
+		return false;
+	}
+
+	public boolean isMagnesiumSuitable(String mgCMolPerKg) {
+		return false;
+	}
+
+	public boolean isTemperatureSuitable(int averageTemperature, int maxTemperature, int minTemperature) {
+		return false;
+	}
+
+	public boolean isRainfallSuitable(int annualPrecipitation) {
+		return false;
+	}
+
+	public boolean isSunlightSuitable(int annualSunlightHours) {
+		return false;
+	}
 }

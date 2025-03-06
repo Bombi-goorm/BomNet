@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -72,4 +73,7 @@ public class Region {
 	@Column(columnDefinition = "VARCHAR(5) NOT NULL")
 	@Comment("경도 보정값")
 	private String yy;
+
+	@OneToOne(mappedBy = "region")
+	private RegionWeather regionWeather;
 }

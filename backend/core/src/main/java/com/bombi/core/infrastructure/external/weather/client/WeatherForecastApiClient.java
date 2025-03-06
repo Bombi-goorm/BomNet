@@ -41,7 +41,7 @@ public class WeatherForecastApiClient {
 			+ " FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
 			// + " WHERE fcstTime >= @startFcstTime and fcstTime <= @endFcstTime"
 			+ " WHERE nx = 38 AND ny = 53"
-			+ " ORDER BY fcstTime DESC"
+			+ " ORDER BY fcstTime"
 			+ " LIMIT 30";
 
 		int endTime = getTimeAsInt(LocalTime.now());
@@ -55,8 +55,6 @@ public class WeatherForecastApiClient {
 
 		try {
 			TableResult tableResult = bigQuery.query(queryConfig);
-
-			Map<LocalDateTime, List<ForecastInfoDto>> resultMap = new HashMap<>();
 
 			List<WeatherInfo> weatherInfos = new ArrayList<>();
 			for (FieldValueList fieldValues : tableResult.iterateAll()) {

@@ -7,6 +7,7 @@ import com.bombi.core.domain.member.repository.MemberInfoRepository;
 import com.bombi.core.domain.product.ProductRepository;
 import com.bombi.core.domain.product.model.Product;
 import com.bombi.core.domain.productionCondition.repository.ProductionConditionRepository;
+import com.bombi.core.presentation.dto.product.FarmSuitability;
 import com.bombi.core.presentation.dto.product.ProductSearchResponseDto;
 
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class ProductSearchService {
 	private final ProductRepository productRepository;
 	private final ProductionConditionRepository productionConditionRepository;
 	private final MemberInfoRepository memberInfoRepository;
-	private final FarmInformationManager farmInformationManager;
+	private final FarmAnalyzer farmAnalyzer;
 
 
 	@Transactional(readOnly = true)
@@ -29,13 +30,11 @@ public class ProductSearchService {
 			.orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
 
 		//상품 판매량 ProductSales
-		//사용자
-
 
 		//농장 적합도 FarmSuitability
 		//pnu코드와 api를 호출해 농장 상태(토양, 기온)를 가져온 후 작물의 생산조건과 비교해 응답
 		String pnuCode = "";
-		farmInformationManager.analyzeSuitability(pnuCode, product);
+		FarmSuitability farmSuitability = farmAnalyzer.analyzeSuitability(pnuCode, product);
 
 		return new ProductSearchResponseDto(product);
 	}
