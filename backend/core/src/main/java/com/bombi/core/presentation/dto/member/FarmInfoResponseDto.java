@@ -15,7 +15,7 @@ public class FarmInfoResponseDto {
 
 	public FarmInfoResponseDto(RegionWeather regionWeather) {
 		this.soilType = null;
-		this.averageTemperature = regionWeather.getAverageTemperature();
-		this.annualPrecipitation = regionWeather.getAnnualPrecipitation();
+		this.averageTemperature = String.valueOf(regionWeather.getAverageTemperature());
+		this.annualPrecipitation = String.valueOf(regionWeather.getAnnualPrecipitation());
 	}
 }
