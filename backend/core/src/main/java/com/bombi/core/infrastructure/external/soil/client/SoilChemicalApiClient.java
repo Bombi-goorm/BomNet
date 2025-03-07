@@ -35,8 +35,8 @@ public class SoilChemicalApiClient {
 	private final RestTemplate restTemplate;
 	private final XmlMapper xmlMapper = new XmlMapper();
 
-	// @Value("${api.soil.serviceKey}")
-	private String serviceKey = "";
+	@Value("${api.soil.serviceKey}")
+	private String serviceKey;
 
 	public SoilChemicalResponseDto sendSoilChemical(String pnuCode) {
 		log.info("SoilChemicalApiClient::sendSoilChemical START");
@@ -79,15 +79,28 @@ public class SoilChemicalApiClient {
 		try {
 			JsonNode root = xmlMapper.readTree(response.getBody());
 
-			String acid = root.path("ACID").asText();
+			String resultCode = root.get("header").get("result_Code").asText();
+			if (!("200".equals(resultCode))) {
+				return null;
+			}
 
-			return new SoilChemicalResponseDto(acid);
+			JsonNode bodyJsonNode = root.get("body").get("items").get("item");
+
+			String pH = bodyJsonNode.path("ACID").asText();
+			String vldphaMgPerKg = bodyJsonNode.path("VLDPHA").asText(); // 유효인산
+			String organicMatterGPerKg = bodyJsonNode.path("OM").asText(); // 유기물
+			String posifertKCMolPerKg = bodyJsonNode.path("POSIFERT_K").asText(); // 칼륨
+			String posifertCaCMolPerKg = bodyJsonNode.path("POSIFERT_CA").asText(); // 칼슘
+			String posifertMgCMolPerKg = bodyJsonNode.path("POSIFERT_MG").asText(); // 마그네슘
+
+			return new SoilChemicalResponseDto(pH, vldphaMgPerKg, organicMatterGPerKg, posifertKCMolPerKg,
+				posifertCaCMolPerKg, posifertMgCMolPerKg);
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException("Xml 매핑 실패", e);
 		}
 	}
 
 	private boolean isErrorResultCode(ResponseEntity<String> response) {
-		return !("200".equals(response.getHeaders().get("Result_Code")));
+		return !response.getStatusCode().is2xxSuccessful();
 	}
 }

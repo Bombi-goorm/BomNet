@@ -6,6 +6,7 @@ import org.hibernate.annotations.Comment;
 
 import com.bombi.core.domain.base.model.BaseEntity;
 import com.bombi.core.domain.category.model.Category;
+import com.bombi.core.domain.cultivation.model.Cultivation;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,6 +38,9 @@ public class Product extends BaseEntity {
 	@JoinColumn(name = "category_id", columnDefinition = "BIGINT NOT NULL")
 	@Comment("카테고리 ID")
 	private Category category;
+
+	@OneToOne(mappedBy = "product", fetch = LAZY)
+	private Cultivation cultivation;
 
 	@Builder
 	private Product(String imageUrl, Category category) {

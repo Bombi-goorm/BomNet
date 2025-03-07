@@ -1,5 +1,7 @@
 package com.bombi.core.presentation.dto.product;
 
+import com.bombi.core.domain.productionCondition.model.ProductionCondition;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,4 +19,15 @@ public class ProductionConditionResponse {
 	private String soilDepth; // 유효 토심(cm)
 	private String pH; // 토양 산도(pH)
 
+	public ProductionConditionResponse(ProductionCondition condition) {
+		this.overwintering = condition.getOverwintering();
+		this.avgTemperatureC = condition.getAverageTemperature();
+		this.minTemperatureC = condition.getMinTemperature();
+		this.maxTemperatureC = condition.getMaxTemperature();
+		this.annualRainfallMM = condition.getAnnualRainfall();
+		this.sunlightHours = condition.getSunlightHours();
+		this.drainage = condition.getDrainage();
+		this.soilDepth = condition.getSoilDepth();
+		this.pH = condition.getPh();
+	}
 }

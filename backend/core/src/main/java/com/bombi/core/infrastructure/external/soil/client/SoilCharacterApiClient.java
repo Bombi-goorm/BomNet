@@ -34,8 +34,8 @@ public class SoilCharacterApiClient {
 	private final RestTemplate restTemplate;
 	private final XmlMapper xmlMapper = new XmlMapper();
 
-	// @Value("${api.soil.serviceKey}")
-	private String serviceKey = "";
+	@Value("${api.soil.serviceKey}")
+	private String serviceKey;
 
 	public SoilCharacterResponseDto sendSoilCharacter(String pnuCode) {
 		log.info("SoilCharacterApiClient::sendSoilCharacter START");
@@ -79,17 +79,24 @@ public class SoilCharacterApiClient {
 		try {
 			JsonNode root = xmlMapper.readTree(response.getBody());
 
-			String soilTypeCode = root.path("Soil_Type_Code").asText();
-			String vldsoildepCode = root.path("Vldsoildep_Code").asText();
-			String soildraCode = root.path("Soildra_Code").asText();
+			String resultCode = root.get("header").get("result_Code").asText();
+			if (!("200".equals(resultCode))) {
+				return null;
+			}
 
-			return new SoilCharacterResponseDto(soilTypeCode, vldsoildepCode, soildraCode);
+			JsonNode bodyJsonNode = root.get("body").get("items").get("item");
+			String soilTypeCode = bodyJsonNode.path("Soil_Type_Code").asText(); // 토양 유형
+			String vldsoildepCode = bodyJsonNode.path("Vldsoildep_Code").asText(); // 유효 토심 코드
+			String soildraCode = bodyJsonNode.path("Soildra_Code").asText(); // 배수 등급 코드
+			String surttureCode = bodyJsonNode.path("Surtture_Code").asText();// 표토 토성 코드
+
+			return new SoilCharacterResponseDto(soilTypeCode, vldsoildepCode, soildraCode, surttureCode);
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException("Xml 매핑 실패", e);
 		}
 	}
 
 	private boolean isErrorResultCode(ResponseEntity<String> response) {
-		return !("200".equals(response.getHeaders().get("Result_Code")));
+		return !response.getStatusCode().is2xxSuccessful();
 	}
 }
