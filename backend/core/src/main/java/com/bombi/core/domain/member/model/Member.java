@@ -41,6 +41,9 @@ public class Member extends BaseEntity {
     @JoinColumn(name = "role_id", columnDefinition = "BIGINT COMMENT '권한 ID'")
     private Role role;
 
+    @OneToOne(mappedBy = "member")
+    private MemberInfo memberInfo;
+
     @Builder
     private Member(String platform, String authEmail, Role role) {
         this.platform = platform;

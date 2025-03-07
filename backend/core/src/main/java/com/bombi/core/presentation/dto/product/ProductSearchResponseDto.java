@@ -11,13 +11,11 @@ public class ProductSearchResponseDto {
 
 	private ProductInfo product;
 	private CultivationInfo cultivationInfo;
-	private ProductSales sales;
 	private FarmSuitability farmSuitability;
 
-	public ProductSearchResponseDto(Product product) {
+	public ProductSearchResponseDto(Product product, FarmSuitability farmSuitability) {
 		this.product = new ProductInfo(product);
 		this.cultivationInfo = new CultivationInfo(product.getCultivation());
-		this.sales = null;
-		this.farmSuitability = null;
+		this.farmSuitability = farmSuitability;
 	}
 }
