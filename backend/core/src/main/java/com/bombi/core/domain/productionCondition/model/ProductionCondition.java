@@ -2,6 +2,9 @@ package com.bombi.core.domain.productionCondition.model;
 
 import static jakarta.persistence.FetchType.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.hibernate.annotations.Comment;
 
 import com.bombi.core.domain.base.model.BaseEntity;
@@ -71,51 +74,90 @@ public class ProductionCondition extends BaseEntity {
 	@Comment("마그네슘")
 	private String mgMgPerKg; // 마그네슘
 
-	public boolean isSoilTextureSuitable(SoilTexture surttureCode) {
-		return false;
+	public boolean isPHSuitable(String soilPH) {
+		double soilPHValue = Double.parseDouble(soilPH);
+		double pHValue = Double.parseDouble(this.ph);
+
+		return soilPHValue >= pHValue - 0.1 && soilPHValue <= pHValue + 0.1;
 	}
 
-	public boolean isSoilDepthSuitable(SoilDepth vldsoildepCode) {
-		return false;
+	public boolean isOrganicMatterSuitable(String soilOrganicMatterGPerKg) {
+		List<Double> orgnicMatterList = Arrays.stream(this.organicMatterGPerKg.split("-"))
+			.map(Double::parseDouble)
+			.toList();
+
+		Double minOrganicMatterGPerKg = orgnicMatterList.get(0);
+		Double maxOrganicMatterGPerKg = orgnicMatterList.get(1);
+
+		double soilOrganicMatterValue = Double.parseDouble(soilOrganicMatterGPerKg);
+
+		return soilOrganicMatterValue >= minOrganicMatterGPerKg && soilOrganicMatterValue <= maxOrganicMatterGPerKg;
 	}
 
-	public boolean isDrainageSuitable(Drainage soildraCode) {
-		return false;
+	public boolean isPhosphorusSuitable(String soilPhosphorus) {
+		List<Integer> phosphorusList = Arrays.stream(this.avPMgPerKg.split("-"))
+			.map(Integer::parseInt)
+			.toList();
+
+		Integer minPhosphorus = phosphorusList.get(0);
+		Integer maxPhosphorus = phosphorusList.get(1);
+
+		int soilPhosphorusValue = Integer.parseInt(soilPhosphorus);
+
+		return soilPhosphorusValue >= minPhosphorus && soilPhosphorusValue <= maxPhosphorus;
 	}
 
-	public boolean isPHSuitable(String ph) {
-		return false;
+	public boolean isPotassiumSuitable(String soilKCMolPerKg) {
+		List<Double> kMgPerKgList = Arrays.stream(this.kMgPerKg.split("-"))
+			.map(Double::parseDouble)
+			.toList();
+
+		Double minPotassium = kMgPerKgList.get(0);
+		Double maxPotassium = kMgPerKgList.get(1);
+
+		double soilPotassiumValue = Double.parseDouble(soilKCMolPerKg);
+
+		return soilPotassiumValue >= minPotassium && soilPotassiumValue <= maxPotassium;
 	}
 
-	public boolean isOrganicMatterSuitable(String organicMatterGPerKg) {
-		return false;
+	public boolean isCalciumSuitable(String soilCaCMolPerKg) {
+		List<Double> caMgPerKgList = Arrays.stream(this.caMgPerKg.split("-"))
+			.map(Double::parseDouble)
+			.toList();
+
+		Double minCalcium = caMgPerKgList.get(0);
+		Double maxCalcium = caMgPerKgList.get(1);
+
+		double soilCalciumValue = Double.parseDouble(soilCaCMolPerKg);
+
+		return soilCalciumValue >= minCalcium && soilCalciumValue <= maxCalcium;
 	}
 
-	public boolean isPhosphorusSuitable(String availablePhosphorus) {
-		return false;
+	public boolean isMagnesiumSuitable(String soilMgCMolPerKg) {
+		List<Double> mgMgPerKgList = Arrays.stream(this.mgMgPerKg.split("-"))
+			.map(Double::parseDouble)
+			.toList();
+
+		Double minMagnesium = mgMgPerKgList.get(0);
+		Double maxMagnesium = mgMgPerKgList.get(1);
+
+		double soilMagnesiumValue = Double.parseDouble(soilMgCMolPerKg);
+
+		return soilMagnesiumValue >= minMagnesium && soilMagnesiumValue <= maxMagnesium;
 	}
 
-	public boolean isPotassiumSuitable(String kcMolPerKg) {
-		return false;
+	public boolean isTemperatureSuitable(int soilAverageTemperature, int soilMaxTemperature, int soilMinTemperature) {
+		int productMinTemperature = Integer.parseInt(this.minTemperature);
+		int productMaxTemperature = Integer.parseInt(this.maxTemperature);
+
+		return soilMinTemperature >= productMinTemperature && soilMaxTemperature <= productMaxTemperature;
 	}
 
-	public boolean isCalciumSuitable(String caCMolPerKg) {
-		return false;
+	public boolean isRainfallSuitable(int soilAnnualPrecipitation) {
+		return soilAnnualPrecipitation >= Integer.parseInt(this.annualRainfall);
 	}
 
-	public boolean isMagnesiumSuitable(String mgCMolPerKg) {
-		return false;
-	}
-
-	public boolean isTemperatureSuitable(int averageTemperature, int maxTemperature, int minTemperature) {
-		return false;
-	}
-
-	public boolean isRainfallSuitable(int annualPrecipitation) {
-		return false;
-	}
-
-	public boolean isSunlightSuitable(int annualSunlightHours) {
-		return false;
+	public boolean isSunlightSuitable(int soilAnnualSunlightHours) {
+		return soilAnnualSunlightHours >= Integer.parseInt(this.sunlightHours);
 	}
 }

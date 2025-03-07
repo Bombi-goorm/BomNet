@@ -26,4 +26,8 @@ public enum SoilDepth {
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유효토심코드입니다."));
 	}
 
+	public boolean isSuitable(ProductionCondition productionCondition) {
+		int soilDepth = (int)(Double.parseDouble(productionCondition.getSoilDepth()));
+		return (soilDepth >= this.minDepth && soilDepth <= this.maxDepth);
+	}
 }

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Drainage {
+public enum SoilDrainage {
 
 	VERY_GOOD("01","매우 양호"),
 	GOOD("02","양호"),
@@ -19,10 +19,14 @@ public enum Drainage {
 	private final String code;
 	private final String description;
 
-	public static Drainage findByCode(String code) {
+	public static SoilDrainage findByCode(String code) {
 		return Arrays.stream(values())
 			.filter(value -> value.code.equals(code))
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 배수등급 코드입니다."));
+	}
+
+	public boolean isSuitable(ProductionCondition productionCondition) {
+		return this.description.equals(productionCondition.getDrainage());
 	}
 }

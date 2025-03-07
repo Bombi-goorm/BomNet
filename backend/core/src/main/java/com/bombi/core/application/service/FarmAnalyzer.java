@@ -7,7 +7,10 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.bombi.core.domain.product.model.Product;
+import com.bombi.core.domain.productionCondition.model.SoilDrainage;
 import com.bombi.core.domain.productionCondition.model.ProductionCondition;
+import com.bombi.core.domain.productionCondition.model.SoilDepth;
+import com.bombi.core.domain.productionCondition.model.SoilTexture;
 import com.bombi.core.domain.region.model.Region;
 import com.bombi.core.domain.region.model.RegionWeather;
 import com.bombi.core.domain.region.repository.RegionRepository;
@@ -16,6 +19,7 @@ import com.bombi.core.infrastructure.external.soil.client.SoilChemicalApiClient;
 import com.bombi.core.infrastructure.external.soil.dto.SoilCharacterResponseDto;
 import com.bombi.core.infrastructure.external.soil.dto.SoilChemicalResponseDto;
 import com.bombi.core.presentation.dto.product.FarmSuitability;
+import com.bombi.core.presentation.dto.product.SuitabilityResult;
 
 import lombok.RequiredArgsConstructor;
 
@@ -53,40 +57,43 @@ public class FarmAnalyzer {
 		ProductionCondition productionCondition = product.getCultivation().getProductionCondition();
 
 		//물리 조건 비교 : 토성, 유효토심, 배수등급
-		Map<String, Boolean> physicalSuitability = analyzeSoilPhysicalSuitability(productionCondition,
+		SuitabilityResult physicalSuitability = analyzeSoilPhysicalSuitability(productionCondition,
 			soilCharacterResponse);
 
 		//화학 조건 비교 : pH, 유기물, 유효인산, 칼륨, 칼슘, 마그네슘
-		Map<String, Boolean> chemicalSuitability = analyzeSoilChemicalSuitability(productionCondition,
+		SuitabilityResult chemicalSuitability = analyzeSoilChemicalSuitability(productionCondition,
 			soilChemicalResponse);
 
 		// 기후 조건 비교
-		Map<String, Boolean> weatherSuitability = analyzeWeatherSuitability(productionCondition, regionWeather);
+		SuitabilityResult climateSuitability = analyzeWeatherSuitability(productionCondition, regionWeather);
 
-		return null;
+		return new FarmSuitability(physicalSuitability, chemicalSuitability, climateSuitability);
 	}
 
-	private Map<String, Boolean> analyzeWeatherSuitability(ProductionCondition productionCondition, RegionWeather regionWeather) {
-		Map<String, Boolean> weatherSuitabilityMap = new HashMap<>();
+	private SuitabilityResult analyzeSoilPhysicalSuitability(ProductionCondition productionCondition,
+		SoilCharacterResponseDto soilCharacterResponse) {
+		Map<String, Boolean> physicalSuitabilityMap = new HashMap<>();
 
-		boolean temperatureSuitability = productionCondition.isTemperatureSuitable(regionWeather.getAverageTemperature(),
-			regionWeather.getMaxTemperature(), regionWeather.getMinTemperature());
-		boolean precipitationSuitability = productionCondition.isRainfallSuitable(regionWeather.getAnnualPrecipitation());
-		boolean sunlightSuitability = productionCondition.isSunlightSuitable(regionWeather.getAnnualSunlightHours());
+		//토성
+		SoilTexture soilTexture = soilCharacterResponse.getSurttureCode();
+		boolean soilTextureSuitability = soilTexture.isSuitable(productionCondition);
 
-		weatherSuitabilityMap.put("temperature", temperatureSuitability); // 기온
-		weatherSuitabilityMap.put("precipitation", precipitationSuitability); // 강수량
-		weatherSuitabilityMap.put("sunlightHours", sunlightSuitability); // 일조량
+		//유효 토심
+		SoilDepth soilDepth = soilCharacterResponse.getVldsoildepCode();
+		boolean soilDepthSuitability = soilDepth.isSuitable(productionCondition);
 
-		// List<String> unsuitableProperties = weatherSuitabilityMap.entrySet().stream()
-		// 	.filter(entry -> !entry.getValue())
-		// 	.map(Map.Entry::getKey)
-		// 	.toList();
+		//배수 등급
+		SoilDrainage soilDrainage = soilCharacterResponse.getSoildraCode();
+		boolean drainageSuitableSuitability = soilDrainage.isSuitable(productionCondition);
 
-		return weatherSuitabilityMap;
+		physicalSuitabilityMap.put("soilTexture", soilTextureSuitability);
+		physicalSuitabilityMap.put("soilDepth", soilDepthSuitability);
+		physicalSuitabilityMap.put("drainage", drainageSuitableSuitability);
+
+		return SuitabilityResult.of(physicalSuitabilityMap);
 	}
 
-	private Map<String, Boolean> analyzeSoilChemicalSuitability(ProductionCondition productionCondition,
+	private SuitabilityResult analyzeSoilChemicalSuitability(ProductionCondition productionCondition,
 		SoilChemicalResponseDto soilChemicalResponse) {
 
 		Map<String, Boolean> chemicalSuitabilityMap = new HashMap<>();
@@ -105,22 +112,27 @@ public class FarmAnalyzer {
 		chemicalSuitabilityMap.put("calcium", calciumSuitability);
 		chemicalSuitabilityMap.put("magnesium", magnesiumSuitability);
 
-		return chemicalSuitabilityMap;
+		return SuitabilityResult.of(chemicalSuitabilityMap);
 	}
 
-	private Map<String, Boolean> analyzeSoilPhysicalSuitability(ProductionCondition productionCondition,
-		SoilCharacterResponseDto soilCharacterResponse) {
-		Map<String, Boolean> physicalSuitabilityMap = new HashMap<>();
+	private SuitabilityResult analyzeWeatherSuitability(ProductionCondition productionCondition, RegionWeather regionWeather) {
+		Map<String, Boolean> weatherSuitabilityMap = new HashMap<>();
 
-		boolean soilTextureSuitability = productionCondition.isSoilTextureSuitable(soilCharacterResponse.getSurttureCode());
-		boolean soilDepthSuitability = productionCondition.isSoilDepthSuitable(soilCharacterResponse.getVldsoildepCode());
-		boolean drainageSuitableSuitability = productionCondition.isDrainageSuitable(soilCharacterResponse.getSoildraCode());
+		boolean temperatureSuitability = productionCondition.isTemperatureSuitable(regionWeather.getAverageTemperature(),
+			regionWeather.getMaxTemperature(), regionWeather.getMinTemperature());
+		boolean precipitationSuitability = productionCondition.isRainfallSuitable(regionWeather.getAnnualPrecipitation());
+		boolean sunlightSuitability = productionCondition.isSunlightSuitable(regionWeather.getAnnualSunlightHours());
 
-		physicalSuitabilityMap.put("soilTexture", soilTextureSuitability);
-		physicalSuitabilityMap.put("soilDepth", soilDepthSuitability);
-		physicalSuitabilityMap.put("drainage", drainageSuitableSuitability);
+		weatherSuitabilityMap.put("temperature", temperatureSuitability); // 기온
+		weatherSuitabilityMap.put("precipitation", precipitationSuitability); // 강수량
+		weatherSuitabilityMap.put("sunlightHours", sunlightSuitability); // 일조량
 
-		return physicalSuitabilityMap;
+		List<String> unsuitableProperties = weatherSuitabilityMap.entrySet().stream()
+			.filter(entry -> !entry.getValue())
+			.map(Map.Entry::getKey)
+			.toList();
+
+		return SuitabilityResult.of(weatherSuitabilityMap);
 	}
 
 }
