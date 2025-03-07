@@ -79,6 +79,11 @@ public class SoilChemicalApiClient {
 		try {
 			JsonNode root = xmlMapper.readTree(response.getBody());
 
+			String resultCode = root.get("header").get("result_Code").asText();
+			if (!("200".equals(resultCode))) {
+				return null;
+			}
+
 			JsonNode bodyJsonNode = root.get("body").get("items").get("item");
 
 			String pH = bodyJsonNode.path("ACID").asText();

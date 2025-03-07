@@ -21,6 +21,7 @@ import com.bombi.core.infrastructure.external.soil.dto.SoilChemicalResponseDto;
 import com.bombi.core.presentation.dto.product.FarmSuitability;
 import com.bombi.core.presentation.dto.product.SuitabilityResult;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -33,38 +34,34 @@ public class FarmAnalyzer {
 	private final RegionRepository regionRepository;
 
 	/**
-	 * 사용자 농장 정보를 모두 가져온다.
-	 * 토양 특성정보는 pnuCode를 파라미터로 공공데이터포털api 호출
-	 *
-	 * @param pnuCode
-	 * @param product
-	 * @return
+	 * pnu코드를 기반으로 농지의 화학적특성, 물리적 특성, 기온 정보를 가져온다.
+	 * 화학적특성, 물리적특성은 공공데이터 포털 api 호출
+	 * 기후조건은 db의 데이터로 비교
+	 * @param pnuCode : 필지번호
+	 * @param product : 선택한 작물
+	 * @return 분석 정보
 	 */
 	public FarmSuitability analyzeSuitability(String pnuCode, Product product) {
-		// 토양 유형, 유효 토심 코드, 배수 등급, 토성
-		SoilCharacterResponseDto soilCharacterResponse = soilCharacterApiClient.sendSoilCharacter(pnuCode);
-
-		// ph, 유기물, 유효인산, 칼륨, 칼슘, 마그네슘
-		SoilChemicalResponseDto soilChemicalResponse = soilChemicalApiClient.sendSoilChemical(pnuCode);
-
 		// 내 농지의 기온정보 가져오기
-		String weatherSiDoCode = pnuCode.substring(0, 2);
-		Region region = regionRepository.findByWeatherSiDoCode(weatherSiDoCode)
+		String weatherSiDoCode = pnuCode.substring(0, 5);
+		Region region = regionRepository.findByWeatherSiGunGuCode(weatherSiDoCode)
 			.orElseThrow(() -> new IllegalArgumentException("지역 정보를 찾을 수 없습니다."));
 		RegionWeather regionWeather = region.getRegionWeather();
 
 		// 작물 생산 조건과 외부 데이터 비교하기
 		ProductionCondition productionCondition = product.getCultivation().getProductionCondition();
 
-		//물리 조건 비교 : 토성, 유효토심, 배수등급
+		//물리 조건 분석 : 토성, 유효토심, 배수등급
+		SoilCharacterResponseDto soilCharacterResponse = soilCharacterApiClient.sendSoilCharacter(pnuCode);
 		SuitabilityResult physicalSuitability = analyzeSoilPhysicalSuitability(productionCondition,
 			soilCharacterResponse);
 
-		//화학 조건 비교 : pH, 유기물, 유효인산, 칼륨, 칼슘, 마그네슘
+		//화학 조건 분석 : pH, 유기물, 유효인산, 칼륨, 칼슘, 마그네슘
+		SoilChemicalResponseDto soilChemicalResponse = soilChemicalApiClient.sendSoilChemical(pnuCode);
 		SuitabilityResult chemicalSuitability = analyzeSoilChemicalSuitability(productionCondition,
 			soilChemicalResponse);
 
-		// 기후 조건 비교
+		// 기후 조건 분석
 		SuitabilityResult climateSuitability = analyzeWeatherSuitability(productionCondition, regionWeather);
 
 		return new FarmSuitability(physicalSuitability, chemicalSuitability, climateSuitability);
@@ -72,6 +69,10 @@ public class FarmAnalyzer {
 
 	private SuitabilityResult analyzeSoilPhysicalSuitability(ProductionCondition productionCondition,
 		SoilCharacterResponseDto soilCharacterResponse) {
+		if(soilCharacterResponse == null) {
+			return null;
+		}
+
 		Map<String, Boolean> physicalSuitabilityMap = new HashMap<>();
 
 		//토성
@@ -95,6 +96,9 @@ public class FarmAnalyzer {
 
 	private SuitabilityResult analyzeSoilChemicalSuitability(ProductionCondition productionCondition,
 		SoilChemicalResponseDto soilChemicalResponse) {
+		if(soilChemicalResponse == null) {
+			return null;
+		}
 
 		Map<String, Boolean> chemicalSuitabilityMap = new HashMap<>();
 
@@ -126,11 +130,6 @@ public class FarmAnalyzer {
 		weatherSuitabilityMap.put("temperature", temperatureSuitability); // 기온
 		weatherSuitabilityMap.put("precipitation", precipitationSuitability); // 강수량
 		weatherSuitabilityMap.put("sunlightHours", sunlightSuitability); // 일조량
-
-		List<String> unsuitableProperties = weatherSuitabilityMap.entrySet().stream()
-			.filter(entry -> !entry.getValue())
-			.map(Map.Entry::getKey)
-			.toList();
 
 		return SuitabilityResult.of(weatherSuitabilityMap);
 	}

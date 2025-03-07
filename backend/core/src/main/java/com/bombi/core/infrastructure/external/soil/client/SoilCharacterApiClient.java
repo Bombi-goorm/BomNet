@@ -79,6 +79,11 @@ public class SoilCharacterApiClient {
 		try {
 			JsonNode root = xmlMapper.readTree(response.getBody());
 
+			String resultCode = root.get("header").get("result_Code").asText();
+			if (!("200".equals(resultCode))) {
+				return null;
+			}
+
 			JsonNode bodyJsonNode = root.get("body").get("items").get("item");
 			String soilTypeCode = bodyJsonNode.path("Soil_Type_Code").asText(); // 토양 유형
 			String vldsoildepCode = bodyJsonNode.path("Vldsoildep_Code").asText(); // 유효 토심 코드

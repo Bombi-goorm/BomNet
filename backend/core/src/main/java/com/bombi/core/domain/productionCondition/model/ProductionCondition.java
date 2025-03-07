@@ -102,7 +102,7 @@ public class ProductionCondition extends BaseEntity {
 		Integer minPhosphorus = phosphorusList.get(0);
 		Integer maxPhosphorus = phosphorusList.get(1);
 
-		int soilPhosphorusValue = Integer.parseInt(soilPhosphorus);
+		int soilPhosphorusValue = (int) (Double.parseDouble(soilPhosphorus));
 
 		return soilPhosphorusValue >= minPhosphorus && soilPhosphorusValue <= maxPhosphorus;
 	}
@@ -147,17 +147,17 @@ public class ProductionCondition extends BaseEntity {
 	}
 
 	public boolean isTemperatureSuitable(int soilAverageTemperature, int soilMaxTemperature, int soilMinTemperature) {
-		int productMinTemperature = Integer.parseInt(this.minTemperature);
-		int productMaxTemperature = Integer.parseInt(this.maxTemperature);
+		int productMinTemperature = (int)Double.parseDouble(this.minTemperature);
+		int productMaxTemperature = (int)Double.parseDouble(this.maxTemperature);
 
 		return soilMinTemperature >= productMinTemperature && soilMaxTemperature <= productMaxTemperature;
 	}
 
 	public boolean isRainfallSuitable(int soilAnnualPrecipitation) {
-		return soilAnnualPrecipitation >= Integer.parseInt(this.annualRainfall);
+		return soilAnnualPrecipitation >= (int)(Double.parseDouble(this.annualRainfall));
 	}
 
 	public boolean isSunlightSuitable(int soilAnnualSunlightHours) {
-		return soilAnnualSunlightHours >= Integer.parseInt(this.sunlightHours);
+		return soilAnnualSunlightHours >= (int) (Double.parseDouble(this.sunlightHours));
 	}
 }

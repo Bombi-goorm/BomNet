@@ -9,7 +9,9 @@ import com.bombi.core.domain.region.model.Region;
 
 public interface RegionRepository extends JpaRepository<Region, Long> {
 
-	Optional<Region> findByWeatherSiDoCode(String weatherSidoCode);
+	Optional<Region> findByWeatherSiDoCode(String weatherSiDoCode);
+
+	Optional<Region> findByWeatherSiGunGuCode(String weatherSiGunGuCode);
 
 	Optional<Region> findByStationNumber(String stationNumber);
 

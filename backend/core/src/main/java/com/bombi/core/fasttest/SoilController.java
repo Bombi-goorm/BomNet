@@ -20,13 +20,13 @@ public class SoilController {
 
 	@GetMapping("/soil/chemical")
 	ResponseEntity<?> soilChemical() {
-		SoilChemicalResponseDto response = soilChemicalApiClient.sendSoilChemical("5115034022100750001");
+		SoilChemicalResponseDto response = soilChemicalApiClient.sendSoilChemical("4617033028100130004");
 		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/soil/character")
 	ResponseEntity<?> soilCharacter() {
-		SoilCharacterResponseDto response = soilCharacterApiClient.sendSoilCharacter("5115034022100750001");
+		SoilCharacterResponseDto response = soilCharacterApiClient.sendSoilCharacter("4617033028100130004");
 		return ResponseEntity.ok(response);
 	}
 }
