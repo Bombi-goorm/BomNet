@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/auth/health")
 @RequiredArgsConstructor
 public class AuthController {
 
     @ResponseBody
-    @GetMapping("/health")
+    @GetMapping
     public ResponseEntity<?> authHealth() {
         return ResponseEntity.ok("Auth :: Healthy");
     }

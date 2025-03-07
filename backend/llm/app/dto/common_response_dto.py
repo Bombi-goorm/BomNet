@@ -7,4 +7,5 @@ T = TypeVar("T")
 class CommonResponseDto(BaseModel, Generic[T]):
     status: str  # ✅ 필수 필드 (누락 시 오류 발생)
     message: str
-    data: Optional[T]
+    data: Optional[T] = None
+

@@ -1,6 +1,7 @@
 import { InterestItem } from "./components/myinfo/InterestsList";
 import { PriceAlertItem } from "./components/myinfo/PriceAlertList";
 import { HomeDto } from "./types/home_types";
+import { Price, PriceResponse } from "./types/price_types";
 import { CultivationInfo, Product } from "./types/product_types";
 
 // 홈화면 샘플 데이터
@@ -230,111 +231,6 @@ export const ITEM_VARIETY_MAP = [
 ];
 
   
-  export const dayPrices = [
-    { id: 1, smallId: '01', date: "2025-02-11", regionId: 1, price: 2500 },
-    { id: 2, smallId: '01', date: "2025-02-12", regionId: 1, price: 2700 },
-    { id: 3, smallId: '01', date: "2025-02-13", regionId: 1, price: 2750 },
-    { id: 4, smallId: '01', date: "2025-02-14", regionId: 1, price: 2631 },
-    { id: 5, smallId: '01', date: "2025-02-15", regionId: 1, price: 2513 },
-    { id: 6, smallId: '01', date: "2025-02-16", regionId: 1, price: 2345 },
-    { id: 7, smallId: '01', date: "2025-02-17", regionId: 1, price: 2100 },
-    { id: 8, smallId: '01', date: "2025-02-18", regionId: 1, price: 2087 },
-
-    { id: 9, smallId: '02', date: "2025-02-21", regionId: 1, price: 2600 },
-    { id: 10, smallId: '02', date: "2025-02-22", regionId: 1, price: 2344 },
-    { id: 11, smallId: '02', date: "2025-02-23", regionId: 1, price: 2198 },
-    { id: 12, smallId: '02', date: "2025-02-24", regionId: 1, price: 3124 },
-    { id: 13, smallId: '02', date: "2025-02-25", regionId: 1, price: 3354 },
-    { id: 14, smallId: '02', date: "2025-02-26", regionId: 1, price: 3022 },
-    { id: 15, smallId: '02', date: "2025-02-27", regionId: 1, price: 2954 },
-    { id: 16, smallId: '02', date: "2025-02-28", regionId: 1, price: 2744 },
-
-    { id: 17, smallId: '03', date: "2025-02-21", regionId: 1, price: 4522 },
-    { id: 18, smallId: '03', date: "2025-02-22", regionId: 1, price: 4211 },
-    { id: 19, smallId: '03', date: "2025-02-23", regionId: 1, price: 3952 },
-    { id: 20, smallId: '03', date: "2025-02-24", regionId: 1, price: 3755 },
-    { id: 21, smallId: '03', date: "2025-02-25", regionId: 1, price: 3800 },
-    { id: 22, smallId: '03', date: "2025-02-26", regionId: 1, price: 3900 },
-    { id: 23, smallId: '03', date: "2025-02-27", regionId: 1, price: 3911 },
-    { id: 24, smallId: '03', date: "2025-02-28", regionId: 1, price: 4052 },
-
-    { id: 29, smallId: '04', date: "2025-02-25", regionId: 1, price: 4000 },
-    { id: 30, smallId: '04', date: "2025-02-25", regionId: 1, price: 4100 },
-    { id: 31, smallId: '04', date: "2025-02-26", regionId: 1, price: 2700 },
-    { id: 32, smallId: '04', date: "2025-02-26", regionId: 1, price: 2600 },
-    { id: 33, smallId: '04', date: "2025-02-27", regionId: 1, price: 4500 },
-    { id: 34, smallId: '04', date: "2025-02-27", regionId: 1, price: 4600 },
-    { id: 35, smallId: '05', date: "2025-02-28", regionId: 1, price: 3300 },
-    { id: 36, smallId: '05', date: "2025-02-28", regionId: 1, price: 3400 },
-    { id: 37, smallId: '05', date: "2025-02-22", regionId: 1, price: 4200 },
-    { id: 38, smallId: '05', date: "2025-02-23", regionId: 1, price: 4300 },
-    { id: 39, smallId: '05', date: "2025-02-24", regionId: 1, price: 3000 },
-    { id: 40, smallId: '05', date: "2025-02-25", regionId: 1, price: 3100 },
-  ];
-
-  export const monthPrices = [
-    { id: 1, smallId: '01', date: "2024-03", regionId: 1, price: 2750 },
-    { id: 2, smallId: '01', date: "2024-04", regionId: 1, price: 2631 },
-    { id: 3, smallId: '01', date: "2024-05", regionId: 1, price: 2513 },
-    { id: 4, smallId: '01', date: "2024-06", regionId: 1, price: 2345 },
-    { id: 5, smallId: '01', date: "2024-07", regionId: 1, price: 2100 },
-    { id: 6, smallId: '01', date: "2024-08", regionId: 1, price: 2087 },
-    { id: 7, smallId: '01', date: "2024-09", regionId: 1, price: 2087 },
-    { id: 8, smallId: '01', date: "2024-10", regionId: 1, price: 2087 },
-    { id: 9, smallId: '01', date: "2024-11", regionId: 1, price: 2087 },
-    { id: 10, smallId: '01', date: "2024-12", regionId: 1, price: 2087 },
-    { id: 11, smallId: '01', date: "2025-01", regionId: 1, price: 2500 },
-    { id: 12, smallId: '01', date: "2025-02", regionId: 1, price: 2700 },
-  ]
-  
-  export const yearPrices = [
-    { id: 1, smallId: '01', date: "2015", regionId: 1, price: 2513 },
-    { id: 2, smallId: '01', date: "2016", regionId: 1, price: 2345 },
-    { id: 3, smallId: '01', date: "2017", regionId: 1, price: 2100 },
-    { id: 4, smallId: '01', date: "2018", regionId: 1, price: 2087 },
-    { id: 5, smallId: '01', date: "2019", regionId: 1, price: 2087 },
-    { id: 6, smallId: '01', date: "2020", regionId: 1, price: 2087 },
-    { id: 7, smallId: '01', date: "2021", regionId: 1, price: 2087 },
-    { id: 8, smallId: '01', date: "2022", regionId: 1, price: 2087 },
-    { id: 9, smallId: '01', date: "2023", regionId: 1, price: 2500 },
-    { id: 10, smallId: '01', date: "2024", regionId: 1, price: 2700 },
-  ]
-  
-  // 실시간 경락가 데이터 (id, 품종 식별자, 날짜시간, 지역 식별자, 경락가)
-  export const liveAuctionPrices = [
-    { id: 1, smallId: '01', datetime: "2025-02-22T08:00", regionId: 1, price: 4767 },
-    { id: 2, smallId: '01', datetime: "2025-02-22T09:00", regionId: 1, price: 4672 },
-    { id: 3, smallId: '01', datetime: "2025-02-22T10:00", regionId: 1, price: 3684 },
-    { id: 4, smallId: '01', datetime: "2025-02-22T11:00", regionId: 1, price: 3791 },
-    { id: 5, smallId: '01', datetime: "2025-02-22T12:00", regionId: 1, price: 4096 },
-    { id: 6, smallId: '01', datetime: "2025-02-22T13:00", regionId: 1, price: 3802 },
-    { id: 7, smallId: '01', datetime: "2025-02-22T14:00", regionId: 1, price: 4911 },
-    { id: 8, smallId: '01', datetime: "2025-02-22T15:00", regionId: 1, price: 4764 },
-    { id: 9, smallId: '01', datetime: "2025-02-22T16:00", regionId: 1, price: 3490 },
-    { id: 10, smallId: '01', datetime: "2025-02-22T17:00", regionId: 1, price: 4107 },
-    { id: 11, smallId: '02', datetime: "2025-02-22T08:00", regionId: 1, price: 4280 },
-    { id: 12, smallId: '02', datetime: "2025-02-22T09:00", regionId: 1, price: 3056 },
-    { id: 13, smallId: '02', datetime: "2025-02-22T10:00", regionId: 1, price: 3954 },
-    { id: 14, smallId: '02', datetime: "2025-02-22T11:00", regionId: 1, price: 3652 },
-    { id: 15, smallId: '02', datetime: "2025-02-22T12:00", regionId: 1, price: 4889 },
-    { id: 16, smallId: '02', datetime: "2025-02-22T13:00", regionId: 1, price: 4356 },
-    { id: 17, smallId: '02', datetime: "2025-02-22T14:00", regionId: 1, price: 4032 },
-    { id: 18, smallId: '02', datetime: "2025-02-22T15:00", regionId: 1, price: 4901 },
-    { id: 19, smallId: '02', datetime: "2025-02-22T16:00", regionId: 1, price: 4680 },
-    { id: 20, smallId: '02', datetime: "2025-02-22T17:00", regionId: 1, price: 4027 },
-    { id: 21, smallId: '03', datetime: "2025-02-22T08:00", regionId: 1, price: 4931 },
-    { id: 22, smallId: '03', datetime: "2025-02-22T09:00", regionId: 1, price: 3458 },
-    { id: 23, smallId: '03', datetime: "2025-02-22T10:00", regionId: 1, price: 3599 },
-    { id: 24, smallId: '03', datetime: "2025-02-22T11:00", regionId: 1, price: 4157 },
-    { id: 25, smallId: '03', datetime: "2025-02-22T12:00", regionId: 1, price: 3928 },
-    { id: 26, smallId: '03', datetime: "2025-02-22T13:00", regionId: 1, price: 4860 },
-    { id: 27, smallId: '03', datetime: "2025-02-22T14:00", regionId: 1, price: 3290 },
-    { id: 28, smallId: '03', datetime: "2025-02-22T15:00", regionId: 1, price: 4978 },
-    { id: 29, smallId: '03', datetime: "2025-02-22T16:00", regionId: 1, price: 3773 },
-    { id: 30, smallId: '03', datetime: "2025-02-22T17:00", regionId: 1, price: 4146 },
-  ];
-  
-  
 // 인기 품목
 export const pupularProducts = [
     { id: 1, varietyId: 1},
@@ -360,17 +256,19 @@ export const nationwideTradeInfo = {
 
 // 추천 생산품
 export const recommendedProducts = [
-  { id: 1, name: "사과", reason: "토양 적합도 높음" },
-  { id: 2, name: "배", reason: "기후 적합도 높음" },
-  { id: 3, name: "딸기", reason: "수익성 높음" },
-  { id: 4, name: "감자", reason: "지역 수요 높음" },
-  { id: 5, name: "고구마", reason: "계절성" },
+  { id: 1, name: "사과", reason: "추천" },
+  { id: 2, name: "배", reason: "추천" },
+  { id: 3, name: "딸기", reason: "추천" },
+  { id: 4, name: "감자", reason: "유통량 상승" },
+  { id: 5, name: "고구마", reason: "가격 상승" },
 ];
 
 
 // 내 농장 정보
 export const farmData = {
   soilType: "양토",
+  chemData: "마그네슘 풍부",
+  phyData: "배수불량",
   averageTemperature: "10°C",
   annualRainfall: "1200mm",
   tradeAmount: "월 550T",
@@ -395,22 +293,22 @@ export const user = {
 // 관심 품목 데이터
 export const interestItems: InterestItem[] = [
   { name: "사과", variety: "후지", isSelected: false },
-  { name: "바나나", variety: "캐번디시", isSelected: true },
-  { name: "포도", variety: "샤인머스캣", isSelected: false },
-  { name: "딸기", variety: "설향", isSelected: false },
-  { name: "배", variety: "신고", isSelected: true },
-  { name: "오렌지", variety: "발렌시아", isSelected: false },
-  { name: "수박", variety: "참외", isSelected: false },
-  { name: "키위", variety: "헤이즐", isSelected: false },
+  { name: "사과", variety: "혹옥", isSelected: true },
+  { name: "사과", variety: "아오리", isSelected: false },
+  { name: "배추", variety: "월동배추", isSelected: false },
+  { name: "배추", variety: "고랭지배추", isSelected: true },
+  { name: "양파", variety: "양파(일반)", isSelected: false },
+  { name: "파프리카", variety: "파프리카", isSelected: false },
+  { name: "아스파라거스", variety: "아스파라거스", isSelected: false },
 ];
 
 // 가격 알림 데이터 (품목, 품종, 가격 정보 포함)
 export const priceAlertItems: PriceAlertItem[] = [
-  { name: "사과", variety: "후지", price: "1,200원" },
-  { name: "바나나", variety: "캐번디시", price: "900원" },
-  { name: "포도", variety: "샤인머스캣", price: "3,500원" },
-  { name: "딸기", variety: "설향", price: "2,000원" },
-  { name: "배", variety: "신고", price: "1,500원" },
+  { name: "사과", variety: "후지", markets: "가락시장", price: "1,200원" },
+  { name: "사과", variety: "홍옥", markets: "가락시장, 강서시장", price: "900원" },
+  { name: "배추", variety: "고랭지배추", markets: "안양시장", price: "3,500원" },
+  { name: "상추", variety: "적상추", markets: "강릉시장", price: "2,000원" },
+  { name: "아스파라거스", variety: "아스파라거스", markets: "포항시장, 창원시장, 울산시장", price: "1,500원" },
 ];
 
 
@@ -641,3 +539,264 @@ export const sampleCultivationData: CultivationInfo[] = [
       "봄철 새순이 나오기 전에는 덮개 관리 및 보온이 중요. 과습에 약하므로 배수 관리를 철저히 해야 함."
   }
 ];
+
+
+// 가격 샘플 데이터
+export const priceResponse: PriceResponse = {
+  annual: [
+    // 홍옥
+    { id: 1, variety: "홍옥", dateTime: "2015", price: 2513 },
+    { id: 2, variety: "홍옥", dateTime: "2016", price: 2345 },
+    { id: 3, variety: "홍옥", dateTime: "2017", price: 2100 },
+    { id: 4, variety: "홍옥", dateTime: "2018", price: 2087 },
+    { id: 5, variety: "홍옥", dateTime: "2019", price: 2087 },
+    { id: 6, variety: "홍옥", dateTime: "2020", price: 2087 },
+    { id: 7, variety: "홍옥", dateTime: "2021", price: 2087 },
+    { id: 8, variety: "홍옥", dateTime: "2022", price: 2087 },
+    { id: 9, variety: "홍옥", dateTime: "2023", price: 2500 },
+    { id: 10, variety: "홍옥", dateTime: "2024", price: 2700 },
+
+    // 아오리
+    { id: 11, variety: "아오리", dateTime: "2015", price: 2800 },
+    { id: 12, variety: "아오리", dateTime: "2016", price: 2650 },
+    { id: 13, variety: "아오리", dateTime: "2017", price: 2400 },
+    { id: 14, variety: "아오리", dateTime: "2018", price: 2300 },
+    { id: 15, variety: "아오리", dateTime: "2019", price: 2250 },
+    { id: 16, variety: "아오리", dateTime: "2020", price: 2200 },
+    { id: 17, variety: "아오리", dateTime: "2021", price: 2225 },
+    { id: 18, variety: "아오리", dateTime: "2022", price: 2300 },
+    { id: 19, variety: "아오리", dateTime: "2023", price: 2900 },
+    { id: 20, variety: "아오리", dateTime: "2024", price: 3100 },
+
+    // 후지
+    { id: 21, variety: "후지", dateTime: "2015", price: 4000 },
+    { id: 22, variety: "후지", dateTime: "2016", price: 3900 },
+    { id: 23, variety: "후지", dateTime: "2017", price: 3700 },
+    { id: 24, variety: "후지", dateTime: "2018", price: 3600 },
+    { id: 25, variety: "후지", dateTime: "2019", price: 3550 },
+    { id: 26, variety: "후지", dateTime: "2020", price: 3500 },
+    { id: 27, variety: "후지", dateTime: "2021", price: 3550 },
+    { id: 28, variety: "후지", dateTime: "2022", price: 3650 },
+    { id: 29, variety: "후지", dateTime: "2023", price: 4200 },
+    { id: 30, variety: "후지", dateTime: "2024", price: 4400 },
+  ],
+  monthly: [
+    // 홍옥
+    { id: 1, variety: "홍옥", dateTime: "2024-03", price: 2750 },
+    { id: 2, variety: "홍옥", dateTime: "2024-04", price: 2631 },
+    { id: 3, variety: "홍옥", dateTime: "2024-05", price: 2513 },
+    { id: 4, variety: "홍옥", dateTime: "2024-06", price: 2345 },
+    { id: 5, variety: "홍옥", dateTime: "2024-07", price: 2100 },
+    { id: 6, variety: "홍옥", dateTime: "2024-08", price: 2087 },
+    { id: 7, variety: "홍옥", dateTime: "2024-09", price: 2087 },
+    { id: 8, variety: "홍옥", dateTime: "2024-10", price: 2087 },
+    { id: 9, variety: "홍옥", dateTime: "2024-11", price: 2087 },
+    { id: 10, variety: "홍옥", dateTime: "2024-12", price: 2087 },
+    { id: 11, variety: "홍옥", dateTime: "2025-01", price: 2500 },
+    { id: 12, variety: "홍옥", dateTime: "2025-02", price: 2700 },
+
+    // 아오리
+    { id: 13, variety: "아오리", dateTime: "2024-03", price: 2900 },
+    { id: 14, variety: "아오리", dateTime: "2024-04", price: 2785 },
+    { id: 15, variety: "아오리", dateTime: "2024-05", price: 2650 },
+    { id: 16, variety: "아오리", dateTime: "2024-06", price: 2500 },
+    { id: 17, variety: "아오리", dateTime: "2024-07", price: 2300 },
+    { id: 18, variety: "아오리", dateTime: "2024-08", price: 2250 },
+    { id: 19, variety: "아오리", dateTime: "2024-09", price: 2200 },
+    { id: 20, variety: "아오리", dateTime: "2024-10", price: 2250 },
+    { id: 21, variety: "아오리", dateTime: "2024-11", price: 2300 },
+    { id: 22, variety: "아오리", dateTime: "2024-12", price: 2350 },
+    { id: 23, variety: "아오리", dateTime: "2025-01", price: 2800 },
+    { id: 24, variety: "아오리", dateTime: "2025-02", price: 3100 },
+
+    // 후지
+    { id: 25, variety: "후지", dateTime: "2024-03", price: 4200 },
+    { id: 26, variety: "후지", dateTime: "2024-04", price: 4100 },
+    { id: 27, variety: "후지", dateTime: "2024-05", price: 3900 },
+    { id: 28, variety: "후지", dateTime: "2024-06", price: 3800 },
+    { id: 29, variety: "후지", dateTime: "2024-07", price: 3650 },
+    { id: 30, variety: "후지", dateTime: "2024-08", price: 3600 },
+    { id: 31, variety: "후지", dateTime: "2024-09", price: 3550 },
+    { id: 32, variety: "후지", dateTime: "2024-10", price: 3600 },
+    { id: 33, variety: "후지", dateTime: "2024-11", price: 3650 },
+    { id: 34, variety: "후지", dateTime: "2024-12", price: 3700 },
+    { id: 35, variety: "후지", dateTime: "2025-01", price: 4150 },
+    { id: 36, variety: "후지", dateTime: "2025-02", price: 4400 },
+  ],
+  daily: [
+    // 홍옥 데이터
+    { id: 1, variety: "홍옥", dateTime: "2025-02-21", price: 2100 },
+    { id: 2, variety: "홍옥", dateTime: "2025-02-22", price: 2210 },
+    { id: 3, variety: "홍옥", dateTime: "2025-02-23", price: 2220 },
+    { id: 4, variety: "홍옥", dateTime: "2025-02-24", price: 2330 },
+    { id: 5, variety: "홍옥", dateTime: "2025-02-25", price: 2140 },
+    { id: 6, variety: "홍옥", dateTime: "2025-02-26", price: 2450 },
+    { id: 7, variety: "홍옥", dateTime: "2025-02-27", price: 2660 },
+    { id: 8, variety: "홍옥", dateTime: "2025-02-28", price: 2270 },
+    { id: 9, variety: "홍옥", dateTime: "2025-03-01", price: 2380 },
+    { id: 10, variety: "홍옥", dateTime: "2025-03-02", price: 2990 },
+    { id: 11, variety: "홍옥", dateTime: "2025-03-03", price: 2600 },
+    { id: 12, variety: "홍옥", dateTime: "2025-03-04", price: 2510 },
+    { id: 13, variety: "홍옥", dateTime: "2025-03-05", price: 2420 },
+    { id: 14, variety: "홍옥", dateTime: "2025-03-06", price: 2330 },
+    { id: 15, variety: "홍옥", dateTime: "2025-03-07", price: 2740 },
+  
+    // 아오리 데이터
+    { id: 16, variety: "아오리", dateTime: "2025-02-21", price: 3500 },
+    { id: 17, variety: "아오리", dateTime: "2025-02-22", price: 3110 },
+    { id: 18, variety: "아오리", dateTime: "2025-02-23", price: 3220 },
+    { id: 19, variety: "아오리", dateTime: "2025-02-24", price: 3130 },
+    { id: 20, variety: "아오리", dateTime: "2025-02-25", price: 3340 },
+    { id: 21, variety: "아오리", dateTime: "2025-02-26", price: 3050 },
+    { id: 22, variety: "아오리", dateTime: "2025-02-27", price: 3860 },
+    { id: 23, variety: "아오리", dateTime: "2025-02-28", price: 3770 },
+    { id: 24, variety: "아오리", dateTime: "2025-03-01", price: 3180 },
+    { id: 25, variety: "아오리", dateTime: "2025-03-02", price: 3490 },
+    { id: 26, variety: "아오리", dateTime: "2025-03-03", price: 3200 },
+    { id: 27, variety: "아오리", dateTime: "2025-03-04", price: 3410 },
+    { id: 28, variety: "아오리", dateTime: "2025-03-05", price: 3520 },
+    { id: 29, variety: "아오리", dateTime: "2025-03-06", price: 3630 },
+    { id: 30, variety: "아오리", dateTime: "2025-03-07", price: 3140 },
+  
+    // 후지 데이터
+    { id: 31, variety: "후지", dateTime: "2025-02-21", price: 4900 },
+    { id: 32, variety: "후지", dateTime: "2025-02-22", price: 4510 },
+    { id: 33, variety: "후지", dateTime: "2025-02-23", price: 4120 },
+    { id: 34, variety: "후지", dateTime: "2025-02-24", price: 4230 },
+    { id: 35, variety: "후지", dateTime: "2025-02-25", price: 4140 },
+    { id: 36, variety: "후지", dateTime: "2025-02-26", price: 4250 },
+    { id: 37, variety: "후지", dateTime: "2025-02-27", price: 4660 },
+    { id: 38, variety: "후지", dateTime: "2025-02-28", price: 4770 },
+    { id: 39, variety: "후지", dateTime: "2025-03-01", price: 4680 },
+    { id: 40, variety: "후지", dateTime: "2025-03-02", price: 4890 },
+    { id: 41, variety: "후지", dateTime: "2025-03-03", price: 4500 },
+    { id: 42, variety: "후지", dateTime: "2025-03-04", price: 4610 },
+    { id: 43, variety: "후지", dateTime: "2025-03-05", price: 4420 },
+    { id: 44, variety: "후지", dateTime: "2025-03-06", price: 4630 },
+    { id: 45, variety: "후지", dateTime: "2025-03-07", price: 4940 },
+  ],
+  realTime: [
+    { id: 1, variety: "홍옥", dateTime: "2025-02-22T08:00", price: 4767 },
+    { id: 2, variety: "홍옥", dateTime: "2025-02-22T09:00", price: 4672 },
+    { id: 3, variety: "홍옥", dateTime: "2025-02-22T10:00", price: 3684 },
+    { id: 4, variety: "홍옥", dateTime: "2025-02-22T11:00", price: 3791 },
+    { id: 5, variety: "홍옥", dateTime: "2025-02-22T12:00", price: 4096 },
+    { id: 6, variety: "홍옥", dateTime: "2025-02-22T13:00", price: 3802 },
+    { id: 7, variety: "아오리", dateTime: "2025-02-22T08:00", price: 4280 },
+    { id: 8, variety: "아오리", dateTime: "2025-02-22T09:00", price: 3056 },
+    { id: 9, variety: "아오리", dateTime: "2025-02-22T10:00", price: 3954 },
+    { id: 10, variety: "아오리", dateTime: "2025-02-22T11:00", price: 3652 },
+    { id: 11, variety: "아오리", dateTime: "2025-02-22T12:00", price: 4889 },
+    { id: 12, variety: "아오리", dateTime: "2025-02-22T13:00", price: 4356 },
+    { id: 13, variety: "후지", dateTime: "2025-02-22T08:00", price: 4931 },
+    { id: 14, variety: "후지", dateTime: "2025-02-22T09:00", price: 3458 },
+    { id: 15, variety: "후지", dateTime: "2025-02-22T10:00", price: 3599 },
+    { id: 16, variety: "후지", dateTime: "2025-02-22T11:00", price: 4157 },
+    { id: 17, variety: "후지", dateTime: "2025-02-22T12:00", price: 3928 },
+    { id: 18, variety: "후지", dateTime: "2025-02-22T13:00", price: 4860 },
+  ],
+  qualityChartData: [
+    // 홍옥 데이터
+    { date: "2025-02-28", variety: "홍옥", 특: 5000, 상: 4500, 보통: 4000, 등외: 3500 },
+    { date: "2025-03-01", variety: "홍옥", 특: 5100, 상: 4550, 보통: 4050, 등외: 3550 },
+    { date: "2025-03-02", variety: "홍옥", 특: 5200, 상: 4600, 보통: 4100, 등외: 3600 },
+    { date: "2025-03-03", variety: "홍옥", 특: 5150, 상: 4570, 보통: 4070, 등외: 3570 },
+    { date: "2025-03-04", variety: "홍옥", 특: 5250, 상: 4620, 보통: 4120, 등외: 3620 },
+    // 아오리 데이터
+    { date: "2025-02-28", variety: "아오리", 특: 5300, 상: 4650, 보통: 4150, 등외: 3650 },
+    { date: "2025-03-01", variety: "아오리", 특: 5350, 상: 4700, 보통: 4200, 등외: 3700 },
+    { date: "2025-03-02", variety: "아오리", 특: 5400, 상: 4750, 보통: 4250, 등외: 3750 },
+    { date: "2025-03-03", variety: "아오리", 특: 5450, 상: 4800, 보통: 4300, 등외: 3800 },
+    { date: "2025-03-04", variety: "아오리", 특: 5500, 상: 4850, 보통: 4350, 등외: 3850 },
+    // 후지 데이터
+    { date: "2025-02-28", variety: "후지", 특: 6000, 상: 5500, 보통: 5000, 등외: 4500 },
+    { date: "2025-03-01", variety: "후지", 특: 6050, 상: 5550, 보통: 5050, 등외: 4550 },
+    { date: "2025-03-02", variety: "후지", 특: 6100, 상: 5600, 보통: 5100, 등외: 4600 },
+    { date: "2025-03-03", variety: "후지", 특: 6150, 상: 5650, 보통: 5150, 등외: 4650 },
+    { date: "2025-03-04", variety: "후지", 특: 6200, 상: 5700, 보통: 5200, 등외: 4700 },
+  ],
+  regionalChartData: [
+    { variety: "홍옥", region: "서울", price: 4800 },
+    { variety: "홍옥", region: "대전", price: 4700 },
+    { variety: "홍옥", region: "부산", price: 4750 },
+    { variety: "홍옥", region: "대구", price: 4650 },
+    { variety: "홍옥", region: "광주", price: 4750 },
+    { variety: "홍옥", region: "울산", price: 4700 },
+    { variety: "홍옥", region: "인천", price: 4650 },
+    { variety: "아오리", region: "서울", price: 4900 },
+    { variety: "아오리", region: "대전", price: 4800 },
+    { variety: "아오리", region: "부산", price: 4850 },
+    { variety: "아오리", region: "대구", price: 4750 },
+    { variety: "아오리", region: "광주", price: 4850 },
+    { variety: "후지", region: "서울", price: 5500 },
+    { variety: "후지", region: "대전", price: 5400 },
+    { variety: "후지", region: "부산", price: 5450 },
+    { variety: "후지", region: "대구", price: 5350 },
+    { variety: "후지", region: "광주", price: 5550 },
+    { variety: "후지", region: "울산", price: 5600 },
+    { variety: "후지", region: "인천", price: 5450 },
+  ],
+  sankeyData: {
+    nodes: [
+      // 첫 번째 레이어: 품종
+      { name: '홍옥' },  // 0
+      { name: '아오리' }, // 1
+      { name: '후지' },  // 2
+      // 두 번째 레이어: 생산지
+      { name: '경북' },  // 3
+      { name: '충북' },  // 4
+      { name: '경남' },  // 5
+      { name: '전북' },  // 6
+      { name: '전남' },  // 7
+      // 세 번째 레이어: 도매시장
+      { name: '안양도매시장' },    // 8
+      { name: '대구북부도매' },    // 9
+      { name: '포항도매시장' },    // 10
+      { name: '서울가락도매시장' }, // 11
+      { name: '부산도매시장' },     // 12
+      { name: '대구중앙도매시장' }, // 13
+      { name: '인천도매시장' },     // 14
+    ],
+    links: [
+      // Set 1: 품종 -> 기존 생산지 (경북, 충북, 경남)
+      { source: 0, target: 3, value: 200 },  // 홍옥 → 경북
+      { source: 0, target: 4, value: 100 },  // 홍옥 → 충북
+      { source: 0, target: 5, value: 50 },   // 홍옥 → 경남
+      { source: 1, target: 3, value: 150 },  // 아오리 → 경북
+      { source: 1, target: 4, value: 120 },  // 아오리 → 충북
+      { source: 1, target: 5, value: 100 },  // 아오리 → 경남
+      { source: 2, target: 3, value: 80 },   // 후지 → 경북
+      { source: 2, target: 4, value: 90 },   // 후지 → 충북
+      { source: 2, target: 5, value: 110 },  // 후지 → 경남
+  
+      // Set 2: 품종 -> 신규 생산지 (전북, 전남)
+      { source: 0, target: 6, value: 70 },  // 홍옥 → 전북
+      { source: 0, target: 7, value: 30 },  // 홍옥 → 전남
+      { source: 1, target: 6, value: 90 },  // 아오리 → 전북
+      { source: 1, target: 7, value: 50 },  // 아오리 → 전남
+      { source: 2, target: 6, value: 60 },  // 후지 → 전북
+      { source: 2, target: 7, value: 80 },  // 후지 → 전남
+  
+      // Set 3: 기존 생산지 -> 기존 도매시장
+      { source: 3, target: 8, value: 120 },  // 경북 → 안양도매시장
+      { source: 3, target: 9, value: 60 },   // 경북 → 대구북부도매
+      { source: 3, target: 10, value: 50 },  // 경북 → 포항도매시장
+      { source: 4, target: 11, value: 90 },  // 충북 → 서울가락도매시장
+      { source: 4, target: 12, value: 90 },  // 충북 → 부산도매시장
+      { source: 5, target: 8, value: 30 },   // 경남 → 안양도매시장
+      { source: 5, target: 9, value: 20 },   // 경남 → 대구북부도매
+      { source: 5, target: 10, value: 40 },  // 경남 → 포항도매시장
+  
+      // Set 4: 기존 생산지 -> 신규 도매시장
+      { source: 3, target: 13, value: 30 },  // 경북 → 대구중앙도매시장
+      { source: 4, target: 14, value: 20 },  // 충북 → 인천도매시장
+      { source: 5, target: 13, value: 10 },  // 경남 → 대구중앙도매시장
+  
+      // Set 5: 신규 생산지 -> 신규 도매시장
+      { source: 6, target: 13, value: 50 },  // 전북 → 대구중앙도매시장
+      { source: 6, target: 14, value: 40 },  // 전북 → 인천도매시장
+      { source: 7, target: 13, value: 30 },  // 전남 → 대구중앙도매시장
+      { source: 7, target: 14, value: 20 },  // 전남 → 인천도매시장
+    ]
+  },
+};

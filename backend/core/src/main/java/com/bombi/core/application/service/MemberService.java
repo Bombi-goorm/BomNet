@@ -2,6 +2,7 @@ package com.bombi.core.application.service;
 
 import java.util.UUID;
 
+import com.bombi.core.presentation.dto.member.MemberRequestDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,5 +67,9 @@ public class MemberService {
 	private String findSidoCodeFrom(MemberInfo memberInfo) {
 		String pnuCode = memberInfo.getPnu();
 		return pnuCode.substring(0, 2);
+	}
+
+	public void registerMember(MemberRequestDto requestDto) {
+		memberInfoRepository.findById()
 	}
 }

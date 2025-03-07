@@ -3,7 +3,6 @@ import { fetchWeather, fetchAlert, fetchPrice, fetchOther } from "../../api/chat
 import { CommonResponseDto } from "../../types/member_types";
 import { ChatbotRequestDto, ChatbotResponseDto } from "../../types/chatbot_types";
 import { useNavigate } from "react-router-dom";
-import { ITEM_VARIETY_MAP } from "../../data_sample";
 import { WeatherInfo } from "../../types/home_types";
 
 
@@ -43,7 +42,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
 
     switch (action) {
       case "alert":
-        initialMessage = "🔔 알람을 받고 싶은 품목, 품종과 가격을 입력해주세요! (예: 사과 홍옥 2000)";
+        initialMessage = "🔔 알람을 받고 싶은 품종과 가격, 지역을 입력해주세요!";
         break;
       case "weather":
         initialMessage = "🌦️ 조회할 지역의 날씨 정보를 입력해주세요! (예: 서울)";
@@ -69,23 +68,24 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
 
     try {
       let response: CommonResponseDto<ChatbotResponseDto> | undefined;
-
-      switch (screen) {
-        case "alert":
-          response = await handleAlertInput();
-          break;
-        case "weather":
-          response = await handleWeatherInput();
-          break;
-        case "price":
-          response = await handlePriceInputSubmit();
-          break;
-        case "other":
-          response = await handleOtherInput();
-          break;
-        default:
-          throw new Error("⛔ 유효하지 않은 요청입니다.");
-      }
+      
+        switch (screen) {
+          case "alert":
+            await handleAlertInput();
+            break;
+          case "weather":
+            response = await handleWeatherInput();
+            break;
+          case "price":
+            response = await handlePriceInputSubmit();
+            break;
+          case "other":
+            response = await handleOtherInput();
+            break;
+          default:
+            throw new Error("⛔ 유효하지 않은 요청입니다.");
+        }
+     
     } catch (error) {
       console.error("API 요청 실패:", error);
       setMessages((prev) => [...prev, { type: "bot", content: "⛔ 요청 처리 중 오류가 발생했습니다." }]);
@@ -97,53 +97,48 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
   //  알람 설정 처리
   const handleAlertInput = async () => {
     if (!userInput.trim()) return;
-
-    // 사용자 입력에서 품목, 품종, 가격 추출
-    const match = userInput.match(/(\S+)\s+(\S+)\s+(\d+)/);
-
-    if (!match) {
-      setMessages((prev) => [...prev, { type: "bot", content: "⚠️ 입력 형식이 올바르지 않습니다. (예: '사과 홍옥 3000')" }]);
-      return;
-    }
-
-    console.log(match)
-
-    const [_, midName, smallName, price] = match;
-
-    // ✅ ITEM_VARIETY_MAP에서 해당 품목과 품종을 검색
-    const matchedItem = ITEM_VARIETY_MAP.find(
-      (item) => item.midName === midName && item.smallName === smallName
-    );
-
-    if (!matchedItem) {
-      setMessages((prev) => [...prev, { type: "bot", content: `❌ '${midName} - ${smallName}' 품목을 찾을 수 없습니다.` }]);
-      return;
-    }
-
+  
     try {
-      // ✅ 서버에 알림 등록 요청
+      // 사용자 입력을 그대로 백엔드에 전달하여 LLM이 정보를 추출하도록 요청
       const response: CommonResponseDto<ChatbotResponseDto> = await fetchAlert({
-        bigId: matchedItem.bigId,
-        midId: matchedItem.midId,
-        smallId: matchedItem.smallId,
-        price: Number(price),
+        input: userInput,
       });
-
-      // ✅ 응답 처리
+  
+      // 응답 처리
       if (response.status === "200") {
-        if (response.message === "ALREADY_REGISTERED") {
-          setMessages((prev) => [...prev, { type: "bot", content: `⚠️ '${midName}-${smallName}-${price}원'은 이미 등록된 상품입니다.` }]);
-        } else {
-          setMessages((prev) => [...prev, { type: "bot", content: `✅ '${midName}-${smallName}-${price}원' 알림이 등록되었습니다.` }]);
-        }
-      } else {
-        setMessages((prev) => [...prev, { type: "bot", content: `❌ 알림 등록 실패: ${response.message || "서버 오류 발생"}` }]);
+          setMessages((prev) => [
+            ...prev,
+            {
+              type: "bot",
+              content: response.message,
+            },
+          ]);        
+      } else if(response.status === "400"){
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            content: response.message,
+          },
+        ]);
+      } else if(response.status === "404"){
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            content: response.message,
+          },
+        ]);
       }
     } catch (error) {
       console.error("API 요청 실패:", error);
-      setMessages((prev) => [...prev, { type: "bot", content: "⛔ 서버 오류로 인해 알림 등록에 실패했습니다." }]);
+      setMessages((prev) => [
+        ...prev,
+        { type: "bot", content: "⛔ 서버 오류로 인해 알림 등록에 실패했습니다." },
+      ]);
     }
   };
+  
 
 
 
@@ -233,7 +228,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
       if (response.status === "200") {
           setMessages((prev) => [
           ...prev,
-          { type: "bot", content: `🔍 ${userInput}의 품종 중 '${response.data.smallName}'를 선택하였습니다.` },
+          { type: "bot", content: `🔍 ${userInput}의 품종 중 '${response.data.crop}'를 선택하였습니다.` },
         ]);
         navigate("/price", { state: response.data });
         return response;
@@ -267,26 +262,26 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
-//  GPT 응답을 사용자에게 보기 좋게 출력
-const handleBotResponse = (data: ChatbotResponseDto) => {
-  let formattedContent = "";
+  //  GPT 응답을 사용자에게 보기 좋게 출력
+  const handleBotResponse = (data: ChatbotResponseDto) => {
+    let formattedContent = "";
 
-  console.log("🔍 GPT 응답 데이터 확인:", data); // 🔎 디버깅용
+    console.log("🔍 GPT 응답 데이터 확인:", data); // 🔎 디버깅용
 
-  //  'intent'가 있을 경우, 보기 좋게 변환
-  const intentText = data.intent?.replace(/[_']/g, " ").trim() || "정보";
+    //  'intent'가 있을 경우, 보기 좋게 변환
+    // const intentText = data.intent?.replace(/[_']/g, " ").trim() || "정보";
 
-  formattedContent = `📌 **${intentText}**\n\n`;
+    // formattedContent = `📌 **${intentText}**\n\n`;
 
-  //  `response_data` 확인 후 출력
-  if (data.response_data?.content) {
-    formattedContent += data.response_data.content;
-  } else {
-    formattedContent += "📎 응답을 가져올 수 없습니다.";
-  }
+    //  `response_data` 확인 후 출력
+    if (data.response_data?.content) {
+      formattedContent += data.response_data.content;
+    } else {
+      formattedContent += "📎 응답을 가져올 수 없습니다.";
+    }
 
-  setMessages((prev) => [...prev, { type: "bot", content: formattedContent }]);
-};
+    setMessages((prev) => [...prev, { type: "bot", content: formattedContent }]);
+  };
 
 
 

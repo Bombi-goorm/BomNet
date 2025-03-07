@@ -3,3 +3,43 @@ spring:
     name: core
   profiles:
     active: local
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+
+  cloud:
+    gcp:
+      project-id: ${GCP_PROJECT_ID}
+      storage:
+        credentials:
+          location: ${GCS_CREDENTIAL}
+      bigquery:
+        credentials:
+          location: ${BIGQUERY_CREDENTIAL}
+
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: ${CORE_PORT}
+
+jwt:
+  secret: ${JWT_SECRET}
+
+
+naver:
+  client-id: ${NAVER_ID}
+  client-secret: ${NAVER_SECRET}
+  news:
+    api:
+      url: ${NAVER_NEWS_URL}

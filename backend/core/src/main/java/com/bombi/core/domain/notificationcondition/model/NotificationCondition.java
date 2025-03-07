@@ -30,7 +30,7 @@ public class NotificationCondition extends BaseEntity {
 	@Column(name = "notification_condition_id")
 	private Long id;
 
-	@Column(columnDefinition = "INT NOT NULL")
+	@Column(columnDefinition = "VARCHAR(50) NOT NULL")
 	@Comment("지정가")
 	private int targetPrice;
 
@@ -44,9 +44,14 @@ public class NotificationCondition extends BaseEntity {
 	@Comment("멤버 ID")
 	private Member member;
 
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "product_id", columnDefinition = "BIGINT NOT NULL")
-	@Comment("작물 ID")
-	private Product product;
+//	@ManyToOne(fetch = LAZY)
+//	@JoinColumn(name = "product_id", columnDefinition = "BIGINT NOT NULL")
+//	@Comment("작물 ID")
+//	private Product product;
 
+	// 가격알림용 임시속성
+	private String category;
+	private String item;
+	private String variety;
+	private String region;
 }

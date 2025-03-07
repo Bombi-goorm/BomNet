@@ -1,16 +1,11 @@
-from fastapi import APIRouter
-from sqlalchemy import create_engine, text
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session
+
+from app.database import get_db
 
 base_router = APIRouter()
-
-
-DATABASE_URL = "mysql+pymysql://root:1234@localhost:3306/bomnet_db"
-
-# Create SQLAlchemy engine and session
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 @base_router.get("/health")
@@ -19,12 +14,9 @@ def health():
 
 
 @base_router.get("/ping")
-def ping_db():
+def ping_db(db: Session = Depends(get_db)):
     try:
-        db = SessionLocal()
-        db.execute(text('SELECT 1'))  # Simple query to check DB connection
+        db.execute(text("SELECT 1"))  # DB 연결 확인용 간단한 쿼리 실행
         return {"message": "Database connection successful"}
     except SQLAlchemyError as e:
-        return {"error": str(e)}
-    finally:
-        db.close()
+        raise HTTPException(status_code=500, detail=str(e))

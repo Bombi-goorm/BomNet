@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.Comment;
@@ -43,6 +45,7 @@ public class Member extends BaseEntity {
 
     @OneToOne(mappedBy = "member")
     private MemberInfo memberInfo;
+
 
     @Builder
     private Member(String platform, String authEmail, Role role) {

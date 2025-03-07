@@ -8,8 +8,24 @@ import MyInfoPage from "./pages/MyInfoPage";
 import AlarmListPage from "./pages/AlarmListPage";
 import ERR404 from "./pages/err/ERR404";
 import ERR500 from "./pages/err/ERR500";
+import { useEffect } from "react";
+
+
 
 function App() {
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("/service-worker.js")      
+          .catch((error) => {
+            console.error("Service Worker registration failed:", error);
+          });
+      });
+    }
+  }, []);
+
+
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
@@ -22,12 +38,9 @@ function App() {
       <Route path="/404" element={<ERR404 />} />
       <Route path="/500" element={<ERR500 />} />
 
-
-
-
       {/* <Route element={<ProtectedRoute />}> */}
-        <Route path="/info" element={<MyInfoPage />} />
-        <Route path="/alarm" element={<AlarmListPage />} />
+      <Route path="/info" element={<MyInfoPage />} />
+      <Route path="/alarm" element={<AlarmListPage />} />
       {/* </Route> */}
     </Routes>
   );

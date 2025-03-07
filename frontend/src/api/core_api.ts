@@ -1,7 +1,9 @@
 import axios from "axios";
 import { CommonResponseDto, InfoResponseDto, SignupRequestDto } from "../types/member_types";
-import { data } from "../data_sample";
-import { HomeDto } from "../types/home_types";
+import { HomeDto, HomeRequestDto } from "../types/home_types";
+import { PriceResponse } from "../types/price_types";
+import { ProductRequestDto } from "../types/product_types";
+import { priceResponse } from "../data_sample";
 
 // Axios 인스턴스 생성
 const api = axios.create({
@@ -29,15 +31,27 @@ export const memberInfo = async (): Promise<CommonResponseDto<InfoResponseDto>> 
 
 
 // 홈화면 정보 요청
-// export const homeInfo = async (): Promise<CommonResponseDto<HomeDto>> => {
-//     const response = await api.post<CommonResponseDto<HomeDto>>(`/core/home/info`);
-//     return response.data;
-// };
+export const homeInfo = async (data: HomeRequestDto): Promise<CommonResponseDto<HomeDto>> => {
+    const response = await api.post<CommonResponseDto<HomeDto>>(`/core/home`, data);
+    return response.data;
+};
 
 // 홈화면 테스트
-export const homeInfo = (): HomeDto => {
-  return data;
+// export const homeInfo = (): HomeDto => {
+//   return data;
+// };
+
+// 품목 가격정보 검색
+export const itemPriceSearch = async (data: ProductRequestDto): Promise<CommonResponseDto<PriceResponse>> => {
+  // const response = await api.post<CommonResponseDto<PriceResponse>>('/core/item/price', data);   
+  // return response.data;
+  return {
+    status: "200",  // API 응답 형식에 맞춰 success 값 추가
+    message: "가격 데이터를 성공적으로 조회했습니다.",
+    data: priceResponse, // 로컬에 있는 priceResponse 반환
+  };
 };
+
 
 
 // 인증 갱신
