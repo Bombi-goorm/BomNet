@@ -71,15 +71,15 @@ public class ProductionCondition extends BaseEntity {
 	@Comment("마그네슘")
 	private String mgMgPerKg; // 마그네슘
 
-	public boolean isSoilTextureSuitable(String surttureCode) {
+	public boolean isSoilTextureSuitable(SoilTexture surttureCode) {
 		return false;
 	}
 
-	public boolean isSoilDepthSuitable(String vldsoildepCode) {
+	public boolean isSoilDepthSuitable(SoilDepth vldsoildepCode) {
 		return false;
 	}
 
-	public boolean isDrainageSuitable(String soildraCode) {
+	public boolean isDrainageSuitable(Drainage soildraCode) {
 		return false;
 	}
 

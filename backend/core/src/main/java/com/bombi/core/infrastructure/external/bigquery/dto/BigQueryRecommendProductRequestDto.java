@@ -20,9 +20,9 @@ public class BigQueryRecommendProductRequestDto {
 	{
 		this.pnuCode = pnuCode;
 		this.sidoCode = sidoCode;
-		this.soilTypeCode = soilCharacterResponse.getSoilTypeCode();
-		this.vldsoildepCode = soilCharacterResponse.getVldsoildepCode();
-		this.soildraCode = soilCharacterResponse.getSoildraCode();
+		// this.soilTypeCode = soilCharacterResponse.getSoilTypeCode();
+		// this.vldsoildepCode = soilCharacterResponse.getVldsoildepCode();
+		// this.soildraCode = soilCharacterResponse.getSoildraCode();
 		this.acid = soilChemicalResponse.getPH();
 	}
 }
