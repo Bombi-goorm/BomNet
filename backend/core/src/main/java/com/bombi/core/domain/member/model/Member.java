@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.Comment;
@@ -61,5 +59,10 @@ public class Member extends BaseEntity {
     public void updatePnu(String pnu) {
         memberInfo.updatePnu(pnu);
         role.changeToFarmer();
+        activateEnableStatus();
+    }
+
+    private void activateEnableStatus() {
+        this.isEnabled = "T";
     }
 }
