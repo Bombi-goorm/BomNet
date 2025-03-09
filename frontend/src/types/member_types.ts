@@ -1,5 +1,3 @@
-import { Product } from "./product_types";
-
 // 공통 응답 타입
 export interface CommonResponseDto<T> {
     status: string, // 응답 코드 
@@ -18,19 +16,9 @@ export interface InfoResponseDto {
     memberId: string,
     email: string,
     PNU?: string,
-    myFarm: MyFarmInfo,
+    myFarm: FarmData,
     recommendedProducts: RecommendedProducts[],
-}
-
-// 농장 정보
-export interface MyFarmInfo {
-    sido: string, // 시/도 명
-    destrict: string, // 시/군/구 명
-    sidoCode: string, // 시/도 코드
-    destrictCode: string, // 시/군/구 코드
-    soilType: string, // 토양 타입
-    averageTemperture: string, // 평균 기온
-    annualprecipitation: string, // 연간 강수량
+    notificationConditions: NotificationCondition[],
 }
 
 // 내 농장 추천 상품
@@ -39,16 +27,34 @@ export interface RecommendedProducts {
     reason: string,
 }
 
-// 관심품목
-export interface interestItems {
+
+// 알림 조건 목록
+export interface NotificationCondition {
     id: number,
-    products: Product, 
-    inWatch: string, // 추적여부
+    item: string,
+    variety: string,
+    markets: string,
+    price: string,
+    isActive: string,
 }
 
-// 알림목록
-export interface NotificationList {
-    id: number,
-    type: string, // 기상/가격 
-    content: string, // 알림 내용
+
+// 농장 정보
+export interface FarmData {
+    overwintering: string;
+    averageTemperature: string;
+    minTemperature: string;
+    maxTemperature: string;
+    annualRainfall: string;
+    sunlightHours: string;
+    drainage: string;
+    soilDepth: string;
+    slopeDegree: string;
+    soilTexture: string;
+    ph: string;
+    organicMatterGPerKg: string;
+    avPMgPerKg: string;
+    kMgPerKg: string;
+    caMgPerKg: string;
+    mgMgPerKg: string;
 }

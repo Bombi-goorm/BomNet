@@ -19,8 +19,9 @@ const PriceAlertList: React.FC<PriceAlertListProps> = ({
 }) => {
   return (
     <div>
-      <h2 className="text-2xl font-semibold text-gray-700">가격 알림 설정</h2>
+    
       <div className="bg-white border p-4 rounded-lg shadow-sm">
+      <h2 className="text-2xl font-semibold text-gray-700">가격 조건 목록</h2>
         <table className="w-full table-auto text-center">
           <thead>
             <tr>
