@@ -2,6 +2,8 @@ package com.bombi.core.application.service;
 
 import java.util.UUID;
 
+import com.bombi.core.domain.member.model.Member;
+import com.bombi.core.domain.member.repository.MemberRepository;
 import com.bombi.core.presentation.dto.member.MemberRequestDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ import com.bombi.core.infrastructure.external.soil.client.SoilChemicalApiClient;
 import com.bombi.core.infrastructure.external.soil.dto.SoilCharacterResponseDto;
 import com.bombi.core.infrastructure.external.soil.dto.SoilChemicalResponseDto;
 import com.bombi.core.presentation.dto.member.MemberInfoResponseDto;
+import com.bombi.core.presentation.dto.member.PnuRegisterRequestDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +38,7 @@ public class MemberService {
 	private final SoilCharacterApiClient soilCharacterApiClient;
 	private final SoilChemicalApiClient soilChemicalApiClient;
 	private final BigQueryRecommendProductApiClient bigQueryRecommendProductApiClient;
+	private final MemberRepository memberRepository;
 
 	@Transactional(readOnly = true)
 	public MemberInfoResponseDto findMemberInfo(String memberId) {
@@ -69,7 +73,14 @@ public class MemberService {
 		return pnuCode.substring(0, 2);
 	}
 
-	public void registerMember(MemberRequestDto requestDto) {
-		memberInfoRepository.findById()
+	// public void registerMember(MemberRequestDto requestDto) {
+	// 	memberInfoRepository.findById()
+	// }
+
+	@Transactional
+	public void registerPnu(PnuRegisterRequestDto requestDto, String memberId) {
+		Member member = memberRepository.findMemberAndInfoById(UUID.fromString(memberId))
+			.orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+		member.updatePnu(requestDto.getPnu());
 	}
 }

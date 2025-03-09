@@ -5,6 +5,7 @@ import com.bombi.core.common.dto.CoreResponseDto;
 import com.bombi.core.presentation.dto.member.MemberInfoResponseDto;
 import com.bombi.core.presentation.dto.member.MemberRequestDto;
 import com.bombi.core.presentation.dto.member.MemberResponseDto;
+import com.bombi.core.presentation.dto.member.PnuRegisterRequestDto;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
@@ -30,6 +31,15 @@ public class MemberController {
     public ResponseEntity<?> registerMember(
             @RequestBody MemberRequestDto requestDto,
             @AuthenticationPrincipal UserDetails userDetails){
-        memberService.registerMember(requestDto, userDetails.);
+        // memberService.registerMember(requestDto, userDetails.);
+        return null;
     }
+
+    @PostMapping("/pnu")
+    public ResponseEntity<?> registerPnu(@RequestBody PnuRegisterRequestDto requestDto,
+        @AuthenticationPrincipal UserDetails userDetails) {
+        memberService.registerPnu(requestDto, userDetails.getUsername());
+        return ResponseEntity.ok((CoreResponseDto.ofSuccess("pnu 등록 완료")));
+    }
+
 }

@@ -34,5 +34,7 @@ public class MemberInfo {
 	@Comment("멤버 ID")
 	private Member member;
 
-
+	public void updatePnu(String pnu) {
+		this.pnu = pnu;
+	}
 }
