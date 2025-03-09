@@ -1,6 +1,7 @@
 import { InterestItem } from "./components/myinfo/InterestsList";
 import { PriceAlertItem } from "./components/myinfo/PriceAlertList";
 import { HomeDto } from "./types/home_types";
+import { FarmData } from "./types/member_types";
 import { Price, PriceResponse } from "./types/price_types";
 import { CultivationInfo, Product } from "./types/product_types";
 
@@ -264,15 +265,6 @@ export const recommendedProducts = [
 ];
 
 
-// 내 농장 정보
-export const farmData = {
-  soilType: "양토",
-  chemData: "마그네슘 풍부",
-  phyData: "배수불량",
-  averageTemperature: "10°C",
-  annualRainfall: "1200mm",
-  tradeAmount: "월 550T",
-};
 
 
 // 추천 지역 거래 정보 샘플 데이터
@@ -799,4 +791,26 @@ export const priceResponse: PriceResponse = {
       { source: 7, target: 14, value: 20 },  // 전남 → 인천도매시장
     ]
   },
+};
+
+
+export const farmData: FarmData = {
+  overwintering: "예", // 월동 여부 (예/아니오)
+  averageTemperature: "15°C", // 평균 기온
+  minTemperature: "5°C", // 최저 기온
+  maxTemperature: "25°C", // 최고 기온
+  annualRainfall: "800mm", // 연간 강수량
+  sunlightHours: "2000h", // 일조 시간
+
+  drainage: "상", // 배수 등급 (상, 중, 하)
+  soilDepth: "30cm", // 유효 토심
+  slopeDegree: "5°", // 경사도
+  soilTexture: "모래질", // 토성
+
+  ph: "6.5", // 산도
+  organicMatterGPerKg: "20g/kg", // 유기물
+  avPMgPerKg: "15mg/kg", // 유효인산
+  kMgPerKg: "30mg/kg", // 칼륨
+  caMgPerKg: "40mg/kg", // 칼슘
+  mgMgPerKg: "10mg/kg" // 마그네슘
 };
