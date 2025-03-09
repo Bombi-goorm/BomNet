@@ -18,7 +18,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
   // 초기 공지 메시지 (항상 표시)
   const fixedMessages = [
     { type: "bot", content: "📢 **오늘의 공지사항**: 강풍 주의보가 발효되었습니다. 외출 시 유의하세요!" },
-    { type: "bot", content: "🔥 **오늘의 인기 토픽**: '스마트 농업이 미래를 바꾼다' 기사 확인하기!" },
+    { type: "bot", content: "🔥 **오늘의 인기 토픽**: '스마트 농업이 미래를 바꾼다'" },
     { type: "bot", content: "무엇을 도와드릴까요? 아래 버튼을 클릭해주세요. 👇" },
   ];
 

@@ -18,7 +18,7 @@ public class NotificationCondition extends BaseEntity {
 	@Column(name = "notification_condition_id")
 	private Long id;
 
-	@Column(columnDefinition = "INT NOT NULL")
+	@Column(columnDefinition = "VARCHAR(50) NOT NULL")
 	@Comment("지정가")
 	private int targetPrice;
 

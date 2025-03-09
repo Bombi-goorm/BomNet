@@ -25,7 +25,6 @@ const PriceAlertList: React.FC<PriceAlertListProps> = ({
         <table className="w-full table-auto text-center">
           <thead>
             <tr>
-              <th className="py-2 px-4 text-gray-800">품목</th>
               <th className="py-2 px-4 text-gray-800">품종</th>
               <th className="py-2 px-4 text-gray-800">시장</th>
               <th className="py-2 px-4 text-gray-800">가격</th>
@@ -35,7 +34,6 @@ const PriceAlertList: React.FC<PriceAlertListProps> = ({
           <tbody>
             {alerts.map((alert, index) => (
               <tr key={index} className="border-t">
-                <td className="py-2 px-4 text-gray-800">{alert.name}</td>
                 <td className="py-2 px-4 text-gray-800">{alert.variety}</td>
                 <td className="py-2 px-4 text-gray-800">{alert.markets}</td>
                 <td className="py-2 px-4 text-gray-800">{alert.price}</td>
