@@ -1,5 +1,6 @@
 package com.bombi.core.application.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.bombi.core.domain.member.model.Member;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bombi.core.domain.member.model.MemberInfo;
 import com.bombi.core.domain.member.repository.MemberInfoRepository;
+import com.bombi.core.domain.notificationcondition.model.NotificationCondition;
 import com.bombi.core.domain.region.model.RegionWeather;
 import com.bombi.core.domain.region.repository.RegionWeatherRepository;
 import com.bombi.core.infrastructure.external.bigquery.client.BigQueryRecommendProductApiClient;
@@ -30,19 +32,22 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MemberService {
 
+	private final MemberRepository memberRepository;
 	private final MemberInfoRepository memberInfoRepository;
 	private final RegionWeatherRepository regionWeatherRepository;
 	private final SoilCharacterApiClient soilCharacterApiClient;
 	private final SoilChemicalApiClient soilChemicalApiClient;
 	private final BigQueryRecommendProductApiClient bigQueryRecommendProductApiClient;
-	private final MemberRepository memberRepository;
 
 	@Transactional(readOnly = true)
 	public MemberInfoResponseDto findMemberInfo(String memberId) {
-		MemberInfo memberInfo = memberInfoRepository.findMemberInfoByMemberId(UUID.fromString(memberId));
+		Member member = memberRepository.findMemberAndInfoById(UUID.fromString(memberId))
+			.orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+		MemberInfo memberInfo = member.getMemberInfo();
+		List<NotificationCondition> notificationConditions = member.getNotificationConditions();
 
-		String sidoCode = findSidoCodeFrom(memberInfo);
 		String pnuCode = memberInfo.getPnu();
+		String sidoCode = pnuCode.substring(0, 5);
 
 		// 평균 기온, 평균 강수량
 		RegionWeather regionWeather = regionWeatherRepository.findWeatherInfoByPNU(sidoCode)
@@ -57,12 +62,7 @@ public class MemberService {
 			pnuCode, sidoCode, soilCharacterResponse, soilChemicalResponse);
 		BigQueryRecommendProductResponseDto responseDto = bigQueryRecommendProductApiClient.callRecommendProduct(requestDto);
 
-		return new MemberInfoResponseDto(memberInfo, regionWeather, responseDto);
-	}
-
-	private String findSidoCodeFrom(MemberInfo memberInfo) {
-		String pnuCode = memberInfo.getPnu();
-		return pnuCode.substring(0, 5);
+		return new MemberInfoResponseDto(memberInfo, regionWeather, responseDto, notificationConditions);
 	}
 
 	// public void registerMember(MemberRequestDto requestDto) {

@@ -6,11 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.Comment;
 
 import com.bombi.core.domain.base.model.BaseEntity;
+import com.bombi.core.domain.notificationcondition.model.NotificationCondition;
 
 @Entity
 @Getter
@@ -44,6 +47,8 @@ public class Member extends BaseEntity {
     @OneToOne(mappedBy = "member")
     private MemberInfo memberInfo;
 
+    @OneToMany(mappedBy = "member")
+    private List<NotificationCondition> notificationConditions = new ArrayList<>();
 
     @Builder
     private Member(String platform, String authEmail, Role role) {
