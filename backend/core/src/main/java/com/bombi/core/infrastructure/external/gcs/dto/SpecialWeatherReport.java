@@ -13,8 +13,6 @@ public class SpecialWeatherReport {
 
 	private String stnId; // 관측지점번호
 	private String title; // 특보 제목
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime tmFc; // 발표 시간
 
 	public SpecialWeatherReport(String stnId, String title, LocalDateTime tmFc) {

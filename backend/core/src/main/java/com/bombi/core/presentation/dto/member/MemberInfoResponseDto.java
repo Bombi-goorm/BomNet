@@ -20,7 +20,7 @@ public class MemberInfoResponseDto {
 	private String memberId;
 	private String email;
 	private String pnuCode;
-	private FarmInfoResponseDto farmInfoResponseDto;
+	private FarmInfoResponseDto myFarm;
 	private List<RecommendedProductDto> recommendedProducts;
 	private List<NotificationConditionResponseDto> notificationConditions;
 
@@ -29,7 +29,7 @@ public class MemberInfoResponseDto {
 		this.memberId = memberInfo.getMember().getId().toString();
 		this.email = memberInfo.getMember().getAuthEmail();
 		this.pnuCode = memberInfo.getPnu();
-		this.farmInfoResponseDto = new FarmInfoResponseDto(regionWeather);
+		// this.farmInfoResponseDto = new FarmInfoResponseDto(regionWeather);
 		this.recommendedProducts = null;
 		this.notificationConditions = notificationConditions.stream()
 			.map(NotificationConditionResponseDto::new)

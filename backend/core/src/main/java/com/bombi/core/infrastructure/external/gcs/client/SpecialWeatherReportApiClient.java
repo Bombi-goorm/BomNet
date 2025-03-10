@@ -24,11 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SpecialWeatherReportApiClient {
 
-	private static final String BUCKET_NAME = "kma_wrn";
-	private static final String JSON_FILE_FORMAT = ".json";
-
 	private final BigQuery bigQuery;
-	private final ObjectMapper objectMapper;
 
 	/**
 	 * pnu코드를 기반으로 region테이블에서 stationId을 기반으로 조회
@@ -41,7 +37,7 @@ public class SpecialWeatherReportApiClient {
 			+ " and fcst_date_time > @startTmFc"
 			+ " and fcst_date_time < @endTmFc"
 			+ " order by fcst_date_time desc"
-			+ " limit 10";
+			+ " limit 6";
 
 		String today = getTodayDateTime();
 		String tomorrow = getTomorrowDateTime();
@@ -91,13 +87,14 @@ public class SpecialWeatherReportApiClient {
 	}
 
 	private SpecialWeatherReport mapJsonToDto(FieldValueList fieldValues) {
-		String stnId = fieldValues.get("stnId").getStringValue();
+		String stnId = fieldValues.get("station_id").getStringValue();
 		String title = fieldValues.get("title").getStringValue();
-		String tmFc = fieldValues.get("tmFc").getStringValue();
+		String tmFc = fieldValues.get("fcst_date_time").getStringValue();
 
-		String titleString = title.replaceAll("\\d{4}\\.\\d{2}\\.\\d{2}\\.\\d{2}:\\d{2}", "");
+		String titleString = title.replaceAll(
+			"제\\d{2}-\\d{2}호\\s*:\\s*\\d{4}\\.\\d{2}\\.\\d{2}\\.\\d{2}:\\d{2}\\s*/\\s*", "");
 
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime tmFcTime = LocalDateTime.parse(tmFc, dateTimeFormatter);
 
 		return new SpecialWeatherReport(stnId, titleString, tmFcTime);

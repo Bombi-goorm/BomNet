@@ -29,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 public class WeatherForecastApiClient {
 
 	private final BigQuery bigQuery;
-	private final ObjectMapper objectMapper;
 
 	/**
 	 * 단기 예보 조회
@@ -43,14 +42,14 @@ public class WeatherForecastApiClient {
 			+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
 			+ " AND nx = @nx AND ny = @ny"
 			+ " ORDER BY fcst_date_time"
-			+ " LIMIT 30";
+			+ " LIMIT 10";
 
 		String startTime = getForecastStartTime();
 		String endTime = getForecastEndTime();
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
-			.addNamedParameter("startFcstTime", QueryParameterValue.dateTime(startTime))
-			.addNamedParameter("endFcstTime", QueryParameterValue.dateTime(endTime))
+			.addNamedParameter("startFcstTime", QueryParameterValue.string(startTime))
+			.addNamedParameter("endFcstTime", QueryParameterValue.string(endTime))
 			.addNamedParameter("nx", QueryParameterValue.string("38"))
 			.addNamedParameter("ny", QueryParameterValue.string("53"))
 			.setUseLegacySql(false)
@@ -61,15 +60,9 @@ public class WeatherForecastApiClient {
 
 			List<WeatherInfo> weatherInfos = new ArrayList<>();
 			for (FieldValueList fieldValues : tableResult.iterateAll()) {
-				String forecastTime = fieldValues.get("fcstTime").getStringValue();
-				forecastTime = String.format("%04d", Integer.parseInt(forecastTime));
-
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");
-				LocalTime time = LocalTime.parse(forecastTime, formatter);
-
-				LocalDate now = LocalDate.now();
-
-				LocalDateTime forecastDateTime = LocalDateTime.of(now, time);
+				String forecastTime = fieldValues.get("fcst_date_time").getStringValue();
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				LocalDateTime forecastDateTime = LocalDateTime.parse(forecastTime, formatter);
 
 				String temperature = fieldValues.get("TMP").getStringValue();
 				String windSpeed = fieldValues.get("WSD").getStringValue();
@@ -86,23 +79,14 @@ public class WeatherForecastApiClient {
 		}
 	}
 
-	private int getTimeAsInt(LocalTime time) {
-		String timeStr = time.format(DateTimeFormatter.ofPattern("HHmm"));
-		return Integer.parseInt(timeStr);
-	}
-
-	private String getTime(LocalTime time) {
-		return time.format(DateTimeFormatter.ofPattern("HHmm"));
-	}
-
 	private String getForecastStartTime() {
 		LocalDateTime localDateTime = LocalDateTime.now();
-		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
 	private String getForecastEndTime() {
 		LocalDateTime localDateTime = LocalDateTime.now().plusHours(6L);
-		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
 }
