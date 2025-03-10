@@ -1,6 +1,5 @@
 package com.bombi.core.application.service;
 
-import java.util.List;
 import java.util.UUID;
 
 import com.bombi.core.domain.member.model.Member;
@@ -10,8 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bombi.core.domain.member.model.MemberInfo;
-import com.bombi.core.domain.member.repository.MemberInfoRepository;
-import com.bombi.core.domain.notificationcondition.model.NotificationCondition;
 import com.bombi.core.domain.region.model.RegionWeather;
 import com.bombi.core.domain.region.repository.RegionWeatherRepository;
 import com.bombi.core.infrastructure.external.bigquery.client.BigQueryRecommendProductApiClient;
@@ -33,7 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService {
 
 	private final MemberRepository memberRepository;
-	private final MemberInfoRepository memberInfoRepository;
 	private final RegionWeatherRepository regionWeatherRepository;
 	private final SoilCharacterApiClient soilCharacterApiClient;
 	private final SoilChemicalApiClient soilChemicalApiClient;

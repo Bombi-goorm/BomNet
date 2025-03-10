@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -52,4 +53,49 @@ public class PushSubscription {
 	@JoinColumn(name = "member_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Member member;
+
+	@Builder
+	private PushSubscription(String endpoint, String p256dh, String auth, String deviceType, String os, String browser,
+		Member member) {
+		this.endpoint = endpoint;
+		this.p256dh = p256dh;
+		this.auth = auth;
+		this.deviceType = deviceType;
+		this.os = os;
+		this.browser = browser;
+		this.member = member;
+	}
+
+	public static PushSubscription of(String endpoint, String p256dh, String auth, String deviceType, String os, String browser,
+		Member member) {
+		return PushSubscription.builder()
+			.endpoint(endpoint)
+			.p256dh(p256dh)
+			.auth(auth)
+			.deviceType(deviceType)
+			.os(os)
+			.browser(browser)
+			.member(member)
+			.build();
+	}
+
+	public void updateOs(String osName) {
+		this.os = osName;
+	}
+
+	public void updateBrowser(String browserName) {
+		this.browser = browserName;
+	}
+
+	public void updateAuth(String auth) {
+		this.auth = auth;
+	}
+
+	public void updateP256dh(String p256dh) {
+		this.p256dh = p256dh;
+	}
+
+	public void updateEndpoint(String endpoint) {
+		this.endpoint = endpoint;
+	}
 }

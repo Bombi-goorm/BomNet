@@ -27,18 +27,6 @@ public class MemberInfoResponseDto {
 	private List<RecommendedProductDto> recommendedProducts;
 	private List<NotificationConditionResponseDto> notificationConditions;
 
-	public MemberInfoResponseDto(MemberInfo memberInfo, RegionWeather regionWeather,
-		BigQueryRecommendProductResponseDto responseDto, List<NotificationCondition> notificationConditions) {
-		this.memberId = memberInfo.getMember().getId().toString();
-		this.email = memberInfo.getMember().getAuthEmail();
-		this.pnuCode = memberInfo.getPnu();
-		// this.farmInfoResponseDto = new FarmInfoResponseDto(regionWeather);
-		this.recommendedProducts = null;
-		this.notificationConditions = notificationConditions.stream()
-			.map(NotificationConditionResponseDto::new)
-			.toList();
-	}
-
 	public MemberInfoResponseDto(
 		Member member,
 		RegionWeather regionWeather,

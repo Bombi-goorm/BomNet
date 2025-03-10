@@ -26,10 +26,10 @@ public class MemberInfo {
 	@Column(name = "member_info_id", columnDefinition = "BIGINT")
 	private Long id;
 
+	@Comment("PNU 코드")
 	private String pnu;
 
 	@OneToOne(fetch = LAZY)
-	// @JoinColumn(name = "member_id", columnDefinition = "VARCHAR(40) NOT NULL")
 	@JoinColumn(name = "member_id")
 	@Comment("멤버 ID")
 	private Member member;
