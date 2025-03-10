@@ -51,15 +51,12 @@ const HomePage = () => {
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
       });
-  
-      console.log("✅ Push Subscription:", pushSubscription);
+
   
       // 🔹 키 값 확인
       const p256dhKey = pushSubscription.getKey("p256dh");
       const authKey = pushSubscription.getKey("auth");
-  
-      console.log("🔍 p256dh Key:", p256dhKey);
-      console.log("🔍 auth Key:", authKey);
+
   
       if (!p256dhKey || !authKey) {
         console.error("❌ 푸시 구독 키 정보가 올바르게 제공되지 않았습니다.");
@@ -87,22 +84,27 @@ const HomePage = () => {
   useEffect(() => {
     const savedUser = sessionStorage.getItem("bomnet_user");
 
-    // 세션스토리지에 사용자 정보가 있으면 바로 로딩 완료
+    // 세션스토리지에 사용자 정보가 있으면 바로 로딩 완료(이미 로그인+인증)
     if (savedUser) {
       setLoading(false);
       return;
     }
+
+    // 캐싱된 사용자정보가 없는경우
     const fetchUserData = async () => {
 
+      // 웹푸시 구독정보 처리
       try {
+
+        // 최신화될 구독정보
         const subscriptionData = await subscribeToPushNotifications();
 
         if (!subscriptionData) {
-          console.warn("❌ 푸시 구독 정보가 없습니다. API 호출을 중단합니다.");
+          console.warn("❌ 푸시 구독 정보가 없습니다. ");
           return;
         }
      
-        // homeInfo API 호출 
+        // homeInfo API 호출 ( 홈화면 정보 )
         const response = await homeInfo(subscriptionData); 
 
         // if(response.status === '500'){
@@ -115,6 +117,8 @@ const HomePage = () => {
         queryClient.setQueryData(["weatherExpect"], response.data.weatherExpect);
         queryClient.setQueryData(["news"], response.data.news);
 
+
+        // 테스트용
         // queryClient.setQueryData(["products"], response.bestItems);
         // queryClient.setQueryData(["weatherNotice"], response.weatherNotice);
         // queryClient.setQueryData(["weatherExpect"], response.weatherExpect);
@@ -122,6 +126,7 @@ const HomePage = () => {
 
         // 추가로 사용자 정보를 가져오기 위한 API 호출
         const memberResponse = await memberInfo();
+
         // API 응답이 성공적이면 세션스토리지에 저장
         if (memberResponse.status === '200') {
           sessionStorage.setItem("bomnet_user", JSON.stringify(memberResponse.data.memberId));
@@ -130,10 +135,10 @@ const HomePage = () => {
       } catch (error) {
         console.error("Error fetching home info:", error);
       } finally {
+        // 로딩 종료
         setLoading(false);
       }
     };
-
     fetchUserData();
   }, []);
 
@@ -145,13 +150,14 @@ const HomePage = () => {
       </div>
     );
   }
+  
   // 로딩이 완료되면 홈 페이지 콘텐츠 렌더링
   return (
     <div className="font-sans">
       <Header />
       <main className="p-4">
         <h1 className="text-2xl font-bold text-center mb-6">
-          농업 생산 증대를 위한 농산물 종합정보 시스템 "봄넷"
+          농산물 종합정보 시스템 "봄넷"
         </h1>
         <BestItemSlider />
         {/* 기상 토픽과 내 지역 날씨 */}

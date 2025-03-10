@@ -11,7 +11,6 @@ const FarmAssessment = () => {
         <div>
           <h3 className="text-lg font-semibold mb-2">기상 (Meteorological)</h3>
           <ul className="list-disc pl-5">
-            <li>월동 여부: {farmData.overwintering}</li>
             <li>평균 기온: {farmData.averageTemperature}</li>
             <li>최저 기온: {farmData.minTemperature}</li>
             <li>최고 기온: {farmData.maxTemperature}</li>

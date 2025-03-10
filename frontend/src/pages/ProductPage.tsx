@@ -1,9 +1,7 @@
 import Header from "../components/Header";
-import MarketData from "../components/product/MarketData";
 import PersonalizedAssessment from "../components/product/PersonalizedAssessment";
 import ProductConditions from "../components/product/ProductConditions";
 import ProductSearch from "../components/product/ProductSearch";
-import RegionStatsTable from "../components/product/RegionStatsTable";
 
 const ProductPage = () => {
   return (
@@ -20,9 +18,9 @@ const ProductPage = () => {
           {/* 생산 조건 */}
           <ProductConditions productId={1}/>  
           {/* 시장 데이터 */}
-          <MarketData />
+          {/* <MarketData /> */}
           {/* 추천 거래 지역 정보 */}
-          <RegionStatsTable />
+          {/* <RegionStatsTable /> */}
           {/* 개인화된 평가 */}
           <PersonalizedAssessment />     
         </div>

@@ -8,11 +8,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
+
+
+    // 알림 배치 Insert
+    @Transactional
+    public void notificationBatchSave(List<Notification> notifications){
+        notificationRepository.saveAll(notifications);
+    }
 
     @Transactional
     public Notification createAndSaveNotification(Member member, NotificationType type, String title, String message) {
@@ -25,5 +34,4 @@ public class NotificationService {
                 .build();
         return notificationRepository.save(notification);
     }
-
 }

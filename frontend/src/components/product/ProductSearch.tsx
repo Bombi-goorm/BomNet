@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ITEM_VARIETY_MAP } from "../../data_sample";
 import { FiHelpCircle } from "react-icons/fi";
 
@@ -13,9 +13,17 @@ const ProductSearch = ({
   );
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [selectedVariety, setSelectedVariety] = useState<string | null>(null);
-  const [pnuCode, setPnuCode] = useState("");
+  const [pnuCode, setPnuCode] = useState<string>("");
 
-  // 품목 검색 처리
+  // 🔹 세션스토리지에서 PNU 코드 불러오기
+  useEffect(() => {
+    const savedPnu = sessionStorage.getItem("bomnet_pnu");
+    if (savedPnu) {
+      setPnuCode(JSON.parse(savedPnu)); // JSON 파싱 후 상태 업데이트
+    }
+  }, []);
+
+  // 🔍 품목 검색 처리
   const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     setQuery(input);
@@ -31,14 +39,14 @@ const ProductSearch = ({
     setFilteredItems(filtered);
   };
 
-  // 품목 선택 시 품종 필터링
+  // 🔍 품목 선택 시 품종 필터링
   const getVarietyOptions = (itemName: string) => {
     return ITEM_VARIETY_MAP.filter((item) => item.midName === itemName).map(
       (item) => item.smallName
     );
   };
 
-  // 품목 선택
+  // 🔹 품목 선택
   const handleItemSelect = (itemName: string) => {
     setSelectedItem(itemName);
     setSelectedVariety(null); // 품종 초기화
@@ -46,7 +54,7 @@ const ProductSearch = ({
     setFilteredItems([]); // 목록 숨기기
   };
 
-  // 검색 실행
+  // 🔹 검색 실행
   const handleSearch = () => {
     if (!selectedItem) {
       alert("검색할 품목을 선택해주세요.");
@@ -64,7 +72,7 @@ const ProductSearch = ({
     <div className="bg-white p-6 rounded-lg shadow">
       <h2 className="text-xl font-semibold mb-4">📌 상품 검색</h2>
 
-      {/* 품목 검색 입력 */}
+      {/* 🔍 품목 검색 입력 */}
       <div className="relative">
         <input
           type="text"
@@ -73,7 +81,7 @@ const ProductSearch = ({
           placeholder="예: 사과"
           className="w-full border border-gray-300 rounded-lg px-4 py-2"
         />
-        {/* 검색 결과 목록 */}
+        {/* 🔍 검색 결과 목록 */}
         {query && (
           <ul className="absolute bg-white border border-gray-300 rounded-lg mt-1 w-full max-h-40 overflow-y-auto shadow-lg">
             {filteredItems.map((item, index) => (
@@ -89,7 +97,7 @@ const ProductSearch = ({
         )}
       </div>
 
-      {/* 품종 선택 (품목이 선택된 경우에만 표시) */}
+      {/* 🔹 품종 선택 (품목이 선택된 경우에만 표시) */}
       {selectedItem && (
         <div className="mt-4">
           <label htmlFor="variety-select" className="text-sm text-gray-700">
@@ -111,7 +119,7 @@ const ProductSearch = ({
         </div>
       )}
 
-      {/* PNU 코드 입력 */}
+      {/* 🔹 PNU 코드 입력 */}
       <div className="mt-4">
         <label htmlFor="pnu-code" className="text-sm text-gray-700">
           PNU 코드 입력:
@@ -119,14 +127,14 @@ const ProductSearch = ({
         <input
           type="text"
           id="pnu-code"
-          value={pnuCode}
+          value={pnuCode} // ✅ 세션스토리지 값이 있으면 자동 입력
           onChange={(e) => setPnuCode(e.target.value)}
           placeholder="예: 1168010300"
           className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-2"
         />
       </div>
 
-      {/* PNU 코드 도움말 */}
+      {/* 🔹 PNU 코드 도움말 */}
       <div className="mt-2 text-sm text-blue-500 flex items-center gap-1">
         <FiHelpCircle className="text-lg" />
         <a
@@ -139,7 +147,7 @@ const ProductSearch = ({
         </a>
       </div>
 
-      {/* 검색 버튼 */}
+      {/* 🔹 검색 버튼 */}
       <div className="mt-6 text-center">
         <button
           onClick={handleSearch}

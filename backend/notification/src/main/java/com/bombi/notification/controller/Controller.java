@@ -19,13 +19,4 @@ public class Controller {
     public ResponseEntity<?> notificationHealth(){
         return ResponseEntity.ok("Notification :: Healthy");
     }
-
-
-
-    @PostMapping("/noti/send")
-    public String sendPush() {
-        webPushNotificationService.sendNotification();
-        return "Push Sent!";
-    }
-
 }

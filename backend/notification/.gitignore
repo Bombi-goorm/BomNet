@@ -38,4 +38,4 @@ out/
 
 ### Local profile ###
 /src/main/resources/application-local.yml
-/src/main/resources/Bomnet PubSub Admin.json
+/src/main/resources/bomnet-pubsub-admin.json

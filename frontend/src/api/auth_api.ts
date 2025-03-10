@@ -12,7 +12,6 @@ const api = axios.create({
 });
 
 
-
 // 로그아웃
 export const logoutMember = async (): Promise<CommonResponseDto<null>> => {
     const response = await api.post<CommonResponseDto<null>>(`/auth/member/logout`);

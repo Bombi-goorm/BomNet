@@ -3,7 +3,7 @@ import { CommonResponseDto, InfoResponseDto, SignupRequestDto } from "../types/m
 import { HomeDto, HomeRequestDto } from "../types/home_types";
 import { PriceResponse } from "../types/price_types";
 import { ProductRequestDto } from "../types/product_types";
-import { priceResponse } from "../data_sample";
+import { data, priceResponse } from "../data_sample";
 
 // Axios 인스턴스 생성
 const api = axios.create({
@@ -41,7 +41,7 @@ export const homeInfo = async (data: HomeRequestDto): Promise<CommonResponseDto<
 //   return data;
 // };
 
-// 품목 가격정보 검색
+// 품목 가격정보 검색 - 비인증
 export const itemPriceSearch = async (data: ProductRequestDto): Promise<CommonResponseDto<PriceResponse>> => {
   // const response = await api.post<CommonResponseDto<PriceResponse>>('/core/item/price', data);   
   // return response.data;
@@ -51,7 +51,6 @@ export const itemPriceSearch = async (data: ProductRequestDto): Promise<CommonRe
     data: priceResponse, // 로컬에 있는 priceResponse 반환
   };
 };
-
 
 
 // 인증 갱신

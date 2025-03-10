@@ -7,9 +7,6 @@ function LoginPage() {
     if (provider === "kakao") {
       window.location.href = KAKAO_AUTH_URL;
     }
-    // } else if (provider === "naver") {
-    //   window.location.href = `${import.meta.env.VITE_SERVER_URL}/oauth2/authorization/naver`;
-    // }
   };
 
   return (
@@ -27,12 +24,6 @@ function LoginPage() {
                 >
                   <span>Kakao Login</span>
                 </button>
-                {/* <button
-                  onClick={() => handleProviderLogin("naver")}
-                  className="w-full flex items-center justify-center space-x-2 bg-green-500 hover:bg-green-600 text-white p-2 rounded"
-                >
-                  <span>Naver Login</span>
-                </button> */}
               </div>
             </div>
           </div>
