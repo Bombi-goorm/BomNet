@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum SoilTexture {
+public enum TopSoilTexture {
 
 	LOAMY_COARSE_SAND("01","양질조사질"),
 	LOAMY_FINE_SAND("02","양질세사질"),
@@ -23,7 +23,7 @@ public enum SoilTexture {
 	private final String code;
 	private final String description;
 
-	public static SoilTexture findByCode(String code) {
+	public static TopSoilTexture findByCode(String code) {
 		return Arrays.stream(values())
 			.filter(value -> value.code.equals(code))
 			.findFirst()
