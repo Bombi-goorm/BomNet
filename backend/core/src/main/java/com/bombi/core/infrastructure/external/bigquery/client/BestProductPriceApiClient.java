@@ -14,6 +14,7 @@ import com.bombi.core.presentation.dto.home.ProductPriceResponse;
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.FieldValueList;
 import com.google.cloud.bigquery.QueryJobConfiguration;
+import com.google.cloud.bigquery.QueryParameterValue;
 import com.google.cloud.bigquery.TableResult;
 
 import lombok.RequiredArgsConstructor;
@@ -27,14 +28,17 @@ public class BestProductPriceApiClient {
 	public List<ProductPriceResponse> callBestProductPrice(List<String> productCodes) {
 
 		String query = "SELECT"
+			// + " *"
 			+ "    SALEDATE,"
 			+ "    avg_cost_per_kg AS price,"
 			+ "    MIDNAME"
 			+ " FROM `goorm-bomnet.mafra.trans_auction`"
 			+ " WHERE MIDNAME IN ('사과', '블루베리', '딸기', '참외', '오이')"
+			// + " WHERE MIDNAME IN UNNEST(@productNames)"
 			+ " ORDER BY SALEDATE;";
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
+			.addNamedParameter("productNames", QueryParameterValue.array(productCodes.toArray(new String[0]), String.class))
 			.setUseLegacySql(false) // 표준 SQL 사용
 			.build();
 
@@ -66,8 +70,11 @@ public class BestProductPriceApiClient {
 
 		List<ProductPriceResponse> responses = new ArrayList<>();
 
+		long index = 1L;
 		for (Map.Entry<String, List<ProductPriceInfo>> entry : resultMap.entrySet()) {
-			ProductPriceResponse productPriceResponse = new ProductPriceResponse(entry.getKey(), entry.getValue());
+			// ProductPriceResponse productPriceResponse = new ProductPriceResponse(entry.getKey(), entry.getValue());
+			ProductPriceResponse productPriceResponse = new ProductPriceResponse(index, entry.getKey(), entry.getValue());
+			index++;
 			responses.add(productPriceResponse);
 		}
 		return responses;

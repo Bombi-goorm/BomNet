@@ -20,7 +20,7 @@ public class ProductPriceController {
 
 	@GetMapping("/best/price")
 	ResponseEntity<?> price() {
-		List<ProductPriceResponse> responses = client.callBestProductPrice(List.of());
+		List<ProductPriceResponse> responses = client.callBestProductPrice(List.of("사과", "배추", "상추", "양파", "파프리카"));
 		return ResponseEntity.ok(responses);
 	}
 }

@@ -25,7 +25,7 @@ public class Role {
     private String rolename;
 
     public void changeToFarmer() {
-        this.rolename = "farmer";
+        this.rolename = "ROLE_FARMER";
     }
 
     // @Enumerated(value = EnumType.STRING)
