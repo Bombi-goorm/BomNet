@@ -12,58 +12,49 @@ import { itemPriceSearch } from "../api/core_api";
 import { CommonResponseDto } from "../types/member_types";
 import { ProductRequestDto } from "../types/product_types";
 
-// 챗봇이나 검색에서 전달받는 품목 정보 타입
-interface SelectedDataString {
-  item: string;
-}
-
+// 🔹 **SearchBar에서 선택된 품목을 PricePage에서 관리**
 const PricePage = () => {
   const location = useLocation();
-  const chatItem = location.state as SelectedDataString | null;
+  const chatItem = location.state as { item: string } | null;
 
   const [priceResponse, setPriceResponse] = useState<PriceResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<string>(chatItem?.item || "");
 
-  // 가격 데이터 조회
-  useEffect(() => {
-    const fetchPriceData = async () => {
-      setLoading(true);
+  // 🔹 **가격 데이터 조회 함수**
+  const fetchPriceData = async (item: string) => {
+    setLoading(true);
+    try {
+      const requestData: ProductRequestDto = { item };
 
-      try {
-        const requestData: ProductRequestDto = {
-          midName: chatItem?.item || "", // 품목 정보가 있으면 포함, 없으면 빈 값
-        };
+      const response: CommonResponseDto<PriceResponse> = await itemPriceSearch(requestData);
 
-        const response: CommonResponseDto<PriceResponse> = await itemPriceSearch(requestData);
-
-        if (response.status === "200") {
-          setPriceResponse(response.data);
-        } else {
-          throw new Error(response.message || "데이터 조회 실패");
-        }
-      } finally {
-        setLoading(false);
+      if (response.status === "200") {
+        setPriceResponse(response.data);
+      } else {
+        alert("데이터 조회 실패")
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchPriceData();
-  }, [chatItem]);
+  useEffect(() => {
+    if (selectedItem) fetchPriceData(selectedItem);
+  }, [selectedItem]);
 
   return (
     <>
       <Header />
       <div className="font-sans bg-gray-50 min-h-screen">
         <main className="max-w-6xl mx-auto p-4">
-          <SearchBar
-            onSelect={() => {
-              // SearchBar에서 품목 선택 시 추가 처리 가능 (예: URL 업데이트)
-            }}
-          />
+          <SearchBar onSelect={(item) => setSelectedItem(item)} />
+
           {loading && <p>데이터 로딩 중...</p>}
           {priceResponse && (
             <>
-              <PriceHistoryChart priceData={priceResponse} />
               <AuctionPriceChart priceData={priceResponse} />
+              <PriceHistoryChart priceData={priceResponse} />
               <QualityChart priceData={priceResponse} />
               <RegionalPriceChart priceData={priceResponse} />
               <SankeyChart priceData={priceResponse} />

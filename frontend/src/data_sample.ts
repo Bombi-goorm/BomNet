@@ -1,9 +1,8 @@
-import { InterestItem } from "./components/myinfo/InterestsList";
 import { PriceAlertItem } from "./components/myinfo/PriceAlertList";
 import { HomeDto } from "./types/home_types";
 import { FarmData } from "./types/member_types";
-import { Price, PriceResponse } from "./types/price_types";
-import { CultivationInfo, Product } from "./types/product_types";
+import { PriceResponse } from "./types/price_types";
+import { CultivationInfo, FarmSuitability, Product, ProductResponseDto } from "./types/product_types";
 
 // 홈화면 샘플 데이터
 export const data: HomeDto =  {
@@ -195,27 +194,6 @@ export const data: HomeDto =  {
   ],
 }
 
-
-
-interface Region {
-  regionId: number;
-  name: string;
-}
-
-// 지역 데이터
-export const REGIONS: Region[] = [
-  { regionId: 1, name: "서울" },
-  { regionId: 2, name: "경기" },
-  { regionId: 3, name: "인천" },
-  { regionId: 4, name: "대전" },
-  { regionId: 5, name: "광주" },
-  { regionId: 6, name: "대구" },
-  { regionId: 7, name: "울산" },
-  { regionId: 8, name: "부산" },
-  { regionId: 9, name: "강원" },
-  { regionId: 10, name: "제주" },
-];
-
 // 품목 및 품종 매핑 데이터셋
 export const ITEM_VARIETY_MAP = [
   { bigId: '06', bigName: '과실류', midName: "사과", midId: '01', smallName: "홍옥", smallId: '01' },
@@ -231,179 +209,109 @@ export const ITEM_VARIETY_MAP = [
   { bigId: '26', bigName: '관엽식물류', midName: "아스파라거스", midId: '28', smallName: "아스파라거스", smallId: '00' },
 ];
 
-  
-// 인기 품목
-export const pupularProducts = [
-    { id: 1, varietyId: 1},
-    { id: 2, varietyId: 2},
-    { id: 3, varietyId: 3},
-    { id: 4, varietyId: 9},
-    { id: 5, varietyId: 10},
-]
-
-
-
 // ------- 생산품 페이지
-
-// 전국 거래 정보 데이터
-export const nationwideTradeInfo = {
-  totalVolume: 1400.5, // 거래량 (톤)
-  totalAmount: 6477000000, // 거래 금액 (원)
-  avgPrice: 3873, // 평균 가격 (원/kg)
-  fluctuationRate: 0.4, // 등락률 (%)
-};
-
-
-
-// 추천 생산품
-export const recommendedProducts = [
-  { id: 1, name: "사과", reason: "추천" },
-  { id: 2, name: "배", reason: "추천" },
-  { id: 3, name: "딸기", reason: "추천" },
-  { id: 4, name: "감자", reason: "유통량 상승" },
-  { id: 5, name: "고구마", reason: "가격 상승" },
-];
-
-
-
-
-// 추천 지역 거래 정보 샘플 데이터
-export const regionStats = [
-  { id: 1, region: "서울", tradeVolume: 500, tradeValue: 2000000000 }, // 20억 원
-  { id: 2, region: "경기", tradeVolume: 400, tradeValue: 1500000000 }, // 15억 원
-  { id: 3, region: "일본", tradeVolume: 200, tradeValue: 800000000 }, // 8억 원
-];
-
-
-// 사용자 정보 데이터
-export const user = {
-  email: "john.doe@example.com",
-  pnuCode: "0987654321",
-  joinDate: "2023-01-01",
-};
-
-// 관심 품목 데이터
-export const interestItems: InterestItem[] = [
-  { name: "사과", variety: "후지", isSelected: false },
-  { name: "사과", variety: "혹옥", isSelected: true },
-  { name: "사과", variety: "아오리", isSelected: false },
-  { name: "배추", variety: "월동배추", isSelected: false },
-  { name: "배추", variety: "고랭지배추", isSelected: true },
-  { name: "양파", variety: "양파(일반)", isSelected: false },
-  { name: "파프리카", variety: "파프리카", isSelected: false },
-  { name: "아스파라거스", variety: "아스파라거스", isSelected: false },
-];
-
-// 가격 알림 데이터 (품목, 품종, 가격 정보 포함)
-export const priceAlertItems: PriceAlertItem[] = [
-  { name: "사과", variety: "후지", markets: "가락시장", price: "1,200원" },
-  { name: "사과", variety: "홍옥", markets: "가락시장, 강서시장", price: "900원" },
-  { name: "배추", variety: "고랭지배추", markets: "안양시장", price: "3,500원" },
-  { name: "상추", variety: "적상추", markets: "강릉시장", price: "2,000원" },
-  { name: "아스파라거스", variety: "아스파라거스", markets: "포항시장, 창원시장, 울산시장", price: "1,500원" },
-];
 
 
 // 상품 정보 데이터
 export const sampleProductData: Product[] = [
   {
     productId: 1,
-    bigId: 100,
-    bigName: "과일",
-    midId: 101,
-    midName: "사과",
-    smallId: 102,
-    smallName: "홍옥",
+    categoryId: 100,
+    category: "과일",
+    itemId: 101,
+    item: "사과",
+    varietyId: 102,
+    variety: "홍옥",
     imgUrl: "https://s3.amazonaws.com/my-bucket/products/apple_hongok.jpg"
   },
   {
     productId: 2,
-    bigId: 100,
-    bigName: "과일",
-    midId: 101,
-    midName: "사과",
-    smallId: 103,
-    smallName: "후지",
+    categoryId: 100,
+    category: "과일",
+    itemId: 101,
+    item: "사과",
+    varietyId: 103,
+    variety: "후지",
     imgUrl: "https://s3.amazonaws.com/my-bucket/products/apple_fuji.jpg"
   },
   {
     productId: 3,
-    bigId: 100,
-    bigName: "과일",
-    midId: 101,
-    midName: "사과",
-    smallId: 104,
-    smallName: "아오리",
+    categoryId: 100,
+    category: "과일",
+    itemId: 101,
+    item: "사과",
+    varietyId: 104,
+    variety: "아오리",
     imgUrl: "https://s3.amazonaws.com/my-bucket/products/apple_aori.jpg"
   },
   {
     productId: 4,
-    bigId: 200,
-    bigName: "채소",
-    midId: 201,
-    midName: "배추",
-    smallId: 202,
-    smallName: "월동배추",
+    categoryId: 200,
+    category: "채소",
+    itemId: 201,
+    item: "배추",
+    varietyId: 202,
+    variety: "월동배추",
     imgUrl: "https://s3.amazonaws.com/my-bucket/products/cabbage_winter.jpg"
   },
   {
     productId: 5,
-    bigId: 200,
-    bigName: "채소",
-    midId: 201,
-    midName: "배추",
-    smallId: 203,
-    smallName: "고랭지배추",
+    categoryId: 200,
+    category: "채소",
+    itemId: 201,
+    item: "배추",
+    varietyId: 203,
+    variety: "고랭지배추",
     imgUrl: "https://s3.amazonaws.com/my-bucket/products/cabbage_highland.jpg"
   },
   {
     productId: 6,
-    bigId: 300,
-    bigName: "채소",
-    midId: 301,
-    midName: "양파",
-    smallId: 302,
-    smallName: "양파(일반)",
+    categoryId: 300,
+    category: "채소",
+    itemId: 301,
+    item: "양파",
+    varietyId: 302,
+    variety: "양파(일반)",
     imgUrl: "https://s3.amazonaws.com/my-bucket/products/onion_normal.jpg"
   },
   {
     productId: 7,
-    bigId: 300,
-    bigName: "채소",
-    midId: 301,
-    midName: "양파",
-    smallId: 303,
-    smallName: "양파(수입)",
+    categoryId: 300,
+    category: "채소",
+    itemId: 301,
+    item: "양파",
+    varietyId: 303,
+    variety: "양파(수입)",
     imgUrl: "https://s3.amazonaws.com/my-bucket/products/onion_import.jpg"
   },
   {
     productId: 8,
-    bigId: 400,
-    bigName: "채소",
-    midId: 401,
-    midName: "상추",
-    smallId: 402,
-    smallName: "적상추",
+    categoryId: 400,
+    category: "채소",
+    itemId: 401,
+    item: "상추",
+    varietyId: 402,
+    variety: "적상추",
     imgUrl: "https://s3.amazonaws.com/my-bucket/products/lettuce_red.jpg"
   },
   {
     productId: 9,
-    bigId: 500,
-    bigName: "채소",
-    midId: 501,
-    midName: "파프리카",
-    smallId: 502,
-    smallName: "파프리카",
+    categoryId: 500,
+    category: "채소",
+    itemId: 501,
+    item: "파프리카",
+    varietyId: 502,
+    variety: "파프리카",
     imgUrl: "https://s3.amazonaws.com/my-bucket/products/paprika.jpg"
   },
   {
     productId: 10,
-    bigId: 600,
-    bigName: "채소",
-    midId: 601,
-    midName: "아스파라거스",
-    smallId: 602,
-    smallName: "녹색",
+    categoryId: 600,
+    category: "채소",
+    itemId: 601,
+    item: "아스파라거스",
+    varietyId: 602,
+    variety: "녹색",
     imgUrl: "https://s3.amazonaws.com/my-bucket/products/asparagus_green.jpg"
   }
 ];
@@ -532,6 +440,26 @@ export const sampleCultivationData: CultivationInfo[] = [
   }
 ];
 
+// 농장 적합도
+export const sampleFarmSuitability: FarmSuitability = {
+  anayize: [
+    { reason: "월동여부", suitability: "적합" },
+    { reason: "평균 기온", suitability: "평균" },
+    { reason: "최저 기온", suitability: "부적합" },
+    { reason: "최고 기온", suitability: "적합" },
+    { reason: "연평균 강수량", suitability: "적합" },
+    { reason: "일조량", suitability: "평균" },
+    { reason: "배수등급", suitability: "적합" },
+    { reason: "유효 토심", suitability: "적합" },
+    { reason: "토양 산도", suitability: "평균" }
+  ]
+};
+
+export const productResponse: ProductResponseDto = {
+  product: sampleProductData[0], // 상품 정보
+  plantCultivation: sampleCultivationData[0], // 상품 재배 정보
+  farmSuitability: sampleFarmSuitability,
+}
 
 // 가격 샘플 데이터
 export const priceResponse: PriceResponse = {
@@ -794,6 +722,23 @@ export const priceResponse: PriceResponse = {
 };
 
 
+
+// 사용자 정보 데이터
+export const user = {
+  email: "john.doe@example.com",
+  pnuCode: "0987654321",
+  joinDate: "2023-01-01",
+};
+
+// 가격 알림 데이터 (품목, 품종, 가격 정보 포함)
+export const priceAlertItems: PriceAlertItem[] = [
+  { name: "사과", variety: "후지", markets: "가락시장", price: "1,200원" },
+  { name: "사과", variety: "홍옥", markets: "가락시장, 강서시장", price: "900원" },
+  { name: "배추", variety: "고랭지배추", markets: "안양시장", price: "3,500원" },
+  { name: "상추", variety: "적상추", markets: "강릉시장", price: "2,000원" },
+  { name: "아스파라거스", variety: "아스파라거스", markets: "포항시장, 창원시장, 울산시장", price: "1,500원" },
+];
+
 export const farmData: FarmData = {
   overwintering: "예", // 월동 여부 (예/아니오)
   averageTemperature: "15°C", // 평균 기온
@@ -814,3 +759,12 @@ export const farmData: FarmData = {
   caMgPerKg: "40mg/kg", // 칼슘
   mgMgPerKg: "10mg/kg" // 마그네슘
 };
+
+// 추천 생산품
+export const recommendedProducts = [
+  { id: 1, name: "사과", reason: "추천" },
+  { id: 2, name: "배", reason: "추천" },
+  { id: 3, name: "딸기", reason: "추천" },
+  { id: 4, name: "감자", reason: "유통량 상승" },
+  { id: 5, name: "고구마", reason: "가격 상승" },
+];

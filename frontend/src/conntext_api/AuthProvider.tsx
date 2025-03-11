@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           const response = await renewAccess();
           if (response.status === "200") {
             sessionStorage.setItem("bomnet_user", response.data.memberId); 
-            sessionStorage.setItem("bomnet_pnu", response.data.PNU);  
+            sessionStorage.setItem("bomnet_pnu", response.data.PNU || "");  
             setBomnetUser({
               memberId: response.data.memberId || null,
               PNU: response.data.PNU || null,

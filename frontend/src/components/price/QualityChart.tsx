@@ -9,13 +9,10 @@ interface QualityChartProps {
 const QualityChart: React.FC<QualityChartProps> = ({ priceData }) => {
   const rawQualityData = priceData?.qualityChartData || [];
 
-  // 🛠 **Extract unique varieties for dropdown**
   const uniqueVarieties = [...new Set(rawQualityData.map((item) => item.variety))];
 
-  // 🛠 **State: Selected Variety**
   const [selectedVariety, setSelectedVariety] = useState<string>(uniqueVarieties[0] || "");
 
-  // 🛠 **Transform Data: Group by `date`, filter by `selectedVariety`**
   const transformedData = rawQualityData
     .filter((entry) => entry.variety === selectedVariety)
     .reduce((acc, entry) => {
@@ -41,25 +38,23 @@ const QualityChart: React.FC<QualityChartProps> = ({ priceData }) => {
 
   return (
     <div className="mb-6">
-      <h2 className="text-xl font-semibold mt-8">📈 품질별 가격 추이 (30일)</h2>
-
-      {/* 🛠 **Dropdown to Select Variety** */}
-      <div className="flex justify-end mb-4">
-        <label htmlFor="variety-select" className="mr-2 text-gray-700">
-          품종 선택:
-        </label>
-        <select
-          id="variety-select"
-          className="border p-2 rounded-md"
-          value={selectedVariety}
-          onChange={(e) => setSelectedVariety(e.target.value)}
-        >
-          {uniqueVarieties.map((variety) => (
-            <option key={variety} value={variety}>
-              {variety}
-            </option>
-          ))}
-        </select>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold">📈 품질별 가격 추이</h2>
+        <div className="flex items-center">
+          <label htmlFor="variety-select" className="text-sm text-gray-700 mr-2">품종 선택:</label>
+          <select
+            id="variety-select"
+            className="border p-2 rounded-md"
+            value={selectedVariety}
+            onChange={(e) => setSelectedVariety(e.target.value)}
+          >
+            {uniqueVarieties.map((variety) => (
+              <option key={variety} value={variety}>
+                {variety}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <ResponsiveContainer width="100%" height={400}>
@@ -70,7 +65,6 @@ const QualityChart: React.FC<QualityChartProps> = ({ priceData }) => {
           <Tooltip />
           <Legend />
 
-          {/* 🛠 **Lines for Selected Variety** */}
           <Line type="monotone" dataKey="특" name="특" stroke="#FF0000" strokeWidth={2} />
           <Line type="monotone" dataKey="상" name="상" stroke="#00FF00" strokeWidth={2} />
           <Line type="monotone" dataKey="보통" name="보통" stroke="#0000FF" strokeWidth={2} />

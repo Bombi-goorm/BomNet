@@ -5,7 +5,7 @@ import ChatBotButton from "../components/chatbot/ChatBotButton";
 import LiveWeatherTopics from "../components/home/LiveWeatherTopics";
 import MyLocalWeather from "../components/home/MyLocalWeather";
 import { useEffect, useState } from "react";
-import { homeInfo, memberInfo } from "../api/core_api";
+import { getHomeInfo, getMemberInfo } from "../api/core_api";
 import { useQueryClient } from "@tanstack/react-query";
 import { HomeRequestDto } from "../types/home_types";
 
@@ -105,7 +105,7 @@ const HomePage = () => {
         }
      
         // homeInfo API 호출 ( 홈화면 정보 )
-        const response = await homeInfo(subscriptionData); 
+        const response = await getHomeInfo(subscriptionData); 
 
         // if(response.status === '500'){
         //   navigate('/500')
@@ -125,13 +125,17 @@ const HomePage = () => {
         // queryClient.setQueryData(["news"], response.news);
 
         // 추가로 사용자 정보를 가져오기 위한 API 호출
-        const memberResponse = await memberInfo();
+        const memberResponse = await getMemberInfo();
 
-        // API 응답이 성공적이면 세션스토리지에 저장
+        // API 응답이 성공적이면 세션스토리지에 저장 ( 인증상태확인 및 개인데이터 활용 목적)
         if (memberResponse.status === '200') {
           sessionStorage.setItem("bomnet_user", JSON.stringify(memberResponse.data.memberId));
           sessionStorage.setItem("bomnet_pnu", JSON.stringify(memberResponse.data.PNU));
         }
+
+        // 사용자 데이터 캐싱( 마이페이지 등에서 활용 )
+        queryClient.setQueryData(["userInfo"], memberResponse.data);
+
       } catch (error) {
         console.error("Error fetching home info:", error);
       } finally {
@@ -140,7 +144,7 @@ const HomePage = () => {
       }
     };
     fetchUserData();
-  }, []);
+  }, [queryClient]);
 
   // 로딩 중일 때는 로딩 UI 표시
   if (loading) {
