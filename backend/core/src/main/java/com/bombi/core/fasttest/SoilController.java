@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bombi.core.infrastructure.external.soil.client.SoilCharacterApiClient;
 import com.bombi.core.infrastructure.external.soil.client.SoilChemicalApiClient;
+import com.bombi.core.infrastructure.external.soil.client.SoilSectionApiClient;
 import com.bombi.core.infrastructure.external.soil.dto.SoilCharacterResponseDto;
 import com.bombi.core.infrastructure.external.soil.dto.SoilChemicalResponseDto;
+import com.bombi.core.infrastructure.external.soil.dto.SoilSectionResponseDto;
 
 import lombok.RequiredArgsConstructor;
 

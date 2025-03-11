@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.FieldValueList;
 import com.google.cloud.bigquery.QueryJobConfiguration;
+import com.google.cloud.bigquery.QueryParameterValue;
 import com.google.cloud.bigquery.TableResult;
 
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 public class WeatherForecastApiClient {
 
 	private final BigQuery bigQuery;
-	private final ObjectMapper objectMapper;
 
 	/**
 	 * 단기 예보 조회
@@ -39,17 +39,19 @@ public class WeatherForecastApiClient {
 		String query = "SELECT"
 			+ " *"
 			+ " FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
-			// + " WHERE fcstTime >= @startFcstTime and fcstTime <= @endFcstTime"
-			+ " WHERE nx = 38 AND ny = 53"
-			+ " ORDER BY fcstTime"
-			+ " LIMIT 30";
+			+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
+			+ " AND nx = @nx AND ny = @ny"
+			+ " ORDER BY fcst_date_time"
+			+ " LIMIT 10";
 
-		int endTime = getTimeAsInt(LocalTime.now());
-		int startTime = getTimeAsInt(LocalTime.now().minusHours(6L));
+		String startTime = getForecastStartTime();
+		String endTime = getForecastEndTime();
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
-			// .addNamedParameter("startFcstTime", QueryParameterValue.int64(startTime))
-			// .addNamedParameter("endFcstTime", QueryParameterValue.int64(endTime))
+			.addNamedParameter("startFcstTime", QueryParameterValue.string(startTime))
+			.addNamedParameter("endFcstTime", QueryParameterValue.string(endTime))
+			.addNamedParameter("nx", QueryParameterValue.string("38"))
+			.addNamedParameter("ny", QueryParameterValue.string("53"))
 			.setUseLegacySql(false)
 			.build();
 
@@ -58,15 +60,9 @@ public class WeatherForecastApiClient {
 
 			List<WeatherInfo> weatherInfos = new ArrayList<>();
 			for (FieldValueList fieldValues : tableResult.iterateAll()) {
-				String forecastTime = fieldValues.get("fcstTime").getStringValue();
-				forecastTime = String.format("%04d", Integer.parseInt(forecastTime));
-
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");
-				LocalTime time = LocalTime.parse(forecastTime, formatter);
-
-				LocalDate now = LocalDate.now();
-
-				LocalDateTime forecastDateTime = LocalDateTime.of(now, time);
+				String forecastTime = fieldValues.get("fcst_date_time").getStringValue();
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				LocalDateTime forecastDateTime = LocalDateTime.parse(forecastTime, formatter);
 
 				String temperature = fieldValues.get("TMP").getStringValue();
 				String windSpeed = fieldValues.get("WSD").getStringValue();
@@ -83,17 +79,14 @@ public class WeatherForecastApiClient {
 		}
 	}
 
-	private int getTimeAsInt(LocalTime time) {
-		String timeStr = time.format(DateTimeFormatter.ofPattern("HHmm"));
-		return Integer.parseInt(timeStr);
+	private String getForecastStartTime() {
+		LocalDateTime localDateTime = LocalDateTime.now();
+		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
-	private ForecastInfoDto mapJsonToDto(String fieldValueString) {
-		try {
-			return objectMapper.readValue(fieldValueString, ForecastInfoDto.class);
-		} catch (JsonProcessingException e) {
-			throw new RuntimeException("JSON 매핑 실패");
-		}
+	private String getForecastEndTime() {
+		LocalDateTime localDateTime = LocalDateTime.now().plusHours(6L);
+		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
 }

@@ -7,11 +7,13 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bombi.core.application.service.NotificationService;
 import com.bombi.core.common.dto.CoreResponseDto;
+import com.bombi.core.presentation.dto.notification.NotificationConditionResponseDto;
 import com.bombi.core.presentation.dto.notification.NotificationResponseDto;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class NotificationController {
 
 	private final NotificationService notificationService;
 
+	@GetMapping
 	public ResponseEntity<CoreResponseDto<?>> getNotifications(
 		@PageableDefault(size = 20) Pageable pageable,
 		@AuthenticationPrincipal UserDetails userDetails

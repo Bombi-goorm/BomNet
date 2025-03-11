@@ -30,4 +30,9 @@ public enum SoilDepth {
 		int soilDepth = (int)(Double.parseDouble(productionCondition.getSoilDepth()));
 		return (soilDepth >= this.minDepth && soilDepth <= this.maxDepth);
 	}
+
+	public String getDescription() {
+		return this.minDepth + "-" + this.maxDepth;
+	}
+
 }

@@ -1,6 +1,5 @@
 package com.bombi.core.infrastructure.external.gcs.client;
 
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -12,15 +11,12 @@ import org.springframework.stereotype.Component;
 
 import com.bombi.core.infrastructure.external.gcs.dto.SpecialWeatherReport;
 import com.bombi.core.infrastructure.external.gcs.dto.SpecialWeatherReportResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.bigquery.BigQuery;
-import com.google.cloud.bigquery.FieldValue;
 import com.google.cloud.bigquery.FieldValueList;
 import com.google.cloud.bigquery.QueryJobConfiguration;
 import com.google.cloud.bigquery.QueryParameterValue;
 import com.google.cloud.bigquery.TableResult;
-import com.google.cloud.storage.Blob;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,33 +24,28 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SpecialWeatherReportApiClient {
 
-	private static final String BUCKET_NAME = "kma_wrn";
-	private static final String JSON_FILE_FORMAT = ".json";
-
 	private final BigQuery bigQuery;
-	private final ObjectMapper objectMapper;
 
 	/**
 	 * pnu코드를 기반으로 region테이블에서 stationId을 기반으로 조회
 	 * @return
 	 */
 	public SpecialWeatherReportResponse sendSpecialWeatherReport(String stationId) {
-		String query = "select stnId, title, tmFc"
-			+ " from kma.wrn"
-			+ " where stnId = @stnId"
-			+ " and tmFc > @startTmFc"
-			+ " and tmFc < @endTmFc" 
-			+ " order by tmFc desc"
-			+ " limit 10";
+		String query = "select station_id, title, fcst_date_time"
+			+ " from kma.stg_kma__wrn"
+			+ " where station_id = @stationId"
+			+ " and fcst_date_time > @startTmFc"
+			+ " and fcst_date_time < @endTmFc"
+			+ " order by fcst_date_time desc"
+			+ " limit 6";
 
-		int stnId = Integer.parseInt(stationId);
-		long today = getTodayAsInt();
-		long tomorrow = getTomorrowAsInt();
+		String today = getTodayDateTime();
+		String tomorrow = getTomorrowDateTime();
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
-			.addNamedParameter("stnId", QueryParameterValue.int64(stnId))
-			.addNamedParameter("startTmFc", QueryParameterValue.int64(today))
-			.addNamedParameter("endTmFc", QueryParameterValue.int64(tomorrow))
+			.addNamedParameter("stationId", QueryParameterValue.string(stationId))
+			.addNamedParameter("startTmFc", QueryParameterValue.string(today))
+			.addNamedParameter("endTmFc", QueryParameterValue.string(tomorrow))
 			.setUseLegacySql(false)
 			.build();
 
@@ -69,20 +60,21 @@ public class SpecialWeatherReportApiClient {
 		}
 	}
 
-	private long getTodayAsInt() {
+	private String getTodayDateTime() {
 		LocalDate today = LocalDate.now();
-		LocalTime localTime = LocalTime.of(3, 0);
+		LocalTime localTime = LocalTime.of(3, 0, 0);
+
 		LocalDateTime localDateTime = LocalDateTime.of(today, localTime);
-		String todayStr = localDateTime.format(DateTimeFormatter.ofPattern("yyyyMMddhhmm"));
-		return Long.parseLong(todayStr);
+
+		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
-	private long getTomorrowAsInt() {
+	private String getTomorrowDateTime() {
 		LocalDate tomorrow = LocalDate.now().plusDays(1L);
 		LocalTime localTime = LocalTime.of(3, 0);
 		LocalDateTime localDateTime = LocalDateTime.of(tomorrow, localTime);
-		String tomorrowStr = localDateTime.format(DateTimeFormatter.ofPattern("yyyyMMddhhmm"));
-		return Long.parseLong(tomorrowStr);
+
+		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
 	private List<SpecialWeatherReport> extractWeatherReport(TableResult result) {
@@ -95,13 +87,14 @@ public class SpecialWeatherReportApiClient {
 	}
 
 	private SpecialWeatherReport mapJsonToDto(FieldValueList fieldValues) {
-		String stnId = fieldValues.get("stnId").getStringValue();
+		String stnId = fieldValues.get("station_id").getStringValue();
 		String title = fieldValues.get("title").getStringValue();
-		String tmFc = fieldValues.get("tmFc").getStringValue();
+		String tmFc = fieldValues.get("fcst_date_time").getStringValue();
 
-		String titleString = title.replaceAll("\\d{4}\\.\\d{2}\\.\\d{2}\\.\\d{2}:\\d{2}", "");
+		String titleString = title.replaceAll(
+			"제\\d{2}-\\d{2}호\\s*:\\s*\\d{4}\\.\\d{2}\\.\\d{2}\\.\\d{2}:\\d{2}\\s*/\\s*", "");
 
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime tmFcTime = LocalDateTime.parse(tmFc, dateTimeFormatter);
 
 		return new SpecialWeatherReport(stnId, titleString, tmFcTime);

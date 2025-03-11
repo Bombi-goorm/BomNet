@@ -1,7 +1,6 @@
 package com.bombi.core.application.service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
@@ -10,7 +9,7 @@ import com.bombi.core.domain.product.model.Product;
 import com.bombi.core.domain.productionCondition.model.SoilDrainage;
 import com.bombi.core.domain.productionCondition.model.ProductionCondition;
 import com.bombi.core.domain.productionCondition.model.SoilDepth;
-import com.bombi.core.domain.productionCondition.model.SoilTexture;
+import com.bombi.core.domain.productionCondition.model.TopSoilTexture;
 import com.bombi.core.domain.region.model.Region;
 import com.bombi.core.domain.region.model.RegionWeather;
 import com.bombi.core.domain.region.repository.RegionRepository;
@@ -21,7 +20,6 @@ import com.bombi.core.infrastructure.external.soil.dto.SoilChemicalResponseDto;
 import com.bombi.core.presentation.dto.product.FarmSuitability;
 import com.bombi.core.presentation.dto.product.SuitabilityResult;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -76,8 +74,8 @@ public class FarmAnalyzer {
 		Map<String, Boolean> physicalSuitabilityMap = new HashMap<>();
 
 		//토성
-		SoilTexture soilTexture = soilCharacterResponse.getSurttureCode();
-		boolean soilTextureSuitability = soilTexture.isSuitable(productionCondition);
+		TopSoilTexture topSoilTexture = soilCharacterResponse.getSurttureCode();
+		boolean soilTextureSuitability = topSoilTexture.isSuitable(productionCondition);
 
 		//유효 토심
 		SoilDepth soilDepth = soilCharacterResponse.getVldsoildepCode();

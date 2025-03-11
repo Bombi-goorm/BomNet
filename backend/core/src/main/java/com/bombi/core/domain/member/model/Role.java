@@ -24,6 +24,10 @@ public class Role {
 
     private String rolename;
 
+    public void changeToFarmer() {
+        this.rolename = "farmer";
+    }
+
     // @Enumerated(value = EnumType.STRING)
     // @Column(columnDefinition = "VARCHAR(20) NOT NULL")
     // @Comment("권한 이름")
