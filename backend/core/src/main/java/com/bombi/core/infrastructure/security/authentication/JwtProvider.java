@@ -78,4 +78,12 @@ public class JwtProvider {
                 .getBody()
                 .get("ROLES", List.class);
     }
+
+    public Claims extractAllClaims(String accessToken) {
+		return Jwts.parserBuilder()
+			.setSigningKey(secretKey)
+			.build()
+			.parseClaimsJws(accessToken)
+			.getBody();
+    }
 }

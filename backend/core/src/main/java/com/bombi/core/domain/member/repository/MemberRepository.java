@@ -13,4 +13,7 @@ public interface MemberRepository extends JpaRepository<Member, UUID>, MemberRep
 	@Query("select m from Member m join fetch m.memberInfo where m.id = :memberId")
 	Optional<Member> findMemberAndInfoById(UUID memberId);
 
+	@Query("select m from Member m join fetch m.role r where m.id = :id")
+	Optional<Member> findMemberAndRoleById(UUID id);
+
 }
