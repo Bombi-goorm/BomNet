@@ -30,7 +30,7 @@ public class JwtProvider {
                     .getBody();
 
             // Check Member ID
-            Long memberId = claims.get("memberId", Long.class);
+            String memberId = claims.getSubject();
             if (memberId == null) {
                 log.warn("JwtProvider::validateToken member ID is null");
                 return false;
