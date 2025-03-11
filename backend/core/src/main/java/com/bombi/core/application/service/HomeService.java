@@ -47,7 +47,6 @@ public class HomeService {
 		SpecialWeatherReportResponse specialWeatherReportResponse = specialWeatherReportApiClient.sendSpecialWeatherReport("108");
 
 		// 기상 예보 -> bigquery
-		// WeatherForecastResponse weatherForecastResponse = weatherForecastApiClient.sendWeatherForecast();
 		WeatherForecastResponse weatherForecastResponse = weatherForecastApiClient.sendWeatherForecast();
 
 		// 농산물 뉴스

@@ -14,8 +14,8 @@ public class ProductPriceResponse {
 	private String imageUrl;
 	private List<ProductPriceInfo> productPrices;
 
-	public ProductPriceResponse(String productName, List<ProductPriceInfo> productPriceInfos) {
-		this.productId = null;
+	public ProductPriceResponse(long index, String productName, List<ProductPriceInfo> productPriceInfos) {
+		this.productId = index;
 		this.imageUrl = null;
 		this.productName = productName;
 		this.productPrices = productPriceInfos;
