@@ -1,6 +1,15 @@
-import { recommendedProducts } from "../../data_sample";
+import React from "react";
 
-const RecommendedProducts = () => {
+
+interface RecommendedProductsProps {
+  recommendedProducts: {
+    id: number;
+    name: string;
+    reason: string;
+  }[];
+}
+
+const RecommendedProducts: React.FC<RecommendedProductsProps> = ({ recommendedProducts }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow text-center">
       <h2 className="text-xl font-semibold mb-4">추천 생산품</h2>

@@ -4,10 +4,13 @@ import { CommonResponseDto } from "../../types/member_types";
 import { ChatbotRequestDto, ChatbotResponseDto } from "../../types/chatbot_types";
 import { useNavigate } from "react-router-dom";
 import { WeatherInfo } from "../../types/home_types";
+import { useAuth } from "../../conntext_api/AuthProvider";
 
 
 
 const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
+
+  const { isAuthenticated } = useAuth();
 
   const navigate = useNavigate();
 
@@ -16,12 +19,21 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
   const [userInput, setUserInput] = useState<string>(""); // 사용자 입력값
 
   // 초기 공지 메시지 (항상 표시)
-  const fixedMessages = [
-    { type: "bot", content: "📢 **오늘의 공지사항**: 강풍 주의보가 발효되었습니다. 외출 시 유의하세요!" },
-    { type: "bot", content: "🔥 **오늘의 인기 토픽**: '스마트 농업이 미래를 바꾼다' 기사 확인하기!" },
-    { type: "bot", content: "무엇을 도와드릴까요? 아래 버튼을 클릭해주세요. 👇" },
-  ];
-
+  let fixedMessages: { type: string; content: string; }[] = [];
+  
+  if(isAuthenticated) {
+    fixedMessages = [
+      { type: "bot", content: "📢 오늘의 공지사항: 강풍 주의보가 발효되었습니다. 외출 시 유의하세요!" },
+      { type: "bot", content: "🔥 오늘의 인기 토픽: '스마트 농업이 미래를 바꾼다'" },
+      { type: "bot", content: "무엇을 도와드릴까요? 아래 버튼을 클릭해주세요. 👇" },
+    ];
+  }else{
+    fixedMessages = [
+      { type: "bot", content: "📢 오늘의 공지사항: 강풍 주의보가 발효되었습니다. 외출 시 유의하세요!" },
+      { type: "bot", content: "🔥 오늘의 인기 토픽: '스마트 농업이 미래를 바꾼다'" },
+    ]
+  }
+ 
   // 챗봇이 처음 열릴 때 공지 추가
   useEffect(() => {
     if (messages.length === 0) {
@@ -37,6 +49,10 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
 
   // 버튼 클릭 시 화면 변경
   const handleButtonClick = (action: string) => {
+    if (!isAuthenticated) {
+      setMessages([{ type: "bot", content: "🔒 이 기능은 로그인 후 이용 가능합니다." }]);
+      return;
+    }
     setScreen(action);
     let initialMessage = "";
 
@@ -62,6 +78,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
 
   //  사용자 입력 처리 (API 요청)
   const handleUserInputSubmit = async () => {
+    
     if (!userInput.trim()) return;
 
     setMessages([...messages, { type: "user", content: userInput }]);
@@ -138,9 +155,6 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
       ]);
     }
   };
-  
-
-
 
   //  날씨 조회 처리
   const handleWeatherInput = async () => {
@@ -184,6 +198,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
     }
   };
   
+  // 날씨 데이터 포맷팅
   const formatWeatherMessage = (location: string, weatherInfo: WeatherInfo): string => {
     return `📍 ${location} 지역 날씨 정보\n\n`
       + `📅 시간: ${new Date(weatherInfo.dateTime ?? new Date().toISOString()).toLocaleTimeString("ko-KR", {
@@ -197,7 +212,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
       + `🌬️ 바람: ${weatherInfo.wind}`;
   };
   
-  //  가격 조회 요청
+  //  가격 조회 요청 -- 수정필요 ( 품목 전달 )
   const handlePriceInputSubmit = async () => {
     if (!userInput.trim()) return;
 
@@ -284,12 +299,6 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
   };
 
 
-
-
-
-  
-
-
   return (
     <div className="fixed bottom-20 right-6 w-96 h-[520px] bg-gradient-to-r from-green-50 to-green-100 shadow-xl rounded-2xl p-4 flex flex-col">
       {/* 헤더 */}
@@ -323,23 +332,49 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
         ))}
       </div>
 
-      {/* 초기 화면 버튼들 */}
+      {/* 초기 화면 버튼들 (로그인 필요 여부 확인) */}
       {screen === "initial" && (
         <div className="grid grid-cols-2 gap-3 mt-4">
-          <button onClick={() => handleButtonClick("alert")} className="bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg">
+          <button
+            onClick={() => handleButtonClick("alert")}
+            className={`py-2 rounded-lg ${isAuthenticated ? "bg-red-500 hover:bg-red-600 text-white" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}
+          >
             알람 설정
           </button>
-          <button onClick={() => handleButtonClick("weather")} className="bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg">
+          <button
+            onClick={() => handleButtonClick("weather")}
+            className={`py-2 rounded-lg ${isAuthenticated ? "bg-blue-500 hover:bg-blue-600 text-white" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}
+          >
             날씨 정보
           </button>
-          <button onClick={() => handleButtonClick("price")} className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg">
+          <button
+            onClick={() => handleButtonClick("price")}
+            className={`py-2 rounded-lg ${isAuthenticated ? "bg-yellow-500 hover:bg-yellow-600 text-white" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}
+          >
             가격 정보
           </button>
-          <button onClick={() => handleButtonClick("other")} className="bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg">
+          <button
+            onClick={() => handleButtonClick("other")}
+            className={`py-2 rounded-lg ${isAuthenticated ? "bg-green-500 hover:bg-green-600 text-white" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}
+          >
             기타 질문
           </button>
         </div>
       )}
+
+           {/* 로그인 유도 메시지 */}
+           {!isAuthenticated && (
+        <div className="mt-4 flex flex-col items-center text-center">
+          <p className="text-gray-700">🔒 로그인이 필요합니다.</p>
+          <button
+            onClick={() => navigate("/login")}
+            className="mt-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg"
+          >
+            로그인 페이지로 이동
+          </button>
+        </div>
+      )}
+
 
       {/* 사용자 입력창 */}
       {screen !== "initial" && (

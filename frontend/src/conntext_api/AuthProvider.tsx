@@ -7,7 +7,7 @@ import { renewAccess } from "../api/core_api";
 type AuthContextType = {
   isAuthenticated: boolean; // 인증 여부
   isLoading: boolean; // 로딩 여부 추가
-  login: (userData: { memberId: string; BJD: string }) => void;
+  login: (userData: { memberId: string; PNU: string }) => void;
   logout: () => void;
 };
 
@@ -17,13 +17,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [bomnetUser, setBomnetUser] = useState<{ memberId: string | null; BJD: string | null }>({
-    memberId: sessionStorage.getItem("bomnet_user")
-      ? JSON.parse(sessionStorage.getItem("bomnet_user")!)
-      : null,
-    BJD: sessionStorage.getItem("bomnet_bjd")
-      ? JSON.parse(sessionStorage.getItem("bomnet_bjd")!)
-      : null,
+  // 🔹 sessionStorage에서 가져올 때 JSON.parse 제거
+  const [bomnetUser, setBomnetUser] = useState<{ memberId: string | null; PNU: string | null }>({
+    memberId: sessionStorage.getItem("bomnet_user") || null,  
+    PNU: sessionStorage.getItem("bomnet_pnu") || null,  
   });
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false); // 초기값: false
@@ -38,17 +35,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } else {
           const response = await renewAccess();
           if (response.status === "200") {
-            sessionStorage.setItem(
-              "bomnet_user",
-              JSON.stringify(response.data.memberId)
-            );
-            sessionStorage.setItem(
-              "bomnet_bjd",
-              JSON.stringify(response.data.PNU)
-            );
+            sessionStorage.setItem("bomnet_user", response.data.memberId); 
+            sessionStorage.setItem("bomnet_pnu", response.data.PNU || "");  
             setBomnetUser({
               memberId: response.data.memberId || null,
-              BJD: response.data.PNU || null,
+              PNU: response.data.PNU || null,
             });
             setIsAuthenticated(true);
           } else {
@@ -68,16 +59,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const handleUnauthorized = async () => {
     sessionStorage.removeItem("bomnet_user");
-    sessionStorage.removeItem("bomnet_bjd");
-    setBomnetUser({ memberId: null, BJD: null });
+    sessionStorage.removeItem("bomnet_pnu");
+    setBomnetUser({ memberId: null, PNU: null });
     setIsAuthenticated(false);
     navigate("/login");
   };
 
-  const login = (userData: { memberId: string; BJD: string }) => {
-    sessionStorage.setItem("bomnet_user", JSON.stringify(userData.memberId));
-    sessionStorage.setItem("bomnet_bjd", JSON.stringify(userData.BJD));
-    setBomnetUser({ memberId: userData.memberId, BJD: userData.BJD });
+  const login = (userData: { memberId: string; PNU: string }) => {
+    sessionStorage.setItem("bomnet_user", userData.memberId); 
+    sessionStorage.setItem("bomnet_pnu", userData.PNU); 
+    setBomnetUser({ memberId: userData.memberId, PNU: userData.PNU });
     setIsAuthenticated(true);
     queryClient.invalidateQueries({ queryKey: ["userInfo"] });
   };

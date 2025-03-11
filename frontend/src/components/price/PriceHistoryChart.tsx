@@ -9,7 +9,6 @@ interface PriceHistoryChartProps {
 const PriceHistoryChart: React.FC<PriceHistoryChartProps> = ({ priceData }) => {
   const [timeRange, setTimeRange] = useState<"year" | "month" | "day">("day");
 
-  // Select data based on the chosen time range
   const getPriceData = () => {
     if (!priceData) return [];
     switch (timeRange) {
@@ -24,7 +23,6 @@ const PriceHistoryChart: React.FC<PriceHistoryChartProps> = ({ priceData }) => {
 
   const rawPriceData = getPriceData();
 
-  // 🛠 **Transform data to group by `dateTime`**
   const transformedData = rawPriceData.reduce((acc, entry) => {
     const existingEntry = acc.find((item) => item.dateTime === entry.dateTime);
 
@@ -37,24 +35,27 @@ const PriceHistoryChart: React.FC<PriceHistoryChartProps> = ({ priceData }) => {
     return acc;
   }, [] as Record<string, any>[]);
 
-  // Extract unique varieties dynamically
   const uniqueVarieties = [...new Set(rawPriceData.map((item) => item.variety))];
 
   return (
     <div className="mb-6">
-      <div className="flex justify-end items-center mb-4">
-        <label htmlFor="time-range" className="text-sm text-gray-700">시간 범위:</label>
-        <select
-          id="time-range"
-          className="border p-2 rounded-md ml-2"
-          value={timeRange}
-          onChange={(e) => setTimeRange(e.target.value as "year" | "month" | "day")}
-        >
-          <option value="year">10년</option>
-          <option value="month">12개월</option>
-          <option value="day">30일</option>
-        </select>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold">📈 기간별 가격 추이</h2>
+        <div className="flex items-center">
+          <label htmlFor="time-range" className="text-sm text-gray-700 mr-2">시간 범위:</label>
+          <select
+            id="time-range"
+            className="border p-2 rounded-md"
+            value={timeRange}
+            onChange={(e) => setTimeRange(e.target.value as "year" | "month" | "day")}
+          >
+            <option value="year">10년</option>
+            <option value="month">12개월</option>
+            <option value="day">30일</option>
+          </select>
+        </div>
       </div>
+
       <ResponsiveContainer width="100%" height={400}>
         <LineChart data={transformedData}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -66,7 +67,7 @@ const PriceHistoryChart: React.FC<PriceHistoryChartProps> = ({ priceData }) => {
             <Line
               key={variety}
               type="monotone"
-              dataKey={variety} // Dynamically use variety name as key
+              dataKey={variety}
               name={variety}
               stroke={`hsl(${index * 72}, 70%, 50%)`}
               strokeWidth={2}

@@ -22,6 +22,8 @@ public class MemberController {
         return ResponseEntity.ok(new CommonResponseDto<>("200", "토큰 재발행 성공"));
     }
 
+
+
     @PostMapping("/logout")
     public ResponseEntity<CommonResponseDto<?>> logout(HttpServletResponse response,
                                                  @AuthenticationPrincipal CustomOAuth2User userDetails) {

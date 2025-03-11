@@ -15,7 +15,7 @@ const Header = () => {
         <nav className="flex gap-4 text-gray-700">
           <Link to="/price" className="hover:text-green-500">가격정보</Link>
           <Link to="/product" className="hover:text-green-500">생산품정보</Link>
-          <Link to="/signup" className="hover:text-green-500">등록</Link>
+          {/* <Link to="/signup" className="hover:text-green-500">등록</Link> */}
           <Link to="/info" className="hover:text-green-500">사용자 정보</Link>
           <Link to="/alarm" className="hover:text-green-500">알림 목록</Link>
         </nav>
@@ -23,9 +23,6 @@ const Header = () => {
         <nav className="flex gap-4 text-gray-700">
           <Link to="/price" className="hover:text-green-500">가격정보</Link>
           <Link to="/product" className="hover:text-green-500">생산품정보</Link>
-          <Link to="/signup" className="hover:text-green-500">등록</Link>
-          <Link to="/info" className="hover:text-green-500">사용자 정보</Link>
-          <Link to="/alarm" className="hover:text-green-500">알림 목록</Link>
           <Link to="/login" className="hover:text-green-500">로그인</Link>
         </nav>
       )}

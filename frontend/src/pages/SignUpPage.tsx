@@ -92,24 +92,6 @@ function SignupPage() {
             농업인이시라면 추가 정보를 입력하신 후 맞춤형 정보를 받아보세요.
           </p>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* <div>
-              <label className="block text-sm font-medium text-gray-700">
-                농지 법정동 코드
-                <Tooltip
-                  content="법정동 코드는 행정 구역을 식별하기 위한 코드입니다."
-                  link="https://www.code.go.kr/stdcode/regCodeL.do"
-                  linkText="법정동 코드 확인하기"
-                />
-              </label>
-              <input
-                type="text"
-                value={additionalInfo1}
-                onChange={(e) => setAdditionalInfo1(e.target.value)}
-                placeholder="예: 1111010100"
-                required
-                className="w-full border border-gray-300 p-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div> */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 농지 PNU 코드

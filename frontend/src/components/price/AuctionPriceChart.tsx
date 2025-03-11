@@ -9,7 +9,7 @@ interface AuctionPriceChartProps {
 const AuctionPriceChart: React.FC<AuctionPriceChartProps> = ({ priceData }) => {
   const rawLiveChartData = priceData?.realTime || [];
 
-  // 🛠 **Transform Data: Group by `datetime`**
+  
   const transformedData = rawLiveChartData.reduce((acc, entry) => {
     const existingEntry = acc.find((item) => item.datetime === entry.dateTime);
 
@@ -22,12 +22,16 @@ const AuctionPriceChart: React.FC<AuctionPriceChartProps> = ({ priceData }) => {
     return acc;
   }, [] as Record<string, any>[]);
 
-  // Extract unique varieties dynamically
+  
   const uniqueVarieties = [...new Set(rawLiveChartData.map((item) => item.variety))];
 
   return (
     <div className="mb-6">
-      <h2 className="text-xl font-semibold mt-8">⏳ 실시간 경락가</h2>
+      
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold">⏳ 실시간 경락가</h2>
+      </div>
+
       <ResponsiveContainer width="100%" height={400}>
         <LineChart data={transformedData}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -42,7 +46,7 @@ const AuctionPriceChart: React.FC<AuctionPriceChartProps> = ({ priceData }) => {
             <Line
               key={variety}
               type="monotone"
-              dataKey={variety} // Use variety name as key
+              dataKey={variety} 
               name={variety}
               stroke={`hsl(${index * 72 + 180}, 70%, 50%)`}
               strokeWidth={2}

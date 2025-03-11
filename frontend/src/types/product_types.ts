@@ -1,13 +1,10 @@
 // 상품 검색 요청 
 export interface ProductRequestDto {
-    startDate?: string, // 검색시작일
-    endDate?: string, // 검색종료일
-    midId?: number, // 품목ID
-    midName?: string, // 품목
-    smallId?: number, // 품종ID
-    smallName?: string, // 품종
-    location?: string, // 지역
-    BJD?: string // 법정동코드
+    itemId?: number, // 품목ID
+    item?: string, // 품목
+    varietyId?: number, // 품종ID
+    variety?: string, // 품종
+    PNU?: string, // PNU
 }
 
 
@@ -15,7 +12,6 @@ export interface ProductRequestDto {
 export interface ProductResponseDto {
     product: Product, // 상품 정보
     plantCultivation: CultivationInfo, // 상품 재배 정보
-    sales: ProductSales, // 상품 판매량 
     farmSuitability: FarmSuitability, // 농장 적합도
 }
 
@@ -23,12 +19,12 @@ export interface ProductResponseDto {
 // 상품 객체(product_code)
 export interface Product {
     productId: number,
-    bigId: number,
-    bigName: string,
-    midId: number,
-    midName: string,
-    smallId: number,
-    smallName: string,
+    categoryId: number,
+    category: string,
+    itemId: number,
+    item: string,
+    varietyId: number,
+    variety: string,
     imgUrl: string, // S3 이미지 경로
 }
 
@@ -55,13 +51,6 @@ export interface Conditions {
     pH: string;                 // 토양 산도 (pH)
 }
 
-// 판매량 정보 (올해)
-export interface ProductSales {
-    distributionQuantityTon: string // 지역별 유통량
-    domesticSalesTon: string, // 국내 총 판매량(총 유통량)
-    exportsTon: string, // 수출량
-    importsTon: string, // 수입량
-}
 
 // 농장 적합도
 export interface FarmSuitability {
@@ -71,14 +60,5 @@ export interface FarmSuitability {
 // 적합도 분석
 export interface Anayize {
     reason: string, 
-    // 월동여부
-    // 평균기온
-    // 최저기온
-    // 최고기온
-    // 연평균 강수량
-    // 일조량
-    // 배수등급
-    // 유효토심
-    // 산도
     suitability: string, // 적합도 
 }
