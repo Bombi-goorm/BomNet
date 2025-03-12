@@ -2,14 +2,8 @@ package com.bombi.core.domain.member.model;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.List;
-
-import org.hibernate.annotations.Comment;
 
 @Entity
 @Table(name = "role")
@@ -22,10 +16,14 @@ public class Role {
     @Column(name = "role_id")
     private Long id;
 
-    private String rolename;
+    private String roleName;
+
+    public Role(String roleName) {
+        this.roleName = roleName;
+    }
 
     public void changeToFarmer() {
-        this.rolename = "ROLE_FARMER";
+        this.roleName = "ROLE_FARMER";
     }
 
     // @Enumerated(value = EnumType.STRING)

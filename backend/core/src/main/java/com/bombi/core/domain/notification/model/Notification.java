@@ -2,6 +2,7 @@ package com.bombi.core.domain.notification.model;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -41,5 +42,18 @@ public class Notification extends BaseEntity {
     @Column(columnDefinition = "VARCHAR(1) COMMENT '알림 확인 여부'")
     private String isRead;
 
+    @Builder
+    private Notification(Member member, NotificationType notificationType, String title, String message, String isRead) {
+        this.member = member;
+        this.notificationType = notificationType;
+        this.title = title;
+        this.message = message;
+        this.isRead = isRead;
+    }
 
+    public void read() {
+        if("F".equals(isRead)) {
+            this.isRead = "T";
+        }
+    }
 }
