@@ -35,7 +35,6 @@ public class NaverNewsApiClient {
         HttpHeaders headers = naverNewsApiUtil.createNewsHeader();
         log.info("NaverNewsApiClient::sendNews Headers - {}", headers);
 
-
         // HttpEntity 생성
         HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
         log.info("NaverNewsApiClient::sendNews requestEntity - {}", requestEntity);
@@ -58,12 +57,12 @@ public class NaverNewsApiClient {
 
             log.info("NaverNewsApiClient::sendNews END");
             return responseEntity.getBody();
-        } catch (HttpClientErrorException | HttpServerErrorException ex) {
-            throw new NewsFailedException(ex.getMessage(), ex);
-
-        }  catch (Exception ex) {
-            ex.printStackTrace();
-            throw new NewsFailedException("알 수 없는 오류 발생: " + ex.getMessage(), ex);
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            log.error("NaverNewsApiClient::sendNews Open Api ERROR - {}", e.getResponseBodyAsString());
+            throw new NewsFailedException(e.getMessage(), e);
+        }  catch (Exception e) {
+            log.error("NaverNewsApiClient::sendNews ERROR - {}", e.getMessage());
+            throw new NewsFailedException("알 수 없는 오류 발생: " + e.getMessage(), e);
         }
     }
 
