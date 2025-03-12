@@ -46,7 +46,7 @@ public class NotificationController {
 		notificationService.markAsRead(requestDto);
 		List<NotificationResponseDto> response = notificationService.getNotifications(pageable,
 			userDetails.getUsername());
-		return ResponseEntity.ok(CoreResponseDto.ofSuccess("알림 목록 조회 성공", response));
+		return ResponseEntity.ok(CoreResponseDto.ofSuccess("알림 읽기 성공", response));
 	}
 
 	@PostMapping("/all")
@@ -54,7 +54,7 @@ public class NotificationController {
 		notificationService.markAsReadAllNotification(userDetails.getUsername());
 		List<NotificationResponseDto> response = notificationService.getNotifications(pageable,
 			userDetails.getUsername());
-		return ResponseEntity.ok(CoreResponseDto.ofSuccess("알림 목록 조회 성공", response));
+		return ResponseEntity.ok(CoreResponseDto.ofSuccess("알림 전체 읽기 성공", response));
 	}
 
 }

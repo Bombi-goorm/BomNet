@@ -13,6 +13,7 @@ public class NotificationConditionResponseDto {
 	private String item;
 	private String variety;
 	private String markets;
+	private String price;
 	private String isActive;
 
 	public NotificationConditionResponseDto(NotificationCondition notificationCondition) {
@@ -20,6 +21,7 @@ public class NotificationConditionResponseDto {
 		this.item = notificationCondition.getItem();
 		this.variety = notificationCondition.getVariety();
 		this.markets = notificationCondition.getRegion();
+		this.price = String.valueOf(notificationCondition.getTargetPrice());
 		this.isActive = notificationCondition.getActive();
 	}
 }
