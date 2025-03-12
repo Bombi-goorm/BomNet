@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReadNotificationRequestDto {
 
-	private Long notificationId;
+	private Long id;
 
-	public ReadNotificationRequestDto(Long notificationId) {
-		this.notificationId = notificationId;
+	public ReadNotificationRequestDto(Long id) {
+		this.id = id;
 	}
 }
