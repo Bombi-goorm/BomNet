@@ -1,4 +1,4 @@
-import { PriceAlertItem } from "./components/myinfo/PriceAlertList";
+
 import { HomeDto } from "./types/home_types";
 import { FarmData } from "./types/member_types";
 import { PriceResponse } from "./types/price_types";
@@ -14,7 +14,7 @@ export const data: HomeDto =  {
           productName: "딸기",
           imgUrl:
             "https://your-s3-bucket.s3.amazonaws.com/products/strawberry.jpg",
-          dayPrice: [
+            productPrices: [
             { date: "2025-02-20", price: 8537 },
             { date: "2025-02-21", price: 8400 },
             { date: "2025-02-22", price: 8600 },
@@ -29,7 +29,7 @@ export const data: HomeDto =  {
           productName: "사과",
           imgUrl:
             "https://your-s3-bucket.s3.amazonaws.com/products/apple.jpg",
-          dayPrice: [
+            productPrices: [
             { date: "2025-02-20", price: 2000 },
             { date: "2025-02-21", price: 2050 },
             { date: "2025-02-22", price: 2100 },
@@ -44,7 +44,7 @@ export const data: HomeDto =  {
           productName: "배",
           imgUrl:
             "https://your-s3-bucket.s3.amazonaws.com/products/pear.jpg",
-          dayPrice: [
+            productPrices: [
             { date: "2025-02-20", price: 8000 },
             { date: "2025-02-21", price: 7900 },
             { date: "2025-02-22", price: 8100 },
@@ -59,7 +59,7 @@ export const data: HomeDto =  {
           productName: "감자",
           imgUrl:
             "https://your-s3-bucket.s3.amazonaws.com/products/potato.jpg",
-          dayPrice: [
+            productPrices: [
             { date: "2025-02-20", price: 2000 },
             { date: "2025-02-21", price: 1950 },
             { date: "2025-02-22", price: 2100 },
@@ -74,7 +74,7 @@ export const data: HomeDto =  {
           productName: "고구마",
           imgUrl:
             "https://your-s3-bucket.s3.amazonaws.com/products/gogu.jpg",
-          dayPrice: [
+            productPrices: [
             { date: "2025-02-20", price: 5000 },
             { date: "2025-02-21", price: 5200 },
             { date: "2025-02-22", price: 4800 },
@@ -729,15 +729,6 @@ export const user = {
   pnuCode: "0987654321",
   joinDate: "2023-01-01",
 };
-
-// 가격 알림 데이터 (품목, 품종, 가격 정보 포함)
-export const priceAlertItems: PriceAlertItem[] = [
-  { name: "사과", variety: "후지", markets: "가락시장", price: "1,200원" },
-  { name: "사과", variety: "홍옥", markets: "가락시장, 강서시장", price: "900원" },
-  { name: "배추", variety: "고랭지배추", markets: "안양시장", price: "3,500원" },
-  { name: "상추", variety: "적상추", markets: "강릉시장", price: "2,000원" },
-  { name: "아스파라거스", variety: "아스파라거스", markets: "포항시장, 창원시장, 울산시장", price: "1,500원" },
-];
 
 export const farmData: FarmData = {
   overwintering: "예", // 월동 여부 (예/아니오)

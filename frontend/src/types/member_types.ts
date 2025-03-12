@@ -7,7 +7,7 @@ export interface CommonResponseDto<T> {
 
 // 등록 요청
 export interface SignupRequestDto {
-    PNU?: string,
+    pnu?: string,
 }
 
 
@@ -15,7 +15,7 @@ export interface SignupRequestDto {
 export interface InfoResponseDto {
     memberId: string,
     email: string,
-    PNU?: string,
+    pnu?: string,
     myFarm: FarmData,
     recommendedProducts: RecommendedProducts[],
     notificationConditions: NotificationCondition[],
@@ -57,4 +57,18 @@ export interface FarmData {
     kMgPerKg: string;
     caMgPerKg: string;
     mgMgPerKg: string;
+}
+
+
+export interface NotificationResponseDto {
+    notifications: Notification[],
+    conditions: NotificationCondition[],
+}
+
+
+export interface Notification {
+    id: number,
+    title: string,
+    content: string;
+    isRead: string;
 }

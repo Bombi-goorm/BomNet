@@ -1,20 +1,23 @@
-import { useQueryClient } from "@tanstack/react-query";
+import React from "react";
 import { News } from "../../types/home_types";
 
-const NewsList = () => {
-  const queryClient = useQueryClient();
+interface NewsListProps {
+  newsData: News[] | undefined;
+}
 
-  // "news" 키로 캐싱된 뉴스 데이터를 가져옵니다.
-  const news = queryClient.getQueryData<News[]>(["news"]);
-
-  if (!news || news.length === 0) {
-    return <div className="text-center text-gray-500">뉴스 데이터를 가져올 수 없습니다.</div>;
+const NewsList: React.FC<NewsListProps> = ({ newsData }) => {
+  if (!newsData || newsData.length === 0) {
+    return (
+      <div className="text-center text-gray-500">
+        뉴스 데이터를 가져올 수 없습니다.
+      </div>
+    );
   }
 
   return (
     <div className="w-full max-w-4xl mx-auto mt-8">
       <ul className="space-y-6">
-        {news.map((article, index) => (
+        {newsData.map((article, index) => (
           <li
             key={index}
             className={`shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow ${

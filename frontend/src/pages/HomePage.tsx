@@ -5,9 +5,10 @@ import ChatBotButton from "../components/chatbot/ChatBotButton";
 import LiveWeatherTopics from "../components/home/LiveWeatherTopics";
 import MyLocalWeather from "../components/home/MyLocalWeather";
 import { useEffect, useState } from "react";
-import { getHomeInfo, getMemberInfo } from "../api/core_api";
+import { getHomeInfo, getMemberInfo, pushSubscribtion } from "../api/core_api";
 import { useQueryClient } from "@tanstack/react-query";
-import { HomeRequestDto } from "../types/home_types";
+import { BestItems, HomeRequestDto, News, WeatherExpections, WeatherNotice } from "../types/home_types";
+import { useNavigate } from "react-router-dom";
 
 // VAPID 공개 키
 const VAPID_PUBLIC_KEY =
@@ -17,9 +18,10 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [, setSubscription] = useState<HomeRequestDto>();
 
+
   // const navigate = useNavigate();
   const queryClient = useQueryClient();
-
+  const navigate = useNavigate();
 
   // Base64 → Uint8Array 변환 함수
   const urlBase64ToUint8Array = (base64String: string) => {
@@ -70,81 +72,64 @@ const HomePage = () => {
         p256dh: arrayBufferToBase64(p256dhKey),
         auth: arrayBufferToBase64(authKey),
       };
+
+      await pushSubscribtion(subscriptionData);
   
-      console.log("✅ 최종 Push Subscription Data:", subscriptionData);
+      // console.log("✅ 최종 Push Subscription Data:", subscriptionData);
   
       setSubscription(subscriptionData);
+
       return subscriptionData;
+
     } catch (error) {
-      console.error("❌ 푸시 구독 실패:", error);
+      // console.error("❌ 푸시 구독 실패:", error);
       return null;
     }
   };
 
   useEffect(() => {
-    const savedUser = sessionStorage.getItem("bomnet_user");
+  const fetchUserData = async () => {
+    try {
+      await subscribeToPushNotifications();
 
-    // 세션스토리지에 사용자 정보가 있으면 바로 로딩 완료(이미 로그인+인증)
-    if (savedUser) {
-      setLoading(false);
-      return;
-    }
-
-    // 캐싱된 사용자정보가 없는경우
-    const fetchUserData = async () => {
-
-      // 웹푸시 구독정보 처리
-      try {
-
-        // 최신화될 구독정보
-        const subscriptionData = await subscribeToPushNotifications();
-
-        if (!subscriptionData) {
-          console.warn("❌ 푸시 구독 정보가 없습니다. ");
-          return;
-        }
-     
-        // homeInfo API 호출 ( 홈화면 정보 )
-        const response = await getHomeInfo(subscriptionData); 
-
-        // if(response.status === '500'){
-        //   navigate('/500')
-        // }
-
-        // 정보 캐싱 
-        queryClient.setQueryData(["products"], response.data.bestItems);
-        queryClient.setQueryData(["weatherNotice"], response.data.weatherNotice);
-        queryClient.setQueryData(["weatherExpect"], response.data.weatherExpect);
-        queryClient.setQueryData(["news"], response.data.news);
-
-
-        // 테스트용
-        // queryClient.setQueryData(["products"], response.bestItems);
-        // queryClient.setQueryData(["weatherNotice"], response.weatherNotice);
-        // queryClient.setQueryData(["weatherExpect"], response.weatherExpect);
-        // queryClient.setQueryData(["news"], response.news);
-
-        // 추가로 사용자 정보를 가져오기 위한 API 호출
-        const memberResponse = await getMemberInfo();
-
-        // API 응답이 성공적이면 세션스토리지에 저장 ( 인증상태확인 및 개인데이터 활용 목적)
-        if (memberResponse.status === '200') {
-          sessionStorage.setItem("bomnet_user", JSON.stringify(memberResponse.data.memberId));
-          sessionStorage.setItem("bomnet_pnu", JSON.stringify(memberResponse.data.PNU));
-        }
-
-        // 사용자 데이터 캐싱( 마이페이지 등에서 활용 )
-        queryClient.setQueryData(["userInfo"], memberResponse.data);
-
-      } catch (error) {
-        console.error("Error fetching home info:", error);
-      } finally {
-        // 로딩 종료
-        setLoading(false);
+      const response = await getHomeInfo();
+      if (response.status !== "200") {
+        navigate("/500");
+        return;
       }
-    };
-    fetchUserData();
-  }, [queryClient]);
+
+      queryClient.setQueryData(["products"], response.data.bestItems);
+      queryClient.setQueryData(["weatherNotice"], response.data.weatherNotice);
+      queryClient.setQueryData(["weatherExpect"], response.data.weatherExpect);
+      queryClient.setQueryData(["news"], response.data.news);
+
+      const memberResponse = await getMemberInfo();
+
+
+
+      if (memberResponse.status === "200") {
+        sessionStorage.setItem("bomnet_user", memberResponse.data.memberId);
+        if (memberResponse.data.pnu) {
+          sessionStorage.setItem("bomnet_pnu", memberResponse.data.pnu);
+        }
+        // queryClient.setQueryData(["userInfo"], memberResponse.data);
+      } else {
+        console.log("미가입 사용자");
+      }
+    } catch (error) {
+      console.error("Error fetching home info:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchUserData();
+}, [queryClient, navigate]);
+
+  const productsData = queryClient.getQueryData<BestItems>(["products"]);
+  const weatherNoticeData = queryClient.getQueryData<WeatherNotice[]>(["weatherNotice"]);
+  const weatherExpectData = queryClient.getQueryData<WeatherExpections>(["weatherExpect"]);
+  const newsData = queryClient.getQueryData<News[]>(["news"]);
 
   // 로딩 중일 때는 로딩 UI 표시
   if (loading) {
@@ -163,13 +148,12 @@ const HomePage = () => {
         <h1 className="text-2xl font-bold text-center mb-6">
           농산물 종합정보 시스템 "봄넷"
         </h1>
-        <BestItemSlider />
-        {/* 기상 토픽과 내 지역 날씨 */}
+        <BestItemSlider productsData={productsData} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 max-w-4xl mx-auto">
-          <LiveWeatherTopics />
-          <MyLocalWeather />
+          <LiveWeatherTopics weatherNoticeData={weatherNoticeData} />
+          <MyLocalWeather weatherExpectData={weatherExpectData} />
         </div>
-        <NewsList />
+        <NewsList newsData={newsData} />
       </main>
       <ChatBotButton />
     </div>

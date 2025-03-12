@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
+import { signup } from "../api/core_api";
 
 interface TooltipProps {
   content: string;
@@ -51,17 +52,12 @@ function SignupPage() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ additionalInfo }),
-      });
+      const response = await signup({pnu: additionalInfo});
 
-      if (response.ok) {
+      if (response.status === '200') {
         navigate("/");
       } else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message || "가입에 실패했습니다. 다시 시도해 주세요.");
+        setErrorMessage("등록에 실패했습니다. 다시 시도해 주세요.");
       }
     } catch (error) {
       console.error("Signup error:", error);
@@ -106,7 +102,6 @@ function SignupPage() {
                 value={additionalInfo}
                 onChange={(e) => setAdditionalInfo(e.target.value)}
                 placeholder="예: 1111018300101970001"
-                required
                 className="w-full border border-gray-300 p-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
