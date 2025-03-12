@@ -31,7 +31,7 @@ public class SecurityConfig {
     }
 
     // 인증 없이도 접근 가능한 경로
-    private static final String[] PUBLIC_API_URL = {"/auth/**"};
+    private static final String[] PUBLIC_API_URL = {"/auth/**", "/login"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

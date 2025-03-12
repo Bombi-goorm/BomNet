@@ -19,6 +19,7 @@ public class MemberController {
 
     @PostMapping("/renew")
     public ResponseEntity<CommonResponseDto<?>> renewToken(){
+        System.out.println("MemberController::renewToken");
         return ResponseEntity.ok(new CommonResponseDto<>("200", "토큰 재발행 성공"));
     }
 

@@ -2,6 +2,7 @@ package com.bombi.auth.infrastructure.security.auth.service;
 
 
 import com.bombi.auth.application.exception.e500.RedisSessionException;
+import com.bombi.auth.domain.member.MemberInfo;
 import com.bombi.auth.infrastructure.security.CustomOAuth2User;
 import com.bombi.auth.infrastructure.security.CustomUserDetails;
 import com.bombi.auth.domain.member.Member;
@@ -79,6 +80,7 @@ public class CustomUserDetailsService extends DefaultOAuth2UserService implement
                         throw new RedisSessionException("사용자 권한 확인 실패");
                     }
                     Member newMember = Member.of(platform, email, userRole.get());
+                    MemberInfo memberInfo = new MemberInfo(newMember);
                     return memberRepository.saveAndFlush(newMember);
                 });
     }

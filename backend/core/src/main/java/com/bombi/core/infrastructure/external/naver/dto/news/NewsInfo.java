@@ -14,9 +14,4 @@ public class NewsInfo {
 	private String link;          // 네이버 뉴스 기사 URL
 	private String description;   // 기사 요약
 	private String pubDate;       // 기사 게재 일자 (dateTime)
-
-	public void eliminateTag() {
-		title = TagEliminator.eliminateBTag(title);
-		description = TagEliminator.eliminateBTag(description);
-	}
 }
