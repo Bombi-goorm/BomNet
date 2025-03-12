@@ -24,7 +24,7 @@ export interface HomeProduct {
     productId: number,
     productName: string,
     imgUrl: string,
-    dayPrice: ProductPrice[],
+    productPrices: ProductPrice[],
 }
 
 // 상품 가격 추이

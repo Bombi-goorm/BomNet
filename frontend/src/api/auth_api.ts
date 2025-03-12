@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CommonResponseDto } from "../types/member_types";
+import { CommonResponseDto, InfoResponseDto } from "../types/member_types";
 
 // Axios 인스턴스 생성
 const api = axios.create({
@@ -10,6 +10,13 @@ const api = axios.create({
       'Content-Type': 'application/json',
     },
 });
+
+
+// 인증 갱신
+export const renewAccess = async (): Promise<CommonResponseDto<InfoResponseDto>> => {
+  const response = await api.post<CommonResponseDto<InfoResponseDto>>('/member/renew');   
+  return response.data;
+};
 
 
 // 로그아웃
