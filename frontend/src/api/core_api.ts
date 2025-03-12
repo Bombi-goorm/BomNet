@@ -29,7 +29,7 @@ export const getMemberInfo = async (): Promise<CommonResponseDto<InfoResponseDto
     return response.data;
 };
 
-// 사용자 정보 요청
+// 구독 정보 저장
 export const pushSubscribtion = async (data: HomeRequestDto): Promise<CommonResponseDto<InfoResponseDto>> => {
   const response = await api.post<CommonResponseDto<InfoResponseDto>>(`/core/member/push`, data);
   return response.data;

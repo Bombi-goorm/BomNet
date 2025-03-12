@@ -112,7 +112,7 @@ const HomePage = () => {
         if (memberResponse.data.pnu) {
           sessionStorage.setItem("bomnet_pnu", memberResponse.data.pnu);
         }
-        queryClient.setQueryData(["userInfo"], memberResponse.data);
+        // queryClient.setQueryData(["userInfo"], memberResponse.data);
       } else {
         console.log("미가입 사용자");
       }
