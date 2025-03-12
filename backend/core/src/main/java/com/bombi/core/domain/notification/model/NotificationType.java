@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum NotificationType {
 
-	WEATHER("특보"),
-	TARGET_PRICE("지정가");
+	WEATHER("특보 알림"),
+	TARGET_PRICE("가격 알림");
 
 	private final String description;
 }

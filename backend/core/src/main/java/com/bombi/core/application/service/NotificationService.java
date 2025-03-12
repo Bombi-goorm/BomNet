@@ -32,7 +32,7 @@ public class NotificationService {
 
 	@Transactional
 	public void markAsRead(ReadNotificationRequestDto requestDto) {
-		Notification notification = notificationRepository.findById(requestDto.getNotificationId())
+		Notification notification = notificationRepository.findById(requestDto.getId())
 			.orElseThrow(() -> new IllegalArgumentException("조회된 알림이 없습니다."));
 
 		notification.read();

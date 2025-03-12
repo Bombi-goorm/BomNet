@@ -3,7 +3,6 @@ package com.bombi.core.presentation.dto.notification;
 import java.time.LocalDateTime;
 
 import com.bombi.core.domain.notification.model.Notification;
-import com.bombi.core.domain.notification.model.NotificationType;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,15 +12,17 @@ import lombok.NoArgsConstructor;
 public class NotificationResponseDto {
 
 	private long id;
-	private NotificationType type;
+	private String title;
 	private String content;
-	private LocalDateTime createdDate;
+	private String isRead;
+	private LocalDateTime createDate;
 
 	public NotificationResponseDto(Notification notification) {
 		this.id = notification.getId();
-		this.type = notification.getNotificationType();
+		this.title = notification.getNotificationType().getDescription();
 		this.content = notification.getMessage();
-		this.createdDate = notification.getCreatedDate();
+		this.isRead = notification.getIsRead();
+		this.createDate = notification.getCreatedDate();
 	}
 
 
