@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		Member member = memberRepository.findMemberAndRoleById(UUID.fromString(username))
 			.orElseThrow(() -> new UsernameNotFoundException(username));
 
-		List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(member.getRole().getRolename()));
+		List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(member.getRole().getRoleName()));
 
 		return new CustomUserDetails(member, authorities);
 	}
