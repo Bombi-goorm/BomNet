@@ -3,6 +3,7 @@ package com.bombi.core.presentation.dto.member;
 import java.util.List;
 
 import com.bombi.core.domain.member.model.Member;
+import com.bombi.core.domain.notificationcondition.model.NotificationCondition;
 import com.bombi.core.domain.region.model.RegionWeather;
 import com.bombi.core.infrastructure.external.bigquery.dto.BigQueryRecommendProductResponseDto;
 import com.bombi.core.infrastructure.external.soil.dto.SoilCharacterResponseDto;
@@ -38,6 +39,7 @@ public class MemberInfoResponseDto {
 		this.myFarm = new FarmInfoResponseDto(regionWeather, characterResponseDto, chemicalResponseDto);
 		this.recommendedProducts = null;
 		this.notificationConditions = member.getNotificationConditions().stream()
+			.filter(NotificationCondition::isActive)
 			.map(NotificationConditionResponseDto::new)
 			.toList();
 	}

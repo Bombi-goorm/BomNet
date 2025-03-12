@@ -53,4 +53,8 @@ public class NotificationCondition extends BaseEntity {
 	private String item;
 	private String variety;
 	private String region;
+
+	public boolean isActive() {
+		return "T".equals(this.active);
+	}
 }
