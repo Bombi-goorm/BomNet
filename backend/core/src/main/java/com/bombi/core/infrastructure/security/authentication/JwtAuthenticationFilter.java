@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.bombi.core.common.dto.CoreResponseDto;
 import com.bombi.core.common.exception.InvalidTokenException;
+import com.bombi.core.common.exception.TokenNotFoundException;
 
 @Slf4j
 @Component
@@ -59,20 +60,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String accessToken = extractTokenFromCookie("access_token", cookies);
             String refreshToken = extractTokenFromCookie("refresh_token", cookies);
 
-            // 액세스 토큰 검증
-            if(accessToken == null) {
-                filterChain.doFilter(request, response);
-                return;
-            }
-
             String memberId;
 
             try {
                 jwtProvider.validateToken(accessToken);
                 Claims claims = jwtProvider.extractAllClaims(accessToken);
                 memberId = claims.getSubject();
-            } catch (ExpiredJwtException e) {
-                log.info("access token expired. start renewing token");
+            } catch (ExpiredJwtException | TokenNotFoundException e) {
+                log.info("access token expired or not found. start renewing token");
                 String renewedAccessToken = jwtGenerator.renewToken(accessToken, refreshToken);
 
                 // set-cookie의 access_token에 새로 발급한 토큰을 지정
