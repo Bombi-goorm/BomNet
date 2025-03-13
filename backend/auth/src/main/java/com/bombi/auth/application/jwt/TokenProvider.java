@@ -36,9 +36,9 @@ public class TokenProvider {
 	private String secretKey;
 
 	// 인증토큰 만료시간 - 1시간
-	public static long ACCESS_EXP = 36000000L;
+	public static long ACCESS_EXP = 3600000L;
 
-	// 갱신토큰 만료시간 - 30일
+	// 갱신토큰 만료시간 - 60일
 	public static long REFRESH_EXP = 5184000000L;
 
 	private static final String ISSUER = "https://bomnet.co.kr";

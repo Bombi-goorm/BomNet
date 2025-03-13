@@ -81,6 +81,7 @@ public class CustomUserDetailsService extends DefaultOAuth2UserService implement
                     }
                     Member newMember = Member.of(platform, email, userRole.get());
                     MemberInfo memberInfo = new MemberInfo(newMember);
+                    newMember.updateMemberInfo(memberInfo);
                     return memberRepository.saveAndFlush(newMember);
                 });
     }

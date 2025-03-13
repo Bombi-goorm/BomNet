@@ -1,5 +1,7 @@
 package com.bombi.auth.application.util;
 
+import static com.bombi.auth.application.jwt.TokenProvider.*;
+
 import com.bombi.auth.application.exception.ResponseWriter;
 import com.bombi.auth.application.exception.e401.InvalidTokenException;
 import com.bombi.auth.application.jwt.TokenProvider;
@@ -135,12 +137,13 @@ public class JwtFilter extends OncePerRequestFilter {
 				}
 
 				String newAccessToken = tokenProvider.generateAccessToken(userDetails);
+				long accessTokenCookieExp = ACCESS_EXP / 1000;
 				ResponseCookie newAccessTokenCookie = ResponseCookie.from("access_token", newAccessToken)
 						.secure(true)
 						.httpOnly(true)
 						.path("/")
 						.sameSite("Strict")
-						.maxAge(60 * 10)
+						.maxAge(accessTokenCookieExp)
 						.build();
 				response.addHeader(HttpHeaders.SET_COOKIE, newAccessTokenCookie.toString());
 				authenticateUser(request, userDetails);
