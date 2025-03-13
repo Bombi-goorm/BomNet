@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RecommendedProductDto {
 
-	private String productName;
+	private String id;
+	private String name;
 	private String reason;
 
 	public RecommendedProductDto(RecommendProduct recommendProduct) {
-		this.productName = recommendProduct.getProductName();
+		this.id = null;
+		this.name = recommendProduct.getProductName();
 		this.reason = recommendProduct.getReason();
 	}
 }

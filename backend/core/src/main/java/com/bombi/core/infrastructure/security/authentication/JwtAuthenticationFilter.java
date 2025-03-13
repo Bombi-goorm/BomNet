@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,14 +32,17 @@ import com.bombi.core.common.exception.TokenNotFoundException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtProvider jwtProvider;
-    private final JwtGenerator jwtGenerator;
-    private final CustomUserDetailsService customUserDetailsService;
-
+    public static final String ACCESS_TOKEN_COOKIE_NAME = "access_token";
+    public static final long ACCESS_TOKEN_COOKIE_AGE = 3600L;
     private static final List<String> EXCLUDED_PATHS = Arrays.asList(
         "/core/health", "/bigquery/data", "/gcs/data", "/weather/special", "/naver/news", "/best/price", "/core/home", "/weather/forecast", "/soil/character", "/soil/chemical",
         "/farm"
     );
+    public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
+
+    private final JwtProvider jwtProvider;
+    private final JwtGenerator jwtGenerator;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -57,8 +61,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
-            String accessToken = extractTokenFromCookie("access_token", cookies);
-            String refreshToken = extractTokenFromCookie("refresh_token", cookies);
+            String accessToken = extractTokenFromCookie(ACCESS_TOKEN_COOKIE_NAME, cookies);
+            String refreshToken = extractTokenFromCookie(REFRESH_TOKEN_COOKIE_NAME, cookies);
 
             String memberId;
 
@@ -71,7 +75,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String renewedAccessToken = jwtGenerator.renewToken(accessToken, refreshToken);
 
                 // set-cookie의 access_token에 새로 발급한 토큰을 지정
-                addTokenCookieInHeader(response, accessToken);
+                addNewTokenCookieInHeader(response, renewedAccessToken);
 
                 Claims claims = jwtProvider.extractAllClaims(renewedAccessToken);
                 memberId = claims.getSubject();
@@ -84,18 +88,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         } catch (InvalidTokenException e) {
             log.error("Token validation error: {}", e.getMessage());
-            ResponseWriter.writeExceptionResponse(
-                response,
-                HttpServletResponse.SC_UNAUTHORIZED,
-                new CoreResponseDto<>("401", "토큰 검증에 실패했습니다.")
-            );
+            deleteAccessTokenInCookie(response);
+            sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "토큰 검증에 실패했습니다.");
+            return;
         } catch (Exception e) {
             log.error("Authentication processing error", e);
-            ResponseWriter.writeExceptionResponse(
-                response,
-                HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                new CoreResponseDto<>("401", "인증 처리 중 오류가 발생했습니다.")
-            );
+            sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "인증 처리 중 오류가 발생했습니다.");
+            return;
         }
 
         filterChain.doFilter(request, response);
@@ -109,16 +108,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             .orElse(null);
     }
 
-    private void addTokenCookieInHeader(HttpServletResponse response, String accessToken) {
-        ResponseCookie cookie = ResponseCookie.from("access_token", accessToken)
+    private void addNewTokenCookieInHeader(HttpServletResponse response, String accessToken) {
+        ResponseCookie cookie = ResponseCookie.from(ACCESS_TOKEN_COOKIE_NAME, accessToken)
             .secure(true)
             .httpOnly(true)
             .path("/")
             .sameSite("Strict")
-            .maxAge(60 * 10)
+            .maxAge(ACCESS_TOKEN_COOKIE_AGE)
             .build();
 
-        response.addHeader("Set-Cookie", cookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+    }
+
+    private void deleteAccessTokenInCookie(HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from(ACCESS_TOKEN_COOKIE_NAME, null)
+            .secure(true)
+            .httpOnly(true)
+            .path("/")
+            .sameSite("Strict")
+            .maxAge(0)
+            .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 
     private void authenticateUser(HttpServletRequest request, UserDetails userDetails) {
@@ -129,5 +140,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         );
         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authToken);
+    }
+
+    private static void sendErrorResponse(HttpServletResponse response, int scUnauthorized, String message) {
+        ResponseWriter.writeExceptionResponse(
+            response,
+            scUnauthorized,
+            new CoreResponseDto<>("401", message)
+        );
     }
 }
