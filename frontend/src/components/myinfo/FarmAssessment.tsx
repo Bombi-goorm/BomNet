@@ -1,18 +1,8 @@
 import React from "react";
+import { FarmData } from "../../types/member_types";
 
 interface FarmAssessmentProps {
-  farmData: {
-    averageTemperature: string;
-    minTemperature: string;
-    maxTemperature: string;
-    annualRainfall: string;
-    sunlightHours: string;
-    drainage: string;
-    soilDepth: string;
-    slopeDegree: string;
-    soilTexture: string;
-    ph: string;
-  };
+  farmData: FarmData;
 }
 
 const FarmAssessment: React.FC<FarmAssessmentProps> = ({ farmData }) => {
@@ -44,6 +34,10 @@ const FarmAssessment: React.FC<FarmAssessmentProps> = ({ farmData }) => {
             <h3 className="text-lg font-semibold mb-2">화학 (Chemical)</h3>
             <ul className="list-disc pl-5">
               <li>산도: {farmData.ph}</li>
+              <li>칼슙: {farmData.caMgPerKg}</li>
+              <li>칼륨: {farmData.kmgPerKg}</li>
+              <li>마그네슘: {farmData.mgMgPerKg}</li>
+              <li>유기물: {farmData.organicMatterGPerKg}</li>
             </ul>
           </div>
         </div>

@@ -16,20 +16,22 @@ export interface InfoResponseDto {
     memberId: string,
     email: string,
     pnu?: string,
+    joinDate: string,
     myFarm: FarmData,
-    recommendedProducts: RecommendedProducts[],
-    notificationConditions: NotificationCondition[],
+    recommendedProducts: RecommendedProduct[],
+    notificationConditions: PriceAlertCondition[],
 }
 
 // 내 농장 추천 상품
-export interface RecommendedProducts {
+export interface RecommendedProduct {
+    id: number,
     productName: string,
     reason: string,
 }
 
 
 // 알림 조건 목록
-export interface NotificationCondition {
+export interface PriceAlertCondition {
     id: number,
     item: string,
     variety: string,
@@ -54,21 +56,22 @@ export interface FarmData {
     ph: string;
     organicMatterGPerKg: string;
     avPMgPerKg: string;
-    kMgPerKg: string;
+    kmgPerKg: string;
     caMgPerKg: string;
     mgMgPerKg: string;
 }
 
 
 export interface NotificationResponseDto {
-    notifications: Notification[],
-    conditions: NotificationCondition[],
+    notifications: UserNotification[],
+    conditions: PriceAlertCondition[],
 }
 
 
-export interface Notification {
-    id: number,
-    title: string,
-    content: string;
-    isRead: string;
+export interface UserNotification {
+    id: number, // 
+    title: string, // 가격/특보 알림
+    content: string; // 어디어디 얼마 
+    isRead: string; // T/F
+    createDate: string; // 알림 생성일
 }

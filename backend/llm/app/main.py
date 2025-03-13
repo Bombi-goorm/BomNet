@@ -6,7 +6,7 @@ from app.controller.alert_controller import alert_router
 from app.controller.base_controller import base_router
 from app.controller.other_controller import other_router
 from app.controller.price_controller import price_router
-from app.controller.weather_controller import weather_router
+# from app.controller.weather_controller import weather_router
 from app.database import engine, Base
 
 # FastAPI 앱 생성
@@ -23,7 +23,7 @@ router = APIRouter(prefix="/llm")
 
 router.include_router(base_router, prefix="/base", tags=["Base"])
 router.include_router(other_router, prefix="/other", tags=["Other"])
-router.include_router(weather_router, prefix="/weather", tags=["Weather"])
+# router.include_router(weather_router, prefix="/weather", tags=["Weather"])
 router.include_router(price_router, prefix="/price", tags=["Price"])
 router.include_router(alert_router, prefix="/alert", tags=["Alert"])
 

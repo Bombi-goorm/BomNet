@@ -23,6 +23,10 @@ public class NotificationCondition extends BaseEntity {
 	private int targetPrice;
 
 	@Column(columnDefinition = "VARCHAR(1) NOT NULL")
+	@Comment("가격 방향성(U/D)")
+	private int priceDirection;
+
+	@Column(columnDefinition = "VARCHAR(1) NOT NULL")
 	@Comment("알림 조건 활성화 여부")
 	private String active;
 

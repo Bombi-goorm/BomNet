@@ -1,8 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { logoutMember } from "../api/auth_api";
-import { renewAccess } from "../api/auth_api";
+import { useNavigate, useLocation } from "react-router-dom";
+import { logoutMember, renewAccess } from "../api/auth_api";
 
 type AuthContextType = {
   isAuthenticated: boolean; // 인증 여부
@@ -15,6 +14,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const queryClient = useQueryClient();
 
   const [bomnetUser, setBomnetUser] = useState<{ memberId: string | null; pnu: string | null }>({
@@ -33,11 +33,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setIsAuthenticated(true);
         } else {
           const response = await renewAccess();
+          console.log(response)
           if (response.status === "200") {
             sessionStorage.setItem("bomnet_user", response.data.memberId); 
             sessionStorage.setItem("bomnet_pnu", response.data.pnu || "");  
             setBomnetUser({
-              memberId: response.data.memberId || null,
+              memberId: response.data.memberId,
               pnu: response.data.pnu || null,
             });
             setIsAuthenticated(true);
@@ -54,14 +55,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     restoreAuthentication();
-  }, [bomnetUser.memberId]);
+  }, []); // 최초 한 번 실행
 
   const handleUnauthorized = async () => {
     sessionStorage.removeItem("bomnet_user");
     sessionStorage.removeItem("bomnet_pnu");
     setBomnetUser({ memberId: null, pnu: null });
     setIsAuthenticated(false);
-    navigate("/login");
+    // 이미 /login 경로라면 navigate 호출하지 않음
+    if (location.pathname !== "/login") {
+      navigate("/login");
+    }
   };
 
   const login = (userData: { memberId: string; pnu: string }) => {

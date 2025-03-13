@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CommonResponseDto, InfoResponseDto, NotificationResponseDto, SignupRequestDto } from "../types/member_types";
+import { CommonResponseDto, InfoResponseDto, PriceAlertCondition, SignupRequestDto, UserNotification } from "../types/member_types";
 import { HomeDto, HomeRequestDto } from "../types/home_types";
 import { PriceResponse } from "../types/price_types";
 import { ProductRequestDto, ProductResponseDto } from "../types/product_types";
@@ -7,11 +7,11 @@ import { ProductRequestDto, ProductResponseDto } from "../types/product_types";
 
 // Axios 인스턴스 생성
 const api = axios.create({
-    // baseURL: 'https://bomnet.co.kr', // 백엔드 주소
+    // baseURL: import.meta.env.VITE_CORE_HOST, // 백엔드 주소
     baseURL: 'http://localhost:8181', // 로컬 테스트
     withCredentials: true, // HttpOnly 쿠키를 위한 설정
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': import.meta.env.CONTENT_TYPE,
     },
 });
 
@@ -72,26 +72,26 @@ export const productInfo = async (data: ProductRequestDto): Promise<CommonRespon
 
 
 // 알림 목록 조회
-export const getNotifications = async (): Promise<CommonResponseDto<NotificationResponseDto>> => {
-  const response = await api.get<CommonResponseDto<NotificationResponseDto>>(`/core/notifications`);
+export const getNotifications = async (): Promise<CommonResponseDto<UserNotification[]>> => {
+  const response = await api.get<CommonResponseDto<UserNotification[]>>(`/core/notifications`);
   return response.data;
 };
 
 // 알림 전부 읽음처리
 export const readAllNotifications = async (): Promise<CommonResponseDto<string>> => {
-  const response = await api.post<CommonResponseDto<string>>(`/core/members/read/all`);
+  const response = await api.post<CommonResponseDto<string>>(`/core/notifications/all`);
   return response.data;
 };
 
 // 알림 읽음처리
-export const readNotification = async (): Promise<CommonResponseDto<string>> => {
-  const response = await api.post<CommonResponseDto<string>>(`/core/members/read/one`);
+export const readNotification = async (data: UserNotification): Promise<CommonResponseDto<string>> => {
+  const response = await api.post<CommonResponseDto<string>>(`/core/members/read/one`, data);
   return response.data;
 };
 
 
 // 알림 조건 삭제
-export const removeNotificationCondition = async (id: number): Promise<CommonResponseDto<string>> => {
-  const response = await api.delete<CommonResponseDto<string>>(`/core/members/remove/${id}`);
+export const removeNotificationCondition = async (id: number): Promise<CommonResponseDto<PriceAlertCondition[]>> => {
+  const response = await api.delete<CommonResponseDto<PriceAlertCondition[]>>(`/core/members/remove/${id}`);
   return response.data;
 };
