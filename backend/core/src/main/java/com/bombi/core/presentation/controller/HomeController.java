@@ -23,9 +23,9 @@ public class HomeController {
 
 	@PostMapping("/core/home")
 	public ResponseEntity<CoreResponseDto<?>> home(
-			@RequestBody HomeRequestDto requestDto,
+			// @RequestBody HomeRequestDto requestDto,
 			@AuthenticationPrincipal UserDetails userDetails) {
-		System.out.println(requestDto.toString());
+		// System.out.println(requestDto.toString());
 		HomeResponseDto responseDto = homeService.homeInfo();
 		return ResponseEntity.ok(CoreResponseDto.of("200", "홈화면 응답", responseDto));
 	}

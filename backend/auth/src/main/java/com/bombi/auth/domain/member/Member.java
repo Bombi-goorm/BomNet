@@ -58,4 +58,8 @@ public class Member extends BaseEntity {
 	public static Member of(String platform, String authEmail, Role role) {
 		return new Member(platform, authEmail, role);
 	}
+
+	public void updateMemberInfo(MemberInfo memberInfo) {
+		this.memberInfo = memberInfo;
+	}
 }
