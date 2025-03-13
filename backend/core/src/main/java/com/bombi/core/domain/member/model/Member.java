@@ -65,6 +65,8 @@ public class Member extends BaseEntity {
         this.platform = platform;
         this.authEmail = authEmail;
         this.role = role;
+        this.isBanned = "F";
+        this.isEnabled = "F";
     }
 
     public static Member of(String platform, String authEmail, Role role) {

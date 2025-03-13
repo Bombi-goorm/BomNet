@@ -1,17 +1,22 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface SearchBarProps {
-  onSelect: (item: string) => void; // 선택된 품목을 부모에 전달할 콜백
+  value: string; // 🔹 부모로부터 초기값 받기 (챗봇 입력)
+  onSelect: (item: string) => void; // 🔹 선택된 품목을 부모에 전달
 }
 
 const defaultSuggestions = ["사과", "배추", "상추", "양파", "파프리카", "아스파라거스"];
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSelect }) => {
-  const [query, setQuery] = useState("");
+const SearchBar: React.FC<SearchBarProps> = ({ value, onSelect }) => {
+  const [query, setQuery] = useState<string>(value); // ✅ 초기값 반영 (챗봇 입력)
   const [suggestions, setSuggestions] = useState(defaultSuggestions);
   const [showSuggestions, setShowSuggestions] = useState(false);
-
   const searchBarRef = useRef<HTMLDivElement | null>(null);
+
+  // ✅ 부모에서 전달된 `value`가 변경되면 `query` 업데이트
+  useEffect(() => {
+    setQuery(value);
+  }, [value]);
 
   // 🔹 **외부 클릭 감지해서 리스트 닫기**
   useEffect(() => {
@@ -28,7 +33,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelect }) => {
   const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     setQuery(input);
-    setShowSuggestions(input.trim() !== "");
+    setShowSuggestions(input.trim() !== ""); // 🔹 입력 중이면 리스트 표시
 
     if (input.trim() === "") {
       setSuggestions(defaultSuggestions);
@@ -40,9 +45,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelect }) => {
     }
   };
 
-  // 🔹 **품목 선택 시: 입력창 업데이트 및 리스트 닫기**
+  // 🔹 **품목 선택 시: 입력창 업데이트 및 부모에 전달**
   const handleItemSelect = (item: string) => {
-    setQuery(item);
+    setQuery(item); // ✅ 선택된 값 입력창 반영
     setShowSuggestions(false);
     onSelect(item);
   };
@@ -57,7 +62,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelect }) => {
 
   return (
     <div ref={searchBarRef} className="bg-white p-4 rounded-lg shadow mb-6 relative">
-       <h2 className="text-xl font-semibold mb-4">📌 상품 검색</h2>
+      <h2 className="text-xl font-semibold mb-4">📌 상품 검색</h2>
       <div className="relative flex items-center">
         <input
           type="text"
@@ -75,7 +80,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelect }) => {
         </button>
       </div>
 
-      {/* 🔹 **검색 리스트 (`ul`) 정렬 및 숨기기 처리** */}
+      {/* 🔹 **자동완성 리스트 (`ul`) ** */}
       {showSuggestions && suggestions.length > 0 && (
         <ul className="absolute left-0 right-0 bg-white border border-gray-300 rounded-lg mt-2 max-h-40 overflow-y-auto shadow-lg z-50 w-full">
           {suggestions.map((item, index) => (
@@ -93,4 +98,4 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelect }) => {
   );
 };
 
-export default SearchBar; 
+export default SearchBar;

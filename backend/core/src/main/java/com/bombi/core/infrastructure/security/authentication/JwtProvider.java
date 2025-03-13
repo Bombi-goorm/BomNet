@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+import com.bombi.core.common.exception.TokenNotFoundException;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -21,6 +23,11 @@ public class JwtProvider {
      * 토큰 유효성 검사
      */
     public boolean validateToken(String token) {
+        if(token == null) {
+            log.info("JwtProvider::validateToken - access token is null");
+            throw new TokenNotFoundException("token is null");
+        }
+
         try {
             // 토큰 파싱
             Claims claims = Jwts.parserBuilder()
@@ -30,7 +37,7 @@ public class JwtProvider {
                     .getBody();
 
             // Check Member ID
-            Long memberId = claims.get("memberId", Long.class);
+            String memberId = claims.getSubject();
             if (memberId == null) {
                 log.warn("JwtProvider::validateToken member ID is null");
                 return false;

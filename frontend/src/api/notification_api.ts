@@ -3,11 +3,11 @@ import { CommonResponseDto } from "../types/member_types";
 
 // Axios 인스턴스 생성
 const api = axios.create({
-    // baseURL: 'https://bomnet.co.kr', // 백엔드 주소
+ // baseURL: import.meta.env.VITE_NOTI_HOST, // 백엔드 주소
     baseURL: 'http://localhost:8184', // 로컬 테스트
     withCredentials: true, // HttpOnly 쿠키를 위한 설정
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': import.meta.env.CONTENT_TYPE,
     },
 });
 

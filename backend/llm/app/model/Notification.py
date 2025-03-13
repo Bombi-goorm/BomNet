@@ -7,8 +7,8 @@ from enum import Enum as PyEnum
 
 
 class NotificationType(PyEnum):
-    WEATHER = "특보"
-    TARGET_PRICE = "지정가"
+    WEATHER = "특보 알림"
+    TARGET_PRICE = "가격 알림"
 
 
 class Notification(Base):
@@ -20,7 +20,7 @@ class Notification(Base):
     product_id = Column(Integer, ForeignKey("product.product_id"), nullable=False, comment="작물 ID")
     notification_type = Column(Enum(NotificationType), nullable=False, comment="알림 종류")
     message = Column(String(255), nullable=True, comment="알림 내용")
-    is_read = Column(String(1), default="N", comment="알림 확인 여부")
+    is_read = Column(String(1), default="F", comment="알림 확인 여부")
 
     member = relationship("Member", back_populates="notifications")
     product = relationship("Product", back_populates="notifications")

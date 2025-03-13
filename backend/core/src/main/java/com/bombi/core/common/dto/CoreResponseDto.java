@@ -24,7 +24,7 @@ public class CoreResponseDto<T> {
     }
 
     public static <T> CoreResponseDto<T> ofSuccess(String message, T data) {
-        return of("SUCCESS", message, data);
+        return of("200", message, data);
     }
 
     public static <T> CoreResponseDto<T> ofSuccess(String message) {

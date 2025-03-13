@@ -40,13 +40,15 @@ public class JwtFilter extends OncePerRequestFilter {
 	private final CustomUserDetailsService customUserDetailsService;
 
 	private static final List<String> EXCLUDED_PATHS = Arrays.asList(
-			"/auth"
+			"/auth", "/login"
 	);
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request,
 									HttpServletResponse response,
 									FilterChain filterChain) throws ServletException, IOException {
+
+		log.info("JwtFilter doFilterInternal request url : {}", request.getRequestURI());
 
 		if (EXCLUDED_PATHS.stream().anyMatch(request.getServletPath()::contains)) {
 			filterChain.doFilter(request, response);

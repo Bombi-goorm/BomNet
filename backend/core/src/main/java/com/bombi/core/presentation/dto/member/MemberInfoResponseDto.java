@@ -3,7 +3,6 @@ package com.bombi.core.presentation.dto.member;
 import java.util.List;
 
 import com.bombi.core.domain.member.model.Member;
-import com.bombi.core.domain.member.model.MemberInfo;
 import com.bombi.core.domain.notificationcondition.model.NotificationCondition;
 import com.bombi.core.domain.region.model.RegionWeather;
 import com.bombi.core.infrastructure.external.bigquery.dto.BigQueryRecommendProductResponseDto;
@@ -22,7 +21,7 @@ public class MemberInfoResponseDto {
 
 	private String memberId;
 	private String email;
-	private String pnuCode;
+	private String pnu;
 	private FarmInfoResponseDto myFarm;
 	private List<RecommendedProductDto> recommendedProducts;
 	private List<NotificationConditionResponseDto> notificationConditions;
@@ -36,10 +35,11 @@ public class MemberInfoResponseDto {
 	{
 		this.memberId = member.getId().toString();
 		this.email = member.getAuthEmail();
-		this.pnuCode = member.getMemberInfo().getPnu();
+		this.pnu = member.getMemberInfo().getPnu();
 		this.myFarm = new FarmInfoResponseDto(regionWeather, characterResponseDto, chemicalResponseDto);
 		this.recommendedProducts = null;
 		this.notificationConditions = member.getNotificationConditions().stream()
+			.filter(NotificationCondition::isActive)
 			.map(NotificationConditionResponseDto::new)
 			.toList();
 	}

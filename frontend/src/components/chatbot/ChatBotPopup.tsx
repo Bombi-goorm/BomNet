@@ -85,6 +85,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
 
     try {
       let response: CommonResponseDto<ChatbotResponseDto> | undefined;
+      console.log(response?.status)
       
         switch (screen) {
           case "alert":
@@ -240,11 +241,9 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
 
       const response = await fetchPrice(requestData);
 
+      console.log(response)
+
       if (response.status === "200") {
-          setMessages((prev) => [
-          ...prev,
-          { type: "bot", content: `🔍 ${userInput}의 품종 중 '${response.data.crop}'를 선택하였습니다.` },
-        ]);
         navigate("/price", { state: response.data });
         return response;
       } else {

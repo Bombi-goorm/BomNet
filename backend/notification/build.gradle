@@ -29,6 +29,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 
+
+
 	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-gcp-pubsub
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-pubsub', version: '1.2.8.RELEASE'
 

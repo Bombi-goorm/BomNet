@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Notification } from "../types/member_types";
-import { getNotifications, readAllNotifications } from "../api/core_api";
+import { UserNotification } from "../types/member_types";
+import { getNotifications, readAllNotifications, readNotification } from "../api/core_api";
 import Header from "../components/Header";
 
 const NotificationList: React.FC = () => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<UserNotification[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   // 알림 데이터를 가져오는 함수
   const fetchNotifications = async () => {
     try {
       const response = await getNotifications();
-      if (response.status === "200" && response.data.notifications) {
-        setNotifications(response.data.notifications);
+      if (response.status === "200") {
+        setNotifications(response.data);
       } else {
         console.error("알림 데이터를 가져올 수 없습니다.");
       }
@@ -55,13 +55,31 @@ const NotificationList: React.FC = () => {
     );
   };
 
-  // 알림 삭제 핸들러
-  const handleDelete = (index: number) => {
-    setNotifications((prev) => prev.filter((_, i) => i !== index));
+  const handleDelete = async (notification: UserNotification) => {
+    try {
+      // 알림 읽음 처리 API 호출
+      const response = await readNotification(notification);
+      
+      if (response.status === '200') {
+        // 상태 업데이트: 읽음 처리된 알림 제거
+        setNotifications((prev) => prev.filter((n) => n.id !== notification.id));
+      } else {
+        console.error("알림 읽음 처리 실패:", response.message);
+      }
+    } catch (error) {
+      console.error("알림 읽음 처리 중 오류 발생:", error);
+    }
   };
 
   if (loading) {
-    return <div className="text-center">로딩 중...</div>;
+    return (
+      <>
+        <Header />
+        <div className="flex items-center justify-center h-screen">
+          <div className="spinner"></div>
+        </div>
+      </>
+    );
   }
 
   return (
@@ -95,7 +113,7 @@ const NotificationList: React.FC = () => {
                 <p className="text-sm text-gray-600">{notification.content}</p>
               </div>
               <button
-                onClick={() => handleDelete(index)}
+                onClick={() => handleDelete(notification)}
                 className="text-red-500 hover:text-red-700"
               >
                 삭제

@@ -1,8 +1,89 @@
 
-import { HomeDto } from "./types/home_types";
+import { BestItems, HomeDto } from "./types/home_types";
 import { FarmData } from "./types/member_types";
 import { PriceResponse } from "./types/price_types";
 import { CultivationInfo, FarmSuitability, Product, ProductResponseDto } from "./types/product_types";
+
+import strawberryImg from "./assets/strawberry.jpg";
+import appleImg from "./assets/apple.jpg";
+import potatoImg from "./assets/potato.jpg";
+import pearImg from "./assets/pear.jpg";
+import goguImg from "./assets/gogu.jpg";
+
+export const bestItemsFix: BestItems = {
+    products: [ //7일
+      {
+        productId: 1,
+        productName: "딸기",
+        imgUrl: strawberryImg,
+          productPrices: [
+          { date: "2025-03-10", price: 6403 },
+          { date: "2025-03-11", price: 6202 },
+          { date: "2025-03-12", price: 6504 },
+          { date: "2025-03-13", price: 6444 },
+          { date: "2025-03-14", price: 6868 },
+          { date: "2025-03-15", price: 6999 },
+          { date: "2025-03-16", price: 6854 },
+        ],
+      },
+      {
+        productId: 2,
+        productName: "사과",
+        imgUrl: appleImg,
+          productPrices: [
+          { date: "2025-03-10", price: 5000 },
+          { date: "2025-03-11", price: 5050 },
+          { date: "2025-03-12", price: 5100 },
+          { date: "2025-03-13", price: 5600 },
+          { date: "2025-03-14", price: 5500 },
+          { date: "2025-03-15", price: 5800 },
+          { date: "2025-03-16", price: 6600 },
+        ],
+      },
+      {
+        productId: 3,
+        productName: "배",
+        imgUrl: pearImg,
+          productPrices: [
+          { date: "2025-03-10", price: 3000 },
+          { date: "2025-03-11", price: 3900 },
+          { date: "2025-03-12", price: 3100 },
+          { date: "2025-03-13", price: 3600 },
+          { date: "2025-03-14", price: 3600 },
+          { date: "2025-03-15", price: 3900 },
+          { date: "2025-03-16", price: 4200 },
+        ],
+      },
+      {
+        productId: 4,
+        productName: "감자",
+        imgUrl: potatoImg,
+          productPrices: [
+          { date: "2025-03-10", price: 2000 },
+          { date: "2025-03-11", price: 1950 },
+          { date: "2025-03-12", price: 2100 },
+          { date: "2025-03-13", price: 2600 },
+          { date: "2025-03-14", price: 3600 },
+          { date: "2025-03-15", price: 3610 },
+          { date: "2025-03-16", price: 3800 },
+        ],
+      },
+      {
+        productId: 5,
+        productName: "고구마",
+        imgUrl: goguImg,
+          productPrices: [
+          { date: "2025-03-10", price: 2000 },
+          { date: "2025-03-11", price: 3200 },
+          { date: "2025-03-12", price: 3800 },
+          { date: "2025-03-13", price: 2600 },
+          { date: "2025-03-14", price: 2600 },
+          { date: "2025-03-15", price: 2800 },
+          { date: "2025-03-16", price: 2500 },
+        ],
+      },
+    ],
+  }
 
 // 홈화면 샘플 데이터
 export const data: HomeDto =  {
@@ -659,23 +740,26 @@ export const priceResponse: PriceResponse = {
   sankeyData: {
     nodes: [
       // 첫 번째 레이어: 품종
-      { name: '홍옥' },  // 0
-      { name: '아오리' }, // 1
-      { name: '후지' },  // 2
+      {name: '홍옥' },  // 0
+      {name: '아오리' }, // 1
+      {name: '후지' },  // 2
+       
       // 두 번째 레이어: 생산지
-      { name: '경북' },  // 3
-      { name: '충북' },  // 4
-      { name: '경남' },  // 5
-      { name: '전북' },  // 6
-      { name: '전남' },  // 7
+      {name: '경북' },  // 3
+      {name: '충북' },  // 4
+      {name: '경남' },  // 5
+      {name: '전북' },  // 6
+      {name: '전남' },  // 7
+
       // 세 번째 레이어: 도매시장
-      { name: '안양도매시장' },    // 8
-      { name: '대구북부도매' },    // 9
-      { name: '포항도매시장' },    // 10
-      { name: '서울가락도매시장' }, // 11
-      { name: '부산도매시장' },     // 12
-      { name: '대구중앙도매시장' }, // 13
-      { name: '인천도매시장' },     // 14
+      {name: '안양도매시장' },    // 8
+      {name: '대구북부도매' },    // 9
+      {name: '포항도매시장' },    // 10
+      {name: '서울가락도매시장' }, // 11
+      {name: '부산도매시장' },     // 12
+      {name: '대구중앙도매시장' }, // 13
+      {name: '인천도매시장' },     // 14
+  
     ],
     links: [
       // Set 1: 품종 -> 기존 생산지 (경북, 충북, 경남)
@@ -746,7 +830,7 @@ export const farmData: FarmData = {
   ph: "6.5", // 산도
   organicMatterGPerKg: "20g/kg", // 유기물
   avPMgPerKg: "15mg/kg", // 유효인산
-  kMgPerKg: "30mg/kg", // 칼륨
+  kmgPerKg: "30mg/kg", // 칼륨
   caMgPerKg: "40mg/kg", // 칼슘
   mgMgPerKg: "10mg/kg" // 마그네슘
 };

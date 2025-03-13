@@ -8,20 +8,21 @@ import { useEffect, useState } from "react";
 import { getHomeInfo, getMemberInfo, pushSubscribtion } from "../api/core_api";
 import { useQueryClient } from "@tanstack/react-query";
 import { BestItems, HomeRequestDto, News, WeatherExpections, WeatherNotice } from "../types/home_types";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../conntext_api/AuthProvider";
+import { bestItemsFix } from "../data_sample";
+
 
 // VAPID 공개 키
-const VAPID_PUBLIC_KEY =
-  "BNCG1iL82tnaqBApiVjuIiP38AoFMbeVLLzlogIG3PM3bcfeRA6CtMs009-Z3Qvy_MIKZdYipQ-L8KpBWR092i4";
+const VAPID_PUBLIC_KEY = import.meta.env.VAPID_PUBLIC_KEY;
 
 const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [, setSubscription] = useState<HomeRequestDto>();
+  const { login } = useAuth();
 
 
   // const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   // Base64 → Uint8Array 변환 함수
   const urlBase64ToUint8Array = (base64String: string) => {
@@ -41,7 +42,11 @@ const HomePage = () => {
     if (!("serviceWorker" in navigator)) return null;
   
     try {
+
+      // @Todo 일부 브라우저에서 워커 등록 안되는 문제 있음 
       const registration = await navigator.serviceWorker.ready;
+
+
       const permission = await Notification.requestPermission();
   
       if (permission !== "granted") {
@@ -93,26 +98,23 @@ const HomePage = () => {
       await subscribeToPushNotifications();
 
       const response = await getHomeInfo();
-      if (response.status !== "200") {
-        navigate("/500");
-        return;
-      }
 
-      queryClient.setQueryData(["products"], response.data.bestItems);
+      queryClient.setQueryData(["products"], bestItemsFix);
       queryClient.setQueryData(["weatherNotice"], response.data.weatherNotice);
       queryClient.setQueryData(["weatherExpect"], response.data.weatherExpect);
       queryClient.setQueryData(["news"], response.data.news);
 
       const memberResponse = await getMemberInfo();
 
-
-
       if (memberResponse.status === "200") {
         sessionStorage.setItem("bomnet_user", memberResponse.data.memberId);
         if (memberResponse.data.pnu) {
           sessionStorage.setItem("bomnet_pnu", memberResponse.data.pnu);
         }
-        // queryClient.setQueryData(["userInfo"], memberResponse.data);
+        login({ 
+          memberId: memberResponse.data.memberId, 
+          pnu: memberResponse.data.pnu || "" 
+        });
       } else {
         console.log("미가입 사용자");
       }
@@ -124,7 +126,7 @@ const HomePage = () => {
   };
 
   fetchUserData();
-}, [queryClient, navigate]);
+}, []);
 
   const productsData = queryClient.getQueryData<BestItems>(["products"]);
   const weatherNoticeData = queryClient.getQueryData<WeatherNotice[]>(["weatherNotice"]);
