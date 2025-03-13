@@ -64,22 +64,24 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 		String refreshToken = tokenProvider.generateRefreshToken(userDetails);
 
 		// 쿠키에 토큰 저장
+		long accessTokenCookieExp = ACCESS_EXP / 1000;
 		ResponseCookie cookie = ResponseCookie.from("access_token", accessToken)
 				.secure(true)
 				.httpOnly(true)
 				.path("/")
 				.sameSite("Strict")
-				.maxAge(ACCESS_EXP)
+				.maxAge(accessTokenCookieExp)
 				.build();
 
 		response.addHeader("Set-Cookie", cookie.toString());
 
+		long refreshTokenCookieExp = REFRESH_EXP / 1000;
 		cookie = ResponseCookie.from("refresh_token", refreshToken)
 				.secure(true)
 				.httpOnly(true)
 				.path("/")
 				.sameSite("Strict")
-				.maxAge(REFRESH_EXP)
+				.maxAge(refreshTokenCookieExp)
 				.build();
 
 		response.addHeader("Set-Cookie", cookie.toString());

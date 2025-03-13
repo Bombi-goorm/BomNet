@@ -2,6 +2,7 @@ package com.bombi.core.presentation.controller;
 
 import com.bombi.core.application.service.MemberService;
 import com.bombi.core.common.dto.CoreResponseDto;
+import com.bombi.core.infrastructure.security.authentication.CustomUserDetails;
 import com.bombi.core.presentation.dto.member.MemberInfoResponseDto;
 import com.bombi.core.presentation.dto.member.MemberRequestDto;
 import com.bombi.core.presentation.dto.member.MemberResponseDto;
@@ -22,7 +23,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping
-    public ResponseEntity<CoreResponseDto<?>> memberInfo(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<CoreResponseDto<?>> memberInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
         MemberInfoResponseDto memberInfoResponseDto = memberService.findMemberInfo(userDetails.getUsername());
         return ResponseEntity.ok(CoreResponseDto.ofSuccess("사용자 조회 성공", memberInfoResponseDto));
     }
@@ -37,7 +38,7 @@ public class MemberController {
 
     @PostMapping("/pnu")
     public ResponseEntity<?> registerPnu(@RequestBody PnuRegisterRequestDto requestDto,
-        @AuthenticationPrincipal UserDetails userDetails) {
+        @AuthenticationPrincipal CustomUserDetails userDetails) {
         memberService.registerPnu(requestDto, userDetails.getUsername());
         return ResponseEntity.ok((CoreResponseDto.ofSuccess("pnu 등록 완료")));
     }
