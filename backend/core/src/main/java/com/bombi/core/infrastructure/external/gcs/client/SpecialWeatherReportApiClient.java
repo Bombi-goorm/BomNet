@@ -30,11 +30,10 @@ public class SpecialWeatherReportApiClient {
 	 * pnu코드를 기반으로 region테이블에서 stationId을 기반으로 조회
 	 * @return
 	 */
-	public SpecialWeatherReportResponse sendSpecialWeatherReport(String stationId) {
-		String query = "select station_id, title, fcst_date_time"
-			+ " from kma.stg_kma__wrn"
-			+ " where station_id = @stationId"
-			+ " and fcst_date_time > @startTmFc"
+	public SpecialWeatherReportResponse sendSpecialWeatherReport(String stn_id) {
+		String query = "select stn_nm, title, fcst_date_time"
+			+ " from kma.int_kma__wrn_alarm"
+			+ " where fcst_date_time > @startTmFc"
 			+ " and fcst_date_time < @endTmFc"
 			+ " order by fcst_date_time desc"
 			+ " limit 6";
@@ -43,7 +42,7 @@ public class SpecialWeatherReportApiClient {
 		String tomorrow = getTomorrowDateTime();
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
-			.addNamedParameter("stationId", QueryParameterValue.string(stationId))
+			.addNamedParameter("stn_nm", QueryParameterValue.string(stn_id))
 			.addNamedParameter("startTmFc", QueryParameterValue.string(today))
 			.addNamedParameter("endTmFc", QueryParameterValue.string(tomorrow))
 			.setUseLegacySql(false)
@@ -87,17 +86,22 @@ public class SpecialWeatherReportApiClient {
 	}
 
 	private SpecialWeatherReport mapJsonToDto(FieldValueList fieldValues) {
-		String stnId = fieldValues.get("station_id").getStringValue();
+		String stnId = fieldValues.get("stn_nm").getStringValue();
 		String title = fieldValues.get("title").getStringValue();
 		String tmFc = fieldValues.get("fcst_date_time").getStringValue();
 
 		String titleString = title.replaceAll(
 			"제\\d{2}-\\d{2}호\\s*:\\s*\\d{4}\\.\\d{2}\\.\\d{2}\\.\\d{2}:\\d{2}\\s*/\\s*", "");
 
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		LocalDateTime tmFcTime = LocalDateTime.parse(tmFc, dateTimeFormatter);
+		DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime dateTime = LocalDateTime.parse(tmFc, inputFormatter);
 
-		return new SpecialWeatherReport(stnId, titleString, tmFcTime);
+		// 출력 포맷: 날짜와 12시간제 시각 + AM/PM, 분/초는 생략
+		DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd ha");
+		String formatted = dateTime.format(outputFormatter);
+
+		return new SpecialWeatherReport(stnId, titleString, formatted);
 	}
+
 
 }
