@@ -1,4 +1,4 @@
-package com.bombi.core.fasttest;
+package com.bombi.core.fasttest.farmInfo;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

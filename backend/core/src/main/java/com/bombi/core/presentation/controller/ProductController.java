@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/core/products")
+@RequestMapping("/core")
 public class ProductController {
 
 	private final ProductSearchService productSearchService;
@@ -33,7 +33,7 @@ public class ProductController {
 		return ResponseEntity.ok(CoreResponseDto.ofSuccess("생산 조건 조회 성공", response));
 	}
 
-	@PostMapping
+	@PostMapping("/item/info")
 	public ResponseEntity<CoreResponseDto<?>> search(
 		@RequestBody ProductSearchRequestDto requestDto,
 		@AuthenticationPrincipal UserDetails userDetails) {
