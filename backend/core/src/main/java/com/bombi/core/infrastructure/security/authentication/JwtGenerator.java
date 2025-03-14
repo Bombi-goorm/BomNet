@@ -23,28 +23,30 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtGenerator {
 
-	public static final String TOKEN_RENEW_REQUEST_URL = "http://localhost:8180/member/renew";
-
 	private final RestTemplate restTemplate;
 
 	/**
 	 * 인증 서버로 갱신 요청
 	 */
 	public String renewToken(String accessToken, String refreshToken) {
-		if(refreshToken == null) {
-			log.error("JwtGenerator::renewToken - refreshToken is null");
-			throw new InvalidTokenException("Refresh token is null");
-		}
+		String requestUrl = "http://localhost:8180/member/renew";
 
 		// request header에 accessToken과 refreshToken 넣기
-		HttpEntity<Object> requestEntity = createRenewRequestHeader(accessToken, refreshToken);
+		String cookieHeader = generateTokenCookie(accessToken, refreshToken);
 
-		// AUTH 서버로 요청 보내기
-		ResponseEntity<String> response = restTemplate.exchange(
-			TOKEN_RENEW_REQUEST_URL,
-			HttpMethod.POST,
-			requestEntity,
-			String.class);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.set(HttpHeaders.COOKIE, cookieHeader);
+
+		HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
+
+
+			// AUTH 서버로 요청 보내기
+			ResponseEntity<?> response = restTemplate.exchange(requestUrl, HttpMethod.POST, requestEntity,
+					String.class);
+
+		System.out.println(response);
+
 
 		if(response.getStatusCode() == HttpStatus.UNAUTHORIZED) {
 			log.error("JwtGenerator::renewToken - token renewal failed");
@@ -55,35 +57,20 @@ public class JwtGenerator {
 		List<String> cookies = response.getHeaders().get(HttpHeaders.SET_COOKIE);
 
 		if (cookies == null || cookies.isEmpty()) {
-			throw new InvalidTokenException("renew failed");
+			throw new IllegalArgumentException("renew failed");
 		}
 
-		return extractNewAccessTokenFromCookie(cookies);
-	}
-
-	private HttpEntity<Object> createRenewRequestHeader(String accessToken, String refreshToken) {
-		String cookieHeader = generateTokenCookie(accessToken, refreshToken);
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set(HttpHeaders.COOKIE, cookieHeader);
-
-		HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
-		return requestEntity;
-	}
-
-	private String generateTokenCookie(String accessToken, String refreshToken) {
-		if (accessToken == null) {
-			return "refresh_token=" + refreshToken;
-		}
-		return "access_token=" + accessToken + "; refresh_token=" + refreshToken;
-	}
-
-	private String extractNewAccessTokenFromCookie(List<String> cookies) {
 		return cookies.stream()
-			.filter(cookie -> cookie.startsWith("access_token="))
-			.map(cookie -> cookie.split(";")[0].split("=")[1])
+			.filter(cookie -> cookie.startsWith("access_token"))
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("renew failed"));
+	}
+
+	private static String generateTokenCookie(String accessToken, String refreshToken) {
+		Cookie accessTokenCookie = new Cookie("access_token", accessToken);
+		Cookie refreshTokenCookie = new Cookie("refresh_token", refreshToken);
+
+		return accessTokenCookie.getName() + "=" + accessTokenCookie.getValue()
+			+ "; " + refreshTokenCookie.getName() + "=" + refreshTokenCookie.getValue();
 	}
 }

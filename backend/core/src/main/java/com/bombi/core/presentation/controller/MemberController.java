@@ -28,14 +28,6 @@ public class MemberController {
         return ResponseEntity.ok(CoreResponseDto.ofSuccess("사용자 조회 성공", memberInfoResponseDto));
     }
 
-    @PostMapping
-    public ResponseEntity<?> registerMember(
-            @RequestBody MemberRequestDto requestDto,
-            @AuthenticationPrincipal UserDetails userDetails){
-        // memberService.registerMember(requestDto, userDetails.);
-        return null;
-    }
-
     @PostMapping("/pnu")
     public ResponseEntity<?> registerPnu(@RequestBody PnuRegisterRequestDto requestDto,
         @AuthenticationPrincipal CustomUserDetails userDetails) {

@@ -13,9 +13,13 @@ public class CultivationInfo {
 
 	private String cultivationContent;
 	private ProductionConditionResponse conditions;
+	private String cultivationFeatures;
+	private String cultivationTips;
 
 	public CultivationInfo(Cultivation cultivation) {
 		this.cultivationContent = cultivation.getCultivationFeatures();
 		this.conditions = new ProductionConditionResponse(cultivation.getProductionCondition());
+		this.cultivationFeatures = cultivation.getCultivationFeatures();
+		this.cultivationTips = cultivation.getCultivationTips();
 	}
 }

@@ -19,7 +19,7 @@ const LiveWeatherTopics: React.FC<LiveWeatherTopicsProps> = ({ weatherNoticeData
             <li key={index} className="text-gray-700 py-2 text-sm md:text-base">
               {notice.location}: {notice.content}{" "}
               <span className="text-xs text-gray-500">
-                ({new Date(notice.dateTime).toLocaleString()})
+                { notice.dateTime }
               </span>
             </li>
           ))

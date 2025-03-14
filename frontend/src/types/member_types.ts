@@ -71,7 +71,7 @@ export interface NotificationResponseDto {
 export interface UserNotification {
     id: number, // 
     title: string, // 가격/특보 알림
-    content: string; // 어디어디 얼마 
-    isRead: string; // T/F
+    content: string; // 내용
+    isRead: string; // T/F 읽음여부
     createDate: string; // 알림 생성일
 }

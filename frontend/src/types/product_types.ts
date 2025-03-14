@@ -4,14 +4,14 @@ export interface ProductRequestDto {
     item?: string, // 품목
     varietyId?: number, // 품종ID
     variety?: string, // 품종
-    PNU?: string, // PNU
+    pnu?: string, // PNU
 }
 
 
 // 상품 응답 Dto
 export interface ProductResponseDto {
     product: Product, // 상품 정보
-    plantCultivation: CultivationInfo, // 상품 재배 정보
+    cultivationInfo: CultivationInfo, // 상품 재배 정보
     farmSuitability: FarmSuitability, // 농장 적합도
 }
 
@@ -35,7 +35,7 @@ export interface CultivationInfo {
     variety: string | null; // 품종명 (품종이 없으면 null)
     conditions: Conditions; // 생산 조건
     cultivationFeatures: string; // 재배 특징 설명
-    managementTips: string; // 관리 팁
+    cultivationTips: string; // 관리 팁
   }
 
 // 생산 조건
@@ -54,11 +54,13 @@ export interface Conditions {
 
 // 농장 적합도
 export interface FarmSuitability {
-    anayize: Anayize[],
+    climateSuitability: SuitabilityResult,
+    soilChemicalSuitability: SuitabilityResult,
+    soilPhysicalSuitability: SuitabilityResult,
 }
 
 // 적합도 분석
-export interface Anayize {
-    reason: string, 
+export interface SuitabilityResult {
+    unsuitableProperties: string[], 
     suitability: string, // 적합도 
 }

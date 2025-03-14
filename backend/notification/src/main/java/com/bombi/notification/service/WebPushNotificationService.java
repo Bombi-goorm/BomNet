@@ -52,14 +52,20 @@ public class WebPushNotificationService {
         ensurePushServiceInitialized();
         String serverUrl = "http://localhost:8183";
 
-
-
         List<PushSubscription> subscriptions = pushSubscriptionRepository.findAll();
         List<com.bombi.notification.entity.Notification> notificationEntities = new ArrayList<>();
 
+
+
         for (String message : messages) {
             // 알림 내용 자연어로 변경
-            String formattedMessage = MessageFormatter.formatMessage(message);
+            String formattedMessage = "";
+            // 주제에 따라 다른 포매터 적용
+            if ("PRICE".equalsIgnoreCase(type)) {
+                formattedMessage = MessageFormatter.formatPriceMessage(message);
+            } else if ("WEATHER".equalsIgnoreCase(type)) {
+                formattedMessage = MessageFormatter.formatWrnMessage(message);
+            }
 
             for (PushSubscription sub : subscriptions) {
                 try {

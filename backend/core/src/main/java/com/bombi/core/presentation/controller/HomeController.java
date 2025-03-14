@@ -1,5 +1,6 @@
 package com.bombi.core.presentation.controller;
 
+import com.bombi.core.infrastructure.security.authentication.CustomUserDetails;
 import com.bombi.core.presentation.dto.home.HomeRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,9 +24,7 @@ public class HomeController {
 
 	@PostMapping("/core/home")
 	public ResponseEntity<CoreResponseDto<?>> home(
-			// @RequestBody HomeRequestDto requestDto,
-			@AuthenticationPrincipal UserDetails userDetails) {
-		// System.out.println(requestDto.toString());
+			@AuthenticationPrincipal CustomUserDetails userDetails) {
 		HomeResponseDto responseDto = homeService.homeInfo();
 		return ResponseEntity.ok(CoreResponseDto.of("200", "홈화면 응답", responseDto));
 	}

@@ -31,11 +31,10 @@ const NotificationList: React.FC = () => {
   const handleReadAll = async () => {
     try {
       const response = await readAllNotifications();
+  
       if (response.status === "200") {
-        // API 호출 성공 시, 모든 알림의 isRead 값을 "T"로 업데이트
-        setNotifications((prev) =>
-          prev.map((notif) => ({ ...notif, isRead: "T" }))
-        );
+        // 읽음 처리 성공 시, 알림 목록 비우기
+        setNotifications([]);
       } else {
         console.error("전체 읽음 처리 실패:", response.message);
       }
