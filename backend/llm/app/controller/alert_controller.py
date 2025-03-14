@@ -1,11 +1,12 @@
 import json, re
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from openai import OpenAI
 from sqlalchemy.orm import Session
 from app.config import settings
 from app.database import get_db
 from app.dto.common_response_dto import CommonResponseDto
 from app.dto.request_dto import ChatbotRequestDto
+from app.member_auth_handler import get_current_member
 from app.model.NotificationCondition import NotificationCondition
 from app.model.Category import Category
 
@@ -13,7 +14,7 @@ alert_router = APIRouter()
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 # 상수 멤버 ID (예시)
-MEMBER_ID = "f74b3c18-c418-4b3e-9f3d-8a6c30f27adf"
+MEMBER_ID = "551653fc-8efb-4bc3-8fae-4053231a3233"
 
 def get_category_hierarchy(category: Category, db: Session):
     """부모(상위) 카테고리부터 현재 카테고리까지의 계층을 조회하는 함수"""
@@ -32,6 +33,11 @@ def get_category_hierarchy(category: Category, db: Session):
 
 @alert_router.post("/set")
 async def create_notification(data: ChatbotRequestDto, db: Session = Depends(get_db)):
+    if not data.member_id:
+        raise HTTPException(status_code=401, detail="멤버를 찾을 수 없습니다.")
+    get_current_member(member_id=data.member_id, db=db)
+
+
     """자연어 분석 후 NotificationCondition을 DB에 저장하고 저장된 데이터를 반환 (Redis 저장 제거)"""
     try:
         # 1. GPT에 JSON 형식으로 결과 출력 요청

@@ -10,6 +10,7 @@ class NotificationType(str, Enum):
 
 
 class ChatbotRequestDto(BaseModel):
+    member_id: str = None
     input: str = None
     bigId: str = None
     midId: str = None

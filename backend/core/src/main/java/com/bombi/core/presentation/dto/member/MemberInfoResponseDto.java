@@ -1,5 +1,6 @@
 package com.bombi.core.presentation.dto.member;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.bombi.core.domain.member.model.Member;
@@ -21,6 +22,7 @@ public class MemberInfoResponseDto {
 
 	private String memberId;
 	private String email;
+	private LocalDateTime joinDate;
 	private String pnu;
 	private FarmInfoResponseDto myFarm;
 	private List<RecommendedProductDto> recommendedProducts;
@@ -35,6 +37,7 @@ public class MemberInfoResponseDto {
 	{
 		this.memberId = member.getId().toString();
 		this.email = member.getAuthEmail();
+		this.joinDate = member.getCreatedDate();
 		this.pnu = member.getMemberInfo().getPnu();
 		this.myFarm = new FarmInfoResponseDto(regionWeather, characterResponseDto, chemicalResponseDto);
 		this.recommendedProducts = null;

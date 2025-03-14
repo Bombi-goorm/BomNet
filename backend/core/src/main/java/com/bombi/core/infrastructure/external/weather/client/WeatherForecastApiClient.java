@@ -1,28 +1,15 @@
 package com.bombi.core.infrastructure.external.weather.client;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.stereotype.Component;
-
-import com.bombi.core.fasttest.weatherforecast.ForecastInfoDto;
 import com.bombi.core.infrastructure.external.weather.dto.WeatherForecastResponse;
 import com.bombi.core.presentation.dto.home.WeatherInfo;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.cloud.bigquery.BigQuery;
-import com.google.cloud.bigquery.FieldValueList;
-import com.google.cloud.bigquery.QueryJobConfiguration;
-import com.google.cloud.bigquery.QueryParameterValue;
-import com.google.cloud.bigquery.TableResult;
-
+import com.google.cloud.bigquery.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -50,8 +37,8 @@ public class WeatherForecastApiClient {
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
 			.addNamedParameter("startFcstTime", QueryParameterValue.string(startTime))
 			.addNamedParameter("endFcstTime", QueryParameterValue.string(endTime))
-			.addNamedParameter("nx", QueryParameterValue.string("38"))
-			.addNamedParameter("ny", QueryParameterValue.string("53"))
+			.addNamedParameter("nx", QueryParameterValue.string("127"))
+			.addNamedParameter("ny", QueryParameterValue.string("60"))
 			.setUseLegacySql(false)
 			.build();
 

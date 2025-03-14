@@ -30,7 +30,7 @@ public class ResponseWriter {
 			jsonResponse = objectMapper.writeValueAsString(responseDto);
 		} catch (IOException e) {
 			// JSON 변환 실패
-			String status = (responseDto.getStatus() != null) ? responseDto.getStatus() : "FAILURE";
+			String status = (responseDto.getStatus() != null) ? responseDto.getStatus() : "400";
 			String message = (responseDto.getMessage() != null) ? responseDto.getMessage() : "요청이 실패했습니다.";
 			jsonResponse = "{\"status\": \"" + status + "\", \"message\": \"" + message + "\"}";
 		}

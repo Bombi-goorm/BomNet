@@ -50,17 +50,6 @@ public class JwtProvider {
         }
     }
 
-    /**
-     * 토큰에서 사용자 ID(memberId) 추출
-     */
-    public Long getMemberIdFromToken(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-        return claims.get("memberId", Long.class);
-    }
 
     /**
      * 토큰에서 사용자 이름(username = email) 추출

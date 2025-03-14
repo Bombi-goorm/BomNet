@@ -9,6 +9,18 @@ import { useAuth } from "../../conntext_api/AuthProvider";
 
 
 const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
+  const storedMemberId = sessionStorage.getItem("bomnet_user") ?? undefined; 
+
+  const [memberId, setMemberId] = useState<string | undefined>(storedMemberId || undefined);
+
+  useEffect(() => {
+    const storedMemberId = sessionStorage.getItem("bomnet_user");
+    if (storedMemberId) {
+      setMemberId(storedMemberId);
+    } else {
+      setMemberId(undefined);
+    }
+  }, []);
 
   const { isAuthenticated } = useAuth();
 
@@ -120,6 +132,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
       // 사용자 입력을 그대로 백엔드에 전달하여 LLM이 정보를 추출하도록 요청
       const response: CommonResponseDto<ChatbotResponseDto> = await fetchAlert({
         input: userInput,
+        memberId: memberId,
       });
   
       // 응답 처리
@@ -162,7 +175,10 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
     if (!userInput.trim()) return;
 
     try {
-      const response: CommonResponseDto<ChatbotResponseDto> = await fetchWeather({ input: userInput });
+      const response: CommonResponseDto<ChatbotResponseDto> = await fetchWeather({
+        input: userInput,
+        memberId: memberId
+      });
 
       if (response.status === "200" && response.data) {
         const { location, weatherInfo } = response.data;
@@ -236,12 +252,12 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
 
       // ✅ API 요청 데이터 (input)
       const requestData: ChatbotRequestDto = {
+        memberId: memberId,
         input: userInput,
       };
 
       const response = await fetchPrice(requestData);
 
-      console.log(response)
 
       if (response.status === "200") {
         navigate("/price", { state: response.data });
@@ -259,7 +275,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
   //  기타 질문 처리 ( 병충해 등 )
   const handleOtherInput = async () => {
     try {
-      const response = await fetchOther({ input: userInput });
+      const response = await fetchOther({ memberId: memberId, input: userInput });
   
       if (!response || !response.data) {
         setMessages((prev) => [...prev, { type: "bot", content: "⛔ 응답을 가져올 수 없습니다." }]);
@@ -280,7 +296,6 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
   const handleBotResponse = (data: ChatbotResponseDto) => {
     let formattedContent = "";
 
-    console.log("🔍 GPT 응답 데이터 확인:", data); // 🔎 디버깅용
 
     //  'intent'가 있을 경우, 보기 좋게 변환
     // const intentText = data.intent?.replace(/[_']/g, " ").trim() || "정보";

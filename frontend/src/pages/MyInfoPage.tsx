@@ -58,7 +58,7 @@ const MyInfoPage = () => {
 
       {/* 사용자 정보 영역 */}
       <div className="container mx-auto p-4 space-y-8 max-w-lg">
-        <UserInformation user={{ email: userInfo.email, pnu: userInfo.pnu, joinDate: "2024-01-01" }} /> 
+        <UserInformation user={{ email: userInfo.email, pnu: userInfo.pnu, joinDate: userInfo.joinDate }} /> 
       </div>
 
       {/* 내 농장 정보 영역 */}
@@ -67,9 +67,9 @@ const MyInfoPage = () => {
       </div>
 
       {/* 추천 생산품 영역 */}
-      <div className="container mx-auto p-4 space-y-8 max-w-[30rem]">
+      {/* <div className="container mx-auto p-4 space-y-8 max-w-[30rem]">
         <RecommendedProducts recommendedProducts={userInfo.recommendedProducts || []} />
-      </div>
+      </div> */}
 
       {/* 가격 조건 목록 영역 */}
       <div className="container mx-auto p-4 space-y-8 max-w-[60rem]">

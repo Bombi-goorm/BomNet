@@ -2,6 +2,7 @@ import { WeatherInfo } from "./home_types";
 
 // 챗봇 요청
 export interface ChatbotRequestDto {
+    memberId?: string;
     input?: string;
     bigId?: string;
     midId?: string;   

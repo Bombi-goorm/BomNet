@@ -18,7 +18,7 @@ public class PubSubSubscriber {
 
     // 🔹 프로덕션 토픽 (가격 & 기상 알림)
     private static final String PRICE_SUBSCRIPTION_ID = "bomnet-test-sub";
-    private static final String WEATHER_SUBSCRIPTION_ID = "bomnet-weather-sub";
+    private static final String WEATHER_SUBSCRIPTION_ID = "bomnet-wrn-topic-sub";
 
     // 개별 큐 (가격 & 기상)
     private final BlockingQueue<String> priceQueue = new LinkedBlockingQueue<>();
@@ -40,10 +40,10 @@ public class PubSubSubscriber {
      */
     public void startSubscribers() {
         startSubscriber(PRICE_SUBSCRIPTION_ID, priceQueue);
-//        startSubscriber(WEATHER_SUBSCRIPTION_ID, weatherQueue);
+        startSubscriber(WEATHER_SUBSCRIPTION_ID, weatherQueue);
 
         Executors.newSingleThreadExecutor().submit(() -> processBatches(priceQueue, "PRICE"));
-//        Executors.newSingleThreadExecutor().submit(() -> processBatches(weatherQueue, "WEATHER"));
+        Executors.newSingleThreadExecutor().submit(() -> processBatches(weatherQueue, "WEATHER"));
     }
 
     private void startSubscriber(String subscriptionId, BlockingQueue<String> queue) {
