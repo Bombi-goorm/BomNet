@@ -1,4 +1,4 @@
-package com.bombi.core.fasttest;
+package com.bombi.core.fasttest.bestproduct;
 
 import java.util.List;
 
@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bombi.core.infrastructure.external.bigquery.client.BestProductPriceApiClient;
-import com.bombi.core.infrastructure.external.bigquery.dto.BestProductPriceResponse;
 import com.bombi.core.presentation.dto.home.ProductPriceResponse;
 
 import lombok.RequiredArgsConstructor;

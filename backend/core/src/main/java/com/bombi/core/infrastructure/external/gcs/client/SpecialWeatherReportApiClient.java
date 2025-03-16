@@ -103,4 +103,5 @@ public class SpecialWeatherReportApiClient {
 		return new SpecialWeatherReport(stnId, titleString, formatted);
 	}
 
+
 }
