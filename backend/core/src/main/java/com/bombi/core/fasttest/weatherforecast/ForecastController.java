@@ -14,13 +14,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ForecastController {
 
-	private final WeatherForecastApiClient client;
+	private final ForecastApiClient client;
 
 	@GetMapping("/weather/forecast")
 	ResponseEntity<?> forecast() {
-		WeatherForecastResponse response = client.sendWeatherForecast();
-		WeatherExpection weatherExpection = new WeatherExpection(response);
-
-		return ResponseEntity.ok(weatherExpection);
+		ResponseEntity<ForecastApiResponse> responseEntity = client.sendWeatherForecast(55, 127);
+		return ResponseEntity.ok(responseEntity.getBody());
+		// return ResponseEntity.ok(response);
 	}
 }
