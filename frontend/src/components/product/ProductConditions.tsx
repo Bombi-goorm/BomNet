@@ -1,4 +1,3 @@
-// src/components/product/ProductConditions.tsx
 import React from "react";
 import { ProductResponseDto } from "../../types/product_types";
 
@@ -7,8 +6,10 @@ interface ProductConditionsProps {
 }
 
 const ProductConditions: React.FC<ProductConditionsProps> = ({ productData }) => {
-  const { product, plantCultivation } = productData;
-  const { conditions, cultivationFeatures, managementTips } = plantCultivation;
+  const { product, cultivationInfo } = productData;
+  const { conditions, cultivationFeatures, cultivationTips } = cultivationInfo;
+
+  console.log(productData)
 
   return (
     <div className="bg-white p-6 rounded-lg shadow flex flex-col md:flex-row">
@@ -16,14 +17,14 @@ const ProductConditions: React.FC<ProductConditionsProps> = ({ productData }) =>
       <div className="w-full md:w-1/3 mb-6 md:mb-0">
         <img
           src={product.imgUrl}
-          alt={`${plantCultivation.cropName} ${plantCultivation.variety ? `(${plantCultivation.variety})` : ""}`}
+          alt={`${cultivationInfo.cropName} ${cultivationInfo.variety ? `(${cultivationInfo.variety})` : ""}`}
           className="rounded-lg w-full h-auto"
         />
       </div>
       {/* 상세 정보 */}
       <div className="w-full md:w-2/3 pl-0 md:pl-6">
         <h2 className="text-xl font-semibold mb-4">
-          {plantCultivation.cropName} {plantCultivation.variety ? `(${plantCultivation.variety})` : ""}
+          {cultivationInfo.cropName} {cultivationInfo.variety ? `(${cultivationInfo.variety})` : ""}
         </h2>
         <p className="mb-6">{cultivationFeatures}</p>
         {/* 생산 조건 */}
@@ -40,7 +41,7 @@ const ProductConditions: React.FC<ProductConditionsProps> = ({ productData }) =>
         {/* 관리 팁 */}
         <div className="bg-gray-100 p-4 rounded-lg mt-4">
           <h3 className="text-lg font-semibold mb-4">🌾 관리 팁</h3>
-          <p>{managementTips}</p>
+          <p>{cultivationTips}</p>
         </div>
       </div>
     </div>

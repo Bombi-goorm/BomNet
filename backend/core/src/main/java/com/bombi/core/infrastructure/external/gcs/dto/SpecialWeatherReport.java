@@ -16,6 +16,7 @@ public class SpecialWeatherReport {
 	// private LocalDateTime tmFc; // 발표 시간
 	private String tmFc;
 
+
 	public SpecialWeatherReport(String stnId, String title, String tmFc) {
 		this.stnId = stnId;
 		this.title = title;

@@ -8,6 +8,7 @@ from app.database import get_db
 from app.dto.common_response_dto import CommonResponseDto
 from app.dto.request_dto import ChatbotRequestDto
 from app.dto.response_dto import PriceResponseDto
+from app.member_auth_handler import get_current_member
 from app.model.Category import Category
 from app.model.Product import Product
 
@@ -16,6 +17,12 @@ price_router = APIRouter()
 
 @price_router.post("/info", response_model=CommonResponseDto[str])
 async def get_price(data: ChatbotRequestDto, db: Session = Depends(get_db)):
+
+    if not data.member_id:
+        raise HTTPException(status_code=401, detail="멤버를 찾을 수 없습니다.")
+    get_current_member(member_id=data.member_id, db=db)
+
+
     """
     ✅ 중분류(품목) 입력이 존재하는지 확인
     """

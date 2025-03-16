@@ -24,6 +24,8 @@ public class ProductController {
 
 	private final ProductSearchService productSearchService;
 
+
+
 	@GetMapping
 	public ResponseEntity<CoreResponseDto<?>> search(
 		@RequestParam(value = "midId") Long midId,

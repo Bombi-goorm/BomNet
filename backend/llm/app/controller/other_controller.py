@@ -1,10 +1,14 @@
 import json
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Depends
 from openai import OpenAI
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
+
 from app.dto.common_response_dto import CommonResponseDto
 from app.dto.request_dto import ChatbotRequestDto
 from app.config import settings
+from app.member_auth_handler import get_current_member
+from app.database import get_db
 
 other_router = APIRouter()
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
@@ -18,7 +22,14 @@ class GPTResponse(BaseModel):
 
 
 @other_router.post("/request", response_model=CommonResponseDto[GPTResponse])
-async def ask_other_question(data: ChatbotRequestDto):
+async def ask_other_question(data: ChatbotRequestDto, db: Session = Depends(get_db)):
+
+    if not data.member_id:
+        raise HTTPException(status_code=401, detail="멤버를 찾을 수 없습니다.")
+    get_current_member(member_id=data.member_id, db=db)
+
+
+
     """🌱 자연어 분석 기반의 GPT API - 다양한 농업 관련 질문 처리"""
 
     try:

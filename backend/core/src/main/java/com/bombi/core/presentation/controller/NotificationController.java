@@ -56,5 +56,4 @@ public class NotificationController {
 			userDetails.getUsername());
 		return ResponseEntity.ok(CoreResponseDto.ofSuccess("알림 전체 읽기 성공", response));
 	}
-
 }

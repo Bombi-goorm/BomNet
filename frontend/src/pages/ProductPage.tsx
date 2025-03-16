@@ -7,6 +7,7 @@ import { productInfo } from "../api/core_api";
 import { CommonResponseDto } from "../types/member_types";
 import { ProductRequestDto, ProductResponseDto } from "../types/product_types";
 
+
 const ProductPage = () => {
   const [productData, setProductData] = useState<ProductResponseDto | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -18,18 +19,18 @@ const ProductPage = () => {
       const requestData: ProductRequestDto = {
         item: searchCriteria.item,
         variety: searchCriteria.variety,
-        PNU: searchCriteria.pnu
+        pnu: searchCriteria.pnu
       };
-
       // API 호출 (상품 정보 조회)
       const response: CommonResponseDto<ProductResponseDto> = await productInfo(requestData);
+
+
       if (response.status === "200") {
         setProductData(response.data);
       } else {
         alert("데이터 조회 실패: " + response.message);
       }
     } catch (error) {
-      console.error("API 요청 실패:", error);
     } finally {
       setLoading(false);
     }

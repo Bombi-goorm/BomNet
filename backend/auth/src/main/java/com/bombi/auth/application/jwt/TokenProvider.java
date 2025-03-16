@@ -20,9 +20,7 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Slf4j
@@ -45,8 +43,13 @@ public class TokenProvider {
 
 	@PostConstruct
 	public void init() {
+		// Base64 디코딩하여 키 생성
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		this.key = Keys.hmacShaKeyFor(keyBytes);
+
+		// FastAPI에서 사용할 Base64 인코딩된 키 출력
+		String encodedKey = Base64.getEncoder().encodeToString(key.getEncoded());
+		System.out.println("Base64 Encoded Key for FastAPI: " + encodedKey);
 	}
 
 	private Key getSigningKey() {

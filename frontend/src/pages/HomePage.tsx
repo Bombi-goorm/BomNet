@@ -99,6 +99,8 @@ const HomePage = () => {
 
       const response = await getHomeInfo();
 
+      console.log(response.data)
+
       queryClient.setQueryData(["products"], bestItemsFix);
       queryClient.setQueryData(["weatherNotice"], response.data.weatherNotice);
       queryClient.setQueryData(["weatherExpect"], response.data.weatherExpect);
