@@ -15,11 +15,18 @@ import lombok.RequiredArgsConstructor;
 public class ForecastController {
 
 	private final ForecastApiClient client;
+	private final WeatherForecastApiClient weatherForecastClient;
+
+	// @GetMapping("/weather/forecast")
+	// ResponseEntity<?> forecast() {
+	// 	ResponseEntity<ForecastApiResponse> responseEntity = client.sendWeatherForecast(55, 127);
+	// 	return ResponseEntity.ok(responseEntity.getBody());
+	// 	// return ResponseEntity.ok(response);
+	// }
 
 	@GetMapping("/weather/forecast")
-	ResponseEntity<?> forecast() {
-		ResponseEntity<ForecastApiResponse> responseEntity = client.sendWeatherForecast(55, 127);
-		return ResponseEntity.ok(responseEntity.getBody());
-		// return ResponseEntity.ok(response);
+	ResponseEntity<WeatherForecastResponse> getForecast() {
+		WeatherForecastResponse response = weatherForecastClient.sendWeatherForecast("119", "61");
+		return ResponseEntity.ok(response);
 	}
 }

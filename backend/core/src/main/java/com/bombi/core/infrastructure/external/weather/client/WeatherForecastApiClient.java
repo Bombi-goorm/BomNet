@@ -21,13 +21,13 @@ public class WeatherForecastApiClient {
 	 * 단기 예보 조회
 	 * @return
 	 */
-	public WeatherForecastResponse sendWeatherForecast() {
+	public WeatherForecastResponse sendWeatherForecast(String nx, String ny) {
 
 		String query = "SELECT"
 			+ " *"
 			+ " FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
-			// + " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
-			+ " WHERE nx = @nx AND ny = @ny"
+			+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
+			+ " AND nx = @nx AND ny = @ny"
 			+ " ORDER BY fcst_date_time"
 			+ " LIMIT 10";
 
@@ -35,15 +35,20 @@ public class WeatherForecastApiClient {
 		String endTime = getForecastEndTime();
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
-			// .addNamedParameter("startFcstTime", QueryParameterValue.string(startTime))
-			// .addNamedParameter("endFcstTime", QueryParameterValue.string(endTime))
-			.addNamedParameter("nx", QueryParameterValue.string("127"))
-			.addNamedParameter("ny", QueryParameterValue.string("60"))
+			.addNamedParameter("startFcstTime", QueryParameterValue.string(startTime))
+			.addNamedParameter("endFcstTime", QueryParameterValue.string(endTime))
+			.addNamedParameter("nx", QueryParameterValue.string(nx))
+			.addNamedParameter("ny", QueryParameterValue.string(ny))
 			.setUseLegacySql(false)
 			.build();
 
 		try {
 			TableResult tableResult = bigQuery.query(queryConfig);
+
+			for (FieldValueList value : tableResult.getValues()) {
+				System.out.print("x = " + value.get("nx"));
+				System.out.println(" y = " + value.get("ny"));
+			}
 
 			List<WeatherInfo> weatherInfos = new ArrayList<>();
 			for (FieldValueList fieldValues : tableResult.iterateAll()) {
@@ -67,12 +72,12 @@ public class WeatherForecastApiClient {
 	}
 
 	private String getForecastStartTime() {
-		LocalDateTime localDateTime = LocalDateTime.now();
+		LocalDateTime localDateTime = LocalDateTime.now().minusDays(3L);
 		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 	}
 
 	private String getForecastEndTime() {
-		LocalDateTime localDateTime = LocalDateTime.now().plusHours(6L);
+		LocalDateTime localDateTime = LocalDateTime.now().minusDays(3L).plusHours(6L);
 		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 	}
 

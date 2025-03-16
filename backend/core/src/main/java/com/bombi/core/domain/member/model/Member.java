@@ -100,4 +100,9 @@ public class Member extends BaseEntity {
     public void registerSubscription(PushSubscription pushSubscription) {
         this.pushSubscriptions.put(pushSubscription.getDeviceType(), pushSubscription);
     }
+
+    public String getSidoCode() {
+        return memberInfo.getSiDoCode();
+    }
+
 }
