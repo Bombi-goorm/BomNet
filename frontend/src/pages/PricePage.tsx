@@ -11,6 +11,7 @@ import SankeyChart from "../components/price/SankeyChart";
 import { itemPriceSearch } from "../api/core_api";
 import { CommonResponseDto } from "../types/member_types";
 import { ProductRequestDto } from "../types/product_types";
+import { priceResponse1 } from "../data_sample";
 
 const PricePage = () => {
   const location = useLocation();
@@ -24,10 +25,13 @@ const PricePage = () => {
   const fetchPriceData = async (item: string) => {
     if (!item) return; // 🔹 item이 빈 값일 경우 요청 방지
 
+    const priceData = priceResponse1;
+
     setLoading(true);
     try {
       const requestData: ProductRequestDto = { item };
       const response: CommonResponseDto<PriceResponse> = await itemPriceSearch(requestData);
+      
 
       if (response.status === "200") {
         setPriceResponse(response.data);
@@ -70,10 +74,10 @@ const PricePage = () => {
             </div>}
           {priceResponse && (
             <>
-              <AuctionPriceChart priceData={priceResponse} />
-              <PriceHistoryChart priceData={priceResponse} />
-              <QualityChart priceData={priceResponse} />
-              <RegionalPriceChart priceData={priceResponse} />
+              <AuctionPriceChart priceData={priceResponse1} />
+              <PriceHistoryChart priceData={priceResponse1} />
+              <QualityChart priceData={priceResponse1} />
+              <RegionalPriceChart priceData={priceResponse1} />
               <SankeyChart priceData={priceResponse} />
             </>
           )}

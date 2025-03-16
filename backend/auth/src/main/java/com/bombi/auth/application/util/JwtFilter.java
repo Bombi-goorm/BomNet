@@ -58,7 +58,6 @@ public class JwtFilter extends OncePerRequestFilter {
 		}
 
 		try {
-			// 쿠키에서 토큰 추출
 			Cookie[] cookies = request.getCookies();
 			if (cookies == null) {
 				filterChain.doFilter(request, response);
@@ -76,85 +75,75 @@ public class JwtFilter extends OncePerRequestFilter {
 				}
 			}
 
-			// 토큰이 모두 만료되거나 없는 경우
-			if (accessToken == null && refreshToken == null) {
+			// 토큰이 둘 다 없으면 필터 패스
+			if ((accessToken == null || accessToken.trim().isEmpty()) &&
+					(refreshToken == null || refreshToken.trim().isEmpty())) {
 				filterChain.doFilter(request, response);
 				return;
 			}
 
-			String memberId;
-			try {
-				// 만료된 토큰에서도 사용자 ID 추출
-				Claims claims = tokenProvider.extractAllClaims(accessToken == null ? refreshToken : accessToken);
-				memberId = claims.getSubject();
-			} catch (ExpiredJwtException e) {
-				log.warn("Access token expired. Attempting to refresh token.");
-				Claims claims = e.getClaims();
-				memberId = claims.getSubject();
-			}
+			String memberId = null;
+			CustomUserDetails userDetails = null;
 
-			// 이미 인증된 경우 스킵
-			if (SecurityContextHolder.getContext().getAuthentication() != null) {
-				filterChain.doFilter(request, response);
-				return;
-			}
+			accessToken = null;
 
-			// 사용자 정보 로드
-			CustomUserDetails userDetails = customUserDetailsService.loadUserByUsername(memberId);
-			if (userDetails == null) {
-				throw new InvalidTokenException("사용자 정보를 찾을 수 없습니다.");
-			}
-
-
-			// Access 토큰 검증
+			// Step 1: access_token 존재할 경우만 검증 시도
 			if (accessToken != null) {
 				try {
 					Claims claims = tokenProvider.extractAllClaims(accessToken);
 					memberId = claims.getSubject();
-				} catch (ExpiredJwtException e) {
-					log.warn("Access token expired. Attempting to use refresh token.");
-					memberId = e.getClaims().getSubject();
-				}
-
-				if (memberId != null) {
 					userDetails = customUserDetailsService.loadUserByUsername(memberId);
+
 					if (tokenProvider.validateAccessToken(accessToken, userDetails)) {
 						authenticateUser(request, userDetails);
 						filterChain.doFilter(request, response);
 						return;
 					}
+				} catch (ExpiredJwtException e) {
+					log.warn("Access token expired, fallback to refresh token.");
+					memberId = e.getClaims().getSubject();
+				} catch (Exception e) {
+					log.error("Access token invalid, fallback to refresh token.", e);
 				}
 			}
-			// Access 토큰이 만료되었거나 없는 경우, Refresh 토큰으로 갱신
-			if (refreshToken != null) {
-				tokenProvider.validateRefreshToken(refreshToken);
+
+			// Step 2: refresh_token으로 재발급 시도
+			if (refreshToken != null && !refreshToken.trim().isEmpty()) {
+				try {
+					tokenProvider.validateRefreshToken(refreshToken);
 
 
-				if (memberId == null) {
-					Claims claims = tokenProvider.extractAllClaims(refreshToken);
-					memberId = claims.getSubject();
+					if (memberId == null) {
+						Claims refreshClaims = tokenProvider.extractAllClaims(refreshToken);
+						memberId = refreshClaims.getSubject();
+					}
+
 					userDetails = customUserDetailsService.loadUserByUsername(memberId);
+					String newAccessToken = tokenProvider.generateAccessToken(userDetails);
+
+
+					ResponseCookie newAccessTokenCookie = ResponseCookie.from("access_token", newAccessToken)
+							.secure(true)
+							.httpOnly(true)
+							.path("/")
+							.sameSite("Strict")
+							.maxAge(ACCESS_EXP / 1000)
+							.build();
+					response.addHeader(HttpHeaders.SET_COOKIE, newAccessTokenCookie.toString());
+
+					authenticateUser(request, userDetails);
+					log.debug("Token refreshed and authentication successful for member: {}", memberId);
+
+					filterChain.doFilter(request, response);
+					return;
+				} catch (Exception e) {
+					log.error("Refresh token invalid.", e);
+					throw new InvalidTokenException("Refresh token validation failed.");
 				}
-
-				String newAccessToken = tokenProvider.generateAccessToken(userDetails);
-				long accessTokenCookieExp = ACCESS_EXP / 1000;
-				ResponseCookie newAccessTokenCookie = ResponseCookie.from("access_token", newAccessToken)
-						.secure(true)
-						.httpOnly(true)
-						.path("/")
-						.sameSite("Strict")
-						.maxAge(accessTokenCookieExp)
-						.build();
-				response.addHeader(HttpHeaders.SET_COOKIE, newAccessTokenCookie.toString());
-				authenticateUser(request, userDetails);
-
-				log.debug("Token refreshed and authentication successful for member: {}", memberId);
-			} else {
-				// Refresh 토큰도 만료된 경우
-				throw new InvalidTokenException("토큰이 만료되었습니다.");
 			}
 
-			filterChain.doFilter(request, response);
+			// Step 3: 둘 다 실패
+			throw new InvalidTokenException("No valid tokens found.");
 
 		} catch (InvalidTokenException e) {
 			log.error("Token validation error: {}", e.getMessage());

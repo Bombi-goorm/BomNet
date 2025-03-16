@@ -31,39 +31,41 @@ public class JwtGenerator {
 	public String renewToken(String accessToken, String refreshToken) {
 		String requestUrl = "http://localhost:8180/member/renew";
 
-		// request header에 accessToken과 refreshToken 넣기
+		// Header에 쿠키 설정
 		String cookieHeader = generateTokenCookie(accessToken, refreshToken);
-
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set(HttpHeaders.COOKIE, cookieHeader);
 
 		HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
 
+		ResponseEntity<?> response = restTemplate.exchange(requestUrl, HttpMethod.POST, requestEntity, String.class);
 
-			// AUTH 서버로 요청 보내기
-			ResponseEntity<?> response = restTemplate.exchange(requestUrl, HttpMethod.POST, requestEntity,
-					String.class);
+		log.info("renew response :: {}", response);
 
-		System.out.println(response);
-
-
-		if(response.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+		if (response.getStatusCode() == HttpStatus.UNAUTHORIZED) {
 			log.error("JwtGenerator::renewToken - token renewal failed");
 			throw new InvalidTokenException("token renewal failed");
 		}
 
-		// accessToken 추출
 		List<String> cookies = response.getHeaders().get(HttpHeaders.SET_COOKIE);
-
 		if (cookies == null || cookies.isEmpty()) {
-			throw new IllegalArgumentException("renew failed");
+			throw new IllegalArgumentException("renew failed: no cookies");
 		}
 
-		return cookies.stream()
-			.filter(cookie -> cookie.startsWith("access_token"))
-			.findFirst()
-			.orElseThrow(() -> new IllegalArgumentException("renew failed"));
+		// access_token 쿠키 문자열에서 JWT 부분만 추출
+		String fullCookie = cookies.stream()
+				.filter(cookie -> cookie.startsWith("access_token"))
+				.findFirst()
+				.orElseThrow(() -> new IllegalArgumentException("renew failed: no access_token cookie"));
+
+		log.info("renewed access_token fullCookie :: {}", fullCookie);
+
+		// "access_token=eyJ...; Path=/..." 형식 → "="으로 split 후 첫 번째 값 제외, ";"로 split해서 토큰만 추출
+		String tokenPart = fullCookie.split(";")[0]; // access_token=eyJ...
+		String tokenValue = tokenPart.split("=")[1]; // eyJ...
+
+		return tokenValue;
 	}
 
 	private static String generateTokenCookie(String accessToken, String refreshToken) {

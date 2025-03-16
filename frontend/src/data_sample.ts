@@ -538,12 +538,12 @@ export const sampleFarmSuitability: FarmSuitability = {
 
 export const productResponse: ProductResponseDto = {
   product: sampleProductData[0], // 상품 정보
-  plantCultivation: sampleCultivationData[0], // 상품 재배 정보
+  cultivationInfo: sampleCultivationData[0], // 상품 재배 정보
   farmSuitability: sampleFarmSuitability,
 }
 
 // 가격 샘플 데이터
-export const priceResponse: PriceResponse = {
+export const priceResponse1: PriceResponse = {
   annual: [
     // 홍옥
     { id: 1, variety: "홍옥", dateTime: "2015", price: 2513 },

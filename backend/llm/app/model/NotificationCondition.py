@@ -10,7 +10,7 @@ class NotificationCondition(Base):
     target_price: Mapped[int] = mapped_column(String, nullable=False, comment="지정가")
     price_direction: Mapped[str] = mapped_column(String(1), default="U", comment="가격 방향성(U/D)")
     active: Mapped[str] = mapped_column(String(1), default="T", comment="알림 조건 활성화 여부")
-    member_id: Mapped[int] = mapped_column(Integer, ForeignKey("member.id"), nullable=False, comment="멤버 ID")
+    member_id: Mapped[str] = mapped_column(String(36), ForeignKey("member.member_id"), nullable=False, comment="멤버 ID")
 
     # 가격알림용 임시 속성
     category: Mapped[Optional[str]] = mapped_column(String, nullable=True, comment="대분류")

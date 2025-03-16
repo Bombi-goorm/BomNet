@@ -13,7 +13,7 @@ from app.database import engine, Base
 app = FastAPI()
 
 # ✅ JWT 미들웨어 추가 (⚡ 올바른 방식)
-# app.add_middleware(JwtFilter)
+app.add_middleware(JwtFilter)
 
 # DB 테이블 생성
 Base.metadata.create_all(bind=engine)

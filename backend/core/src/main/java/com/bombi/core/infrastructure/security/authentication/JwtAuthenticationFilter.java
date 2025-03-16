@@ -74,6 +74,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 log.info("access token expired or not found. start renewing token");
                 String renewedAccessToken = jwtGenerator.renewToken(accessToken, refreshToken);
 
+                System.out.println("renewd:::");
+                System.out.println(renewedAccessToken);
+
                 // set-cookie의 access_token에 새로 발급한 토큰을 지정
                 addNewTokenCookieInHeader(response, renewedAccessToken);
 

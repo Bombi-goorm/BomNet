@@ -32,12 +32,13 @@ export interface RecommendedProduct {
 
 // 알림 조건 목록
 export interface PriceAlertCondition {
-    id: number,
-    item: string,
-    variety: string,
-    markets: string,
-    price: string,
-    isActive: string,
+    id?: number,
+    item?: string,
+    variety?: string,
+    markets?: string,
+    price?: string,
+    isActive?: string,
+    notificationConditionId?: number,
 }
 
 
