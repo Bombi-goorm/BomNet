@@ -1,4 +1,4 @@
-package com.bombi.core.fasttest.pricechart;
+package com.bombi.core.presentation.dto.price.chart;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +17,9 @@ public class LinkInformation {
 		this.value = value;
 	}
 
-	public static LinkInformation of(SankeyLinkDto sankeyLinkDto) {
-		return new LinkInformation(sankeyLinkDto.getSource(), sankeyLinkDto.getTarget(), sankeyLinkDto.getValue());
+	public LinkInformation(long source, long target, String value) {
+		this.source = String.valueOf(source);
+		this.target = String.valueOf(target);
+		this.value = value;
 	}
-
 }

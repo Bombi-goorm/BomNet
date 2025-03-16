@@ -1,4 +1,4 @@
-package com.bombi.core.fasttest.pricechart;
+package com.bombi.core.presentation.dto.price.chart;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TotalNodeInfo {
 
+	private String id;
 	private String name;
 
-	public TotalNodeInfo(String name) {
+	public TotalNodeInfo(long id, String name) {
+		this.id = String.valueOf(id);
 		this.name = name;
 	}
 }

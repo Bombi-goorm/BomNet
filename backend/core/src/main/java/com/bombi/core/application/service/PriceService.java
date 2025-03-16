@@ -1,49 +1,32 @@
-package com.bombi.core.fasttest.pricechart;
+package com.bombi.core.application.service;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
-import com.bombi.core.infrastructure.external.chart.client.PriceChartLinkApiClient;
-import com.bombi.core.infrastructure.external.chart.client.PriceChartNodeApiClient;
 import com.bombi.core.infrastructure.external.chart.dto.ChartLinkInfo;
 import com.bombi.core.infrastructure.external.chart.dto.ChartNodeInfo;
 import com.bombi.core.presentation.dto.price.chart.LinkInformation;
-import com.bombi.core.presentation.dto.price.chart.SankeyDataResponseDto;
+import com.bombi.core.infrastructure.external.chart.client.PriceChartLinkApiClient;
+import com.bombi.core.infrastructure.external.chart.client.PriceChartNodeApiClient;
 import com.bombi.core.presentation.dto.price.chart.TotalNodeInfo;
+import com.bombi.core.presentation.dto.price.OverallPriceInfoResponse;
 
 import lombok.RequiredArgsConstructor;
 
-@RestController
+@Service
 @RequiredArgsConstructor
-@RequestMapping("/product/chart")
-public class PriceChartController {
+public class PriceService {
 
 	private final PriceChartNodeApiClient priceChartNodeApiClient;
 	private final PriceChartLinkApiClient priceChartLinkApiClient;
 
-	@GetMapping("/node")
-	ResponseEntity<?> priceNode() {
-		List<ChartNodeInfo> response = priceChartNodeApiClient.getNodes("사과", "2025-03-07");
-		return ResponseEntity.ok(response);
-	}
-
-	@GetMapping("/link")
-	ResponseEntity<?> priceLink() {
-		List<ChartLinkInfo> response = priceChartLinkApiClient.getLinks("사과", "2025-03-07");
-		return ResponseEntity.ok(response);
-	}
-
-	@GetMapping
-	public ResponseEntity<?> priceLinkAndNodeChart() {
-		String date = "2025-03-07";
+	public OverallPriceInfoResponse findAllPrice() {
 		String item = "사과";
+		String date = "2025-03-07";
 
 		// 전체 노드 정보
 		List<ChartNodeInfo> nodeInfos = priceChartNodeApiClient.getNodes(item, date);
@@ -82,14 +65,13 @@ public class PriceChartController {
 			.sorted(Comparator.comparing(ChartNodeInfo::getId))
 			.toList();
 
-		List<TotalNodeInfo> totalNodeInfos = createTotalNodeIfno(productNodeInfos, areaNodeInfos, marketNodeInfos);
-		List<LinkInformation> linkInformations = createLinkInfo(linksFromProductToArea, linksFromAreaToMarket);
+		List<TotalNodeInfo> totalNodeInfos = createTotalNodeInfo(productNodeInfos, areaNodeInfos, marketNodeInfos);
+		List<LinkInformation> totalLinkInfos = createLinkInfo(linksFromProductToArea, linksFromAreaToMarket);
 
-		SankeyDataResponseDto response = new SankeyDataResponseDto(totalNodeInfos, linkInformations);
-		return ResponseEntity.ok(response);
+		return new OverallPriceInfoResponse(totalNodeInfos, totalLinkInfos);
 	}
 
-	private List<TotalNodeInfo> createTotalNodeIfno(
+	private List<TotalNodeInfo> createTotalNodeInfo(
 		List<ChartNodeInfo> productNodeInfos,
 		List<ChartNodeInfo> areaNodeInfos,
 		List<ChartNodeInfo> marketNodeInfos)
@@ -108,5 +90,4 @@ public class PriceChartController {
 			.map(link -> new LinkInformation(link.getSource(), link.getTarget(), link.getValue()))
 			.toList();
 	}
-
 }

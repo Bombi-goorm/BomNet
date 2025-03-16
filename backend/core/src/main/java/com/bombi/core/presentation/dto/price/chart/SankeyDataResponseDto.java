@@ -1,8 +1,6 @@
-package com.bombi.core.fasttest.pricechart;
+package com.bombi.core.presentation.dto.price.chart;
 
 import java.util.List;
-
-import org.springframework.http.ResponseEntity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
