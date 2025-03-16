@@ -1,4 +1,4 @@
-package com.bombi.core.fasttest;
+package com.bombi.core.fasttest.soilInfo;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,10 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bombi.core.infrastructure.external.soil.client.SoilCharacterApiClient;
 import com.bombi.core.infrastructure.external.soil.client.SoilChemicalApiClient;
-import com.bombi.core.infrastructure.external.soil.client.SoilSectionApiClient;
 import com.bombi.core.infrastructure.external.soil.dto.SoilCharacterResponseDto;
 import com.bombi.core.infrastructure.external.soil.dto.SoilChemicalResponseDto;
-import com.bombi.core.infrastructure.external.soil.dto.SoilSectionResponseDto;
 
 import lombok.RequiredArgsConstructor;
 
