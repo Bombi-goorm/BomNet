@@ -19,6 +19,8 @@ spring:
 
 gcp:
   projectId: ${PROJECT_ID}
+  pubsub:
+    credentials: ${GOOGLE_APPLICATION_CREDENTIALS}
   sub:
     price: ${PRICE_SUBSCRIPTION_ID}
     weather: ${WEATHER_SUBSCRIPTION_ID}
