@@ -17,14 +17,14 @@ AUTH_SERVER_URL = os.getenv("AUTH_SERVER_URL")
 JWT_SECRET = os.getenv("JWT_SECRET")
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")  # 기본 알고리즘 설정
 
-print("✅ AUTH_SERVER_URL:", AUTH_SERVER_URL)
-print("✅ JWT_SECRET:", JWT_SECRET)  # 보안상 직접 출력 X
-print("✅ JWT_ALGORITHM:", JWT_ALGORITHM)
+# print("✅ AUTH_SERVER_URL:", AUTH_SERVER_URL)
+# print("✅ JWT_SECRET:", JWT_SECRET)  # 보안상 직접 출력 X
+# print("✅ JWT_ALGORITHM:", JWT_ALGORITHM)
 
 # 🚨 여기서 추가 해싱하지 말고, 그대로 사용!
 
 
-print("✅ JWT_SECRET_KEY 생성 완료")
+# print("✅ JWT_SECRET_KEY 생성 완료")
 
 def get_db():
     """ 데이터베이스 세션 생성 """
