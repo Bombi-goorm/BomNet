@@ -10,13 +10,8 @@ spring:
 
   cloud:
     gcp:
-      project-id: ${GCP_PROJECT_ID}
-      storage:
-        credentials:
-          location: ${GCS_CREDENTIAL}
       bigquery:
-        credentials:
-          location: ${BIGQUERY_CREDENTIAL}
+          credentials-json: ${BIGQUERY_CREDENTIAL}
 
 
   data:
