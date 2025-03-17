@@ -13,6 +13,7 @@ const api = axios.create({
 });
 
 
+
 export const chatHealth = async (): Promise<string> => {
   const response = await api.get<string>(`/llm/health`);
   return response.data; 
