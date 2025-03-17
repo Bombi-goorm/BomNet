@@ -29,4 +29,3 @@ server:
 vapid:
   public: ${VAPID_PUBLIC}
   private: ${VAPID_PRIVATE}
-  subject: ${VAPID_SUB}
