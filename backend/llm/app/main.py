@@ -7,7 +7,7 @@ from app.controller.base_controller import base_router
 from app.controller.other_controller import other_router
 from app.controller.price_controller import price_router
 # from app.controller.weather_controller import weather_router
-from database import engine, Base
+from app.database import engine, Base
 
 # FastAPI 앱 생성
 app = FastAPI()
