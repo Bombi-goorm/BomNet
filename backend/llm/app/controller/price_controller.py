@@ -1,5 +1,3 @@
-import random
-
 from fastapi import HTTPException, APIRouter, Depends
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
@@ -7,10 +5,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.dto.common_response_dto import CommonResponseDto
 from app.dto.request_dto import ChatbotRequestDto
-from app.dto.response_dto import PriceResponseDto
-from app.member_auth_handler import get_current_member
 from app.model.Category import Category
-from app.model.Product import Product
 
 price_router = APIRouter()
 

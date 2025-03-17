@@ -1,30 +1,20 @@
 import base64
-import hashlib
-import hmac
 import os
-import requests
+
 import jwt
+import requests
+from fastapi import Request, HTTPException
 from jwt import ExpiredSignatureError, InvalidTokenError
-from fastapi import Request, HTTPException, Depends
-from sqlalchemy import UUID
-from starlette.middleware.base import BaseHTTPMiddleware
 from sqlalchemy.orm import Session
+from starlette.middleware.base import BaseHTTPMiddleware
+
+from app.config import settings
 from app.database import SessionLocal
 from app.model import Member
 
-# ✅ 환경변수 가져오기
-AUTH_SERVER_URL = os.getenv("AUTH_SERVER_URL")
-JWT_SECRET = os.getenv("JWT_SECRET")
-JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")  # 기본 알고리즘 설정
-
-# print("✅ AUTH_SERVER_URL:", AUTH_SERVER_URL)
-# print("✅ JWT_SECRET:", JWT_SECRET)  # 보안상 직접 출력 X
-# print("✅ JWT_ALGORITHM:", JWT_ALGORITHM)
-
-# 🚨 여기서 추가 해싱하지 말고, 그대로 사용!
-
-
-# print("✅ JWT_SECRET_KEY 생성 완료")
+AUTH_SERVER_URL = settings.AUTH_SERVER_URL
+JWT_SECRET = settings.JWT_SECRET
+JWT_ALGORITHM = settings.JWT_ALGORITHM
 
 def get_db():
     """ 데이터베이스 세션 생성 """
