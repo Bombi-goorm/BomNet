@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.model import Member
 
+
 def get_current_member(member_id: str, db: Session = Depends(get_db)):
 
     if not member_id:
