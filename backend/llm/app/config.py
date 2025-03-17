@@ -9,7 +9,6 @@ load_dotenv(dotenv_path)  # ✅ 강제 로드
 class Settings(BaseSettings):
     # ✅ 인증 관련
     AUTH_SERVER_URL: str
-    JWT_PUBLIC_KEY_PATH: str
     JWT_SECRET: str
     JWT_ALGORITHM: str
 
