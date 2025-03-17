@@ -29,7 +29,7 @@ class JwtFilter(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next):
         # ✅ 헬스 체크 URL 우회
-        if request.url.path.startswith("/llm/health"):
+        if request.url.path.startswith("/llm/base/health"):
             print("LLM::Healthy")
             return await call_next(request)
 
