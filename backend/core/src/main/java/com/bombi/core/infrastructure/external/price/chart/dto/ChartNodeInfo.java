@@ -1,4 +1,4 @@
-package com.bombi.core.infrastructure.external.chart.dto;
+package com.bombi.core.infrastructure.external.price.chart.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,5 +13,9 @@ public class ChartNodeInfo {
 	public ChartNodeInfo(long nodeId, String nodeName) {
 		this.id = nodeId;
 		this.name = nodeName;
+	}
+
+	public void updateId(int id) {
+		this.id = id;
 	}
 }

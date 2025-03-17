@@ -17,4 +17,6 @@ public interface RegionRepository extends JpaRepository<Region, Long> {
 
 	@Query("select r.siGunGuName from Region r where r.stationNumber = :stationNumber")
 	Optional<Region> findSiDoNameByStationNumber(String stationNumber);
+
+	Optional<Region> findByStationName(String stationName);
 }

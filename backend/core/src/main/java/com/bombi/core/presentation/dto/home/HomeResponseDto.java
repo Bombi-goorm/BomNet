@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.bombi.core.infrastructure.external.gcs.dto.SpecialWeatherReportResponse;
 import com.bombi.core.infrastructure.external.naver.dto.news.NaverNewsResponse;
-import com.bombi.core.infrastructure.external.weather.dto.WeatherForecastResponse;
 import com.bombi.core.presentation.dto.weather.WeatherNoticeResponseDto;
 
 import lombok.Getter;
@@ -22,13 +21,13 @@ public class HomeResponseDto {
 	public HomeResponseDto(
 		List<ProductPriceResponse> productPriceResponses,
 		SpecialWeatherReportResponse specialWeatherReport,
-		WeatherForecastResponse weatherForecastResponse,
+		WeatherExpection weatherForecastResponse,
 		NaverNewsResponse naverNewsResponse) {
 		this.bestItems = new BestItem(productPriceResponses);
 		this.weatherNotice = specialWeatherReport.getItem().stream()
 			.map(WeatherNoticeResponseDto::new)
 			.toList();
-		this.weatherExpection = new WeatherExpection(weatherForecastResponse);
+		this.weatherExpection = weatherForecastResponse;
 		this.news = naverNewsResponse.getItems()
 			.stream()
 			.map(NewsResponseDto::new)

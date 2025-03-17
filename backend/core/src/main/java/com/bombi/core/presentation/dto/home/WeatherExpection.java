@@ -2,6 +2,7 @@ package com.bombi.core.presentation.dto.home;
 
 import java.util.List;
 
+import com.bombi.core.domain.region.model.Region;
 import com.bombi.core.infrastructure.external.weather.dto.WeatherForecastResponse;
 
 import lombok.Getter;
@@ -17,5 +18,10 @@ public class WeatherExpection {
 	public WeatherExpection(WeatherForecastResponse weatherForecastResponse) {
 		this.location = "제주";
 		this.weatherInfo = weatherForecastResponse.getWeatherInfos();
+	}
+
+	public WeatherExpection(Region region, List<WeatherInfo> weatherInfos) {
+		this.location = region.getStationName();
+		this.weatherInfo = weatherInfos;
 	}
 }

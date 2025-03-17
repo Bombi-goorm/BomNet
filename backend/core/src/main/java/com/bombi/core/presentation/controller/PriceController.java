@@ -18,7 +18,7 @@ public class PriceController {
 
 	@PostMapping("/core/item/price")
 	public ResponseEntity<?> overallPrice() {
-		OverallPriceInfoResponse response = priceService.findAllPrice();
+		OverallPriceInfoResponse response = priceService.findItemFlow("사과", "2025-03-07");
 		return ResponseEntity.ok(CoreResponseDto.ofSuccess("가격 정보 조회 성공", response));
 	}
 
