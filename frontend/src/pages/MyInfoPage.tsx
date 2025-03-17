@@ -3,7 +3,6 @@ import Header from "../components/Header";
 import UserInformation from "../components/myinfo/UserInformation";
 import PriceAlertList from "../components/myinfo/PriceAlertList";
 import FarmAssessment from "../components/myinfo/FarmAssessment";
-import RecommendedProducts from "../components/myinfo/RecommendedProducts";
 
 
 // 타입 정의

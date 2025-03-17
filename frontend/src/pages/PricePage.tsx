@@ -11,6 +11,7 @@ import SankeyChart from "../components/price/SankeyChart";
 import { itemPriceSearch } from "../api/core_api";
 import { CommonResponseDto } from "../types/member_types";
 import { ProductRequestDto } from "../types/product_types";
+import { priceResponse1 } from "../data_sample";
 
 const PricePage = () => {
   const location = useLocation();
@@ -28,6 +29,7 @@ const PricePage = () => {
     try {
       const requestData: ProductRequestDto = { item };
       const response: CommonResponseDto<PriceResponse> = await itemPriceSearch(requestData);
+      
 
       if (response.status === "200") {
         setPriceResponse(response.data);
@@ -70,11 +72,11 @@ const PricePage = () => {
             </div>}
           {priceResponse && (
             <>
-              <AuctionPriceChart priceData={priceResponse} />
-              <PriceHistoryChart priceData={priceResponse} />
-              <QualityChart priceData={priceResponse} />
-              <RegionalPriceChart priceData={priceResponse} />
-              <SankeyChart priceData={priceResponse} />
+              <AuctionPriceChart priceData={priceResponse1} />
+              <PriceHistoryChart priceData={priceResponse1} />
+              <QualityChart priceData={priceResponse1} />
+              <RegionalPriceChart priceData={priceResponse1} />
+              <SankeyChart priceData={priceResponse1} />
             </>
           )}
         </main>

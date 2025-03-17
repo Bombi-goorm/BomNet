@@ -3,7 +3,7 @@ import { CommonResponseDto, InfoResponseDto, PriceAlertCondition, SignupRequestD
 import { HomeDto, HomeRequestDto } from "../types/home_types";
 import { PriceResponse } from "../types/price_types";
 import { ProductRequestDto, ProductResponseDto } from "../types/product_types";
-import { data, priceResponse, productResponse } from "../data_sample";
+// import { data, priceResponse, productResponse } from "../data_sample";
 
 // Axios 인스턴스 생성
 const api = axios.create({
@@ -49,18 +49,19 @@ export const getHomeInfo = async (): Promise<CommonResponseDto<HomeDto>> => {
 
 // 품목 가격정보 검색 - 비인증
 export const itemPriceSearch = async (data: ProductRequestDto): Promise<CommonResponseDto<PriceResponse>> => {
-  // const response = await api.post<CommonResponseDto<PriceResponse>>('/core/item/price', data);   
-  // return response.data;
-  return {
-    status: "200",  // API 응답 형식에 맞춰 success 값 추가
-    message: "가격 데이터를 성공적으로 조회했습니다.",
-    data: priceResponse, // 로컬에 있는 priceResponse 반환
-  };
+  const response = await api.post<CommonResponseDto<PriceResponse>>('/core/item/price', data);  
+  console.log(response.data) 
+  return response.data;
+  // return {
+  //   status: "200",  // API 응답 형식에 맞춰 success 값 추가
+  //   message: "가격 데이터를 성공적으로 조회했습니다.",
+  //   data: priceResponse, // 로컬에 있는 priceResponse 반환
+  // };
 };
 
 // 상품 + PNU로 재배조건 및 적합도 평가
 export const productInfo = async (data: ProductRequestDto): Promise<CommonResponseDto<ProductResponseDto>> => {
-  const response = await api.post<CommonResponseDto<ProductResponseDto>>(`/core/products`, data);
+  const response = await api.post<CommonResponseDto<ProductResponseDto>>(`/core/item/info`, data);
   return response.data;
   // return {
   //   status: "200",  
@@ -91,7 +92,7 @@ export const readNotification = async (data: UserNotification): Promise<CommonRe
 
 
 // 알림 조건 삭제
-export const removeNotificationCondition = async (id: number): Promise<CommonResponseDto<PriceAlertCondition[]>> => {
-  const response = await api.delete<CommonResponseDto<PriceAlertCondition[]>>(`/core/members/remove/${id}`);
+export const removeNotificationCondition = async (data: PriceAlertCondition): Promise<CommonResponseDto<PriceAlertCondition[]>> => {
+  const response = await api.post<CommonResponseDto<PriceAlertCondition[]>>(`/notification/condition`, data);
   return response.data;
 };

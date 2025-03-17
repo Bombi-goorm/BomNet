@@ -24,9 +24,9 @@ class GPTResponse(BaseModel):
 @other_router.post("/request", response_model=CommonResponseDto[GPTResponse])
 async def ask_other_question(data: ChatbotRequestDto, db: Session = Depends(get_db)):
 
-    if not data.member_id:
-        raise HTTPException(status_code=401, detail="멤버를 찾을 수 없습니다.")
-    get_current_member(member_id=data.member_id, db=db)
+    # if not data.member_id:
+    #     raise HTTPException(status_code=401, detail="멤버를 찾을 수 없습니다.")
+    # get_current_member(member_id=data.member_id, db=db)
 
 
 

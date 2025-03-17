@@ -2,7 +2,7 @@
 import { BestItems, HomeDto } from "./types/home_types";
 import { FarmData } from "./types/member_types";
 import { PriceResponse } from "./types/price_types";
-import { CultivationInfo, FarmSuitability, Product, ProductResponseDto } from "./types/product_types";
+// import { CultivationInfo, FarmSuitability, Product, ProductResponseDto } from "./types/product_types";
 
 import strawberryImg from "./assets/strawberry.jpg";
 import appleImg from "./assets/apple.jpg";
@@ -293,257 +293,257 @@ export const ITEM_VARIETY_MAP = [
 // ------- 생산품 페이지
 
 
-// 상품 정보 데이터
-export const sampleProductData: Product[] = [
-  {
-    productId: 1,
-    categoryId: 100,
-    category: "과일",
-    itemId: 101,
-    item: "사과",
-    varietyId: 102,
-    variety: "홍옥",
-    imgUrl: "https://s3.amazonaws.com/my-bucket/products/apple_hongok.jpg"
-  },
-  {
-    productId: 2,
-    categoryId: 100,
-    category: "과일",
-    itemId: 101,
-    item: "사과",
-    varietyId: 103,
-    variety: "후지",
-    imgUrl: "https://s3.amazonaws.com/my-bucket/products/apple_fuji.jpg"
-  },
-  {
-    productId: 3,
-    categoryId: 100,
-    category: "과일",
-    itemId: 101,
-    item: "사과",
-    varietyId: 104,
-    variety: "아오리",
-    imgUrl: "https://s3.amazonaws.com/my-bucket/products/apple_aori.jpg"
-  },
-  {
-    productId: 4,
-    categoryId: 200,
-    category: "채소",
-    itemId: 201,
-    item: "배추",
-    varietyId: 202,
-    variety: "월동배추",
-    imgUrl: "https://s3.amazonaws.com/my-bucket/products/cabbage_winter.jpg"
-  },
-  {
-    productId: 5,
-    categoryId: 200,
-    category: "채소",
-    itemId: 201,
-    item: "배추",
-    varietyId: 203,
-    variety: "고랭지배추",
-    imgUrl: "https://s3.amazonaws.com/my-bucket/products/cabbage_highland.jpg"
-  },
-  {
-    productId: 6,
-    categoryId: 300,
-    category: "채소",
-    itemId: 301,
-    item: "양파",
-    varietyId: 302,
-    variety: "양파(일반)",
-    imgUrl: "https://s3.amazonaws.com/my-bucket/products/onion_normal.jpg"
-  },
-  {
-    productId: 7,
-    categoryId: 300,
-    category: "채소",
-    itemId: 301,
-    item: "양파",
-    varietyId: 303,
-    variety: "양파(수입)",
-    imgUrl: "https://s3.amazonaws.com/my-bucket/products/onion_import.jpg"
-  },
-  {
-    productId: 8,
-    categoryId: 400,
-    category: "채소",
-    itemId: 401,
-    item: "상추",
-    varietyId: 402,
-    variety: "적상추",
-    imgUrl: "https://s3.amazonaws.com/my-bucket/products/lettuce_red.jpg"
-  },
-  {
-    productId: 9,
-    categoryId: 500,
-    category: "채소",
-    itemId: 501,
-    item: "파프리카",
-    varietyId: 502,
-    variety: "파프리카",
-    imgUrl: "https://s3.amazonaws.com/my-bucket/products/paprika.jpg"
-  },
-  {
-    productId: 10,
-    categoryId: 600,
-    category: "채소",
-    itemId: 601,
-    item: "아스파라거스",
-    varietyId: 602,
-    variety: "녹색",
-    imgUrl: "https://s3.amazonaws.com/my-bucket/products/asparagus_green.jpg"
-  }
-];
+// // 상품 정보 데이터
+// export const sampleProductData: Product[] = [
+//   {
+//     productId: 1,
+//     categoryId: 100,
+//     category: "과일",
+//     itemId: 101,
+//     item: "사과",
+//     varietyId: 102,
+//     variety: "홍옥",
+//     imgUrl: "https://s3.amazonaws.com/my-bucket/products/apple_hongok.jpg"
+//   },
+//   {
+//     productId: 2,
+//     categoryId: 100,
+//     category: "과일",
+//     itemId: 101,
+//     item: "사과",
+//     varietyId: 103,
+//     variety: "후지",
+//     imgUrl: "https://s3.amazonaws.com/my-bucket/products/apple_fuji.jpg"
+//   },
+//   {
+//     productId: 3,
+//     categoryId: 100,
+//     category: "과일",
+//     itemId: 101,
+//     item: "사과",
+//     varietyId: 104,
+//     variety: "아오리",
+//     imgUrl: "https://s3.amazonaws.com/my-bucket/products/apple_aori.jpg"
+//   },
+//   {
+//     productId: 4,
+//     categoryId: 200,
+//     category: "채소",
+//     itemId: 201,
+//     item: "배추",
+//     varietyId: 202,
+//     variety: "월동배추",
+//     imgUrl: "https://s3.amazonaws.com/my-bucket/products/cabbage_winter.jpg"
+//   },
+//   {
+//     productId: 5,
+//     categoryId: 200,
+//     category: "채소",
+//     itemId: 201,
+//     item: "배추",
+//     varietyId: 203,
+//     variety: "고랭지배추",
+//     imgUrl: "https://s3.amazonaws.com/my-bucket/products/cabbage_highland.jpg"
+//   },
+//   {
+//     productId: 6,
+//     categoryId: 300,
+//     category: "채소",
+//     itemId: 301,
+//     item: "양파",
+//     varietyId: 302,
+//     variety: "양파(일반)",
+//     imgUrl: "https://s3.amazonaws.com/my-bucket/products/onion_normal.jpg"
+//   },
+//   {
+//     productId: 7,
+//     categoryId: 300,
+//     category: "채소",
+//     itemId: 301,
+//     item: "양파",
+//     varietyId: 303,
+//     variety: "양파(수입)",
+//     imgUrl: "https://s3.amazonaws.com/my-bucket/products/onion_import.jpg"
+//   },
+//   {
+//     productId: 8,
+//     categoryId: 400,
+//     category: "채소",
+//     itemId: 401,
+//     item: "상추",
+//     varietyId: 402,
+//     variety: "적상추",
+//     imgUrl: "https://s3.amazonaws.com/my-bucket/products/lettuce_red.jpg"
+//   },
+//   {
+//     productId: 9,
+//     categoryId: 500,
+//     category: "채소",
+//     itemId: 501,
+//     item: "파프리카",
+//     varietyId: 502,
+//     variety: "파프리카",
+//     imgUrl: "https://s3.amazonaws.com/my-bucket/products/paprika.jpg"
+//   },
+//   {
+//     productId: 10,
+//     categoryId: 600,
+//     category: "채소",
+//     itemId: 601,
+//     item: "아스파라거스",
+//     varietyId: 602,
+//     variety: "녹색",
+//     imgUrl: "https://s3.amazonaws.com/my-bucket/products/asparagus_green.jpg"
+//   }
+// ];
 
-// 재배 정보 데이터
-export const sampleCultivationData: CultivationInfo[] = [
-  {
-    productId: 1,
-    cropName: "사과",
-    variety: "홍옥",
-    conditions: {
-      overwintering: "T", // 월동 가능
-      avgTemperatureC: "10.0",
-      minTemperatureC: "-20.0",
-      maxTemperatureC: "35.0",
-      annualRainfallMM: "1100.0",
-      sunlightHours: "2000.0",
-      drainage: "양호",
-      soilDepth: "80.0",
-      pH: "6.2"
-    },
-    cultivationFeatures:
-      "온대성 과수로서 15-24°C가 적정 생육온도이며, 겨울철 -20°C 이하에서도 내한성이 강한 품종이 있음. 개화기에는 서리 피해에 주의해야 하며, 일조량이 많을수록 착색이 우수함.",
-    managementTips:
-      "겨울 전정으로 착과 수를 조절하고, 여름철 가지 유인을 통해 통풍과 광합성을 극대화해야 함. 병충해 방지를 위해 적절한 방제 및 봉지 씌우기에 신경 써야 함."
-  },
-  {
-    productId: 4,
-    cropName: "배추",
-    variety: "월동배추",
-    conditions: {
-      overwintering: "T",
-      avgTemperatureC: "4.0",
-      minTemperatureC: "-15.0",
-      maxTemperatureC: "22.0",
-      annualRainfallMM: "900.0",
-      sunlightHours: "1600.0",
-      drainage: "양호-약간양호",
-      soilDepth: "50.0",
-      pH: "6.5"
-    },
-    cultivationFeatures:
-      "냉량성 작물로, 월동배추는 -10°C 이하에서도 생육 가능. 발아 적온은 20-25°C이며, 고온기(여름철)에는 생육이 억제될 수 있음.",
-    managementTips:
-      "충분한 시비 관리로 결구율을 높이고, 생리장해 예방 필요. 진딧물 및 노린재 방제 필수. 장마철 습해 방지를 위해 배수로 정비 철저."
-  },
-  {
-    productId: 6,
-    cropName: "양파",
-    variety: "양파(일반)",
-    conditions: {
-      overwintering: "F",
-      avgTemperatureC: "12.0",
-      minTemperatureC: "-3.0",
-      maxTemperatureC: "30.0",
-      annualRainfallMM: "1000.0",
-      sunlightHours: "1600.0",
-      drainage: "양호-약간불량",
-      soilDepth: "50.0",
-      pH: "6.2"
-    },
-    cultivationFeatures:
-      "온대 및 온난 지역에서 재배 가능하며, 발아 적온은 15-25°C. 생육 최적 온도는 17°C이며, 배수가 잘되는 토양이 필요함.",
-    managementTips:
-      "생육 초기에 충분한 관수 필요. 파밤나방, 총채벌레 방제 필수. 수확 후 0-4°C의 저온 저장 필요."
-  },
-  {
-    productId: 8,
-    cropName: "상추",
-    variety: "적상추",
-    conditions: {
-      overwintering: "F",
-      avgTemperatureC: "16.5",
-      minTemperatureC: "0.0",
-      maxTemperatureC: "28.0",
-      annualRainfallMM: "1100.0",
-      sunlightHours: "1750.0",
-      drainage: "양호-약간양호",
-      soilDepth: "50.0",
-      pH: "6.3"
-    },
-    cultivationFeatures:
-      "냉량성 작물로 15-20°C에서 생육이 가장 활발하며, 30°C 이상에서는 생육 저해 및 화아분화(꽃대 올라옴) 발생.",
-    managementTips:
-      "여름철 고온기에는 차광망을 이용한 온도 조절이 필수. 수확 전 질소 과다 시비를 피해야 질산염 농도 증가 방지 가능. 진딧물 및 노린재 방제 필요."
-  },
-  {
-    productId: 9,
-    cropName: "파프리카",
-    variety: "파프리카",
-    conditions: {
-      overwintering: "F",
-      avgTemperatureC: "19.5",
-      minTemperatureC: "5.0",
-      maxTemperatureC: "32.0",
-      annualRainfallMM: "1300.0",
-      sunlightHours: "2200.0",
-      drainage: "양호-약간양호",
-      soilDepth: "50.0",
-      pH: "6.1"
-    },
-    cultivationFeatures:
-      "재배 기간이 길며, 토양 pH 6.0-6.5에서 잘 자라고, 배수가 잘 되는 유기물 함량이 높은 토양이 적합함.",
-    managementTips:
-      "병해충(흰가루병, 탄저병) 예방을 위해 환기 및 습도 조절 필수. 적절한 줄기 유인 및 가지치기로 광합성 효율을 극대화해야 함."
-  },
-  {
-    productId: 10,
-    cropName: "아스파라거스",
-    variety: "녹색",
-    conditions: {
-      overwintering: "T",
-      avgTemperatureC: "15.5",
-      minTemperatureC: "-5.0",
-      maxTemperatureC: "30.0",
-      annualRainfallMM: "1200.0",
-      sunlightHours: "2000.0",
-      drainage: "양호-약간양호",
-      soilDepth: "50.0",
-      pH: "6.5"
-    },
-    cultivationFeatures:
-      "다년생 작물로, 첫 수확까지 2-3년이 필요하며, 최적 생육 온도는 16-20°C.",
-    managementTips:
-      "봄철 새순이 나오기 전에는 덮개 관리 및 보온이 중요. 과습에 약하므로 배수 관리를 철저히 해야 함."
-  }
-];
+// // 재배 정보 데이터
+// export const sampleCultivationData: CultivationInfo[] = [
+//   {
+//     productId: 1,
+//     cropName: "사과",
+//     variety: "홍옥",
+//     conditions: {
+//       overwintering: "T", // 월동 가능
+//       avgTemperatureC: "10.0",
+//       minTemperatureC: "-20.0",
+//       maxTemperatureC: "35.0",
+//       annualRainfallMM: "1100.0",
+//       sunlightHours: "2000.0",
+//       drainage: "양호",
+//       soilDepth: "80.0",
+//       pH: "6.2"
+//     },
+//     cultivationFeatures:
+//       "온대성 과수로서 15-24°C가 적정 생육온도이며, 겨울철 -20°C 이하에서도 내한성이 강한 품종이 있음. 개화기에는 서리 피해에 주의해야 하며, 일조량이 많을수록 착색이 우수함.",
+//     managementTips:
+//       "겨울 전정으로 착과 수를 조절하고, 여름철 가지 유인을 통해 통풍과 광합성을 극대화해야 함. 병충해 방지를 위해 적절한 방제 및 봉지 씌우기에 신경 써야 함."
+//   },
+//   {
+//     productId: 4,
+//     cropName: "배추",
+//     variety: "월동배추",
+//     conditions: {
+//       overwintering: "T",
+//       avgTemperatureC: "4.0",
+//       minTemperatureC: "-15.0",
+//       maxTemperatureC: "22.0",
+//       annualRainfallMM: "900.0",
+//       sunlightHours: "1600.0",
+//       drainage: "양호-약간양호",
+//       soilDepth: "50.0",
+//       pH: "6.5"
+//     },
+//     cultivationFeatures:
+//       "냉량성 작물로, 월동배추는 -10°C 이하에서도 생육 가능. 발아 적온은 20-25°C이며, 고온기(여름철)에는 생육이 억제될 수 있음.",
+//     managementTips:
+//       "충분한 시비 관리로 결구율을 높이고, 생리장해 예방 필요. 진딧물 및 노린재 방제 필수. 장마철 습해 방지를 위해 배수로 정비 철저."
+//   },
+//   {
+//     productId: 6,
+//     cropName: "양파",
+//     variety: "양파(일반)",
+//     conditions: {
+//       overwintering: "F",
+//       avgTemperatureC: "12.0",
+//       minTemperatureC: "-3.0",
+//       maxTemperatureC: "30.0",
+//       annualRainfallMM: "1000.0",
+//       sunlightHours: "1600.0",
+//       drainage: "양호-약간불량",
+//       soilDepth: "50.0",
+//       pH: "6.2"
+//     },
+//     cultivationFeatures:
+//       "온대 및 온난 지역에서 재배 가능하며, 발아 적온은 15-25°C. 생육 최적 온도는 17°C이며, 배수가 잘되는 토양이 필요함.",
+//     managementTips:
+//       "생육 초기에 충분한 관수 필요. 파밤나방, 총채벌레 방제 필수. 수확 후 0-4°C의 저온 저장 필요."
+//   },
+//   {
+//     productId: 8,
+//     cropName: "상추",
+//     variety: "적상추",
+//     conditions: {
+//       overwintering: "F",
+//       avgTemperatureC: "16.5",
+//       minTemperatureC: "0.0",
+//       maxTemperatureC: "28.0",
+//       annualRainfallMM: "1100.0",
+//       sunlightHours: "1750.0",
+//       drainage: "양호-약간양호",
+//       soilDepth: "50.0",
+//       pH: "6.3"
+//     },
+//     cultivationFeatures:
+//       "냉량성 작물로 15-20°C에서 생육이 가장 활발하며, 30°C 이상에서는 생육 저해 및 화아분화(꽃대 올라옴) 발생.",
+//     managementTips:
+//       "여름철 고온기에는 차광망을 이용한 온도 조절이 필수. 수확 전 질소 과다 시비를 피해야 질산염 농도 증가 방지 가능. 진딧물 및 노린재 방제 필요."
+//   },
+//   {
+//     productId: 9,
+//     cropName: "파프리카",
+//     variety: "파프리카",
+//     conditions: {
+//       overwintering: "F",
+//       avgTemperatureC: "19.5",
+//       minTemperatureC: "5.0",
+//       maxTemperatureC: "32.0",
+//       annualRainfallMM: "1300.0",
+//       sunlightHours: "2200.0",
+//       drainage: "양호-약간양호",
+//       soilDepth: "50.0",
+//       pH: "6.1"
+//     },
+//     cultivationFeatures:
+//       "재배 기간이 길며, 토양 pH 6.0-6.5에서 잘 자라고, 배수가 잘 되는 유기물 함량이 높은 토양이 적합함.",
+//     managementTips:
+//       "병해충(흰가루병, 탄저병) 예방을 위해 환기 및 습도 조절 필수. 적절한 줄기 유인 및 가지치기로 광합성 효율을 극대화해야 함."
+//   },
+//   {
+//     productId: 10,
+//     cropName: "아스파라거스",
+//     variety: "녹색",
+//     conditions: {
+//       overwintering: "T",
+//       avgTemperatureC: "15.5",
+//       minTemperatureC: "-5.0",
+//       maxTemperatureC: "30.0",
+//       annualRainfallMM: "1200.0",
+//       sunlightHours: "2000.0",
+//       drainage: "양호-약간양호",
+//       soilDepth: "50.0",
+//       pH: "6.5"
+//     },
+//     cultivationFeatures:
+//       "다년생 작물로, 첫 수확까지 2-3년이 필요하며, 최적 생육 온도는 16-20°C.",
+//     managementTips:
+//       "봄철 새순이 나오기 전에는 덮개 관리 및 보온이 중요. 과습에 약하므로 배수 관리를 철저히 해야 함."
+//   }
+// ];
 
 // 농장 적합도
-export const sampleFarmSuitability: FarmSuitability = {
-  anayize: [
-    { reason: "월동여부", suitability: "적합" },
-    { reason: "평균 기온", suitability: "평균" },
-    { reason: "최저 기온", suitability: "부적합" },
-    { reason: "최고 기온", suitability: "적합" },
-    { reason: "연평균 강수량", suitability: "적합" },
-    { reason: "일조량", suitability: "평균" },
-    { reason: "배수등급", suitability: "적합" },
-    { reason: "유효 토심", suitability: "적합" },
-    { reason: "토양 산도", suitability: "평균" }
-  ]
-};
+// export const sampleFarmSuitability: FarmSuitability = {
+//   anayize: [
+//     { reason: "월동여부", suitability: "적합" },
+//     { reason: "평균 기온", suitability: "평균" },
+//     { reason: "최저 기온", suitability: "부적합" },
+//     { reason: "최고 기온", suitability: "적합" },
+//     { reason: "연평균 강수량", suitability: "적합" },
+//     { reason: "일조량", suitability: "평균" },
+//     { reason: "배수등급", suitability: "적합" },
+//     { reason: "유효 토심", suitability: "적합" },
+//     { reason: "토양 산도", suitability: "평균" }
+//   ]
+// };
 
-export const productResponse: ProductResponseDto = {
-  product: sampleProductData[0], // 상품 정보
-  plantCultivation: sampleCultivationData[0], // 상품 재배 정보
-  farmSuitability: sampleFarmSuitability,
-}
+// export const productResponse: ProductResponseDto = {
+//   product: sampleProductData[0], // 상품 정보
+//   cultivationInfo: sampleCultivationData[0], // 상품 재배 정보
+//   farmSuitability: sampleFarmSuitability,
+// }
 
 // 가격 샘플 데이터
-export const priceResponse: PriceResponse = {
+export const priceResponse1: PriceResponse = {
   annual: [
     // 홍옥
     { id: 1, variety: "홍옥", dateTime: "2015", price: 2513 },
@@ -698,23 +698,23 @@ export const priceResponse: PriceResponse = {
   ],
   qualityChartData: [
     // 홍옥 데이터
-    { date: "2025-02-28", variety: "홍옥", 특: 5000, 상: 4500, 보통: 4000, 등외: 3500 },
-    { date: "2025-03-01", variety: "홍옥", 특: 5100, 상: 4550, 보통: 4050, 등외: 3550 },
-    { date: "2025-03-02", variety: "홍옥", 특: 5200, 상: 4600, 보통: 4100, 등외: 3600 },
-    { date: "2025-03-03", variety: "홍옥", 특: 5150, 상: 4570, 보통: 4070, 등외: 3570 },
-    { date: "2025-03-04", variety: "홍옥", 특: 5250, 상: 4620, 보통: 4120, 등외: 3620 },
+    { date: "2025-02-28", variety: "홍옥", special: 5000, high: 4500, moderate: 4000, other: 3500 },
+    { date: "2025-03-01", variety: "홍옥", special: 5100, high: 4550, moderate: 4050, other: 3550 },
+    { date: "2025-03-02", variety: "홍옥", special: 5200, high: 4600, moderate: 4100, other: 3600 },
+    { date: "2025-03-03", variety: "홍옥", special: 5150, high: 4570, moderate: 4070, other: 3570 },
+    { date: "2025-03-04", variety: "홍옥", special: 5250, high: 4620, moderate: 4120, other: 3620 },
     // 아오리 데이터
-    { date: "2025-02-28", variety: "아오리", 특: 5300, 상: 4650, 보통: 4150, 등외: 3650 },
-    { date: "2025-03-01", variety: "아오리", 특: 5350, 상: 4700, 보통: 4200, 등외: 3700 },
-    { date: "2025-03-02", variety: "아오리", 특: 5400, 상: 4750, 보통: 4250, 등외: 3750 },
-    { date: "2025-03-03", variety: "아오리", 특: 5450, 상: 4800, 보통: 4300, 등외: 3800 },
-    { date: "2025-03-04", variety: "아오리", 특: 5500, 상: 4850, 보통: 4350, 등외: 3850 },
+    { date: "2025-02-28", variety: "아오리", special: 5300, high: 4650, moderate: 4150, other: 3650 },
+    { date: "2025-03-01", variety: "아오리", special: 5350, high: 4700, moderate: 4200, other: 3700 },
+    { date: "2025-03-02", variety: "아오리", special: 5400, high: 4750, moderate: 4250, other: 3750 },
+    { date: "2025-03-03", variety: "아오리", special: 5450, high: 4800, moderate: 4300, other: 3800 },
+    { date: "2025-03-04", variety: "아오리", special: 5500, high: 4850, moderate: 4350, other: 3850 },
     // 후지 데이터
-    { date: "2025-02-28", variety: "후지", 특: 6000, 상: 5500, 보통: 5000, 등외: 4500 },
-    { date: "2025-03-01", variety: "후지", 특: 6050, 상: 5550, 보통: 5050, 등외: 4550 },
-    { date: "2025-03-02", variety: "후지", 특: 6100, 상: 5600, 보통: 5100, 등외: 4600 },
-    { date: "2025-03-03", variety: "후지", 특: 6150, 상: 5650, 보통: 5150, 등외: 4650 },
-    { date: "2025-03-04", variety: "후지", 특: 6200, 상: 5700, 보통: 5200, 등외: 4700 },
+    { date: "2025-02-28", variety: "후지", special: 6000, high: 5500, moderate: 5000, other: 4500 },
+    { date: "2025-03-01", variety: "후지", special: 6050, high: 5550, moderate: 5050, other: 4550 },
+    { date: "2025-03-02", variety: "후지", special: 6100, high: 5600, moderate: 5100, other: 4600 },
+    { date: "2025-03-03", variety: "후지", special: 6150, high: 5650, moderate: 5150, other: 4650 },
+    { date: "2025-03-04", variety: "후지", special: 6200, high: 5700, moderate: 5200, other: 4700 },
   ],
   regionalChartData: [
     { variety: "홍옥", region: "서울", price: 4800 },

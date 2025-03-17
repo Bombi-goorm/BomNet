@@ -15,7 +15,10 @@ const PriceAlertList: React.FC<PriceAlertListProps> = ({ initialAlerts }) => {
     setLoading(true)
     try {
       const alertId = alerts[index]?.id;
-      const deleteResponse = await removeNotificationCondition(alertId);
+      const data: PriceAlertCondition = {
+        notificationConditionId: alertId,
+      }
+      const deleteResponse = await removeNotificationCondition(data);
       if (deleteResponse.status === "200") {
         setAlerts(deleteResponse.data);
         setLoading(false)

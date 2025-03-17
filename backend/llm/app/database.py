@@ -16,7 +16,13 @@ DATABASE_URL = f"mysql+pymysql://{settings.DATABASE_USER}:{settings.DATABASE_PAS
 
 
 # ✅ DB 세션 종속성 주입
-engine = create_engine(DATABASE_URL, pool_recycle=3600, pool_size=10)
+engine = create_engine(
+    DATABASE_URL,
+    pool_size=10,
+    max_overflow=20,
+    pool_pre_ping=True,    # 커넥션 살아있는지 확인
+    pool_recycle=3600      # 1시간 지나면 재활용
+)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 

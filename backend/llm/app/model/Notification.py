@@ -15,7 +15,7 @@ class Notification(Base):
     __tablename__ = "notification"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    member_id = Column(Integer, ForeignKey("member.id"), nullable=False, comment="멤버 ID")
+    member_id = Column(String(36), ForeignKey("member.member_id"), nullable=False, comment="멤버 ID")
     # Product의 PK 컬럼은 실제 DB에서는 'product_id'이므로 외래키도 이 이름으로 지정합니다.
     product_id = Column(Integer, ForeignKey("product.product_id"), nullable=False, comment="작물 ID")
     notification_type = Column(Enum(NotificationType), nullable=False, comment="알림 종류")
