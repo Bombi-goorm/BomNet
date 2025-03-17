@@ -1,8 +1,6 @@
 spring:
   application:
     name: notification
-  profiles:
-    active: local
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver

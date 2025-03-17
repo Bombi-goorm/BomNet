@@ -1,7 +1,6 @@
 spring:
-  profiles:
-    active: local
-
+  application:
+    name: auth
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_NAME}
