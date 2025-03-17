@@ -25,3 +25,8 @@ gcp:
 
 server:
   port: ${NOTI_PORT}
+
+vapid:
+  public: ${VAPID_PUBLIC}
+  private: ${VAPID_PRIVATE}
+  subject: ${VAPID_SUB}
