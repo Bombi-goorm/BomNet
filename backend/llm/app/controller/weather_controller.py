@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends
 from google.cloud import bigquery
 from sqlalchemy.orm import Session
 
@@ -7,7 +7,6 @@ from app.database import get_db
 from app.dto.common_response_dto import CommonResponseDto
 from app.dto.request_dto import ChatbotRequestDto
 from app.dto.response_dto import WeatherResponseDto, WeatherInfo
-from app.member_auth_handler import get_current_member
 
 weather_router = APIRouter()
 

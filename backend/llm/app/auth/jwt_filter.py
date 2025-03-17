@@ -1,5 +1,4 @@
 import base64
-import os
 
 import jwt
 import requests
@@ -29,6 +28,10 @@ class JwtFilter(BaseHTTPMiddleware):
     """ 모든 요청에서 JWT를 검증하고 사용자 인증을 수행하는 미들웨어 """
 
     async def dispatch(self, request: Request, call_next):
+        # ✅ 헬스 체크 URL 우회
+        if request.url.path == "/llm/health/ping":
+            return await call_next(request)
+
         access_token = request.cookies.get("access_token")
         refresh_token = request.cookies.get("refresh_token")
         db: Session = next(get_db())  # 데이터베이스 세션 생성

@@ -51,7 +51,7 @@ app.add_middleware(
 app.include_router(router, prefix="/llm", tags=["llm"])
 
 # FastAPI 실행
-# uvicorn app:main:app --host 0.0.0.0 --port 8182 --reload
+# uvicorn main:app --host 0.0.0.0 --port 8182 --reload
 if __name__ == "__main__":
     import uvicorn
 
