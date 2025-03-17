@@ -18,13 +18,13 @@ import java.util.concurrent.*;
 public class PubSubSubscriber {
 
     @Value("${gcp.projectId}")
-    private static String PROJECT_ID;
+    private String PROJECT_ID;
 
     @Value("${gcp.sub.price}")
-    private static String PRICE_SUBSCRIPTION_ID;
+    private String PRICE_SUBSCRIPTION_ID;
 
     @Value("${gcp.sub.weather}")
-    private static String WEATHER_SUBSCRIPTION_ID;
+    private String WEATHER_SUBSCRIPTION_ID;
 
 //    private static final String PROJECT_ID = "goorm-bomnet";
 
