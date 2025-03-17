@@ -39,7 +39,7 @@ public class TokenProvider {
 	// 갱신토큰 만료시간 - 60일
 	public static long REFRESH_EXP = 5184000000L;
 
-	private static final String ISSUER = "https://bomnet.co.kr";
+	private static final String ISSUER = "https://bomnet.shop";
 
 	@PostConstruct
 	public void init() {

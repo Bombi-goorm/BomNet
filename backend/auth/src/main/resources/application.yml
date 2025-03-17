@@ -1,3 +1,42 @@
 spring:
   profiles:
     active: local
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-name: ${KAKAO_CLIENT_NAME}
+            client-id: ${KAKAO_CLIENT_ID}
+            client-authentication-method: ${KAKAO_AUTH_METHOD}
+            redirect-uri: ${KAKAO_REDIRECT_ID}
+            authorization-grant-type: ${KAKAO_AUTH_TYPE}
+            scope: ${KAKAO_SCOPE}
+        provider:
+          kakao:
+            authorization_uri: ${KAKAO_AUTH_URI}
+            token_uri: ${KAKAO_TOKEN_URI}
+            user-info-uri: ${KAKAO_USER_INFO_URI}
+            user_name_attribute: ${KAKAO_ATTRIBUTE}
+
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL_TYPE}
+
+server:
+  port: ${AUTH_PORT}
+
+jwt:
+  secret: ${JWT_SECRET}

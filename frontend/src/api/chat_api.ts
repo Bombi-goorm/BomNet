@@ -4,8 +4,8 @@ import { ChatbotRequestDto, ChatbotResponseDto } from "../types/chatbot_types";
 
 // Axios 인스턴스 생성
 const api = axios.create({
-  // baseURL: import.meta.env.VITE_LLM_HOST, // 백엔드 주소
-    baseURL: 'http://localhost:8182', // 로컬 테스트
+  baseURL: import.meta.env.VITE_LLM_HOST, // 백엔드 주소
+    // baseURL: 'http://localhost:8182', // 로컬 테스트
     withCredentials: true, // HttpOnly 쿠키를 위한 설정
     headers: {
       'Content-Type': import.meta.env.CONTENT_TYPE,

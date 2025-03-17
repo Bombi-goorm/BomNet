@@ -10,6 +10,7 @@ spring:
     username: ${DB_USER}
     password: ${DB_PASS}
 
+
   cloud:
     gcp:
       project-id: ${GCP_PROJECT_ID}
@@ -28,13 +29,14 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${DDL_TYPE}
 
 server:
   port: ${CORE_PORT}
 
 jwt:
   secret: ${JWT_SECRET}
+  authUrl: ${AUTH_URL}
 
 
 naver:
