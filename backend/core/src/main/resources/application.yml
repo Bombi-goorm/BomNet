@@ -42,3 +42,7 @@ naver:
   news:
     api:
       url: ${NAVER_NEWS_URL}
+
+api:
+  soil:
+    serviceKey: ${SOIL_API_KEY}
