@@ -1,6 +1,7 @@
 package com.bombi.core.infrastructure.external.weather.client;
 
-import com.bombi.core.infrastructure.external.weather.dto.WeatherForecastResponse;
+import com.bombi.core.domain.region.model.Region;
+import com.bombi.core.presentation.dto.home.WeatherExpection;
 import com.bombi.core.presentation.dto.home.WeatherInfo;
 import com.google.cloud.bigquery.*;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class WeatherForecastApiClient {
 	 * 단기 예보 조회
 	 * @return
 	 */
-	public WeatherForecastResponse sendWeatherForecast() {
+	public WeatherExpection sendWeatherForecast(Region region) {
 
 		String query = "SELECT"
 			+ " *"
@@ -33,12 +34,14 @@ public class WeatherForecastApiClient {
 
 		String startTime = getForecastStartTime();
 		String endTime = getForecastEndTime();
+		String nx = region.getXx();
+		String ny = region.getYy();
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
 			.addNamedParameter("startFcstTime", QueryParameterValue.string(startTime))
 			.addNamedParameter("endFcstTime", QueryParameterValue.string(endTime))
-			.addNamedParameter("nx", QueryParameterValue.string("60"))
-			.addNamedParameter("ny", QueryParameterValue.string("127"))
+			.addNamedParameter("nx", QueryParameterValue.string(nx))
+			.addNamedParameter("ny", QueryParameterValue.string(ny))
 			.setUseLegacySql(false)
 			.build();
 
@@ -60,7 +63,7 @@ public class WeatherForecastApiClient {
 				weatherInfos.add(weatherInfo);
 			}
 
-			return new WeatherForecastResponse(weatherInfos);
+			return new WeatherExpection(region, weatherInfos);
 		} catch (Exception e) {
 			throw new RuntimeException("BigQuery 쿼리 실행 중 오류 발생", e);
 		}

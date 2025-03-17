@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bombi.core.domain.region.model.Region;
+import com.bombi.core.domain.region.repository.RegionRepository;
 import com.bombi.core.infrastructure.external.weather.client.WeatherForecastApiClient;
 import com.bombi.core.infrastructure.external.weather.dto.WeatherForecastResponse;
 import com.bombi.core.presentation.dto.home.WeatherExpection;
@@ -15,11 +17,13 @@ import lombok.RequiredArgsConstructor;
 public class ForecastController {
 
 	private final WeatherForecastApiClient client;
+	private final RegionRepository regionRepository;
 
 	@GetMapping("/weather/forecast")
 	ResponseEntity<?> forecast() {
-		WeatherForecastResponse response = client.sendWeatherForecast();
-		WeatherExpection weatherExpection = new WeatherExpection(response);
+		Region region = regionRepository.findByStationName("서울")
+			.orElseThrow(() -> new IllegalArgumentException("ForecastController::region find failed."));
+		WeatherExpection weatherExpection = client.sendWeatherForecast(region);
 
 		return ResponseEntity.ok(weatherExpection);
 	}
