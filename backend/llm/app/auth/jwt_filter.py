@@ -29,7 +29,8 @@ class JwtFilter(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next):
         # ✅ 헬스 체크 URL 우회
-        if request.url.path == "/llm/health/ping":
+        if request.url.path.startswith("/llm/health"):
+            print("LLM::Healthy")
             return await call_next(request)
 
         access_token = request.cookies.get("access_token")
