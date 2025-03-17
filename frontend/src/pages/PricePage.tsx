@@ -25,8 +25,6 @@ const PricePage = () => {
   const fetchPriceData = async (item: string) => {
     if (!item) return; // 🔹 item이 빈 값일 경우 요청 방지
 
-    const priceData = priceResponse1;
-
     setLoading(true);
     try {
       const requestData: ProductRequestDto = { item };
@@ -78,7 +76,7 @@ const PricePage = () => {
               <PriceHistoryChart priceData={priceResponse1} />
               <QualityChart priceData={priceResponse1} />
               <RegionalPriceChart priceData={priceResponse1} />
-              <SankeyChart priceData={priceResponse} />
+              <SankeyChart priceData={priceResponse1} />
             </>
           )}
         </main>

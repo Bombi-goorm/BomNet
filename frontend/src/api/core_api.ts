@@ -3,7 +3,7 @@ import { CommonResponseDto, InfoResponseDto, PriceAlertCondition, SignupRequestD
 import { HomeDto, HomeRequestDto } from "../types/home_types";
 import { PriceResponse } from "../types/price_types";
 import { ProductRequestDto, ProductResponseDto } from "../types/product_types";
-import { data, priceResponse, productResponse } from "../data_sample";
+// import { data, priceResponse, productResponse } from "../data_sample";
 
 // Axios 인스턴스 생성
 const api = axios.create({
