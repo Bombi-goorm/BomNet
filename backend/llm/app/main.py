@@ -2,11 +2,11 @@ from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.auth.jwt_filter import JwtFilter
-from controller.alert_controller import alert_router
-from controller.base_controller import base_router
-from controller.other_controller import other_router
-from controller.price_controller import price_router
-# from controller.weather_controller import weather_router
+from app.controller.alert_controller import alert_router
+from app.controller.base_controller import base_router
+from app.controller.other_controller import other_router
+from app.controller.price_controller import price_router
+# from app.controller.weather_controller import weather_router
 from database import engine, Base
 
 # FastAPI 앱 생성
