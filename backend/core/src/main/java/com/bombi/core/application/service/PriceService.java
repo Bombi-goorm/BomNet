@@ -1,22 +1,10 @@
 package com.bombi.core.application.service;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
-import com.bombi.core.infrastructure.external.price.chart.dto.ChartLinkInfo;
-import com.bombi.core.infrastructure.external.price.chart.dto.ChartNodeInfo;
 import com.bombi.core.presentation.dto.price.ProductPriceDto;
-import com.bombi.core.presentation.dto.price.chart.LinkInformation;
-import com.bombi.core.infrastructure.external.price.chart.client.PriceChartLinkApiClient;
-import com.bombi.core.infrastructure.external.price.chart.client.PriceChartNodeApiClient;
-import com.bombi.core.presentation.dto.price.chart.NodeInformation;
 import com.bombi.core.presentation.dto.price.OverallPriceInfoResponse;
 import com.bombi.core.presentation.dto.price.chart.SankeyDataResponseDto;
 
@@ -26,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PriceService {
 
+	private final AnnualItemPriceService annualItemPriceService;
+	private final MonthlyItemPriceService monthlyItemPriceService;
 	private final DailyItemPriceService dailyItemPriceService;
 	private final SankeyChartPriceService sankeyChartPriceService;
 
@@ -35,8 +25,10 @@ public class PriceService {
 	 */
 	public OverallPriceInfoResponse findItemFlow(String item, String date) {
 		//연간 가격 정보
+		List<ProductPriceDto> annualItemPrice = annualItemPriceService.getAnnualItemPrice(item);
 
 		//월간 가격 정보
+		List<ProductPriceDto> monthlyItemPrice = monthlyItemPriceService.getMonthlyItemPrice(item);
 
 		//일간 가격 정보
 		List<ProductPriceDto> dailyItemPrice = dailyItemPriceService.getDailyItemPrice(item);
@@ -49,7 +41,7 @@ public class PriceService {
 
 		// 품종별 sankey chart
 		SankeyDataResponseDto sankeyChartInfo = sankeyChartPriceService.findSankeyChartInfo(item, date);
-		return new OverallPriceInfoResponse(dailyItemPrice, sankeyChartInfo);
+		return new OverallPriceInfoResponse(annualItemPrice, monthlyItemPrice, dailyItemPrice, sankeyChartInfo);
 	}
 
 
