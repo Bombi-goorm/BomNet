@@ -8,7 +8,7 @@ const api = axios.create({
     // baseURL: 'http://localhost:8182', // 로컬 테스트
     withCredentials: true, // HttpOnly 쿠키를 위한 설정
     headers: {
-      'Content-Type': import.meta.env.CONTENT_TYPE,
+      'Content-Type': 'application/json',
     },
 });
 

@@ -13,7 +13,7 @@ import { bestItemsFix, data } from "../data_sample";
 
 
 // VAPID 공개 키
-const VAPID_PUBLIC_KEY = import.meta.env.VAPID_PUBLIC_KEY;
+const VAPID_PUBLIC_KEY = 'BNCG1iL82tnaqBApiVjuIiP38AoFMbeVLLzlogIG3PM3bcfeRA6CtMs009-Z3Qvy_MIKZdYipQ-L8KpBWR092i4';
 
 const HomePage = () => {
   const [loading, setLoading] = useState(true);
