@@ -42,7 +42,7 @@ app.include_router(router)
 # CORS 설정
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # 프론트엔드 도메인
+    allow_origins=["https://bomnet.shop"],  # 프론트엔드 도메인
     allow_credentials=True,
     allow_methods=["*"],  # 모든 HTTP 메서드 허용
     allow_headers=["*"],  # 모든 헤더 허용

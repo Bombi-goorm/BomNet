@@ -38,11 +38,9 @@ async def create_notification(request: Request, data: ChatbotRequestDto, db: Ses
     # if not data.member_id:
     #     raise HTTPException(status_code=401, detail="멤버를 찾을 수 없습니다.")
 
-    print('222')
     member_id = request.state.member.id
-    print(member_id)
+    # print(member_id)
     # get_current_member(member_id=data.member_id, db=db)
-    print('11')
 
     """자연어 분석 후 NotificationCondition을 DB에 저장하고 저장된 데이터를 반환 (Redis 저장 제거)"""
     try:
