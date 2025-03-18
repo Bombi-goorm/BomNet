@@ -41,8 +41,12 @@ public class MemberService {
 			.orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 		MemberInfo memberInfo = member.getMemberInfo();
 
+		System.out.println("serviceMember-ID::" + member.getId());
+
 		String pnuCode = memberInfo.getPnu();
 		String sidoCode = pnuCode.substring(0, 5);
+
+		System.out.println("MemberPnu::"+pnuCode);
 
 		// 평균 기온, 평균 강수량
 		RegionWeather regionWeather = regionWeatherRepository.findWeatherInfoByPNU(sidoCode)
