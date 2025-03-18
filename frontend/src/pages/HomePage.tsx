@@ -52,6 +52,7 @@ const HomePage = () => {
       setTimeout(() => {
         if (!settled) {
           settled = true;
+          resolve("default"); // 권한 미응답 → default 처리
         }
       }, timeoutMs);
     });

@@ -69,7 +69,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 				.secure(true)
 				.httpOnly(true)
 				.path("/")
-				.sameSite("Strict")
+				.sameSite("None")
 				.maxAge(accessTokenCookieExp)
 				.build();
 
@@ -80,7 +80,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 				.secure(true)
 				.httpOnly(true)
 				.path("/")
-				.sameSite("Strict")
+				.sameSite("None")
 				.maxAge(refreshTokenCookieExp)
 				.build();
 
