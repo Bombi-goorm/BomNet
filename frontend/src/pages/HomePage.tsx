@@ -38,6 +38,25 @@ const HomePage = () => {
     return btoa(String.fromCharCode(...new Uint8Array(buffer)));
   };
 
+  const requestPermissionWithTimeout = (timeoutMs = 5000): Promise<NotificationPermission> => {
+    return new Promise((resolve) => {
+      let settled = false;
+  
+      Notification.requestPermission().then((permission) => {
+        if (!settled) {
+          settled = true;
+          resolve(permission);
+        }
+      });
+  
+      setTimeout(() => {
+        if (!settled) {
+          settled = true;
+        }
+      }, timeoutMs);
+    });
+  };
+
   const subscribeToPushNotifications = async (): Promise<HomeRequestDto | null> => {
     if (!("serviceWorker" in navigator)) return null;
   
@@ -47,11 +66,11 @@ const HomePage = () => {
       const registration = await navigator.serviceWorker.ready;
 
 
-      const permission = await Notification.requestPermission();
-  
+      const permission = await requestPermissionWithTimeout();
+
       if (permission !== "granted") {
         console.warn("⚠️ 알림 권한이 허용되지 않았습니다.");
-        return null;
+        return null; // 권한 거부 or 응답 없음 → 정상 종료
       }
   
       const pushSubscription = await registration.pushManager.subscribe({
