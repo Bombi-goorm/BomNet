@@ -58,9 +58,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             System.out.println("filter1::");
             // 쿠키에서 토큰 추출
             Cookie[] cookies = request.getCookies();
-            if (cookies == null) {
+
+            String rawCookieHeader = request.getHeader("Cookie");
+            System.out.println("🔹 Raw Cookie Header: " + rawCookieHeader);
+
+//            if (cookies == null) {
+//                filterChain.doFilter(request, response);
+//                return;
+//            }
+
+            if (cookies == null || cookies.length == 0) {
+                System.out.println("🔹 No cookies found in the request.");
+                System.out.println("Cookie::"+cookies);
                 filterChain.doFilter(request, response);
                 return;
+            } else {
+                System.out.println("🔸 Cookies received in the request:");
+                for (Cookie cookie : cookies) {
+                    System.out.printf("    • Name: %s%n", cookie.getName());
+                    System.out.printf("      Value: %s%n", cookie.getValue());
+                    System.out.printf("      Domain: %s%n", cookie.getDomain());
+                    System.out.printf("      Path: %s%n", cookie.getPath());
+                    System.out.printf("      Secure: %s%n", cookie.getSecure());
+                    System.out.printf("      HttpOnly: %s%n", cookie.isHttpOnly());
+                    System.out.printf("      MaxAge: %d%n", cookie.getMaxAge());
+                    System.out.println("------------------------------------");
+                }
             }
 
             String accessToken = extractTokenFromCookie(ACCESS_TOKEN_COOKIE_NAME, cookies);
