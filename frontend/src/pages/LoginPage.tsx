@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 
 function LoginPage() {
-  const KAKAO_AUTH_URL = import.meta.env.KAKAO_AUTH_URL;
+  const KAKAO_AUTH_URL = "https://auth.bomnet.shop/oauth2/authorization/kakao"; 
   const handleProviderLogin = (provider: string) => {
     if (provider === "kakao") {
       window.location.href = KAKAO_AUTH_URL;
