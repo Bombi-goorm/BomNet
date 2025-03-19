@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -84,5 +85,10 @@ public class CustomUserDetailsService extends DefaultOAuth2UserService implement
                     newMember.updateMemberInfo(memberInfo);
                     return memberRepository.saveAndFlush(newMember);
                 });
+    }
+
+    public Member getMember(UUID memberId){
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new UsernameNotFoundException("Member not found"));
     }
 }

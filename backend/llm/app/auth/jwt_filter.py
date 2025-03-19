@@ -61,8 +61,9 @@ class JwtFilter(BaseHTTPMiddleware):
         print_token_preview(refresh_token, "Refresh Token (from cookie)")
 
         JWT_SECRET_KEY = base64.b64decode(JWT_SECRET)
+        key_bytes = base64.b64decode(JWT_SECRET)
         print("JWT_SECRET_KEY:::", JWT_SECRET_KEY)
-
+        print("JWT_SECRET_KEY_BYTES:::", key_bytes)
 
         try:
             if not access_token:
@@ -73,7 +74,7 @@ class JwtFilter(BaseHTTPMiddleware):
             print("[DEBUG] :: ACCESS - JWT_SECRET_KEY :: ", JWT_SECRET_KEY)
             print("[DEBUG] :: ACCESS - JWT_ALGORITHM :: ", JWT_ALGORITHM)
             # ✅ 1. 액세스 토큰 검증
-            payload = jwt.decode(access_token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
+            payload = jwt.decode(access_token, key_bytes, algorithms=[JWT_ALGORITHM])
             member_id = payload.get("sub")
 
             print("[DEBUG] :: ACCESS - TOKEN :: ", access_token)
@@ -82,7 +83,7 @@ class JwtFilter(BaseHTTPMiddleware):
             # ✅ 1. 액세스 토큰 검증
             try:
                 # ✅ 토큰 디코딩 시도
-                payload = jwt.decode(access_token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
+                payload = jwt.decode(access_token, key_bytes, algorithms=[JWT_ALGORITHM])
                 member_id = payload.get("sub")
                 print("[DEBUG] :: ACCESS - Member ID :: ", member_id)
             except ExpiredSignatureError:

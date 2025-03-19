@@ -1,8 +1,10 @@
 package com.bombi.auth.presentation.controller;
 
+import com.bombi.auth.domain.member.Member;
 import com.bombi.auth.infrastructure.security.CustomOAuth2User;
 import com.bombi.auth.infrastructure.RedisService;
 import com.bombi.auth.infrastructure.security.CustomUserDetails;
+import com.bombi.auth.infrastructure.security.auth.service.CustomUserDetailsService;
 import com.bombi.auth.presentation.dto.CommonResponseDto;
 import com.bombi.auth.presentation.dto.MemberResponseDto;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,12 +20,18 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final RedisService redisService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @PostMapping("/renew")
     public ResponseEntity<CommonResponseDto<?>> renewToken(@AuthenticationPrincipal CustomUserDetails customUserDetails){
         System.out.println("MemberController::renewToken");
         System.out.println("AUTH::MEMBER::"+customUserDetails.getMember().getId());
-        return ResponseEntity.ok(new CommonResponseDto<>("200", "토큰 재발행 성공"));
+        Member member = customUserDetailsService.getMember(customUserDetails.getMember().getId());
+        MemberResponseDto responseDto = new MemberResponseDto(
+                member.getId(),
+                member.getMemberInfo().getPnu()
+        );
+        return ResponseEntity.ok(new CommonResponseDto<>("200", "토큰 재발행 성공", responseDto));
     }
 
 
