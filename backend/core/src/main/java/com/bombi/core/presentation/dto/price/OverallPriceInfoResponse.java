@@ -24,14 +24,16 @@ public class OverallPriceInfoResponse {
 		List<ProductPriceDto> annualItemPrice,
 		List<ProductPriceDto> monthlyItemPrice,
 		List<ProductPriceDto> dailyItemPrice,
+		List<ProductPriceDto> realTimeItemPrice,
+		List<RegionChartData> regionItemPrice,
 		SankeyDataResponseDto sankeyChartInfo)
 	{
 		this.annual = annualItemPrice;
 		this.monthly = monthlyItemPrice;
 		this.daily = dailyItemPrice;
-		this.realTime = new ArrayList<>();
+		this.realTime = realTimeItemPrice;
 		this.qualityChartData = new ArrayList<>();
-		this.regionalChartData = new ArrayList<>();
+		this.regionalChartData = regionItemPrice;
 		this.sankeyData = sankeyChartInfo;
 	}
 

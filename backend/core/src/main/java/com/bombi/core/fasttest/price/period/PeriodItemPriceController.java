@@ -1,16 +1,17 @@
 package com.bombi.core.fasttest.price.period;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bombi.core.application.service.MonthlyVarietyPriceCollector;
-import com.bombi.core.infrastructure.external.price.variety.client.DailyVarietyPriceCollector;
-import com.bombi.core.infrastructure.external.price.variety.dto.VarietyPriceInfo;
+import com.bombi.core.application.service.QualityItemPriceService;
+import com.bombi.core.application.service.RealtimeItemPriceService;
+import com.bombi.core.application.service.RegionItemPriceService;
 import com.bombi.core.presentation.dto.price.ProductPriceDto;
+import com.bombi.core.presentation.dto.price.QualityVarietyPriceData;
+import com.bombi.core.presentation.dto.price.RegionChartData;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +20,10 @@ import lombok.RequiredArgsConstructor;
 public class PeriodItemPriceController {
 
 	// private final DailyVarietyPriceCollector client;
-	private final MonthlyVarietyPriceCollector collector;
+	// private final MonthlyVarietyPriceCollector collector;
+	private final RealtimeItemPriceService realtimeItemPriceService;
+	private final QualityItemPriceService qualityItemPriceService;
+	private final RegionItemPriceService regionItemPriceService;
 
 	@GetMapping("/price/variety")
 	ResponseEntity<?> periodItemPriceVariety() {
@@ -34,7 +38,11 @@ public class PeriodItemPriceController {
 		//
 		// 	productPriceDtos.add(productPriceDto);
 		// }
-		List<VarietyPriceInfo> response = collector.sendVarietyPriceTrend("사과", "2024-04-01", "2025-03-31");
+		// List<VarietyPriceInfo> response = collector.sendVarietyPriceTrend("사과", "2024-04-01", "2025-03-31");
+
+		List<ProductPriceDto> response = realtimeItemPriceService.getRealtimeItemPrice("사과");
+		// List<QualityVarietyPriceData> response = qualityItemPriceService.getQualityItemPrice("사과");
+		// List<RegionChartData> response = regionItemPriceService.getRegionItemPrice("사과");
 
 		return ResponseEntity.ok(response);
 	}

@@ -13,4 +13,13 @@ public class QualityChartData {
 	private int high;
 	private int moderate;
 	private int other;
+
+	public QualityChartData(String date, String variety, int special, int high, int moderate, int other) {
+		this.date = date;
+		this.variety = variety;
+		this.special = special;
+		this.high = high;
+		this.moderate = moderate;
+		this.other = other;
+	}
 }
