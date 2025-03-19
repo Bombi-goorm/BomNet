@@ -21,10 +21,10 @@ export interface PriceResponse {
   export interface QualityChartDataItem {
     date: string;   // "YYYY-MM-DD" 형식의 날짜
     variety: string; // 품종명 (예: "홍옥", "부사", "아오리")
-    special: number;     // "특" 등급 가격
-    high: number;     // "상" 등급 가격
-    moderate: number;   // "보통" 등급 가격
-    other: number;   // "등외" 등급 가격
+    special?: number;     // "특" 등급 가격
+    high?: number;     // "상" 등급 가격
+    moderate?: number;   // "보통" 등급 가격
+    other?: number;   // "등외" 등급 가격
   }
   
   // 지역별 품종 가격 데이터 타입

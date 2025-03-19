@@ -9,8 +9,6 @@ const ProductConditions: React.FC<ProductConditionsProps> = ({ productData }) =>
   const { product, cultivationInfo } = productData;
   const { conditions, cultivationFeatures, cultivationTips } = cultivationInfo;
 
-  console.log(productData)
-
   return (
     <div className="bg-white p-6 rounded-lg shadow flex flex-col md:flex-row">
       {/* 이미지 섹션 */}

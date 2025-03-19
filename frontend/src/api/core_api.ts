@@ -50,7 +50,7 @@ export const getHomeInfo = async (): Promise<CommonResponseDto<HomeDto>> => {
 // 품목 가격정보 검색 - 비인증
 export const itemPriceSearch = async (data: ProductRequestDto): Promise<CommonResponseDto<PriceResponse>> => {
   const response = await api.post<CommonResponseDto<PriceResponse>>('/core/item/price', data);  
-  console.log(response.data) 
+  // console.log(response.data) 
   return response.data;
   // return {
   //   status: "200",  // API 응답 형식에 맞춰 success 값 추가

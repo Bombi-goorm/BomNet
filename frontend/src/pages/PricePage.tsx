@@ -37,7 +37,6 @@ const PricePage = () => {
         alert("데이터 조회 실패");
       }
     } catch (error) {
-      console.error("❌ 데이터 조회 중 오류 발생:", error);
     } finally {
       setLoading(false);
     }

@@ -70,7 +70,7 @@ const HomePage = () => {
       const permission = await requestPermissionWithTimeout();
 
       if (permission !== "granted") {
-        console.warn("⚠️ 알림 권한이 허용되지 않았습니다.");
+        // console.warn("⚠️ 알림 권한이 허용되지 않았습니다.");
         return null; // 권한 거부 or 응답 없음 → 정상 종료
       }
   
@@ -86,7 +86,7 @@ const HomePage = () => {
 
   
       if (!p256dhKey || !authKey) {
-        console.error("❌ 푸시 구독 키 정보가 올바르게 제공되지 않았습니다.");
+        // console.error("❌ 푸시 구독 키 정보가 올바르게 제공되지 않았습니다.");
         return null;
       }
   
@@ -139,10 +139,10 @@ const HomePage = () => {
           pnu: memberResponse.data.pnu || "" 
         });
       } else {
-        console.log("미가입 사용자");
+        // console.log("미가입 사용자");
       }
     } catch (error) {
-      console.error("Error fetching home info:", error);
+      // console.error("Error fetching home info:", error);
     } finally {
       setLoading(false);
     }

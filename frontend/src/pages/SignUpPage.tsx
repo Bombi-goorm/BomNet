@@ -60,7 +60,6 @@ function SignupPage() {
         setErrorMessage("등록에 실패했습니다. 다시 시도해 주세요.");
       }
     } catch (error) {
-      console.error("Signup error:", error);
       setErrorMessage("서버와의 통신 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
