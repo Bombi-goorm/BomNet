@@ -1,4 +1,4 @@
-package com.bombi.core.fasttest.pricechart;
+package com.bombi.core.application.service;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -8,46 +8,26 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import com.bombi.core.infrastructure.external.price.chart.client.PriceChartLinkApiClient;
 import com.bombi.core.infrastructure.external.price.chart.client.PriceChartNodeApiClient;
 import com.bombi.core.infrastructure.external.price.chart.dto.ChartLinkInfo;
 import com.bombi.core.infrastructure.external.price.chart.dto.ChartNodeInfo;
 import com.bombi.core.presentation.dto.price.chart.LinkInformation;
-import com.bombi.core.presentation.dto.price.chart.SankeyDataResponseDto;
 import com.bombi.core.presentation.dto.price.chart.NodeInformation;
+import com.bombi.core.presentation.dto.price.chart.SankeyDataResponseDto;
 
 import lombok.RequiredArgsConstructor;
 
-@RestController
+@Service
 @RequiredArgsConstructor
-@RequestMapping("/product/chart")
-public class PriceChartController {
+public class SankeyChartPriceService {
 
 	private final PriceChartNodeApiClient priceChartNodeApiClient;
 	private final PriceChartLinkApiClient priceChartLinkApiClient;
 
-	@GetMapping("/node")
-	ResponseEntity<?> priceNode() {
-		List<ChartNodeInfo> response = priceChartNodeApiClient.getNodes("사과", "2025-03-07");
-		return ResponseEntity.ok(response);
-	}
-
-	@GetMapping("/link")
-	ResponseEntity<?> priceLink() {
-		List<ChartLinkInfo> response = priceChartLinkApiClient.getLinks("사과", "2025-03-07");
-		return ResponseEntity.ok(response);
-	}
-
-	@GetMapping
-	public ResponseEntity<?> priceLinkAndNodeChart() {
-		String date = "2025-03-07";
-		String item = "사과";
-
+	public SankeyDataResponseDto findSankeyChartInfo(String item, String date) {
 		// 전체 노드 정보
 		List<ChartNodeInfo> nodeInfos = priceChartNodeApiClient.getNodes(item, date);
 
@@ -92,7 +72,8 @@ public class PriceChartController {
 
 		List<NodeInformation> nodeInformations = createTotalNodeInfo(productNodeInfos, areaNodeInfos, marketNodeInfos);
 		List<LinkInformation> linkInformations = createTotalLinkInfo(linkInfos);
-		return ResponseEntity.ok(new SankeyDataResponseDto(nodeInformations, linkInformations));
+
+		return new SankeyDataResponseDto(nodeInformations, linkInformations);
 	}
 
 	private Set<Long> extractSourceNodeFromLink(List<ChartLinkInfo> linkInfos) {
@@ -156,6 +137,4 @@ public class PriceChartController {
 			.map(link -> new LinkInformation(link.getSource(), link.getTarget(), link.getValue()))
 			.toList();
 	}
-
-
 }

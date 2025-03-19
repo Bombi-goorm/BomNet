@@ -3,10 +3,9 @@ package com.bombi.core.presentation.dto.price;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bombi.core.presentation.dto.price.chart.LinkInformation;
 import com.bombi.core.presentation.dto.price.chart.SankeyDataResponseDto;
-import com.bombi.core.presentation.dto.price.chart.NodeInformation;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,14 +21,16 @@ public class OverallPriceInfoResponse {
 	private List<RegionChartData> regionalChartData;
 	private SankeyDataResponseDto sankeyData;
 
-	public OverallPriceInfoResponse(List<NodeInformation> nodeInformationResponse,
-		List<LinkInformation> linkInformationResponse) {
-		this.annual = new ArrayList<>();
-		this.monthly = new ArrayList<>();
-		this.daily = new ArrayList<>();
-		this.realTime = new ArrayList<>();
-		this.qualityChartData = new ArrayList<>();
-		this.regionalChartData = new ArrayList<>();
-		this.sankeyData = new SankeyDataResponseDto(nodeInformationResponse, linkInformationResponse);
+	public OverallPriceInfoResponse(List<ProductPriceDto> annualItemPrice, List<ProductPriceDto> monthlyItemPrice,
+		List<ProductPriceDto> dailyItemPrice, List<ProductPriceDto> realTimeItemPrice,
+		List<QualityChartData> qualityChartData,
+		List<RegionChartData> regionItemPrice, SankeyDataResponseDto sankeyChartInfo) {
+		this.annual = annualItemPrice;
+		this.monthly = monthlyItemPrice;
+		this.daily = dailyItemPrice;
+		this.realTime = realTimeItemPrice;
+		this.regionalChartData = regionItemPrice;
+		this.sankeyData = sankeyChartInfo;
+		this.qualityChartData = qualityChartData;
 	}
 }
