@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Header from "../components/Header";
+// import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../api/core_api";
 
