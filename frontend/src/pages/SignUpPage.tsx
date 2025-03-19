@@ -80,7 +80,7 @@ function SignupPage() {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className="font-sans bg-gray-50 min-h-screen flex items-center justify-center p-4">
         <div className="bg-white p-8 rounded shadow-md w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto">
           <h2 className="text-2xl font-bold mb-4 text-center">처음이시네요!</h2>

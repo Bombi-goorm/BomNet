@@ -70,6 +70,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 				.httpOnly(true)
 				.path("/")
 				.sameSite("None")
+				.domain("bomnet.shop")
 				.maxAge(accessTokenCookieExp)
 				.build();
 
@@ -81,6 +82,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 				.httpOnly(true)
 				.path("/")
 				.sameSite("None")
+				.domain("bomnet.shop")
 				.maxAge(refreshTokenCookieExp)
 				.build();
 
