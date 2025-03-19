@@ -16,7 +16,7 @@ const ProductConditions: React.FC<ProductConditionsProps> = ({ productData }) =>
       {/* 이미지 섹션 */}
       <div className="w-full md:w-1/3 mb-6 md:mb-0">
         <img
-          src={product.imgUrl}
+          src={product.imageUrl}
           alt={`${cultivationInfo.cropName} ${cultivationInfo.variety ? `(${cultivationInfo.variety})` : ""}`}
           className="rounded-lg w-full h-auto"
         />
