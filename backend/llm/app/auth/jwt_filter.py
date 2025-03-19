@@ -34,18 +34,6 @@ def print_token_preview(token, label="Token"):
 class JwtFilter(BaseHTTPMiddleware):
     """ 모든 요청에서 JWT를 검증하고 사용자 인증을 수행하는 미들웨어 """
 
-    # ✅ 인증 관련
-    print(f"AUTH_SERVER_URL     :: {settings.AUTH_SERVER_URL}")
-    print(f"JWT_SECRET (preview):: {settings.JWT_SECRET}")
-    print(f"JWT_ALGORITHM       :: {settings.JWT_ALGORITHM}")
-
-    # ✅ 데이터베이스 관련
-    print(f"DATABASE_USER       :: {settings.DATABASE_USER}")
-    print(f"DATABASE_PASSWORD   :: {settings.DATABASE_PASSWORD}")
-    print(f"DATABASE_HOST       :: {settings.DATABASE_HOST}")
-    print(f"DATABASE_PORT       :: {settings.DATABASE_PORT}")
-    print(f"DATABASE_NAME       :: {settings.DATABASE_NAME}")
-
     async def dispatch(self, request: Request, call_next):
         # ✅ 헬스 체크 URL 우회
         if request.url.path.startswith("/llm/base/health"):
@@ -60,32 +48,23 @@ class JwtFilter(BaseHTTPMiddleware):
         print_token_preview(access_token, "Access Token (from cookie)")
         print_token_preview(refresh_token, "Refresh Token (from cookie)")
 
-        JWT_SECRET_KEY = base64.b64decode(JWT_SECRET)
+        # JWT_SECRET_KEY = base64.b64decode(JWT_SECRET)
         key_bytes = base64.b64decode(JWT_SECRET).decode("utf-8")
-        print("JWT_SECRET_KEY:::", JWT_SECRET_KEY)
-        print("JWT_SECRET_KEY_BYTES:::", key_bytes)
 
         try:
             if not access_token:
                 print("[ERROR] :: No Access Token")
                 raise ExpiredSignatureError  # 강제로 토큰 만료 처리 → 리프레시 토큰 갱신 흐름으로 이동
 
-            print("[DEBUG] :: ACCESS - TOKEN :: ", access_token)
-            print("[DEBUG] :: ACCESS - JWT_SECRET_KEY :: ", JWT_SECRET_KEY)
-            print("[DEBUG] :: ACCESS - JWT_ALGORITHM :: ", JWT_ALGORITHM)
-            # ✅ 1. 액세스 토큰 검증
-            payload = jwt.decode(access_token, key_bytes, algorithms=[JWT_ALGORITHM])
-            member_id = payload.get("sub")
+            # # ✅ 1. 액세스 토큰 검증
+            # payload = jwt.decode(access_token, key_bytes, algorithms=[JWT_ALGORITHM])
+            # member_id = payload.get("sub")
 
-            print("[DEBUG] :: ACCESS - TOKEN :: ", access_token)
-            print("[DEBUG] :: ACCESS - JWT_SECRET_KEY :: ", JWT_SECRET_KEY)
-            print("[DEBUG] :: ACCESS - JWT_ALGORITHM :: ", JWT_ALGORITHM)
             # ✅ 1. 액세스 토큰 검증
             try:
                 # ✅ 토큰 디코딩 시도
                 payload = jwt.decode(access_token, key_bytes, algorithms=[JWT_ALGORITHM])
                 member_id = payload.get("sub")
-                print("[DEBUG] :: ACCESS - Member ID :: ", member_id)
             except ExpiredSignatureError:
                 print("[ERROR] :: Access Token Expired ❗")
                 raise
@@ -93,7 +72,6 @@ class JwtFilter(BaseHTTPMiddleware):
                 print(f"[ERROR] :: Invalid Access Token ❗ Reason → {str(e)}")
                 raise
 
-            print("[DEBUG] :: ACCESS - Member ID :: ", member_id)
             # ✅ 2. 사용자 조회
             member = db.query(Member).filter(Member.id == member_id).first()
             if not member:
@@ -109,15 +87,12 @@ class JwtFilter(BaseHTTPMiddleware):
 
             # ✅ 리프레시 토큰으로 새 액세스 토큰 요청
             new_access_token = await self.refresh_access_token(refresh_token, db)
-            print("[DEBUG] :: New Access Token :: ", new_access_token)
 
             # ✅ 새 토큰 검증 및 사용자 조회
             member = self.verify_access_token(new_access_token, db)
             request.state.member = member
 
-            print("[DEBUG] :: Member state :: ", request.state.member)
-
-            # ✅ 응답에 새 토큰 설정
+            # ✅ 응답에 새 토큰 설정imageUrl
             response = await call_next(request)
             response.set_cookie(key="access_token", value=new_access_token, httponly=True, secure=True)
             return response
