@@ -24,6 +24,7 @@ def get_db():
         db.close()
 
 
+
 def print_token_preview(token, label="Token"):
     if token:
         print(f"[DEBUG] {label}: {token[:20]}... ({len(token)} chars)")
@@ -56,12 +57,30 @@ class JwtFilter(BaseHTTPMiddleware):
                 print("[ERROR] :: No Access Token")
                 raise ExpiredSignatureError  # 강제로 토큰 만료 처리 → 리프레시 토큰 갱신 흐름으로 이동
 
+            print("[DEBUG] :: ACCESS - TOKEN :: ", access_token)
+            print("[DEBUG] :: ACCESS - JWT_SECRET_KEY :: ", JWT_SECRET_KEY)
+            print("[DEBUG] :: ACCESS - JWT_ALGORITHM :: ", JWT_ALGORITHM)
             # ✅ 1. 액세스 토큰 검증
             payload = jwt.decode(access_token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
             member_id = payload.get("sub")
 
-            print("[DEBUG] :: ACCESS - Member ID :: ", member_id)
+            print("[DEBUG] :: ACCESS - TOKEN :: ", access_token)
+            print("[DEBUG] :: ACCESS - JWT_SECRET_KEY :: ", JWT_SECRET_KEY)
+            print("[DEBUG] :: ACCESS - JWT_ALGORITHM :: ", JWT_ALGORITHM)
+            # ✅ 1. 액세스 토큰 검증
+            try:
+                # ✅ 토큰 디코딩 시도
+                payload = jwt.decode(access_token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
+                member_id = payload.get("sub")
+                print("[DEBUG] :: ACCESS - Member ID :: ", member_id)
+            except ExpiredSignatureError:
+                print("[ERROR] :: Access Token Expired ❗")
+                raise
+            except InvalidTokenError as e:
+                print(f"[ERROR] :: Invalid Access Token ❗ Reason → {str(e)}")
+                raise
 
+            print("[DEBUG] :: ACCESS - Member ID :: ", member_id)
             # ✅ 2. 사용자 조회
             member = db.query(Member).filter(Member.id == member_id).first()
             if not member:
