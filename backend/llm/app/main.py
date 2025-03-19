@@ -46,16 +46,4 @@ app.include_router(router, prefix="/llm", tags=["llm"])
 if __name__ == "__main__":
     import uvicorn
 
-    # ✅ 인증 관련
-    print(f"AUTH_SERVER_URL     :: {settings.AUTH_SERVER_URL}")
-    print(f"JWT_SECRET (preview):: {settings.JWT_SECRET[:10]}... ({len(settings.JWT_SECRET)} chars)")
-    print(f"JWT_ALGORITHM       :: {settings.JWT_ALGORITHM}")
-
-    # ✅ 데이터베이스 관련
-    print(f"DATABASE_USER       :: {settings.DATABASE_USER}")
-    print(f"DATABASE_PASSWORD   :: {settings.DATABASE_PASSWORD[:3]}*** (length {len(settings.DATABASE_PASSWORD)} chars)")
-    print(f"DATABASE_HOST       :: {settings.DATABASE_HOST}")
-    print(f"DATABASE_PORT       :: {settings.DATABASE_PORT}")
-    print(f"DATABASE_NAME       :: {settings.DATABASE_NAME}")
-
     uvicorn.run("app:main:app", host="0.0.0.0", port=8182, reload=True)

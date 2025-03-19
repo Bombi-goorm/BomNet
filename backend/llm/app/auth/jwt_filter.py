@@ -34,6 +34,18 @@ def print_token_preview(token, label="Token"):
 class JwtFilter(BaseHTTPMiddleware):
     """ 모든 요청에서 JWT를 검증하고 사용자 인증을 수행하는 미들웨어 """
 
+    # ✅ 인증 관련
+    print(f"AUTH_SERVER_URL     :: {settings.AUTH_SERVER_URL}")
+    print(f"JWT_SECRET (preview):: {settings.JWT_SECRET}")
+    print(f"JWT_ALGORITHM       :: {settings.JWT_ALGORITHM}")
+
+    # ✅ 데이터베이스 관련
+    print(f"DATABASE_USER       :: {settings.DATABASE_USER}")
+    print(f"DATABASE_PASSWORD   :: {settings.DATABASE_PASSWORD}")
+    print(f"DATABASE_HOST       :: {settings.DATABASE_HOST}")
+    print(f"DATABASE_PORT       :: {settings.DATABASE_PORT}")
+    print(f"DATABASE_NAME       :: {settings.DATABASE_NAME}")
+
     async def dispatch(self, request: Request, call_next):
         # ✅ 헬스 체크 URL 우회
         if request.url.path.startswith("/llm/base/health"):
