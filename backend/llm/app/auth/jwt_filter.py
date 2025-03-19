@@ -24,6 +24,12 @@ def get_db():
         db.close()
 
 
+def print_token_preview(token, label="Token"):
+    if token:
+        print(f"[DEBUG] {label}: {token[:20]}... ({len(token)} chars)")
+    else:
+        print(f"[DEBUG] {label}: None")
+
 class JwtFilter(BaseHTTPMiddleware):
     """ 모든 요청에서 JWT를 검증하고 사용자 인증을 수행하는 미들웨어 """
 
@@ -37,15 +43,24 @@ class JwtFilter(BaseHTTPMiddleware):
         refresh_token = request.cookies.get("refresh_token")
         db: Session = next(get_db())  # 데이터베이스 세션 생성
 
+
+        print_token_preview(access_token, "Access Token (from cookie)")
+        print_token_preview(refresh_token, "Refresh Token (from cookie)")
+
         JWT_SECRET_KEY = base64.b64decode(JWT_SECRET)
+        print("JWT_SECRET_KEY:::", JWT_SECRET_KEY)
+
 
         try:
             if not access_token:
+                print("[ERROR] :: No Access Token")
                 raise ExpiredSignatureError  # 강제로 토큰 만료 처리 → 리프레시 토큰 갱신 흐름으로 이동
 
             # ✅ 1. 액세스 토큰 검증
             payload = jwt.decode(access_token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
             member_id = payload.get("sub")
+
+            print("[DEBUG] :: ACCESS - Member ID :: ", member_id)
 
             # ✅ 2. 사용자 조회
             member = db.query(Member).filter(Member.id == member_id).first()
@@ -54,17 +69,21 @@ class JwtFilter(BaseHTTPMiddleware):
 
             request.state.member = member
 
-        except (ExpiredSignatureError, InvalidTokenError):
+        except (ExpiredSignatureError, InvalidTokenError) as e:
             # ✅ access_token이 없거나 만료, 검증 실패 모두 여기로 옴
             if not refresh_token:
+                print(f"[ERROR] :: No Refresh Token :: {str(e)}")
                 raise HTTPException(status_code=401, detail="Missing refresh token")
 
             # ✅ 리프레시 토큰으로 새 액세스 토큰 요청
             new_access_token = await self.refresh_access_token(refresh_token, db)
+            print("[DEBUG] :: New Access Token :: ", new_access_token)
 
             # ✅ 새 토큰 검증 및 사용자 조회
             member = self.verify_access_token(new_access_token, db)
             request.state.member = member
+
+            print("[DEBUG] :: Member state :: ", request.state.member)
 
             # ✅ 응답에 새 토큰 설정
             response = await call_next(request)
@@ -78,6 +97,7 @@ class JwtFilter(BaseHTTPMiddleware):
     async def refresh_access_token(self, refresh_token: str, db: Session) -> str:
         """ 인증 서버에 refresh_token을 보내서 새로운 access_token을 받음 """
         if not AUTH_SERVER_URL:
+            print("[ERROR] :: No AUTH_SERVER_URL :: ", AUTH_SERVER_URL)
             raise HTTPException(status_code=500, detail="AUTH_SERVER_URL is not set")
 
         refresh_url = f"{AUTH_SERVER_URL}/member/renew"
@@ -100,5 +120,6 @@ class JwtFilter(BaseHTTPMiddleware):
                 raise HTTPException(status_code=401, detail="User not found")
 
             return user
-        except (ExpiredSignatureError, InvalidTokenError):
+        except (ExpiredSignatureError, InvalidTokenError) as e:
+            print(f"[ERROR] :: Token decode failed: {str(e)}")
             raise HTTPException(status_code=401, detail="Invalid token")
