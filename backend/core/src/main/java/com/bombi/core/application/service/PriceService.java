@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.bombi.core.presentation.dto.price.ProductPriceDto;
 import com.bombi.core.presentation.dto.price.OverallPriceInfoResponse;
-import com.bombi.core.presentation.dto.price.QualityVarietyPriceData;
+import com.bombi.core.presentation.dto.price.QualityChartData;
 import com.bombi.core.presentation.dto.price.RegionChartData;
 import com.bombi.core.presentation.dto.price.chart.SankeyDataResponseDto;
 
@@ -42,14 +42,15 @@ public class PriceService {
 		List<ProductPriceDto> realTimeItemPrice = realtimeItemPriceService.getRealtimeItemPrice(item);
 
 		//상태(특상, 상, 중, 하) 별 가격 정보
-		// List<QualityVarietyPriceData> qualityItemPrice = qualityItemPriceService.getQualityItemPrice(item);
+		List<QualityChartData> qualityChartData = qualityItemPriceService.getQualityItemPrice(item);
 
 		//지역별 가격 정보
 		List<RegionChartData> regionItemPrice = regionItemPriceService.getRegionItemPrice(item);
 
 		// 품종별 sankey chart
 		SankeyDataResponseDto sankeyChartInfo = sankeyChartPriceService.findSankeyChartInfo(item, date);
-		return new OverallPriceInfoResponse(annualItemPrice, monthlyItemPrice, dailyItemPrice, realTimeItemPrice, regionItemPrice, sankeyChartInfo);
+
+		return new OverallPriceInfoResponse(annualItemPrice, monthlyItemPrice, dailyItemPrice, realTimeItemPrice, qualityChartData, regionItemPrice, sankeyChartInfo);
 	}
 
 
