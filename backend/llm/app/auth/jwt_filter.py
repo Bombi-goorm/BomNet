@@ -61,7 +61,7 @@ class JwtFilter(BaseHTTPMiddleware):
         print_token_preview(refresh_token, "Refresh Token (from cookie)")
 
         JWT_SECRET_KEY = base64.b64decode(JWT_SECRET)
-        key_bytes = base64.b64decode(JWT_SECRET)
+        key_bytes = base64.b64decode(JWT_SECRET).decode("utf-8")
         print("JWT_SECRET_KEY:::", JWT_SECRET_KEY)
         print("JWT_SECRET_KEY_BYTES:::", key_bytes)
 
