@@ -18,7 +18,7 @@ pipeline {
         stage('Checkout Github') {
             steps {
                 dir('backend/notification') {
-                    checkout([$class: 'GitSCM', branches: [[name: '*/dev']],
+                    checkout([$class: 'GitSCM', branches: [[name: '*/v1.0.0']],
                     userRemoteConfigs: [[
                         credentialsId: GITCREDENTIAL, 
                         url: GITWEBADD
