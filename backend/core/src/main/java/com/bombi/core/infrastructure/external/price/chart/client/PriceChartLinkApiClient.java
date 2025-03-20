@@ -1,11 +1,11 @@
-package com.bombi.core.infrastructure.external.chart.client;
+package com.bombi.core.infrastructure.external.price.chart.client;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.bombi.core.infrastructure.external.chart.dto.ChartNodeInfo;
+import com.bombi.core.infrastructure.external.price.chart.dto.ChartLinkInfo;
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.FieldValueList;
 import com.google.cloud.bigquery.QueryJobConfiguration;
@@ -16,38 +16,39 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class PriceChartNodeApiClient {
+public class PriceChartLinkApiClient {
 
 	private final BigQuery bigQuery;
 
-	public List<ChartNodeInfo> getNodes(String item, String dateTime) {
-		String query = "select * from kma.int_mafra__sankey_nodes"
-			+ " where item = @item and date_time = @date_time"
-			+ " order by node_id;";
+	public List<ChartLinkInfo> getLinks(String item, String dateTime) {
+
+		String query = "select"
+			+ " *"
+			+ " from kma.int_mafra__sankey_links"
+			+ " where item = @item and date_time = @date_time";
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
 			.addNamedParameter("item", QueryParameterValue.string(item))
 			.addNamedParameter("date_time", QueryParameterValue.date(dateTime))
-			.setUseLegacySql(false) // 표준 SQL 사용
+			.setUseLegacySql(false)
 			.build();
 
 		try {
 			TableResult result = bigQuery.query(queryConfig);
 
-			List<ChartNodeInfo> nodeInfos = new ArrayList<>();
+			List<ChartLinkInfo> linkInfos = new ArrayList<>();
 
 			for (FieldValueList value : result.getValues()) {
-				long nodeId = value.get("node_id").getLongValue();
-				String nodeName = value.get("node").getStringValue();
+				long src = value.get("src").getLongValue();
+				long target = value.get("tgt").getLongValue();
+				String val = value.get("val").getStringValue();
 
-				ChartNodeInfo chartNodeInfo = new ChartNodeInfo(nodeId, nodeName);
-				nodeInfos.add(chartNodeInfo);
+				linkInfos.add(new ChartLinkInfo(src, target, val));
 			}
-
-			return nodeInfos;
-		} catch (InterruptedException e) {
+			return linkInfos;
+		}
+		catch (InterruptedException e) {
 			throw new RuntimeException("BigQuery 쿼리 실행 중 오류 발생", e);
 		}
 	}
-
 }

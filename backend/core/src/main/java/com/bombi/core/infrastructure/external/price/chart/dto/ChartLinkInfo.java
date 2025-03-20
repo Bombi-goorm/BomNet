@@ -1,4 +1,4 @@
-package com.bombi.core.infrastructure.external.chart.dto;
+package com.bombi.core.infrastructure.external.price.chart.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,5 +15,13 @@ public class ChartLinkInfo {
 		this.source = source;
 		this.target = target;
 		this.value = value;
+	}
+
+	public void updateSource(int i) {
+		this.source = i;
+	}
+
+	public void updateTarget(int targetIndex) {
+		this.target = targetIndex;
 	}
 }
