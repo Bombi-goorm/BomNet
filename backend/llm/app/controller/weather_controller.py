@@ -1,62 +1,66 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from google.cloud import bigquery
-from sqlalchemy.orm import Session
 
 from app.config import settings
-from app.database import get_db
 from app.dto.common_response_dto import CommonResponseDto
 from app.dto.request_dto import ChatbotRequestDto
 from app.dto.response_dto import WeatherResponseDto, WeatherInfo
 
 weather_router = APIRouter()
 
+# BigQuery 클라이언트 초기화
 client = bigquery.Client(project=settings.GCP_PROJECT_ID)
 
+# GCP 프로젝트 및 데이터셋 설정
 GCP_PROJECT_ID = settings.GCP_PROJECT_ID
 DATASET_ID = settings.DATASET_ID
 TABLE_ID = settings.TABLE_ID
 
-
 @weather_router.post("/info", response_model=CommonResponseDto[WeatherResponseDto])
-async def get_weather(data: ChatbotRequestDto, db: Session = Depends(get_db)):
-
-    # if not data.member_id:
-    #     raise HTTPException(status_code=401, detail="멤버를 찾을 수 없습니다.")
-    # get_current_member(member_id=data.member_id, db=db)
-
-
+async def get_weather(data: ChatbotRequestDto):
     """
     사용자 입력 `region` 값을 받아 BigQuery에서 날씨 데이터 조회.
     서버 연동에 실패하면 샘플 데이터를 반환합니다.
     """
     try:
-        query = "SELECT"
-        + " *"
-        + " FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
-        + " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
-        + " AND nx = @nx AND ny = @ny"
-        + " ORDER BY fcst_date_time"
-        + " LIMIT 10";
+        # BigQuery 쿼리 정의
+        query = """
+            SELECT
+                fcst_date_time,
+                TMP as temperature,
+                WSD as windSpeed,
+                SKY as skyStatus,
+                REH as humidity
+            FROM `goorm-bomnet.kma.int_kma_pivoted_short`
+            WHERE nx = @nx AND ny = @ny
+            ORDER BY fcst_date_time
+            LIMIT 10
+        """
 
+        # BigQuery 쿼리 파라미터 설정
         job_config = bigquery.QueryJobConfig(
             query_parameters=[
-                bigquery.ScalarQueryParameter("region", "STRING", data.region)
+                bigquery.ScalarQueryParameter("nx", "STRING", data.nx),  # 사용자 입력값
+                bigquery.ScalarQueryParameter("ny", "STRING", data.ny)   # 사용자 입력값
             ]
         )
 
+        # 쿼리 실행
         query_job = client.query(query, job_config=job_config)
         result = query_job.result()
 
+        # 첫 번째 결과 행을 가져옴
         row = next(result, None)
         if row:
+            # 실제 데이터를 바탕으로 WeatherResponseDto 생성
             weather_info = WeatherResponseDto(
-                location=row.location,
+                location=data.region,
                 weatherInfo=WeatherInfo(
-                    weather=row.weather,
+                    weather=row.skyStatus,
                     temperature=row.temperature,
                     humidity=row.humidity,
-                    wind=row.wind,
-                    dateTime=row.datetime.isoformat() + "Z"
+                    wind=row.windSpeed,
+                    dateTime=row.fcst_date_time.isoformat() + "Z"
                 )
             )
             return CommonResponseDto(
@@ -65,15 +69,15 @@ async def get_weather(data: ChatbotRequestDto, db: Session = Depends(get_db)):
                 data=weather_info
             )
         else:
+            # 데이터가 없을 경우
             return CommonResponseDto(
                 status="404",
                 message=f"{data.region}에 대한 날씨 데이터를 찾을 수 없습니다.",
                 data=None
             )
 
-
     except Exception as e:
-        # 서버 연동 실패 시 원래 제공된 샘플 데이터로 응답
+        # 서버 연동 실패 시 샘플 데이터 반환
         sample_weather_info = WeatherResponseDto(
             location="서울",
             weatherInfo=WeatherInfo(
