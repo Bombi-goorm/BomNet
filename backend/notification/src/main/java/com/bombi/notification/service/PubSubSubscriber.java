@@ -1,24 +1,43 @@
 package com.bombi.notification.service;
 
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.pubsub.v1.Subscriber;
 import com.google.pubsub.v1.ProjectSubscriptionName;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import javax.annotation.PostConstruct;
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class PubSubSubscriber {
 
-    private static final String PROJECT_ID = "goorm-bomnet";
+    @Value("${gcp.projectId}")
+    private String PROJECT_ID;
+
+    @Value("${gcp.sub.price}")
+    private String PRICE_SUBSCRIPTION_ID;
+
+    @Value("${gcp.sub.weather}")
+    private String WEATHER_SUBSCRIPTION_ID;
+
+    @Value("${gcp.pubsub.credentials}")
+    private String credentialJson;
+
+//    private static final String PROJECT_ID = "goorm-bomnet";
 
     // 🔹 프로덕션 토픽 (가격 & 기상 알림)
-    private static final String PRICE_SUBSCRIPTION_ID = "bomnet-test-sub";
-    private static final String WEATHER_SUBSCRIPTION_ID = "bomnet-wrn-topic-sub";
+//    private static final String PRICE_SUBSCRIPTION_ID = "bomnet-test-sub";
+//    private static final String WEATHER_SUBSCRIPTION_ID = "bomnet-wrn-topic-sub";
 
     // 개별 큐 (가격 & 기상)
     private final BlockingQueue<String> priceQueue = new LinkedBlockingQueue<>();
@@ -35,30 +54,50 @@ public class PubSubSubscriber {
             new ThreadPoolExecutor.CallerRunsPolicy() // 누락 없이 모든 메시지 처리
     );
 
+    @PostConstruct
+    public void init() {
+        startSubscribers();  // ✅ 구독 시작을 애플리케이션 초기화 시 자동 호출
+    }
+
     /**
      * 🔹 다중 토픽 구독 (가격 & 기상 알림)
      */
     public void startSubscribers() {
-        startSubscriber(PRICE_SUBSCRIPTION_ID, priceQueue);
-        startSubscriber(WEATHER_SUBSCRIPTION_ID, weatherQueue);
 
-        Executors.newSingleThreadExecutor().submit(() -> processBatches(priceQueue, "PRICE"));
-        Executors.newSingleThreadExecutor().submit(() -> processBatches(weatherQueue, "WEATHER"));
+        try {
+            // ✅ JSON → Credentials 변환
+            ByteArrayInputStream stream = new ByteArrayInputStream(credentialJson.getBytes(StandardCharsets.UTF_8));
+            ServiceAccountCredentials credentials = ServiceAccountCredentials.fromStream(stream);
+
+            FixedCredentialsProvider credentialsProvider = FixedCredentialsProvider.create(credentials);
+
+            // ✅ credentialsProvider 전달하도록 수정
+            startSubscriber(PRICE_SUBSCRIPTION_ID, priceQueue, credentialsProvider);
+            startSubscriber(WEATHER_SUBSCRIPTION_ID, weatherQueue, credentialsProvider);
+
+            Executors.newSingleThreadExecutor().submit(() -> processBatches(priceQueue, "PRICE"));
+            Executors.newSingleThreadExecutor().submit(() -> processBatches(weatherQueue, "WEATHER"));
+
+        } catch (Exception e) {
+            log.error("❗ Pub/Sub 구독자 초기화 실패", e);
+        }
     }
 
-    private void startSubscriber(String subscriptionId, BlockingQueue<String> queue) {
+    private void startSubscriber(String subscriptionId, BlockingQueue<String> queue, FixedCredentialsProvider credentialsProvider) {
         ProjectSubscriptionName subscriptionName =
                 ProjectSubscriptionName.of(PROJECT_ID, subscriptionId);
 
         Subscriber subscriber = Subscriber.newBuilder(subscriptionName, (message, consumer) -> {
             String pubSubMessage = message.getData().toStringUtf8();
-            System.out.println("🔹 Received message [" + subscriptionId + "]: " + pubSubMessage + "::" + LocalDateTime.now());
+//            System.out.println("🔹 Received message [" + subscriptionId + "]: " + pubSubMessage + "::" + LocalDateTime.now());
             queue.offer(pubSubMessage);
             consumer.ack();
-        }).build();
+        }).setCredentialsProvider(credentialsProvider)
+                .build();
 
         subscriber.startAsync().awaitRunning();
-        System.out.println("🚀 Listening for messages on " + subscriptionId);
+        log.info("🚀 Listening for messages on " + subscriptionId);
+//        System.out.println("🚀 Listening for messages on " + subscriptionId);
     }
 
     private void processBatches(BlockingQueue<String> queue, String type) {

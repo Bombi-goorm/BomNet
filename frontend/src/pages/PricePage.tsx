@@ -11,7 +11,7 @@ import SankeyChart from "../components/price/SankeyChart";
 import { itemPriceSearch } from "../api/core_api";
 import { CommonResponseDto } from "../types/member_types";
 import { ProductRequestDto } from "../types/product_types";
-import { priceResponse1 } from "../data_sample";
+// import { priceResponse1 } from "../data_sample";
 
 const PricePage = () => {
   const location = useLocation();
@@ -37,7 +37,6 @@ const PricePage = () => {
         alert("데이터 조회 실패");
       }
     } catch (error) {
-      console.error("❌ 데이터 조회 중 오류 발생:", error);
     } finally {
       setLoading(false);
     }
@@ -72,11 +71,11 @@ const PricePage = () => {
             </div>}
           {priceResponse && (
             <>
-              <AuctionPriceChart priceData={priceResponse1} />
-              <PriceHistoryChart priceData={priceResponse1} />
-              <QualityChart priceData={priceResponse1} />
-              <RegionalPriceChart priceData={priceResponse1} />
-              <SankeyChart priceData={priceResponse1} />
+              <AuctionPriceChart priceData={priceResponse} />
+              <PriceHistoryChart priceData={priceResponse} />
+              <QualityChart priceData={priceResponse} />
+              <RegionalPriceChart priceData={priceResponse} />
+              <SankeyChart priceData={priceResponse} />
             </>
           )}
         </main>

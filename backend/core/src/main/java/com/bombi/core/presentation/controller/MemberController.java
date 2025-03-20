@@ -24,6 +24,7 @@ public class MemberController {
 
     @GetMapping
     public ResponseEntity<CoreResponseDto<?>> memberInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        System.out.println("memberInfo-ID::" + userDetails.getUsername());
         MemberInfoResponseDto memberInfoResponseDto = memberService.findMemberInfo(userDetails.getUsername());
         return ResponseEntity.ok(CoreResponseDto.ofSuccess("사용자 조회 성공", memberInfoResponseDto));
     }

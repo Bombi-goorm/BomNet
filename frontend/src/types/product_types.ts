@@ -25,7 +25,7 @@ export interface Product {
     item: string,
     varietyId: number,
     variety: string,
-    imgUrl: string, // S3 이미지 경로
+    imageUrl: string, // S3 이미지 경로
 }
 
 // 작물 재배 정보

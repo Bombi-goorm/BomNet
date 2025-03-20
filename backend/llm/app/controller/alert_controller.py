@@ -1,14 +1,16 @@
-import json, re
-from fastapi import APIRouter, Depends, HTTPException, Request
+import json
+import re
+
+from fastapi import APIRouter, Depends, Request
 from openai import OpenAI
 from sqlalchemy.orm import Session
+
 from app.config import settings
 from app.database import get_db
 from app.dto.common_response_dto import CommonResponseDto
 from app.dto.request_dto import ChatbotRequestDto
-from app.member_auth_handler import get_current_member
-from app.model.NotificationCondition import NotificationCondition
 from app.model.Category import Category
+from app.model.NotificationCondition import NotificationCondition
 
 alert_router = APIRouter()
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
@@ -36,11 +38,9 @@ async def create_notification(request: Request, data: ChatbotRequestDto, db: Ses
     # if not data.member_id:
     #     raise HTTPException(status_code=401, detail="멤버를 찾을 수 없습니다.")
 
-    print('222')
     member_id = request.state.member.id
-    print(member_id)
+    # print(member_id)
     # get_current_member(member_id=data.member_id, db=db)
-    print('11')
 
     """자연어 분석 후 NotificationCondition을 DB에 저장하고 저장된 데이터를 반환 (Redis 저장 제거)"""
     try:

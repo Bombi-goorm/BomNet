@@ -126,7 +126,8 @@ public class JwtFilter extends OncePerRequestFilter {
 							.secure(true)
 							.httpOnly(true)
 							.path("/")
-							.sameSite("Strict")
+							.sameSite("None")
+							.domain("bomnet.shop")
 							.maxAge(ACCESS_EXP / 1000)
 							.build();
 					response.addHeader(HttpHeaders.SET_COOKIE, newAccessTokenCookie.toString());

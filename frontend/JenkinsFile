@@ -8,7 +8,7 @@ pipeline {
 
         AWS_CREDENTIAL_NAME = 'aws_cre'
         ECR_PATH = '575108933149.dkr.ecr.ap-northeast-2.amazonaws.com'
-        IMAGE_NAME = '575108933149.dkr.ecr.ap-northeast-2.amazonaws.com/bombi/llm'
+        IMAGE_NAME = '575108933149.dkr.ecr.ap-northeast-2.amazonaws.com/bombi/front'
         REGION = 'ap-northeast-2'
 
         GITCREDENTIAL = 'git_cre'
@@ -17,7 +17,7 @@ pipeline {
     stages {
         stage('Checkout Github') {
             steps {
-                dir('backend/llm') {
+                dir('front') {
                     checkout([$class: 'GitSCM', branches: [[name: '*/v1.0.0']],
                     userRemoteConfigs: [[
                         credentialsId: GITCREDENTIAL, 
@@ -36,8 +36,8 @@ pipeline {
         }
         stage('docker image build') {
             steps {
-                sh "docker build -t ${IMAGE_NAME}:${currentBuild.number} -f backend/llm/Dockerfile backend/llm/"
-                sh "docker build -t ${IMAGE_NAME}:latest -f backend/llm/Dockerfile backend/llm/"
+                sh "docker build -t ${IMAGE_NAME}:${currentBuild.number} -f frontend/Dockerfile front/"
+                sh "docker build -t ${IMAGE_NAME}:latest -f frontend/Dockerfile front/"
             }
             post {
                 failure {
@@ -51,13 +51,11 @@ pipeline {
         stage('docker image push') {
             steps {
                 script{
-                    sh 'aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ECR_PATH}'
-
                     // cleanup current user docker credentials
-                    // sh 'rm -f ~/.dockercfg ~/.docker/config.json || true'
+                    sh 'rm -f ~/.dockercfg ~/.docker/config.json || true'
                     
                    
-                    docker.withRegistry("https://${ECR_PATH}") {
+                    docker.withRegistry("https://${ECR_PATH}", "ecr:${REGION}:${AWS_CREDENTIAL_NAME}") {
                       docker.image("${IMAGE_NAME}:${BUILD_NUMBER}").push()
                       docker.image("${IMAGE_NAME}:latest").push()
                     }
@@ -66,13 +64,13 @@ pipeline {
             }
             post {
                 failure {
-                    // sh "docker image rm -f ${IMAGE_NAME}:${currentBuild.number}"
-                    // sh "docker image rm -f ${IMAGE_NAME}:latest"
+                    sh "docker image rm -f ${IMAGE_NAME}:${currentBuild.number}"
+                    sh "docker image rm -f ${IMAGE_NAME}:latest"
                     sh "echo push failed"
                 }
                 success {
-                    // sh "docker image rm -f ${IMAGE_NAME}:${currentBuild.number}"
-                    // sh "docker image rm -f ${IMAGE_NAME}:latest"
+                    sh "docker image rm -f ${IMAGE_NAME}:${currentBuild.number}"
+                    sh "docker image rm -f ${IMAGE_NAME}:latest"
                     sh "echo push success"
                 }
             }
@@ -82,7 +80,7 @@ pipeline {
                 git credentialsId: GITCREDENTIAL, url: GITSSHADD, branch: 'main'
                 sh "git config --global user.email ${GITEMAIL}"
                 sh "git config --global user.name ${GITNAME}"
-                sh "sed -i 's@${IMAGE_NAME}:.*@${IMAGE_NAME}:${currentBuild.number}@g' llm/llm-deployment.yaml"
+                sh "sed -i 's@${IMAGE_NAME}:.*@${IMAGE_NAME}:${currentBuild.number}@g' front/fron-deployment.yaml"
 
                 sh "git add ."
                 sh "git branch -M main"

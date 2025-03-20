@@ -53,7 +53,7 @@ public class SecurityConfig {
         http
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
-                        .defaultSuccessUrl("http://localhost:5173", true) // 성공 후 React로 이동
+                        .defaultSuccessUrl("https://bomnet.shop", true) // 성공 후 React로 이동
                         .userInfoEndpoint(userInfo -> userInfo.userService(oauth2UserService))
                         .successHandler(oauth2SuccessHandler) // 직접 리디렉션 처리
                 );

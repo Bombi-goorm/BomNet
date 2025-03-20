@@ -9,14 +9,12 @@ const ProductConditions: React.FC<ProductConditionsProps> = ({ productData }) =>
   const { product, cultivationInfo } = productData;
   const { conditions, cultivationFeatures, cultivationTips } = cultivationInfo;
 
-  console.log(productData)
-
   return (
     <div className="bg-white p-6 rounded-lg shadow flex flex-col md:flex-row">
       {/* 이미지 섹션 */}
       <div className="w-full md:w-1/3 mb-6 md:mb-0">
         <img
-          src={product.imgUrl}
+          src={product.imageUrl}
           alt={`${cultivationInfo.cropName} ${cultivationInfo.variety ? `(${cultivationInfo.variety})` : ""}`}
           className="rounded-lg w-full h-auto"
         />

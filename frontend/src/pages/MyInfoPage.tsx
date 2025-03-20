@@ -18,8 +18,6 @@ const MyInfoPage = () => {
       try {
         const memberResponse = await getMemberInfo();
 
-        console.log(memberResponse.data)
-
         setUserInfo(memberResponse.data);
       } catch (error) {
         console.error("사용자 정보를 불러오는 중 오류 발생:", error);
