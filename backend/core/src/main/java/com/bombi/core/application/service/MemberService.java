@@ -44,10 +44,15 @@ public class MemberService {
 			.orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 		MemberInfo memberInfo = member.getMemberInfo();
 
+		// TO-DO : 일반사용자는 pnu가 없으므로 위치기반 데이터는 다 쓰지 않기로 결정
 		String pnuCode = memberInfo.getPnu();
-		String sidoCode = pnuCode.substring(0, 5);
+
+		if (pnuCode == null || pnuCode.length() < 5) {
+			return new MemberInfoResponseDto(member);
+		}
 
 		// 평균 기온, 평균 강수량
+		String sidoCode = pnuCode.substring(0, 5);
 		RegionWeather regionWeather = regionWeatherRepository.findWeatherInfoByPNU(sidoCode)
 			.orElseThrow(() -> new IllegalArgumentException("회원 지역 정보를 찾을 수 없습니다."));
 
