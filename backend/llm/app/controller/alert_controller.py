@@ -1,5 +1,5 @@
 import json, re
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from openai import OpenAI
 from sqlalchemy.orm import Session
 from app.config import settings
@@ -14,7 +14,7 @@ alert_router = APIRouter()
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 # 상수 멤버 ID (예시)
-MEMBER_ID = "551653fc-8efb-4bc3-8fae-4053231a3233"
+# MEMBER_ID = "551653fc-8efb-4bc3-8fae-4053231a3233"
 
 def get_category_hierarchy(category: Category, db: Session):
     """부모(상위) 카테고리부터 현재 카테고리까지의 계층을 조회하는 함수"""
@@ -32,11 +32,15 @@ def get_category_hierarchy(category: Category, db: Session):
 
 
 @alert_router.post("/set")
-async def create_notification(data: ChatbotRequestDto, db: Session = Depends(get_db)):
-    if not data.member_id:
-        raise HTTPException(status_code=401, detail="멤버를 찾을 수 없습니다.")
-    get_current_member(member_id=data.member_id, db=db)
+async def create_notification(request: Request, data: ChatbotRequestDto, db: Session = Depends(get_db)):
+    # if not data.member_id:
+    #     raise HTTPException(status_code=401, detail="멤버를 찾을 수 없습니다.")
 
+    print('222')
+    member_id = request.state.member.id
+    print(member_id)
+    # get_current_member(member_id=data.member_id, db=db)
+    print('11')
 
     """자연어 분석 후 NotificationCondition을 DB에 저장하고 저장된 데이터를 반환 (Redis 저장 제거)"""
     try:
@@ -184,7 +188,7 @@ async def create_notification(data: ChatbotRequestDto, db: Session = Depends(get
 
     # 5. 사용자당 활성화된 알림 조건 등록 개수 제한 확인 (동일 상품과 상관없이 최대 5개)
     user_notification_count = db.query(NotificationCondition).filter(
-        NotificationCondition.member_id == MEMBER_ID,
+        NotificationCondition.member_id == member_id,
         NotificationCondition.active == "T"
     ).count()
     if user_notification_count >= 5:
@@ -209,10 +213,10 @@ async def create_notification(data: ChatbotRequestDto, db: Session = Depends(get
     db_condition = None
     if target_price is not None:
         db_condition = NotificationCondition(
-            member_id=MEMBER_ID,  # 상수 MEMBER_ID 사용
+            member_id=member_id,
             target_price=target_price,  # 가격 조건을 바로 사용할 수 있는 형식으로 저장
             price_direction=price_direction,
-            active="Y",
+            active="T",
             category=category_names.get(1, ""),
             item=category_names.get(2, ""),
             variety=category_names.get(3, ""),

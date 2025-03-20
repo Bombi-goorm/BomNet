@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static final long ACCESS_TOKEN_COOKIE_AGE = 60L;
     private static final List<String> EXCLUDED_PATHS = Arrays.asList(
         "/core/health", "/bigquery/data", "/gcs/data", "/weather/special", "/naver/news", "/best/price", "/core/home", "/weather/forecast", "/soil/character", "/soil/chemical",
-        "/farm", "/product/chart/node", "/product/chart/link", "/product/chart", "/core/item/price"
+        "/farm", "/product/chart/node", "/product/chart/link", "/product/chart", "/core/item/price", "/price/variety"
     );
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
 
@@ -73,6 +73,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } catch (ExpiredJwtException | TokenNotFoundException e) {
                 log.info("access token expired or not found. start renewing token");
                 String renewedAccessToken = jwtGenerator.renewToken(accessToken, refreshToken);
+
+                System.out.println("renewd:::");
+                System.out.println(renewedAccessToken);
 
                 // set-cookie의 access_token에 새로 발급한 토큰을 지정
                 addNewTokenCookieInHeader(response, renewedAccessToken);

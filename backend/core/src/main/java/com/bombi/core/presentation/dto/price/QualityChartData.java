@@ -9,8 +9,17 @@ public class QualityChartData {
 
 	private String date;
 	private String variety;
-	private int special;
-	private int high;
-	private int moderate;
-	private int other;
+	private Long special;
+	private Long high;
+	private Long moderate;
+	private Long other;
+
+	public QualityChartData(String date, String variety, Long special, Long high, Long moderate, Long other) {
+		this.date = date;
+		this.variety = variety;
+		this.special = special;
+		this.high = high;
+		this.moderate = moderate;
+		this.other = other;
+	}
 }

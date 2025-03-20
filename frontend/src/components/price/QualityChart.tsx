@@ -19,17 +19,17 @@ const QualityChart: React.FC<QualityChartProps> = ({ priceData }) => {
       const existingEntry = acc.find((item) => item.date === entry.date);
 
       if (existingEntry) {
-        existingEntry["특"] = entry.특;
-        existingEntry["상"] = entry.상;
-        existingEntry["보통"] = entry.보통;
-        existingEntry["등외"] = entry.등외;
+        existingEntry["특"] = entry.special;
+        existingEntry["상"] = entry.high;
+        existingEntry["보통"] = entry.moderate;
+        existingEntry["등외"] = entry.other;
       } else {
         acc.push({
           date: entry.date,
-          "특": entry.특,
-          "상": entry.상,
-          "보통": entry.보통,
-          "등외": entry.등외,
+          "특": entry.special,
+          "상": entry.high,
+          "보통": entry.moderate,
+          "등외": entry.other,
         });
       }
 

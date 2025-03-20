@@ -9,7 +9,7 @@ import uuid
 class Member(Base):
     __tablename__ = "member"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, comment="회원 ID")
+    id = Column(String(36), name='member_id', primary_key=True, default=uuid.uuid4, comment="회원 ID")
     platform = Column(String(10), nullable=False, comment="소셜 로그인")
     auth_email = Column(String(100), nullable=False, unique=True, comment="이메일")
     is_enabled = Column(String(1), default="Y", comment="활성 여부")

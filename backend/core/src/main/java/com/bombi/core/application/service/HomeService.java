@@ -1,18 +1,14 @@
 package com.bombi.core.application.service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import com.bombi.core.domain.member.model.Member;
-import com.bombi.core.domain.member.repository.MemberRepository;
 import com.bombi.core.domain.product.ProductRepository;
 import com.bombi.core.domain.product.model.Product;
 import com.bombi.core.domain.region.model.Region;
@@ -23,9 +19,10 @@ import com.bombi.core.infrastructure.external.weather.client.WeatherForecastApiC
 import com.bombi.core.infrastructure.external.gcs.dto.SpecialWeatherReportResponse;
 import com.bombi.core.infrastructure.external.naver.client.NaverNewsApiClient;
 import com.bombi.core.infrastructure.external.naver.dto.news.NaverNewsResponse;
-import com.bombi.core.infrastructure.external.weather.dto.WeatherForecastResponse;
+import com.bombi.core.presentation.dto.home.HomeRequestDto;
 import com.bombi.core.presentation.dto.home.HomeResponseDto;
 import com.bombi.core.presentation.dto.home.ProductPriceResponse;
+import com.bombi.core.presentation.dto.home.WeatherExpection;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,20 +30,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class HomeService {
 
+	private final RegionRepository regionRepository;
 	private final ProductRepository productRepository;
 	private final BestProductPriceApiClient bestProductApiClient;
 	private final SpecialWeatherReportApiClient specialWeatherReportApiClient;
 	private final WeatherForecastApiClient weatherForecastApiClient;
 	private final NaverNewsApiClient naverNewsApiClient;
-	private final MemberRepository memberRepository;
-	private final RegionRepository regionRepository;
 
 	@Transactional(readOnly = true)
-	public HomeResponseDto homeInfo() {
-		//사용자 로그인 여부 확인
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-		Region region = findRegionInfo(authentication);
+	public HomeResponseDto homeInfo(HomeRequestDto requestDto) {
+		Region region = findRegionInfo(requestDto);
 
 		// 인기/관심 상품 가격 추이 :: BestProductApiClient -> bigquery
 		PageRequest pageRequest = PageRequest.of(0, 5, Sort.by("id"));
@@ -58,32 +51,28 @@ public class HomeService {
 		List<ProductPriceResponse> productPriceResponses = bestProductApiClient.callBestProductPrice(midCategoryNames);
 
 		// 기상 특보
-		SpecialWeatherReportResponse specialWeatherReportResponse = specialWeatherReportApiClient.sendSpecialWeatherReport("108");
+		SpecialWeatherReportResponse specialWeatherReportResponse = specialWeatherReportApiClient.sendSpecialWeatherReport();
 
 		// 기상 예보 -> bigquery
-		// WeatherForecastResponse weatherForecastResponse = weatherForecastApiClient.sendWeatherForecast(region.getXx(), region.getYy());
-		WeatherForecastResponse weatherForecastResponse = weatherForecastApiClient.sendWeatherForecast("119", "61");
+		WeatherExpection weatherExpection = weatherForecastApiClient.sendWeatherForecast(region);
 
 		// 농산물 뉴스
 		NaverNewsResponse naverNewsResponse = naverNewsApiClient.sendNews();
 
-		return new HomeResponseDto(productPriceResponses, specialWeatherReportResponse, weatherForecastResponse, naverNewsResponse);
+		return new HomeResponseDto(productPriceResponses, specialWeatherReportResponse, weatherExpection, naverNewsResponse);
 	}
 
-	private Region findRegionInfo(Authentication authentication) {
-		if(authentication == null) {
+	private Region findRegionInfo(HomeRequestDto requestDto) {
+
+		if(requestDto == null || !StringUtils.hasText(requestDto.getPnu())) {
 			return regionRepository.findByStationName("서울")
-				.orElseThrow(() -> new IllegalArgumentException("서울에 해당하는 지역 정보를 찾을 수 없습니다."));
+				.orElseThrow(() -> new IllegalArgumentException("서울 지역 정보를 찾을 없습니다."));
 		}
 
-		Member member = memberRepository.findMemberAndInfoById(UUID.fromString(authentication.getName()))
-			.orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
-		String weatherSiGunGuCode = member.getSidoCode();
+		String weatherSiGunGuCode = requestDto.getPnu().substring(0, 5);
 
-		Region region = regionRepository.findByWeatherSiGunGuCode(weatherSiGunGuCode)
+		return regionRepository.findByWeatherSiGunGuCode(weatherSiGunGuCode)
 			.orElseThrow(() -> new IllegalArgumentException("해당 시군구 코드를 가지는 지역 정보를 찾을 수 없습니다."));
-
-		return region;
 	}
 
 }

@@ -23,7 +23,7 @@ public class SpecialWeatherController {
 
 	@GetMapping("/weather/special")
 	ResponseEntity<?> specialWeather() {
-		SpecialWeatherReportResponse response = specialWeatherReportApiClient.sendSpecialWeatherReport("108");
+		SpecialWeatherReportResponse response = specialWeatherReportApiClient.sendSpecialWeatherReport();
 
 		return ResponseEntity.ok(response);
 	}

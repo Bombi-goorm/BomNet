@@ -100,6 +100,9 @@ public class TokenProvider {
 	 * @return Claims 객체
 	 */
 	public Claims extractAllClaims(String token) {
+		if (token == null || token.trim().isEmpty()) {
+			throw new IllegalArgumentException("JWT token is null or empty.");
+		}
 		try {
 			return Jwts.parserBuilder()
 					.setSigningKey(getSigningKey())

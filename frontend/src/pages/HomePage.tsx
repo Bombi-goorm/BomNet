@@ -9,7 +9,7 @@ import { getHomeInfo, getMemberInfo, pushSubscribtion } from "../api/core_api";
 import { useQueryClient } from "@tanstack/react-query";
 import { BestItems, HomeRequestDto, News, WeatherExpections, WeatherNotice } from "../types/home_types";
 import { useAuth } from "../conntext_api/AuthProvider";
-import { bestItemsFix } from "../data_sample";
+import { bestItemsFix, data } from "../data_sample";
 
 
 // VAPID 공개 키
@@ -99,11 +99,12 @@ const HomePage = () => {
 
       const response = await getHomeInfo();
 
-      console.log(response.data)
+      // console.log(response.data)
 
       queryClient.setQueryData(["products"], bestItemsFix);
       queryClient.setQueryData(["weatherNotice"], response.data.weatherNotice);
-      queryClient.setQueryData(["weatherExpect"], response.data.weatherExpect);
+      // queryClient.setQueryData(["weatherExpect"], response.data.weatherExpect);
+      queryClient.setQueryData(["weatherExpect"], data.weatherExpect);
       queryClient.setQueryData(["news"], response.data.news);
 
       const memberResponse = await getMemberInfo();

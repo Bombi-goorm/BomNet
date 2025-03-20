@@ -6,6 +6,7 @@ import requests
 import jwt
 from jwt import ExpiredSignatureError, InvalidTokenError
 from fastapi import Request, HTTPException, Depends
+from sqlalchemy import UUID
 from starlette.middleware.base import BaseHTTPMiddleware
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
@@ -42,48 +43,41 @@ class JwtFilter(BaseHTTPMiddleware):
         refresh_token = request.cookies.get("refresh_token")
         db: Session = next(get_db())  # 데이터베이스 세션 생성
 
-        print(access_token)
-        print(refresh_token)
-
-        if not access_token:
-            raise HTTPException(status_code=401, detail="Missing access token")
+        JWT_SECRET_KEY = base64.b64decode(JWT_SECRET)
 
         try:
-            # ✅ 1. JWT 토큰 검증 및 사용자 ID(member_id) 추출
-            payload = jwt.decode(access_token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+            if not access_token:
+                raise ExpiredSignatureError  # 강제로 토큰 만료 처리 → 리프레시 토큰 갱신 흐름으로 이동
 
-            print(payload)
-
+            # ✅ 1. 액세스 토큰 검증
+            payload = jwt.decode(access_token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
             member_id = payload.get("sub")
 
-            print(member_id)
-            print('11111111')
+            # ✅ 2. 사용자 조회
+            member = db.query(Member).filter(Member.id == member_id).first()
+            if not member:
+                raise HTTPException(status_code=401, detail="Member not found")
 
-            # ✅ 2. DB에서 사용자 객체 조회
-            user = db.query(Member).filter(Member.member_id == member_id).first()
-            if not user:
-                raise HTTPException(status_code=401, detail="User not found")
+            request.state.member = member
 
-            # ✅ 3. 인증된 사용자 객체를 요청에 저장
-            request.state.user = user
-
-        except ExpiredSignatureError:
-            # ✅ 4. 액세스 토큰 만료 → 리프레시 토큰 확인
+        except (ExpiredSignatureError, InvalidTokenError):
+            # ✅ access_token이 없거나 만료, 검증 실패 모두 여기로 옴
             if not refresh_token:
-                raise HTTPException(status_code=401, detail="Token expired and no refresh token found")
+                raise HTTPException(status_code=401, detail="Missing refresh token")
 
+            # ✅ 리프레시 토큰으로 새 액세스 토큰 요청
             new_access_token = await self.refresh_access_token(refresh_token, db)
-            request.state.user = self.verify_access_token(new_access_token, db)
 
-            # ✅ 5. 새로운 토큰으로 응답 생성
+            # ✅ 새 토큰 검증 및 사용자 조회
+            member = self.verify_access_token(new_access_token, db)
+            request.state.member = member
+
+            # ✅ 응답에 새 토큰 설정
             response = await call_next(request)
             response.set_cookie(key="access_token", value=new_access_token, httponly=True, secure=True)
             return response
 
-        except InvalidTokenError:
-            raise HTTPException(status_code=401, detail="Invalid token")
-
-        # ✅ 6. 요청 계속 진행
+            # ✅ 정상 검증 후 요청 계속 처리
         response = await call_next(request)
         return response
 
@@ -107,7 +101,7 @@ class JwtFilter(BaseHTTPMiddleware):
             payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
             member_id = payload.get("sub")
 
-            user = db.query(Member).filter(Member.member_id == member_id).first()
+            user = db.query(Member).filter(Member.id == member_id).first()
             if not user:
                 raise HTTPException(status_code=401, detail="User not found")
 

@@ -5,13 +5,20 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class TotalNodeInfo {
+public class NodeInformation {
 
 	private String id;
 	private String name;
+	private int depth;
 
-	public TotalNodeInfo(long id, String name) {
+	public NodeInformation(long id, String name) {
 		this.id = String.valueOf(id);
 		this.name = name;
+	}
+
+	public NodeInformation(long id, String name, int depth) {
+		this.id = String.valueOf(id);
+		this.name = name;
+		this.depth = depth;
 	}
 }

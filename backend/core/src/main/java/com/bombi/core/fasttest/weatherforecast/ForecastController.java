@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bombi.core.domain.region.model.Region;
+import com.bombi.core.domain.region.repository.RegionRepository;
 import com.bombi.core.infrastructure.external.weather.client.WeatherForecastApiClient;
 import com.bombi.core.infrastructure.external.weather.dto.WeatherForecastResponse;
 import com.bombi.core.presentation.dto.home.WeatherExpection;
@@ -14,19 +16,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ForecastController {
 
-	private final ForecastApiClient client;
-	private final WeatherForecastApiClient weatherForecastClient;
-
-	// @GetMapping("/weather/forecast")
-	// ResponseEntity<?> forecast() {
-	// 	ResponseEntity<ForecastApiResponse> responseEntity = client.sendWeatherForecast(55, 127);
-	// 	return ResponseEntity.ok(responseEntity.getBody());
-	// 	// return ResponseEntity.ok(response);
-	// }
+	private final WeatherForecastApiClient client;
+	private final RegionRepository regionRepository;
 
 	@GetMapping("/weather/forecast")
-	ResponseEntity<WeatherForecastResponse> getForecast() {
-		WeatherForecastResponse response = weatherForecastClient.sendWeatherForecast("119", "61");
-		return ResponseEntity.ok(response);
+	ResponseEntity<?> forecast() {
+		Region region = regionRepository.findByStationName("서울")
+			.orElseThrow(() -> new IllegalArgumentException("ForecastController::region find failed."));
+		WeatherExpection weatherExpection = client.sendWeatherForecast(region);
+
+		return ResponseEntity.ok(weatherExpection);
 	}
 }
