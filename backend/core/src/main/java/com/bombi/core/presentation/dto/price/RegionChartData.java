@@ -9,5 +9,11 @@ public class RegionChartData {
 
 	private String variety;
 	private String region;
-	private int price;
+	private long price;
+
+	public RegionChartData(String variety, String region, long price) {
+		this.variety = variety;
+		this.region = region;
+		this.price = price;
+	}
 }
