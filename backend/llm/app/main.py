@@ -32,7 +32,8 @@ app.add_middleware(
 router = APIRouter(prefix="/llm")
 router.include_router(base_router, prefix="/base", tags=["Base"])
 router.include_router(other_router, prefix="/other", tags=["Other"])
-# router.include_router(weather_router, prefix="/weather", tags=["Weather"])
+
+router.include_router(weather_router, prefix="/weather", tags=["Weather"])
 router.include_router(price_router, prefix="/price", tags=["Price"])
 router.include_router(alert_router, prefix="/alert", tags=["Alert"])
 
