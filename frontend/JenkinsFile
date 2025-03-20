@@ -14,9 +14,9 @@ pipeline {
         GITCREDENTIAL = 'git_cre'
         DOCKERHUBCREDENTIAL = 'docker_cre'
         SLACK_CHANNEL = "jenkins"
-        SLACK_START_AND_FINISH_COLOR = "#778899";
-        SLACK_SUCCESS_COLOR = "#2C953C";
-        SLACK_FAIL_COLOR = "#FF3232";
+        SLACK_START_AND_FINISH_COLOR = "#778899"
+        SLACK_SUCCESS_COLOR = "#2C953C"
+        SLACK_FAIL_COLOR = "#FF3232"
     }
     stages {
         stage('Checkout Github') {
@@ -84,16 +84,11 @@ pipeline {
             steps {
                 script{
                     sh 'aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ECR_PATH}'
-
-                    // cleanup current user docker credentials
-                    // sh 'rm -f ~/.dockercfg ~/.docker/config.json || true'
                     
-                   
                     docker.withRegistry("https://${ECR_PATH}") {
                       docker.image("${IMAGE_NAME}:${BUILD_NUMBER}").push()
                       docker.image("${IMAGE_NAME}:latest").push()
                     }
-
                 }
             }
             post {
@@ -151,7 +146,6 @@ pipeline {
                     sh "echo manifest update failed"
                 }
                 success {
-                    success {
                     slackSend (
                         channel: SLACK_CHANNEL,
                         color: SLACK_SUCCESS_COLOR,
@@ -161,7 +155,5 @@ pipeline {
                 }
             }
         }
-
     }
-}
 }
