@@ -3,12 +3,14 @@ package com.bombi.core.application.service;
 import java.util.UUID;
 
 import com.bombi.core.domain.member.model.Member;
+import com.bombi.core.domain.member.model.Role;
 import com.bombi.core.domain.member.repository.MemberRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bombi.core.domain.member.model.MemberInfo;
+import com.bombi.core.domain.member.repository.RoleRepository;
 import com.bombi.core.domain.region.model.RegionWeather;
 import com.bombi.core.domain.region.repository.RegionWeatherRepository;
 import com.bombi.core.infrastructure.external.bigquery.client.BigQueryRecommendProductApiClient;
@@ -30,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService {
 
 	private final MemberRepository memberRepository;
+	private final RoleRepository roleRepository;
 	private final RegionWeatherRepository regionWeatherRepository;
 	private final SoilCharacterApiClient soilCharacterApiClient;
 	private final SoilChemicalApiClient soilChemicalApiClient;
@@ -68,6 +71,8 @@ public class MemberService {
 	public void registerPnu(PnuRegisterRequestDto requestDto, String memberId) {
 		Member member = memberRepository.findMemberAndInfoById(UUID.fromString(memberId))
 			.orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
-		member.updatePnu(requestDto.getPnu());
+		Role roleFarmer = roleRepository.findByRoleName("ROLE_FARMER")
+			.orElseThrow(() -> new IllegalArgumentException("ROLE_FARMER를 찾을 수 없다."));
+		member.updatePnu(requestDto.getPnu(), roleFarmer);
 	}
 }

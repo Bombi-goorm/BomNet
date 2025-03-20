@@ -73,9 +73,9 @@ public class Member extends BaseEntity {
         return new Member(platform, authEmail, role);
     }
 
-    public void updatePnu(String pnu) {
+    public void updatePnu(String pnu, Role roleFarmer) {
         memberInfo.updatePnu(pnu);
-        role.changeToFarmer();
+        this.role = roleFarmer;
         activateEnableStatus();
     }
 
