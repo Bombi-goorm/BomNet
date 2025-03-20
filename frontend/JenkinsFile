@@ -21,7 +21,7 @@ pipeline {
     stages {
         stage('Checkout Github') {
             steps {
-                dir('front') {
+                dir('frontend') {
                     checkout([$class: 'GitSCM', branches: [[name: '*/v1.0.0']],
                     userRemoteConfigs: [[
                         credentialsId: GITCREDENTIAL, 
@@ -54,8 +54,8 @@ pipeline {
         }
         stage('docker image build') {
             steps {
-                sh "docker build -t ${IMAGE_NAME}:${currentBuild.number} -f frontend/Dockerfile front/"
-                sh "docker build -t ${IMAGE_NAME}:latest -f frontend/Dockerfile front/"
+                sh "docker build -t ${IMAGE_NAME}:${currentBuild.number} -f frontend/Dockerfile frontend/"
+                sh "docker build -t ${IMAGE_NAME}:latest -f frontend/Dockerfile frontend/"
             }
             post {
                 failure {
@@ -161,5 +161,4 @@ pipeline {
         }
 
     }
-}
 }
