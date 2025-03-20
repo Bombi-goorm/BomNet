@@ -40,7 +40,7 @@ public class MemberInfo {
 
 	public String getSiDoCode() {
 		if(pnu == null) {
-			return "11480";
+			return "11680";
 		}
 		return pnu.substring(0, 5);
 	}

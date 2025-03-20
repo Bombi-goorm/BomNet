@@ -46,4 +46,17 @@ public class MemberInfoResponseDto {
 			.map(NotificationConditionResponseDto::new)
 			.toList();
 	}
+
+	public MemberInfoResponseDto(Member member) {
+		this.memberId = member.getId().toString();
+		this.email = member.getAuthEmail();
+		this.joinDate = member.getCreatedDate();
+		this.pnu = null;
+		this.myFarm = null;
+		this.recommendedProducts = null;
+		this.notificationConditions = member.getNotificationConditions().stream()
+			.filter(NotificationCondition::isActive)
+			.map(NotificationConditionResponseDto::new)
+			.toList();
+	}
 }
