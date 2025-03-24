@@ -97,18 +97,26 @@ public class TokenProvider {
 	 */
 	public Claims extractAllClaims(String token) {
 		if (token == null || token.trim().isEmpty()) {
+			log.error("JWT 토큰이 null 또는 빈 문자열입니다.");
 			throw new IllegalArgumentException("JWT token is null or empty.");
 		}
 		try {
-			return Jwts.parserBuilder()
+			Claims claims = Jwts.parserBuilder()
 					.setSigningKey(getSigningKey())
 					.build()
 					.parseClaimsJws(token)
 					.getBody();
+			log.info("JWT Claim 추출 성공 - subject: {}, issuer: {}", claims.getSubject(), claims.getIssuer());
+			return claims;
 		} catch (ExpiredJwtException e) {
+			log.warn("JWT 토큰 만료 - subject: {}, issuer: {}", e.getClaims().getSubject(), e.getClaims().getIssuer());
 			return e.getClaims();
+		} catch (Exception e) {
+			log.error("JWT Claim 추출 실패", e);
+			throw new InvalidTokenException("JWT 처리 중 오류가 발생했습니다.");
 		}
 	}
+
 
 
 	/**
@@ -120,10 +128,13 @@ public class TokenProvider {
 	 */
 	public boolean validateAccessToken(String token, CustomUserDetails userDetails) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		final String memberId = extractMemberId(token);
-		return memberId.equals(userDetails.getMember().getId()) &&
+		boolean valid = memberId.equals(userDetails.getMember().getId()) &&
 				!isTokenExpired(token) &&
 				ISSUER.equals(extractIssuer(token));
+		log.info("Access 토큰 검증 결과 - memberId={}, 유효성={}", memberId, valid);
+		return valid;
 	}
+
 
 
 	/**
@@ -135,22 +146,25 @@ public class TokenProvider {
 		try {
 			String memberId = extractMemberId(token);
 			String tokenVerifyString = extractClaim(token, claims -> claims.get("vfs", String.class));
+			String storedVerifyString = redisService.getRefreshTokenVerification(memberId);
 
-			String storedVerifyString = redisService.getRefreshTokenVerification(
-					memberId
-			);
+			log.info("Refresh 토큰 검증 시도 - memberId={}", memberId);
 
 			if (tokenVerifyString == null ||
 					!tokenVerifyString.equals(storedVerifyString) ||
 					isTokenExpired(token) ||
 					!ISSUER.equals(extractIssuer(token))) {
+				log.warn("Refresh 토큰 검증 실패 - memberId={}, 토큰 검증 문자열 불일치 또는 만료", memberId);
 				throw new IllegalArgumentException("인증 요청이 유효하지 않습니다.");
 			}
+
+			log.info("Refresh 토큰 검증 성공 - memberId={}", memberId);
 		} catch (Exception e) {
-			log.error("Access 토큰 검증 실패: {}", e.getMessage());
+			log.error("Refresh 토큰 검증 중 오류 - {}", e.getMessage(), e);
 			throw new IllegalArgumentException("인증 요청 중 오류가 발생했습니다.");
 		}
 	}
+
 
 	/**
 	 * JWT 토큰 만료 여부 확인.
@@ -192,12 +206,15 @@ public class TokenProvider {
 			CustomUserDetails userDetails
 	) {
 		try {
-			return buildAccessToken(extraClaims, userDetails, ACCESS_EXP);
+			String token = buildAccessToken(extraClaims, userDetails, ACCESS_EXP);
+			log.info("Access 토큰 생성 완료 - memberId={}", userDetails.getMember().getId());
+			return token;
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-			log.error("Access 토큰 생성 실패: memberId={}", userDetails.getMember().getId(), e);
+			log.error("Access 토큰 생성 실패 - memberId={}", userDetails.getMember().getId(), e);
 			throw new InvalidTokenException("인증과정에서 오류가 발생했습니다.");
 		}
 	}
+
 
 	/**
 	 * Refresh 토큰 생성 (추가 Claims 포함).
@@ -210,26 +227,27 @@ public class TokenProvider {
 			Map<String, Object> extraClaims,
 			CustomUserDetails userDetails
 	)  {
-		// 토큰 검증용 문자열 생성
 		try {
 			String verifyString = GenerateCodeUtil.generateTokenVerifyString();
-
-			System.out.println(REFRESH_EXP);
-			// Redis에 검증용 문자열 저장
 			redisService.setRefreshTokenVerification(
 					String.valueOf(userDetails.getMember().getId()),
 					verifyString,
 					REFRESH_EXP
 			);
-			return buildRefreshToken(extraClaims, userDetails, REFRESH_EXP, verifyString);
+			log.info("Refresh 토큰 검증 정보 저장 완료 - memberId={}", userDetails.getMember().getId());
+
+			String token = buildRefreshToken(extraClaims, userDetails, REFRESH_EXP, verifyString);
+			log.info("Refresh 토큰 생성 완료 - memberId={}", userDetails.getMember().getId());
+			return token;
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-			log.error("Refresh 토큰 생성 실패: memberId={}", userDetails.getMember().getId(), e);
+			log.error("Refresh 토큰 생성 실패 - memberId={}", userDetails.getMember().getId(), e);
 			throw new InvalidTokenException("인증과정에서 오류가 발생했습니다.");
 		} catch (Exception e) {
-			log.error("Refresh 토큰 검증 정보 저장 실패: memberId={}", userDetails.getMember().getId(), e);
+			log.error("Refresh 토큰 검증 정보 저장 실패 - memberId={}", userDetails.getMember().getId(), e);
 			throw new RedisSessionException("인증정보 저장 중 오류가 발생했습니다.");
 		}
 	}
+
 
 	/**
 	 * Access 토큰 빌드.
