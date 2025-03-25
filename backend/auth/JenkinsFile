@@ -13,6 +13,11 @@ pipeline {
 
         GITCREDENTIAL = 'git_cre'
         DOCKERHUBCREDENTIAL = 'docker_cre'
+        SLACK_CHANNEL = "jenkins"
+        SLACK_START_AND_FINISH_COLOR = "#778899";
+        SLACK_SUCCESS_COLOR = "#2C953C";
+        SLACK_FAIL_COLOR = "#FF3232";
+
     }
     stages {
         stage('Checkout Github') {
