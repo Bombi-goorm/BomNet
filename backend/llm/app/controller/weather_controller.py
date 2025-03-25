@@ -1,6 +1,8 @@
 from fastapi import APIRouter
 from google.cloud import bigquery
+import json
 import logging
+from google.oauth2 import service_account
 
 from app.config import settings
 from app.dto.common_response_dto import CommonResponseDto
@@ -9,6 +11,10 @@ from app.dto.response_dto import WeatherResponseDto, WeatherInfo
 
 weather_router = APIRouter()
 logger = logging.getLogger("weather_logger")
+
+# ✅ JSON 문자열에서 credentials 객체 생성
+credential_dict = json.loads(settings.GOOGLE_APPLICATION_CREDENTIALS)
+credentials = service_account.Credentials.from_service_account_info(credential_dict)
 
 # BigQuery 클라이언트 초기화
 client = bigquery.Client(project=settings.GCP_PROJECT_ID)
