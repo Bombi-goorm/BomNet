@@ -36,7 +36,8 @@ public class MemberController {
 
     @PostMapping("/logout")
     public ResponseEntity<CommonResponseDto<?>> logout(HttpServletResponse response,
-                                                 @AuthenticationPrincipal CustomOAuth2User userDetails) {
+                                                       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+
 
         ResponseCookie cookie = ResponseCookie.from("access_token", null)
                 .secure(true)
@@ -58,7 +59,8 @@ public class MemberController {
 
         response.addHeader("Set-Cookie", cookie.toString());
 
-        redisService.resetStatus(String.valueOf(userDetails.getMember().getId()));
+
+        redisService.resetStatus(String.valueOf(customUserDetails.getMember().getId()));
 
         return ResponseEntity.ok(new CommonResponseDto<>("200", "로그아웃 성공"));
     }

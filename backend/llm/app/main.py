@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 import logging
@@ -13,7 +15,32 @@ from app.controller.weather_controller import weather_router
 from app.database import engine, Base
 from app.util.request_interceptor import RequestTimerMiddleware
 
-logger = logging.getLogger("main_logger")
+
+def setup_loggers(logger_names: List[str]):
+    formatter = logging.Formatter("%(asctime)s | %(name)s | %(levelname)s | %(message)s")
+
+    for name in logger_names:
+        logger = logging.getLogger(name)
+        logger.setLevel(logging.INFO)
+
+        # 중복 방지: 핸들러가 없을 때만 등록
+        if not logger.handlers:
+            handler = logging.StreamHandler()
+            handler.setFormatter(formatter)
+            logger.addHandler(handler)
+
+# 사용 예시
+logger_names = [
+    "alert_logger",
+    "weather_logger",
+    "gpt_logger",
+    "auth_logger",
+    "database_logger",
+    "request_timer_logger",
+    "main_logger",
+]
+
+setup_loggers(logger_names)
 
 # FastAPI 앱 생성
 app = FastAPI()

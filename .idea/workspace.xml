@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="218060a4-012f-4962-98f6-4c4b7b1da468" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/llm/app/util/request_interceptor.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/llm/app/util/request_interceptor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/chatbot/ChatBotPopup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/chatbot/ChatBotPopup.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/home/MyLocalWeather.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/home/MyLocalWeather.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/price/SankeyChart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/price/SankeyChart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/types/home_types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/types/home_types.ts" afterDir="false" />
-    </list>
+    <list default="true" id="218060a4-012f-4962-98f6-4c4b7b1da468" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -163,7 +156,7 @@
       <workItem from="1740354861458" duration="1226000" />
       <workItem from="1742863484124" duration="1256000" />
       <workItem from="1742868907138" duration="1293000" />
-      <workItem from="1742876957153" duration="2164000" />
+      <workItem from="1742876957153" duration="2168000" />
     </task>
     <servers />
   </component>
