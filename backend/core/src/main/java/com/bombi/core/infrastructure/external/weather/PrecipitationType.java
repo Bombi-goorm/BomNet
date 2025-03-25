@@ -1,5 +1,7 @@
 package com.bombi.core.infrastructure.external.weather;
 
+import java.util.Arrays;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -17,4 +19,10 @@ public enum PrecipitationType {
 	private final String code;
 	private final String description;
 
+	public static PrecipitationType findByCode(String code) {
+		return Arrays.stream(values())
+			.filter(type -> type.getCode().equals(code))
+			.findFirst()
+			.orElseThrow(() -> new IllegalArgumentException("해당하는 강수 타입 코드가 없습니다."));
+	}
 }
