@@ -37,4 +37,11 @@ public class MemberInfo {
 	public void updatePnu(String pnu) {
 		this.pnu = pnu;
 	}
+
+	public String getSiDoCode() {
+		if(pnu == null) {
+			return "11680";
+		}
+		return pnu.substring(0, 5);
+	}
 }

@@ -30,6 +30,7 @@ public class RedisService {
             redisTemplate.delete(refreshKey);
             log.debug("실패 카운트 초기화: id={}", id);
         } catch (Exception e) {
+            log.error("Redis 상태 초기화 실패: ", e);
             throw new RedisSessionException("사용자 정보 처리 중 오류 발생");
         }
     }
@@ -42,6 +43,7 @@ public class RedisService {
         try {
             redisTemplate.opsForValue().set(key, verifyString, expiration, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
+            log.error("Redis 저장 실패 - key={}, exp={}ms", key, expiration, e);
             e.printStackTrace();
             throw new RedisSessionException("토큰 정보 저장 중 오류 발생");
         }
@@ -55,6 +57,7 @@ public class RedisService {
         try {
             return redisTemplate.opsForValue().get(key);
         } catch (Exception e) {
+            log.error("Redis 조회 실패 - key={}", key, e);
             throw new RedisSessionException("토큰 정보 조회 중 오류 발생");
         }
     }

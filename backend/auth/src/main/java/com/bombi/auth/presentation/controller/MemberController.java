@@ -24,8 +24,6 @@ public class MemberController {
 
     @PostMapping("/renew")
     public ResponseEntity<CommonResponseDto<?>> renewToken(@AuthenticationPrincipal CustomUserDetails customUserDetails){
-        System.out.println("MemberController::renewToken");
-        System.out.println("AUTH::MEMBER::"+customUserDetails.getMember().getId());
         Member member = customUserDetailsService.getMember(customUserDetails.getMember().getId());
         MemberResponseDto responseDto = new MemberResponseDto(
                 member.getId(),

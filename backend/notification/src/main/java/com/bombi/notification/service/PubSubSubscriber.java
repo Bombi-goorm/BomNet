@@ -33,11 +33,6 @@ public class PubSubSubscriber {
     @Value("${gcp.pubsub.credentials}")
     private String credentialJson;
 
-//    private static final String PROJECT_ID = "goorm-bomnet";
-
-    // 🔹 프로덕션 토픽 (가격 & 기상 알림)
-//    private static final String PRICE_SUBSCRIPTION_ID = "bomnet-test-sub";
-//    private static final String WEATHER_SUBSCRIPTION_ID = "bomnet-wrn-topic-sub";
 
     // 개별 큐 (가격 & 기상)
     private final BlockingQueue<String> priceQueue = new LinkedBlockingQueue<>();
@@ -84,20 +79,28 @@ public class PubSubSubscriber {
     }
 
     private void startSubscriber(String subscriptionId, BlockingQueue<String> queue, FixedCredentialsProvider credentialsProvider) {
-        ProjectSubscriptionName subscriptionName =
-                ProjectSubscriptionName.of(PROJECT_ID, subscriptionId);
+        try {
+            ProjectSubscriptionName subscriptionName =
+                    ProjectSubscriptionName.of(PROJECT_ID, subscriptionId);
 
-        Subscriber subscriber = Subscriber.newBuilder(subscriptionName, (message, consumer) -> {
-            String pubSubMessage = message.getData().toStringUtf8();
-//            System.out.println("🔹 Received message [" + subscriptionId + "]: " + pubSubMessage + "::" + LocalDateTime.now());
-            queue.offer(pubSubMessage);
-            consumer.ack();
-        }).setCredentialsProvider(credentialsProvider)
-                .build();
+            Subscriber subscriber = Subscriber.newBuilder(subscriptionName, (message, consumer) -> {
+                        String pubSubMessage = message.getData().toStringUtf8();
+                        try {
+                            queue.offer(pubSubMessage);
+                            consumer.ack();
+                        } catch (Exception e) {
+                            log.error("메시지 큐 적재 실패 - subscriptionId={}, message={}", subscriptionId, pubSubMessage, e);
+                            consumer.nack();
+                        }
+                    }).setCredentialsProvider(credentialsProvider)
+                    .build();
 
-        subscriber.startAsync().awaitRunning();
-        log.info("🚀 Listening for messages on " + subscriptionId);
-//        System.out.println("🚀 Listening for messages on " + subscriptionId);
+            subscriber.startAsync().awaitRunning();
+            log.info("🚀 Listening for messages on " + subscriptionId);
+        } catch (Exception e) {
+            log.error("개별 구독자 실행 실패 - subscriptionId={}", subscriptionId, e);
+            throw new RuntimeException("구독 시작 실패 - subscriptionId=" + subscriptionId, e);
+        }
     }
 
     private void processBatches(BlockingQueue<String> queue, String type) {
@@ -107,13 +110,22 @@ public class PubSubSubscriber {
                 queue.drainTo(batch, 100); // 최대 100개씩 배치 처리
 
                 if (!batch.isEmpty()) {
-                    executorService.submit(() -> webPushNotificationService.sendBatchNotifications(batch, type));
+                    executorService.submit(() -> {
+                        try {
+                            webPushNotificationService.sendBatchNotifications(batch, type);
+                        } catch (Exception e) {
+                            log.error("배치 알림 전송 실패 - type={}, batchSize={}", type, batch.size(), e);
+                        }
+                    });
                 }
 
                 Thread.sleep(100); // CPU 부하 방지
             } catch (InterruptedException e) {
+                log.warn("배치 처리 스레드 인터럽트 - type={}", type);
                 Thread.currentThread().interrupt();
                 break;
+            } catch (Exception e) {
+                log.error("배치 처리 중 예외 발생 - type={}", type, e);
             }
         }
     }

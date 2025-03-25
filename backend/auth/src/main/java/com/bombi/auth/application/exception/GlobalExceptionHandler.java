@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     // 500 INTERNAL_SERVER_ERROR - REDIS
     @ExceptionHandler(RedisSessionException.class)
     public ResponseEntity<?> handleRedisSessionException(RedisSessionException ex) {
-        log.warn("RedisSessionException - " + ex.getMessage());
+        log.error("RedisSessionException - Redis 상태관리 실패, message={}", ex.getMessage(), ex);
         CommonResponseDto<?> response = new CommonResponseDto<>("500", "상태 관리 중 오류 발생.");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
