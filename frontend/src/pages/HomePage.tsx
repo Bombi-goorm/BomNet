@@ -62,10 +62,7 @@ const HomePage = () => {
     if (!("serviceWorker" in navigator)) return null;
   
     try {
-
-      // @Todo 일부 브라우저에서 워커 등록 안되는 문제 있음 
       const registration = await navigator.serviceWorker.ready;
-
 
       const permission = await requestPermissionWithTimeout();
 
@@ -78,6 +75,7 @@ const HomePage = () => {
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
       });
+
 
   
       // 🔹 키 값 확인
@@ -113,9 +111,13 @@ const HomePage = () => {
   };
 
   useEffect(() => {
+    subscribeToPushNotifications();
+  }, []);
+
+  useEffect(() => {
   const fetchUserData = async () => {
     try {
-      await subscribeToPushNotifications();
+      // await subscribeToPushNotifications();
 
       const response = await getHomeInfo();
 

@@ -63,7 +63,7 @@ public class CustomOAuth2User implements OAuth2User, UserDetails {
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return member.getIsBanned() == null || !member.getIsBanned().equals('Y');
+		return member.getIsBanned() == null || !member.getIsBanned().equals('T');
 	}
 
 	@Override
@@ -73,6 +73,6 @@ public class CustomOAuth2User implements OAuth2User, UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return member.getIsEnabled() != null && member.getIsEnabled().equals('Y');
+		return member.getIsEnabled() != null && member.getIsEnabled().equals('T');
 	}
 }
