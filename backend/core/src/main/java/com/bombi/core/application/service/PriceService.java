@@ -1,9 +1,11 @@
 package com.bombi.core.application.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.bombi.core.presentation.dto.price.PriceSearchRequestDto;
 import com.bombi.core.presentation.dto.price.ProductPriceDto;
 import com.bombi.core.presentation.dto.price.OverallPriceInfoResponse;
 import com.bombi.core.presentation.dto.price.QualityChartData;
@@ -26,9 +28,10 @@ public class PriceService {
 
 	/**
 	 * 검색한 품목의 품종별 가격 추이
-	 * @param item : 품목. ex) 사과
 	 */
-	public OverallPriceInfoResponse findItemFlow(String item, String date) {
+	public OverallPriceInfoResponse findItemFlow(PriceSearchRequestDto requestDto) {
+		String item = requestDto.getItem();
+
 		//연간 가격 정보
 		List<ProductPriceDto> annualItemPrice = annualItemPriceService.getAnnualItemPrice(item);
 
@@ -48,6 +51,7 @@ public class PriceService {
 		List<RegionChartData> regionItemPrice = regionItemPriceService.getRegionItemPrice(item);
 
 		// 품종별 sankey chart
+		String date = LocalDate.now().toString();
 		SankeyDataResponseDto sankeyChartInfo = sankeyChartPriceService.findSankeyChartInfo(item, date);
 
 		return new OverallPriceInfoResponse(annualItemPrice, monthlyItemPrice, dailyItemPrice, realTimeItemPrice, qualityChartData, regionItemPrice, sankeyChartInfo);
