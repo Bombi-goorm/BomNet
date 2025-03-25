@@ -3,7 +3,6 @@ package com.bombi.core.presentation.dto.home;
 import java.util.List;
 
 import com.bombi.core.domain.region.model.Region;
-import com.bombi.core.infrastructure.external.weather.dto.WeatherForecastResponse;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,13 +14,10 @@ public class WeatherExpection {
 	private String location;
 	private List<WeatherInfo> weatherInfo;
 
-	public WeatherExpection(WeatherForecastResponse weatherForecastResponse) {
-		this.location = "제주";
-		this.weatherInfo = weatherForecastResponse.getWeatherInfos();
-	}
-
-	public WeatherExpection(Region region, List<WeatherInfo> weatherInfos) {
+	public WeatherExpection(Region region, List<BigqueryForecastResponse> bigqueryForecastResponses) {
 		this.location = region.getStationName();
-		this.weatherInfo = weatherInfos;
+		this.weatherInfo = bigqueryForecastResponses.stream()
+			.map(WeatherInfo::new)
+			.toList();
 	}
 }

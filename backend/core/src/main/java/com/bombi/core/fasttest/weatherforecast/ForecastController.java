@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bombi.core.domain.region.model.Region;
 import com.bombi.core.domain.region.repository.RegionRepository;
 import com.bombi.core.infrastructure.external.weather.client.WeatherForecastApiClient;
-import com.bombi.core.infrastructure.external.weather.dto.WeatherForecastResponse;
 import com.bombi.core.presentation.dto.home.WeatherExpection;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +17,7 @@ public class ForecastController {
 
 	private final WeatherForecastApiClient client;
 	private final RegionRepository regionRepository;
+	private final ForecastApiClient forecastApiClient;
 
 	@GetMapping("/weather/forecast")
 	ResponseEntity<?> forecast() {
@@ -26,5 +26,8 @@ public class ForecastController {
 		WeatherExpection weatherExpection = client.sendWeatherForecast(region);
 
 		return ResponseEntity.ok(weatherExpection);
+
+		// return forecastApiClient.sendWeatherForecast(
+		// 	Integer.parseInt(region.getXx()), Integer.parseInt(region.getYy()));
 	}
 }
