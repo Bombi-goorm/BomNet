@@ -18,7 +18,7 @@ pipeline {
         stage('Checkout Github') {
             steps {
                 dir('backend/auth') {
-                    checkout([$class: 'GitSCM', branches: [[name: '*/dev']],
+                    checkout([$class: 'GitSCM', branches: [[name: '*/v1.0.0']],
                     userRemoteConfigs: [[
                         credentialsId: GITCREDENTIAL, 
                         url: GITWEBADD
@@ -27,9 +27,24 @@ pipeline {
             }
             post {
                 failure {
+                    slackSend (
+                        channel: SLACK_CHANNEL,
+                        color: SLACK_FAIL_COLOR,
+                        message: "======================= AUTH =======================\n" + 
+                        "Git Checkout에 실패하였습니다.\n" +
+                        "\n" +
+                        "<-More info->\n" +
+                        "${env.BUILD_URL}console\n" +
+                        "=============================================="
+                    )
                     sh "echo clone failed"
                 }
                 success {
+                    slackSend (
+                        channel: SLACK_CHANNEL,
+                        color: SLACK_SUCCESS_COLOR,
+                        message: "======================= AUTH =======================\nGit Checkout에 성공하였습니다."
+                    )
                     sh "echo clone success"
                 }
             }
@@ -41,9 +56,24 @@ pipeline {
             }
             post {
                 failure {
+                    slackSend (
+                        channel: SLACK_CHANNEL,
+                        color: SLACK_FAIL_COLOR,
+                        message: "Docker Image Build에 실패하였습니다.\n" +
+                        "\n" +
+                        "<-More info->\n" +
+                        "${env.BUILD_URL}console\n" +
+                        "=============================================="
+                    )
                     sh "echo image build failed"
                 }
                 success {
+                    slackSend (
+                        channel: SLACK_CHANNEL,
+                        color: SLACK_SUCCESS_COLOR,
+                        message: "Dcker Image Build에 성공하였습니다."
+                    )
+
                     sh "echo image build success"
                 }
             }
@@ -64,11 +94,25 @@ pipeline {
             }
             post {
                 failure {
+                    slackSend (
+                        channel: SLACK_CHANNEL,
+                        color: SLACK_FAIL_COLOR,
+                        message: "ECR에 Image Push를 실패하였습니다.\n" +
+                        "\n" +
+                        "<-More info->\n" +
+                        "${env.BUILD_URL}console\n" +
+                        "=============================================="
+                    )
                     sh "docker image rm -f ${IMAGE_NAME}:${currentBuild.number}"
                     sh "docker image rm -f ${IMAGE_NAME}:latest"
                     sh "echo push failed"
                 }
                 success {
+                    slackSend (
+                        channel: SLACK_CHANNEL,
+                        color: SLACK_SUCCESS_COLOR,
+                        message: "ECR에 Image Push를 성공하였습니다."
+                    )
                     sh "docker image rm -f ${IMAGE_NAME}:${currentBuild.number}"
                     sh "docker image rm -f ${IMAGE_NAME}:latest"
                     sh "echo push success"
@@ -91,9 +135,24 @@ pipeline {
             }
             post {
                 failure {
+                    slackSend (
+                        channel: SLACK_CHANNEL,
+                        color: SLACK_FAIL_COLOR,
+                        message: "Manifest File 변경을 실패하였습니다.\n" +
+                        "\n" +
+                        "<-More info->\n" +
+                        "${env.BUILD_URL}console\n" +
+                        "=============================================="
+                    )
                     sh "echo manifest update failed"
                 }
                 success {
+                    slackSend (
+                        channel: SLACK_CHANNEL,
+                        color: SLACK_SUCCESS_COLOR,
+                        message: "Manifest File 변경을 성공하였습니다" + 
+                        "=============================================="
+                    )
                     sh "echo manifest update success"
                 }
             }

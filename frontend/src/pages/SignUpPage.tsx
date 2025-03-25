@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Header from "../components/Header";
+// import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../api/core_api";
 
@@ -60,7 +60,6 @@ function SignupPage() {
         setErrorMessage("등록에 실패했습니다. 다시 시도해 주세요.");
       }
     } catch (error) {
-      console.error("Signup error:", error);
       setErrorMessage("서버와의 통신 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
@@ -80,7 +79,7 @@ function SignupPage() {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className="font-sans bg-gray-50 min-h-screen flex items-center justify-center p-4">
         <div className="bg-white p-8 rounded shadow-md w-full max-w-md md:max-w-lg lg:max-w-xl mx-auto">
           <h2 className="text-2xl font-bold mb-4 text-center">처음이시네요!</h2>

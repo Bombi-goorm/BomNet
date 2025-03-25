@@ -3,6 +3,7 @@ package com.bombi.core.infrastructure.security.authentication;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -25,11 +26,13 @@ public class JwtGenerator {
 
 	private final RestTemplate restTemplate;
 
+	@Value("${jwt.authUrl}")
+	private String authUrl;
 	/**
 	 * 인증 서버로 갱신 요청
 	 */
 	public String renewToken(String accessToken, String refreshToken) {
-		String requestUrl = "http://localhost:8180/member/renew";
+		String requestUrl = authUrl;
 
 		// Header에 쿠키 설정
 		String cookieHeader = generateTokenCookie(accessToken, refreshToken);

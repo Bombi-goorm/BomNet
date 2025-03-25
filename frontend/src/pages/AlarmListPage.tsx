@@ -14,10 +14,10 @@ const NotificationList: React.FC = () => {
       if (response.status === "200") {
         setNotifications(response.data);
       } else {
-        console.error("알림 데이터를 가져올 수 없습니다.");
+        // console.error("알림 데이터를 가져올 수 없습니다.");
       }
     } catch (error) {
-      console.error("Error fetching notifications:", error);
+      // console.error("Error fetching notifications:", error);
     } finally {
       setLoading(false);
     }
@@ -36,10 +36,10 @@ const NotificationList: React.FC = () => {
         // 읽음 처리 성공 시, 알림 목록 비우기
         setNotifications([]);
       } else {
-        console.error("전체 읽음 처리 실패:", response.message);
+        // console.error("전체 읽음 처리 실패:", response.message);
       }
     } catch (error) {
-      console.error("전체 읽음 처리 에러:", error);
+      // console.error("전체 읽음 처리 에러:", error);
     }
   };
 
@@ -63,10 +63,10 @@ const NotificationList: React.FC = () => {
         // 상태 업데이트: 읽음 처리된 알림 제거
         setNotifications((prev) => prev.filter((n) => n.id !== notification.id));
       } else {
-        console.error("알림 읽음 처리 실패:", response.message);
+        // console.error("알림 읽음 처리 실패:", response.message);
       }
     } catch (error) {
-      console.error("알림 읽음 처리 중 오류 발생:", error);
+      // console.error("알림 읽음 처리 중 오류 발생:", error);
     }
   };
 

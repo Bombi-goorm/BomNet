@@ -1,15 +1,8 @@
-import os
-from dotenv import load_dotenv
-from pydantic_settings import BaseSettings
-
-# ✅ .env 파일 강제 로드
-dotenv_path = os.path.join(os.path.dirname(__file__), "../.env")
-load_dotenv(dotenv_path)  # ✅ 강제 로드
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     # ✅ 인증 관련
     AUTH_SERVER_URL: str
-    JWT_PUBLIC_KEY_PATH: str
     JWT_SECRET: str
     JWT_ALGORITHM: str
 
@@ -27,9 +20,8 @@ class Settings(BaseSettings):
     DATASET_ID: str
     TABLE_ID: str
 
-    class Config:
-        env_file = "../.env"  # ✅ .env 파일을 명시적으로 지정
-        env_file_encoding = "utf-8"
+    # ✅ 환경설정 (env 파일 없이 환경변수만 사용 가능)
+    model_config = SettingsConfigDict(env_file_encoding='utf-8')
 
-# ✅ 환경변수 로드 확인
+# ✅ 환경변수 자동 매핑
 settings = Settings()

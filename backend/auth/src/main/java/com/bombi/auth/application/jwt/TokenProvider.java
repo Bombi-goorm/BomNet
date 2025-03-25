@@ -39,17 +39,13 @@ public class TokenProvider {
 	// 갱신토큰 만료시간 - 60일
 	public static long REFRESH_EXP = 5184000000L;
 
-	private static final String ISSUER = "https://bomnet.co.kr";
+	private static final String ISSUER = "https://bomnet.shop";
 
 	@PostConstruct
 	public void init() {
 		// Base64 디코딩하여 키 생성
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		this.key = Keys.hmacShaKeyFor(keyBytes);
-
-		// FastAPI에서 사용할 Base64 인코딩된 키 출력
-		String encodedKey = Base64.getEncoder().encodeToString(key.getEncoded());
-		System.out.println("Base64 Encoded Key for FastAPI: " + encodedKey);
 	}
 
 	private Key getSigningKey() {

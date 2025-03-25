@@ -282,7 +282,6 @@ export const ITEM_VARIETY_MAP = [
   { bigId: '06', bigName: '과실류', midName: "사과", midId: '01', smallName: "아오리", smallId: '04' },
   { bigId: '10', bigName: '엽경채류', midName: "배추", midId: '01', smallName: "고랭지배추", smallId: '05' },
   { bigId: '10', bigName: '엽경채류', midName: "배추", midId: '01', smallName: "월동배추", smallId: '04' },
-  { bigId: '10', bigName: '엽경채류', midName: "상추", midId: '01', smallName: "청상추", smallId: '01' },
   { bigId: '10', bigName: '엽경채류', midName: "상추", midId: '01', smallName: "적상추", smallId: '02' },
   { bigId: '12', bigName: '조미채소류', midName: "양파", midId: '01', smallName: "양파(일반)", smallId: '01' },
   { bigId: '12', bigName: '조미채소류', midName: "양파", midId: '01', smallName: "양파(수입)", smallId: '98' },

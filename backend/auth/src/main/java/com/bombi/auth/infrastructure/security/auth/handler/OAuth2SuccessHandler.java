@@ -69,7 +69,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 				.secure(true)
 				.httpOnly(true)
 				.path("/")
-				.sameSite("Strict")
+				.sameSite("None")
+				.domain("bomnet.shop")
 				.maxAge(accessTokenCookieExp)
 				.build();
 
@@ -80,7 +81,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 				.secure(true)
 				.httpOnly(true)
 				.path("/")
-				.sameSite("Strict")
+				.sameSite("None")
+				.domain("bomnet.shop")
 				.maxAge(refreshTokenCookieExp)
 				.build();
 
@@ -88,8 +90,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
 		// 등록되지 않은 계정이면 등록 페이지로 이동. 이미 등록된 계정이면 홈으로 이동
 		String redirectUri = member.getIsEnabled().equals("F") ?
-				"http://localhost:5173/signup" :
-				"http://localhost:5173";
+				"https://bomnet.shop/signup" :
+				"https://bomnet.shop";
 		response.sendRedirect(redirectUri);
 	}
 }

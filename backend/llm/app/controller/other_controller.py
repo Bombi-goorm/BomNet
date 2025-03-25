@@ -1,14 +1,14 @@
 import json
-from fastapi import APIRouter, HTTPException, Depends
+
+from fastapi import APIRouter, Depends
 from openai import OpenAI
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from app.config import settings
+from app.database import get_db
 from app.dto.common_response_dto import CommonResponseDto
 from app.dto.request_dto import ChatbotRequestDto
-from app.config import settings
-from app.member_auth_handler import get_current_member
-from app.database import get_db
 
 other_router = APIRouter()
 client = OpenAI(api_key=settings.OPENAI_API_KEY)

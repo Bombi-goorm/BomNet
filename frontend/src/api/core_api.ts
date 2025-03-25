@@ -7,11 +7,11 @@ import { ProductRequestDto, ProductResponseDto } from "../types/product_types";
 
 // Axios 인스턴스 생성
 const api = axios.create({
-    // baseURL: import.meta.env.VITE_CORE_HOST, // 백엔드 주소
-    baseURL: 'http://localhost:8181', // 로컬 테스트
+    baseURL: import.meta.env.VITE_CORE_HOST, // 백엔드 주소
+    // baseURL: 'https://core.bomnet.shop', // 로컬 테스트
     withCredentials: true, // HttpOnly 쿠키를 위한 설정
     headers: {
-      'Content-Type': import.meta.env.CONTENT_TYPE,
+      'Content-Type': 'application/json',
     },
 });
 
@@ -50,7 +50,7 @@ export const getHomeInfo = async (): Promise<CommonResponseDto<HomeDto>> => {
 // 품목 가격정보 검색 - 비인증
 export const itemPriceSearch = async (data: ProductRequestDto): Promise<CommonResponseDto<PriceResponse>> => {
   const response = await api.post<CommonResponseDto<PriceResponse>>('/core/item/price', data);  
-  console.log(response.data) 
+  // console.log(response.data) 
   return response.data;
   // return {
   //   status: "200",  // API 응답 형식에 맞춰 success 값 추가

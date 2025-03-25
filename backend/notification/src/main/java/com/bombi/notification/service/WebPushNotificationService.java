@@ -29,8 +29,7 @@ public class WebPushNotificationService {
     @Value("${vapid.private}")
     private String vapidPrivateKey;
 
-    @Value("${vapid.subject}")
-    private String vapidSubject;
+    private String vapidSubject = "mailto:your-email@example.com";
 
     static {
         if (Security.getProvider("BC") == null) {

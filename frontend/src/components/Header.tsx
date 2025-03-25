@@ -17,15 +17,15 @@ const Header = () => {
       </div>
       {isAuthenticated ? (
         <nav className="flex gap-4 text-gray-700">
-          <Link to="/price" className="hover:text-green-500">가격정보</Link>
-          <Link to="/product" className="hover:text-green-500">생산품정보</Link>
+          <Link to="/price" className="hover:text-green-500">유통정보</Link>
+          <Link to="/product" className="hover:text-green-500">생산정보</Link>
           <Link to="/info" className="hover:text-green-500">사용자 정보</Link>
           <Link to="/alarm" className="hover:text-green-500">알림 목록</Link>
         </nav>
       ) : (
         <nav className="flex gap-4 text-gray-700">
-          <Link to="/price" className="hover:text-green-500">가격정보</Link>
-          <Link to="/product" className="hover:text-green-500">생산품정보</Link>
+          <Link to="/price" className="hover:text-green-500">유통정보</Link>
+          <Link to="/product" className="hover:text-green-500">생산정보</Link>
           <Link to="/login" className="hover:text-green-500">로그인</Link>
         </nav>
       )}

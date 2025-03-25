@@ -13,7 +13,7 @@ import { bestItemsFix, data } from "../data_sample";
 
 
 // VAPID 공개 키
-const VAPID_PUBLIC_KEY = import.meta.env.VAPID_PUBLIC_KEY;
+const VAPID_PUBLIC_KEY = 'BNCG1iL82tnaqBApiVjuIiP38AoFMbeVLLzlogIG3PM3bcfeRA6CtMs009-Z3Qvy_MIKZdYipQ-L8KpBWR092i4';
 
 const HomePage = () => {
   const [loading, setLoading] = useState(true);
@@ -38,6 +38,26 @@ const HomePage = () => {
     return btoa(String.fromCharCode(...new Uint8Array(buffer)));
   };
 
+  const requestPermissionWithTimeout = (timeoutMs = 5000): Promise<NotificationPermission> => {
+    return new Promise((resolve) => {
+      let settled = false;
+  
+      Notification.requestPermission().then((permission) => {
+        if (!settled) {
+          settled = true;
+          resolve(permission);
+        }
+      });
+  
+      setTimeout(() => {
+        if (!settled) {
+          settled = true;
+          resolve("default"); // 권한 미응답 → default 처리
+        }
+      }, timeoutMs);
+    });
+  };
+
   const subscribeToPushNotifications = async (): Promise<HomeRequestDto | null> => {
     if (!("serviceWorker" in navigator)) return null;
   
@@ -47,11 +67,11 @@ const HomePage = () => {
       const registration = await navigator.serviceWorker.ready;
 
 
-      const permission = await Notification.requestPermission();
-  
+      const permission = await requestPermissionWithTimeout();
+
       if (permission !== "granted") {
-        console.warn("⚠️ 알림 권한이 허용되지 않았습니다.");
-        return null;
+        // console.warn("⚠️ 알림 권한이 허용되지 않았습니다.");
+        return null; // 권한 거부 or 응답 없음 → 정상 종료
       }
   
       const pushSubscription = await registration.pushManager.subscribe({
@@ -66,7 +86,7 @@ const HomePage = () => {
 
   
       if (!p256dhKey || !authKey) {
-        console.error("❌ 푸시 구독 키 정보가 올바르게 제공되지 않았습니다.");
+        // console.error("❌ 푸시 구독 키 정보가 올바르게 제공되지 않았습니다.");
         return null;
       }
   
@@ -119,10 +139,10 @@ const HomePage = () => {
           pnu: memberResponse.data.pnu || "" 
         });
       } else {
-        console.log("미가입 사용자");
+        // console.log("미가입 사용자");
       }
     } catch (error) {
-      console.error("Error fetching home info:", error);
+      // console.error("Error fetching home info:", error);
     } finally {
       setLoading(false);
     }
