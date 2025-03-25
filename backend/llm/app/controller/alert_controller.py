@@ -111,6 +111,11 @@ async def create_notification(request: Request, data: ChatbotRequestDto, db: Ses
         market = parsed_data.get("market")
         price_direction = parsed_data.get("price_direction", "U")
 
+        # ✅ region과 market 모두 없을 경우 기본값 '서울'로 설정
+        if not region and not market:
+            logger.warning(f"[지역 미입력] 기본값 '서울' 적용")
+            region = "서울"
+
         if not item or not variety or not region:
             logger.error("[ERROR] 필수 정보 누락 - item/variety/region 확인")
             return CommonResponseDto(status="400", message="❌ 필수 정보 누락", data=None)

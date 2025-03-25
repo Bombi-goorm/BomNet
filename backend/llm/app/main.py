@@ -11,14 +11,16 @@ from app.controller.other_controller import other_router
 from app.controller.price_controller import price_router
 from app.controller.weather_controller import weather_router
 from app.database import engine, Base
+from app.util.request_interceptor import RequestTimerMiddleware
 
 logger = logging.getLogger("main_logger")
 
 # FastAPI 앱 생성
 app = FastAPI()
 
-# ✅ JWT 미들웨어 추가 (⚡ 올바른 방식)
+# ✅ 미들웨어 추가
 app.add_middleware(JwtFilter)
+app.add_middleware(RequestTimerMiddleware)
 
 # DB 테이블 생성
 Base.metadata.create_all(bind=engine)

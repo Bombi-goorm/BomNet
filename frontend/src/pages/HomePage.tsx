@@ -125,8 +125,9 @@ const HomePage = () => {
 
       queryClient.setQueryData(["products"], bestItemsFix);
       queryClient.setQueryData(["weatherNotice"], response.data.weatherNotice);
-      // queryClient.setQueryData(["weatherExpect"], response.data.weatherExpect);
-      queryClient.setQueryData(["weatherExpect"], data.weatherExpect);
+      queryClient.setQueryData(["weatherExpect"], response.data.weatherExpect);
+      console.log(response.data.weatherExpect)
+      // queryClient.setQueryData(["weatherExpect"], data.weatherExpect);
       queryClient.setQueryData(["news"], response.data.news);
 
       const memberResponse = await getMemberInfo();

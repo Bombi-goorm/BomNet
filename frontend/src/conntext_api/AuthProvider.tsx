@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setIsAuthenticated(true);
         } else {
           const response = await renewAccess();
-          console.log(response)
+          // console.log(response)
           if (response.status === "200") {
             sessionStorage.setItem("bomnet_user", response.data.memberId); 
             sessionStorage.setItem("bomnet_pnu", response.data.pnu || "");  
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           }
         }
       } catch (error) {
-        console.error("인증 상태 확인 실패:", error);
+        // console.error("인증 상태 확인 실패:", error);
         setIsAuthenticated(false);
       } finally {
         setIsLoading(false); // 로딩 종료
@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         alert("로그아웃 실패! 잠시 후 다시 시도하세요.");
       }
     } catch (error) {
-      console.error("로그아웃 처리 실패:", error);
+      // console.error("로그아웃 처리 실패:", error);
       alert("로그아웃 처리 중 문제가 발생했습니다.");
     }
   };
