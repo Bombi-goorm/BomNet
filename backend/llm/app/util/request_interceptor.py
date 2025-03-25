@@ -4,7 +4,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
 
-logger = logging.getLogger("alert_logger")
+logger = logging.getLogger("api_logger")
 
 class RequestTimerMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):

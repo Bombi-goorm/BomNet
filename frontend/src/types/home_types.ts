@@ -48,11 +48,16 @@ export interface WeatherExpections {
 
 // 날씨 정보
 export interface WeatherInfo {
-    weather: string,
     temperature: string,
     humidity: string,
+    windSpeed: string,
+    forecastTime: string,
+    weather: Weather,
+}
+
+export interface Weather {
     wind: string,
-    dateTime: string,
+    sky: string,
 }
 
 // 뉴스 

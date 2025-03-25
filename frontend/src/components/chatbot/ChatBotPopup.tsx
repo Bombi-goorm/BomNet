@@ -117,7 +117,6 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
         }
      
     } catch (error) {
-      // console.error("API 요청 실패:", error);
       setMessages((prev) => [...prev, { type: "bot", content: "⛔ 요청 처리 중 오류가 발생했습니다." }]);
     }
 
@@ -162,7 +161,6 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
         ]);
       }
     } catch (error) {
-      // console.error("API 요청 실패:", error);
       setMessages((prev) => [
         ...prev,
         { type: "bot", content: "⛔ 서버 오류로 인해 알림 등록에 실패했습니다." },
@@ -206,7 +204,6 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
         return response;
       }
     } catch (error) {
-      // console.error("API 요청 실패:", error);
       setMessages((prev) => [
         ...prev,
         { type: "bot", content: "⛔ 서버 오류로 인해 날씨 정보를 가져오지 못했습니다." },
@@ -267,7 +264,6 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
         return response;
       }
     } catch (error) {
-      // console.error("API 요청 실패:", error);
       setMessages((prev) => [...prev, { type: "bot", content: "⛔ 서버 오류로 인해 조회에 실패했습니다." }]);
     }
   };
@@ -287,7 +283,6 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
   
       return response;
     } catch (error) {
-      // console.error("GPT API 오류:", error);
       setMessages((prev) => [...prev, { type: "bot", content: "⛔ 서버 오류로 인해 요청을 처리할 수 없습니다." }]);
     }
   };

@@ -4,7 +4,10 @@ import {
   WiCloudy,
   WiRain,
   WiSnow,
-  WiThunderstorm,
+  WiCloudyWindy,
+  WiSnowWind,
+  WiRainWind,
+  WiDayWindy
 } from "react-icons/wi";
 import { WeatherExpections, WeatherInfo } from "../../types/home_types";
 
@@ -12,12 +15,42 @@ interface MyLocalWeatherProps {
   weatherExpectData: WeatherExpections | undefined;
 }
 
-const weatherIcon = (weather: string) => {
-  if (weather.includes("맑음")) return <WiDaySunny className="text-6xl text-yellow-300" />;
-  if (weather.includes("구름")) return <WiCloudy className="text-6xl text-gray-300" />;
-  if (weather.includes("비")) return <WiRain className="text-6xl text-blue-400" />;
-  if (weather.includes("눈")) return <WiSnow className="text-6xl text-blue-200" />;
-  if (weather.includes("천둥")) return <WiThunderstorm className="text-6xl text-purple-400" />;
+const weatherIcon = (weather: string, windy: string) => {
+  const isWindy = windy === 'T';
+
+  if (weather.includes("맑음")) {
+    return isWindy ? (
+      <WiDayWindy className="text-6xl text-yellow-300" />
+    ) : (
+      <WiDaySunny className="text-6xl text-yellow-300" />
+    );
+  }
+
+  if (weather.includes("구름")) {
+    return isWindy ? (
+      <WiCloudyWindy className="text-6xl text-gray-400" />
+    ) : (
+      <WiCloudy className="text-6xl text-gray-300" />
+    );
+  }
+
+  if (weather.includes("비")) {
+    return isWindy ? (
+      <WiRainWind className="text-6xl text-blue-500" />
+    ) : (
+      <WiRain className="text-6xl text-blue-400" />
+    );
+  }
+
+  if (weather.includes("눈")) {
+    return isWindy ? (
+      <WiSnowWind className="text-6xl text-blue-200" />
+    ) : (
+      <WiSnow className="text-6xl text-blue-100" />
+    );
+  }
+
+  // 기본 fallback
   return <WiDaySunny className="text-6xl text-yellow-300" />;
 };
 
@@ -45,12 +78,12 @@ const MyLocalWeather: React.FC<MyLocalWeatherProps> = ({ weatherExpectData }) =>
         <div className="text-center mb-8">
           <div className="flex items-center justify-around">
             <div className="flex items-center space-x-4">
-              {weatherIcon(currentWeather.weather)}
+              {weatherIcon(currentWeather.weather.sky, currentWeather.weather.wind)}
               <div>
-                <p className="text-lg">{currentWeather.weather}</p>
+                <p className="text-lg">{currentWeather.weather.sky}</p>
                 <p className="text-5xl font-bold">{currentWeather.temperature}</p>
                 <p className="text-sm mt-2">
-                  습도: {currentWeather.humidity} | 바람: {currentWeather.wind}
+                  습도: {currentWeather.humidity} | 바람: {currentWeather.windSpeed}
                 </p>
               </div>
             </div>
@@ -65,9 +98,9 @@ const MyLocalWeather: React.FC<MyLocalWeatherProps> = ({ weatherExpectData }) =>
           <div className="flex justify-center space-x-6">
             {forecastList.map((forecast, index) => (
               <div key={index} className="text-center">
-                {weatherIcon(forecast.weather)}
+                {weatherIcon(forecast.weather.sky, forecast.weather.wind)}
                 <p className="text-lg font-bold mt-2">{forecast.temperature}</p>
-                <p className="text-sm text-gray-100">{formatTime(forecast.dateTime)}시</p>
+                <p className="text-sm text-gray-100">{formatTime(forecast.forecastTime)}시</p>
               </div>
             ))}
           </div>
