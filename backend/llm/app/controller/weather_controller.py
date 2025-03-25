@@ -17,7 +17,8 @@ credential_dict = json.loads(settings.GOOGLE_APPLICATION_CREDENTIALS)
 credentials = service_account.Credentials.from_service_account_info(credential_dict)
 
 # BigQuery 클라이언트 초기화
-client = bigquery.Client(project=settings.GCP_PROJECT_ID)
+# client = bigquery.Client(project=settings.GCP_PROJECT_ID)
+client = bigquery.Client(credentials=credentials, project=settings.GCP_PROJECT_ID)
 
 # GCP 프로젝트 및 데이터셋 설정
 GCP_PROJECT_ID = settings.GCP_PROJECT_ID
