@@ -27,10 +27,10 @@ public class WeatherForecastApiClient {
 		String query = "SELECT"
 			+ " *"
 			+ " FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
-			+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
-			+ " AND nx = @nx AND ny = @ny"
-			+ " ORDER BY fcst_date_time"
-			+ " LIMIT 10";
+			// + " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
+			// + " AND nx = @nx AND ny = @ny"
+			+ " ORDER BY fcst_date_time ASC, PTY DESC";
+			// + " LIMIT 10";
 
 		String startTime = getForecastStartTime();
 		String endTime = getForecastEndTime();
@@ -54,12 +54,25 @@ public class WeatherForecastApiClient {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 				LocalDateTime forecastDateTime = LocalDateTime.parse(forecastTime, formatter);
 
-				String temperature = fieldValues.get("TMP").getStringValue();
-				String windSpeed = fieldValues.get("WSD").getStringValue();
-				String skyStatus = fieldValues.get("SKY").getStringValue();
-				String humidity = fieldValues.get("REH").getStringValue();
+				String temperature = fieldValues.get("TMP").getStringValue(); // 온도
+				String windSpeed = fieldValues.get("WSD").getStringValue(); // 풍속
+				String skyStatus = fieldValues.get("SKY").getStringValue(); // 기상 상태 - 맑음, 조금 흐림, 흐림
+				String humidity = fieldValues.get("REH").getStringValue(); // 습도
+				String precipitationType = fieldValues.get("PTY").getStringValue(); // 강수 형태
+				String precipitationMMPerHour = fieldValues.get("PCP").getStringValue(); // 1시간 강수량
+				String snowCmPerHour = fieldValues.get("SNO").getStringValue(); // 1시간 신적설
 
-				WeatherInfo weatherInfo = new WeatherInfo(forecastDateTime, skyStatus, temperature, humidity, windSpeed);
+				// WeatherInfo weatherInfo = new WeatherInfo(forecastDateTime, skyStatus, temperature, humidity, windSpeed);
+				WeatherInfo weatherInfo = WeatherInfo.builder()
+					.temperature(temperature)
+					.forecastTime(forecastDateTime)
+					.wind(windSpeed)
+					.weather(skyStatus)
+					.humidity(humidity)
+					.precipitationType(precipitationType)
+					.precipitationMMPerHour(precipitationMMPerHour)
+					.snowPerHour(snowCmPerHour)
+					.build();
 				weatherInfos.add(weatherInfo);
 			}
 

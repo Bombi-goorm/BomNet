@@ -38,7 +38,7 @@ public class ForecastApiClient {
 			.queryParam("numOfRows", "10")
 			.queryParam("pageNo", "1")
 			.queryParam("dataType", "JSON")
-			.queryParam("base_date", "20250315")
+			.queryParam("base_date", "20250320")
 			.queryParam("base_time", "2300")
 			.queryParam("nx", 127)
 			.queryParam("ny", 60)

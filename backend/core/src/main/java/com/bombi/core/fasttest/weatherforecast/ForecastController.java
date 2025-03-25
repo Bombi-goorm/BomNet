@@ -18,13 +18,16 @@ public class ForecastController {
 
 	private final WeatherForecastApiClient client;
 	private final RegionRepository regionRepository;
+	private final ForecastApiClient forecastApiClient;
 
 	@GetMapping("/weather/forecast")
 	ResponseEntity<?> forecast() {
 		Region region = regionRepository.findByStationName("서울")
 			.orElseThrow(() -> new IllegalArgumentException("ForecastController::region find failed."));
 		WeatherExpection weatherExpection = client.sendWeatherForecast(region);
-
 		return ResponseEntity.ok(weatherExpection);
+
+		// return forecastApiClient.sendWeatherForecast(
+		// 	Integer.parseInt(region.getXx()), Integer.parseInt(region.getYy()));
 	}
 }
