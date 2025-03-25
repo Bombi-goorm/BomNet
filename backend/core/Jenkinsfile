@@ -68,7 +68,6 @@ pipeline {
                     sh "echo image build failed"
                 }
                 success {
-success {
                     slackSend (
                         channel: SLACK_CHANNEL,
                         color: SLACK_SUCCESS_COLOR,
