@@ -1,4 +1,4 @@
-package com.bombi.core.infrastructure.external.gcs.client;
+package com.bombi.core.infrastructure.external.weather.client;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,9 +9,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.bombi.core.infrastructure.external.gcs.dto.SpecialWeatherReport;
-import com.bombi.core.infrastructure.external.gcs.dto.SpecialWeatherReportResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.bombi.core.infrastructure.external.weather.dto.SpecialWeatherReport;
+import com.bombi.core.infrastructure.external.weather.dto.SpecialWeatherReportResponse;
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.FieldValueList;
 import com.google.cloud.bigquery.QueryJobConfiguration;

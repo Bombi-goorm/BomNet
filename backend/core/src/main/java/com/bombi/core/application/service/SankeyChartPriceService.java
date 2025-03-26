@@ -1,5 +1,6 @@
 package com.bombi.core.application.service;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,12 +28,14 @@ public class SankeyChartPriceService {
 	private final PriceChartNodeApiClient priceChartNodeApiClient;
 	private final PriceChartLinkApiClient priceChartLinkApiClient;
 
-	public SankeyDataResponseDto findSankeyChartInfo(String item, String date) {
+	public SankeyDataResponseDto findSankeyChartInfo(String item) {
+		String yesterday = LocalDate.now().minusDays(1).toString();
+
 		// 전체 노드 정보
-		List<ChartNodeInfo> nodeInfos = priceChartNodeApiClient.getNodes(item, date);
+		List<ChartNodeInfo> nodeInfos = priceChartNodeApiClient.getNodes(item, yesterday);
 
 		// 전체 링크 정보
-		List<ChartLinkInfo> linkInfos = priceChartLinkApiClient.getLinks(item, date);
+		List<ChartLinkInfo> linkInfos = priceChartLinkApiClient.getLinks(item, yesterday);
 
 		// 링크에서 노드 추출
 		Set<Long> sourceNodeIds = extractSourceNodeFromLink(linkInfos);

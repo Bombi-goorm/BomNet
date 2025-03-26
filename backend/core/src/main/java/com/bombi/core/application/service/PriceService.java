@@ -51,8 +51,7 @@ public class PriceService {
 		List<RegionChartData> regionItemPrice = regionItemPriceService.getRegionItemPrice(item);
 
 		// 품종별 sankey chart
-		String date = LocalDate.now().toString();
-		SankeyDataResponseDto sankeyChartInfo = sankeyChartPriceService.findSankeyChartInfo(item, date);
+		SankeyDataResponseDto sankeyChartInfo = sankeyChartPriceService.findSankeyChartInfo(item);
 
 		return new OverallPriceInfoResponse(annualItemPrice, monthlyItemPrice, dailyItemPrice, realTimeItemPrice, qualityChartData, regionItemPrice, sankeyChartInfo);
 	}

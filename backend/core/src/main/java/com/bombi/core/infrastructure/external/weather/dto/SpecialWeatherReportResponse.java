@@ -1,4 +1,4 @@
-package com.bombi.core.infrastructure.external.gcs.dto;
+package com.bombi.core.infrastructure.external.weather.dto;
 
 import java.util.List;
 

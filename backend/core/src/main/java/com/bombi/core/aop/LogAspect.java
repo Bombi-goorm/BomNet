@@ -18,7 +18,7 @@ public class LogAspect {
 
 	@Around("servicePointcut()")
 	public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-		Long startTime = System.currentTimeMillis();
+		long startTime = System.currentTimeMillis();
 		String shortString = joinPoint.getSignature().toShortString();
 
 		log.info("[AOP] {} Start", shortString);

@@ -44,18 +44,11 @@ public class MemberService {
 			.orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 		MemberInfo memberInfo = member.getMemberInfo();
 
-
-		// TO-DO : 일반사용자는 pnu가 없으므로 위치기반 데이터는 다 쓰지 않기로 결정
-
-		System.out.println("serviceMember-ID::" + member.getId());
-
 		String pnuCode = memberInfo.getPnu();
 
 		if (pnuCode == null || pnuCode.length() < 5) {
 			return new MemberInfoResponseDto(member);
 		}
-
-		System.out.println("MemberPnu::"+pnuCode);
 
 		// 평균 기온, 평균 강수량
 		String sidoCode = pnuCode.substring(0, 5);
@@ -66,17 +59,8 @@ public class MemberService {
 		SoilCharacterResponseDto soilCharacterResponse = soilCharacterApiClient.sendSoilCharacter(pnuCode);
 		SoilChemicalResponseDto soilChemicalResponse = soilChemicalApiClient.sendSoilChemical(pnuCode);
 
-		// 토양 코드, 평균 기온, 평균 강수량을 포함해 BigQuery로 api 요청 필요
-		BigQueryRecommendProductRequestDto requestDto = new BigQueryRecommendProductRequestDto(
-			pnuCode, sidoCode, soilCharacterResponse, soilChemicalResponse);
-		BigQueryRecommendProductResponseDto recommendProductResponseDto = bigQueryRecommendProductApiClient.callRecommendProduct(requestDto);
-
-		return new MemberInfoResponseDto(member, regionWeather, soilCharacterResponse, soilChemicalResponse, recommendProductResponseDto);
+		return new MemberInfoResponseDto(member, regionWeather, soilCharacterResponse, soilChemicalResponse, null);
 	}
-
-	// public void registerMember(MemberRequestDto requestDto) {
-	// 	memberInfoRepository.findById()
-	// }
 
 	@Transactional
 	public void registerPnu(PnuRegisterRequestDto requestDto, String memberId) {

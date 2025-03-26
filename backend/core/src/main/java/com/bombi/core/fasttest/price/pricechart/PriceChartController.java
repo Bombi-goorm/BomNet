@@ -1,5 +1,6 @@
 package com.bombi.core.fasttest.price.pricechart;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -45,7 +46,8 @@ public class PriceChartController {
 
 	@GetMapping
 	public ResponseEntity<?> priceLinkAndNodeChart() {
-		String date = "2025-03-07";
+		// String date = "2025-03-07";
+		String date = LocalDate.now().minusDays(1L).toString();
 		String item = "사과";
 
 		// 전체 노드 정보

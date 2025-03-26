@@ -23,7 +23,6 @@ public class DatabaseConnectionChecker implements CommandLineRunner {
                 log.info("Database connected successfully!");
             } else {
                 log.error("Failed to connect to the database.");
-                System.out.println();
             }
         } catch (SQLException e) {
             log.error("SQL Exception: " + e.getMessage());
