@@ -26,6 +26,9 @@ public class LogAspect {
 		Object result = null;
 		try {
 			result = joinPoint.proceed();
+		} catch (Exception e) {
+			log.error("[AOP] {} Exception : {}", shortString, e.getMessage());
+			throw e;
 		} finally {
 			long endTime = System.currentTimeMillis();
 			long durationMs = endTime - startTime;
