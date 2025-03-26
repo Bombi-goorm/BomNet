@@ -17,7 +17,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         if (request.getRequestURI().startsWith("/core")) {
-            String requestId = UUID.randomUUID().toString();
+            String requestId = UUID.randomUUID().toString().substring(0, 8);
             long startTime = System.nanoTime();
 
             MDC.put("TRANSFER_REQUEST", "Y");
