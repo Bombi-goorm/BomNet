@@ -85,9 +85,9 @@ public class FarmAnalyzer {
 		SoilDrainage soilDrainage = soilCharacterResponse.getSoildraCode();
 		boolean drainageSuitableSuitability = soilDrainage.isSuitable(productionCondition);
 
-		physicalSuitabilityMap.put("soilTexture", soilTextureSuitability);
-		physicalSuitabilityMap.put("soilDepth", soilDepthSuitability);
-		physicalSuitabilityMap.put("drainage", drainageSuitableSuitability);
+		physicalSuitabilityMap.put("토성", soilTextureSuitability); // 토성
+		physicalSuitabilityMap.put("유효 토심", soilDepthSuitability); // 토심
+		physicalSuitabilityMap.put("배수 등급", drainageSuitableSuitability); // 배수
 
 		return SuitabilityResult.of(physicalSuitabilityMap);
 	}
@@ -107,12 +107,12 @@ public class FarmAnalyzer {
 		boolean calciumSuitability = productionCondition.isCalciumSuitable(soilChemicalResponse.getCaCMolPerKg());
 		boolean magnesiumSuitability = productionCondition.isMagnesiumSuitable(soilChemicalResponse.getMgCMolPerKg());
 
-		chemicalSuitabilityMap.put("pH", pHSuitability);
-		chemicalSuitabilityMap.put("OrganicMatter", organicMatterSuitability);
-		chemicalSuitabilityMap.put("phosphorus", phosphorusSuitability);
-		chemicalSuitabilityMap.put("potassium", potassiumSuitability);
-		chemicalSuitabilityMap.put("calcium", calciumSuitability);
-		chemicalSuitabilityMap.put("magnesium", magnesiumSuitability);
+		chemicalSuitabilityMap.put("산도", pHSuitability); // 산도
+		chemicalSuitabilityMap.put("유기물", organicMatterSuitability); // 유기물
+		chemicalSuitabilityMap.put("유효 인산", phosphorusSuitability); // 유효인산
+		chemicalSuitabilityMap.put("칼륨", potassiumSuitability); // 칼륨
+		chemicalSuitabilityMap.put("칼슘", calciumSuitability); // 칼슘
+		chemicalSuitabilityMap.put("마그네슘", magnesiumSuitability); // 마그네슘
 
 		return SuitabilityResult.of(chemicalSuitabilityMap);
 	}
@@ -125,9 +125,9 @@ public class FarmAnalyzer {
 		boolean precipitationSuitability = productionCondition.isRainfallSuitable(regionWeather.getAnnualPrecipitation());
 		boolean sunlightSuitability = productionCondition.isSunlightSuitable(regionWeather.getAnnualSunlightHours());
 
-		weatherSuitabilityMap.put("temperature", temperatureSuitability); // 기온
-		weatherSuitabilityMap.put("precipitation", precipitationSuitability); // 강수량
-		weatherSuitabilityMap.put("sunlightHours", sunlightSuitability); // 일조량
+		weatherSuitabilityMap.put("기온", temperatureSuitability); // 기온
+		weatherSuitabilityMap.put("강수량", precipitationSuitability); // 강수량
+		weatherSuitabilityMap.put("일조량", sunlightSuitability); // 일조량
 
 		return SuitabilityResult.of(weatherSuitabilityMap);
 	}
