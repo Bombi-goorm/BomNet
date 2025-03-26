@@ -16,6 +16,21 @@ from app.database import engine, Base
 from app.util.request_interceptor import RequestTimerMiddleware
 
 
+
+
+
+
+# 사용 예시
+logger_names = [
+    "alert_logger",
+    "weather_logger",
+    "gpt_logger",
+    "auth_logger",
+    "database_logger",
+    "request_timer_logger",
+    "main_logger",
+]
+
 def setup_loggers(logger_names: List[str]):
     formatter = logging.Formatter("%(asctime)s | %(name)s | %(levelname)s | %(message)s")
 
@@ -29,18 +44,9 @@ def setup_loggers(logger_names: List[str]):
             handler.setFormatter(formatter)
             logger.addHandler(handler)
 
-# 사용 예시
-logger_names = [
-    "alert_logger",
-    "weather_logger",
-    "gpt_logger",
-    "auth_logger",
-    "database_logger",
-    "request_timer_logger",
-    "main_logger",
-]
-
 setup_loggers(logger_names)
+
+logger = logging.getLogger("main_logger")
 
 # FastAPI 앱 생성
 app = FastAPI()
@@ -84,6 +90,8 @@ async def check_db_connection_on_startup():
         logger.info("[DB 연결 성공] DB 연결 완료")
     except SQLAlchemyError as e:
         logger.error("[ERROR] DB 연결 실패", exc_info=True)
+
+
 
 
 # FastAPI 실행
