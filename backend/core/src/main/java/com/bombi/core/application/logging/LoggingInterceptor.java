@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
@@ -24,6 +25,17 @@ public class LoggingInterceptor implements HandlerInterceptor {
             MDC.put("START_TIME", String.valueOf(startTime));
             MDC.put("REQUEST_URI", request.getRequestURI());
             MDC.put("METHOD", request.getMethod());
+
+            if(handler instanceof HandlerMethod) {
+                HandlerMethod handlerMethod = (HandlerMethod) handler;
+                String controllerName = handlerMethod.getBeanType().getSimpleName();
+                String methodName = handlerMethod.getMethod().getName();
+
+                String handlerInformation = controllerName + "." + methodName;
+                MDC.put("HANDLER_INFO", handlerInformation);
+            } else {
+                MDC.put("HANDLER_INFO", handler.toString());
+            }
 
             log.info("Request Start: {}", request.getRequestURI());
         }
@@ -48,7 +60,6 @@ public class LoggingInterceptor implements HandlerInterceptor {
         } catch (NumberFormatException e) {
             log.error("Invalid start time format", e);
         } finally {
-            // 요청 처리 완료 후 MDC 초기화
             MDC.clear();
         }
     }
