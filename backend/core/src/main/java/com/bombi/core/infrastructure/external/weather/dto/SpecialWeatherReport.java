@@ -1,8 +1,6 @@
-package com.bombi.core.infrastructure.external.gcs.dto;
+package com.bombi.core.infrastructure.external.weather.dto;
 
 import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

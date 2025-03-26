@@ -34,7 +34,7 @@ public class RegionVarietyPriceCollector {
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
 			.addNamedParameter("item", QueryParameterValue.string(item))
-			.setUseLegacySql(false) // 표준 SQL 사용
+			.setUseLegacySql(false)
 			.build();
 
 		try {
@@ -44,14 +44,8 @@ public class RegionVarietyPriceCollector {
 
 			for (FieldValueList value : result.getValues()) {
 				String varietyValue = value.get("variety").getStringValue();
-				String dateTimeValue = value.get("date_time").getStringValue();
 				String regionName = value.get("plor_nm").getStringValue();
 				long averagePricePerKg = value.get("avg_ppk").getLongValue();
-
-				// System.out.print("varietyValue = " + varietyValue);
-				// System.out.print(", dateTimeValue = " + dateTimeValue);
-				// System.out.print(", regionName = " + regionName);
-				// System.out.println(", averagePricePerKg = " + averagePricePerKg);
 
 				RegionChartData data = new RegionChartData(varietyValue, regionName, averagePricePerKg);
 				regionChartData.add(data);
