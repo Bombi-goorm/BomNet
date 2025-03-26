@@ -2,7 +2,7 @@ package com.bombi.core.presentation.dto.home;
 
 import java.util.List;
 
-import com.bombi.core.infrastructure.external.gcs.dto.SpecialWeatherReportResponse;
+import com.bombi.core.infrastructure.external.weather.dto.SpecialWeatherReportResponse;
 import com.bombi.core.infrastructure.external.naver.dto.news.NaverNewsResponse;
 import com.bombi.core.presentation.dto.weather.WeatherNoticeResponseDto;
 

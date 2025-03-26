@@ -1,6 +1,6 @@
 package com.bombi.core.presentation.dto.weather;
 
-import com.bombi.core.infrastructure.external.gcs.dto.SpecialWeatherReport;
+import com.bombi.core.infrastructure.external.weather.dto.SpecialWeatherReport;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

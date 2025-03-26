@@ -33,12 +33,12 @@ import com.bombi.core.common.exception.TokenNotFoundException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     public static final String ACCESS_TOKEN_COOKIE_NAME = "access_token";
+    public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
     public static final long ACCESS_TOKEN_COOKIE_AGE = 60L;
     private static final List<String> EXCLUDED_PATHS = Arrays.asList(
         "/core/health", "/bigquery/data", "/gcs/data", "/weather/special", "/naver/news", "/best/price", "/core/home", "/weather/forecast", "/soil/character", "/soil/chemical",
         "/farm", "/product/chart/node", "/product/chart/link", "/product/chart", "/core/item/price", "/price/variety"
     );
-    public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
 
     private final JwtProvider jwtProvider;
     private final JwtGenerator jwtGenerator;
@@ -47,68 +47,42 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("JwtAuthenticationFilter::doFilterInternal");
-        System.out.println("doFilterInternal::");
+
         if (EXCLUDED_PATHS.stream().anyMatch(request.getServletPath()::contains)) {
-            System.out.println("EXCLUDED_PATHS::");
+            log.info("EXCLUDED_PATHS::");
             filterChain.doFilter(request, response);
             return;
         }
 
         try {
-            System.out.println("filter1::");
             // 쿠키에서 토큰 추출
             Cookie[] cookies = request.getCookies();
 
             String rawCookieHeader = request.getHeader("Cookie");
             System.out.println("🔹 Raw Cookie Header: " + rawCookieHeader);
 
-//            if (cookies == null) {
-//                filterChain.doFilter(request, response);
-//                return;
-//            }
-
             if (cookies == null || cookies.length == 0) {
-                System.out.println("🔹 No cookies found in the request.");
-                System.out.println("Cookie::"+cookies);
+                log.info("🔹 No cookies found in the request.");
+                log.info("Cookie::{}",cookies);
                 filterChain.doFilter(request, response);
                 return;
             } else {
-                System.out.println("🔸 Cookies received in the request:");
-                for (Cookie cookie : cookies) {
-                    System.out.printf("    • Name: %s%n", cookie.getName());
-                    System.out.printf("      Value: %s%n", cookie.getValue());
-                    System.out.printf("      Domain: %s%n", cookie.getDomain());
-                    System.out.printf("      Path: %s%n", cookie.getPath());
-                    System.out.printf("      Secure: %s%n", cookie.getSecure());
-                    System.out.printf("      HttpOnly: %s%n", cookie.isHttpOnly());
-                    System.out.printf("      MaxAge: %d%n", cookie.getMaxAge());
-                    System.out.println("------------------------------------");
-                }
+                log.info("🔸 Cookies received in the request:");
             }
 
             String accessToken = extractTokenFromCookie(ACCESS_TOKEN_COOKIE_NAME, cookies);
             String refreshToken = extractTokenFromCookie(REFRESH_TOKEN_COOKIE_NAME, cookies);
 
-            System.out.println("filter2::");
-            System.out.println(accessToken);
-            System.out.println(refreshToken);
-
             String memberId;
 
             try {
-                System.out.println("filter3::");
                 jwtProvider.validateToken(accessToken);
-                System.out.println("filter4::");
                 Claims claims = jwtProvider.extractAllClaims(accessToken);
-                System.out.println("filter5::");
                 memberId = claims.getSubject();
-                System.out.println("filter6::"+memberId);
+                log.info("filter6::{}", memberId);
             } catch (ExpiredJwtException | TokenNotFoundException e) {
                 log.info("access token expired or not found. start renewing token");
                 String renewedAccessToken = jwtGenerator.renewToken(accessToken, refreshToken);
-
-                System.out.println("renewd:::");
-                System.out.println(renewedAccessToken);
 
                 // set-cookie의 access_token에 새로 발급한 토큰을 지정
                 addNewTokenCookieInHeader(response, renewedAccessToken);
@@ -117,21 +91,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 memberId = claims.getSubject();
             }
 
-            System.out.println("filter7::");
             if(memberId != null) {
                 UserDetails userDetails = customUserDetailsService.loadUserByUsername(memberId);
                 authenticateUser(request, userDetails);
             }
 
-            System.out.println("filter8::");
         } catch (InvalidTokenException e) {
-            System.out.println("filter::InvalidTokenException");
             log.error("Token validation error: {}", e.getMessage());
             deleteAccessTokenInCookie(response);
             sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "토큰 검증에 실패했습니다.");
             return;
         } catch (Exception e) {
-            System.out.println("filter::Exception");
             log.error("Authentication processing error", e);
             sendErrorResponse(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "인증 처리 중 오류가 발생했습니다.");
             return;
@@ -141,7 +111,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String extractTokenFromCookie(String tokenName, Cookie[] cookies) {
-        System.out.println("extractTokenFromCookie::");
+        log.info("extractTokenFromCookie::");
         return Arrays.stream(cookies)
             .filter(cookie -> cookie.getName().equals(tokenName))
             .findFirst()
@@ -174,7 +144,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void authenticateUser(HttpServletRequest request, UserDetails userDetails) {
-        System.out.println("authenticateUser::");
+        log.info("authenticateUser");
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             userDetails,
             null,
@@ -185,7 +155,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private static void sendErrorResponse(HttpServletResponse response, int scUnauthorized, String message) {
-        System.out.println("sendErrorResponse::");
         ResponseWriter.writeExceptionResponse(
             response,
             scUnauthorized,

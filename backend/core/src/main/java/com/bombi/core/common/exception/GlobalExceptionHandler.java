@@ -99,23 +99,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(response);
     }
 
-    // // 네이버 API 예외처리
-    // @ExceptionHandler(NaverApiException.class)
-    // public ResponseEntity<?> handleNaverApiException(NaverApiException ex) {
-    //     log.warn("NaverApiException - " + ex.getMessage());
-    //
-    //     HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-    //
-    //     // 발생 원인에 따른 상태 코드 설정
-    //     if (ex.getCause() instanceof UnsupportedEncodingException ||
-    //             ex.getCause() instanceof NoSuchAlgorithmException ||
-    //             ex.getCause() instanceof InvalidKeyException) {
-    //         httpStatus = HttpStatus.BAD_REQUEST;
-    //     }
-    //     CoreResponseDto response = new CoreResponseDto(ex.getStatus(), "요청이 실패했습니다. 관리자에게 문의해주세요.");
-    //     return ResponseEntity.status(httpStatus).body(response);
-    // }
-
     // 멤버 인증 예외
     @ExceptionHandler(MemberAuthException.class)
     public ResponseEntity<?> handleMemberAuthException(MemberAuthException ex) {
