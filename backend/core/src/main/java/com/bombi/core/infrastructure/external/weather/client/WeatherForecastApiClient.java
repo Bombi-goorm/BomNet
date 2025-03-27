@@ -5,13 +5,18 @@ import com.bombi.core.presentation.dto.home.WeatherExpection;
 import com.bombi.core.presentation.dto.home.BigqueryForecastResponse;
 import com.google.cloud.bigquery.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class WeatherForecastApiClient {
@@ -29,13 +34,16 @@ public class WeatherForecastApiClient {
 			+ " FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
 			+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
 			+ " AND nx = @nx AND ny = @ny"
-			+ " ORDER BY fcst_date_time ASC, PTY DESC"
-			+ " LIMIT 10";
+			+ " ORDER BY fcst_date_time ASC";
+			// + " LIMIT 10";
 
 		String startTime = getForecastStartTime();
 		String endTime = getForecastEndTime();
 		String nx = region.getXx();
 		String ny = region.getYy();
+
+		log.info("Start time: {}, End time : {}", startTime, endTime);
+		log.info("NX: {}, NY: {}", nx, ny);
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
 			.addNamedParameter("startFcstTime", QueryParameterValue.string(startTime))
@@ -89,12 +97,17 @@ public class WeatherForecastApiClient {
 	}
 
 	private String getForecastStartTime() {
-		LocalDateTime localDateTime = LocalDateTime.now();
+		// LocalDateTime localDateTime = LocalDateTime.now();
+		LocalDate localDate = LocalDate.now();
+		LocalTime midnight = LocalTime.MIDNIGHT;
+		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
 		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 	}
 
 	private String getForecastEndTime() {
-		LocalDateTime localDateTime = LocalDateTime.now().plusHours(6L);
+		LocalDate localDate = LocalDate.now().plusDays(1);
+		LocalTime midnight = LocalTime.MIDNIGHT;
+		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
 		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 	}
 
