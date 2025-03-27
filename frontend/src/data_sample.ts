@@ -1,5 +1,5 @@
 
-import { BestItems, HomeDto } from "./types/home_types";
+import { BestItems } from "./types/home_types";
 import { FarmData } from "./types/member_types";
 import { PriceResponse } from "./types/price_types";
 // import { CultivationInfo, FarmSuitability, Product, ProductResponseDto } from "./types/product_types";
