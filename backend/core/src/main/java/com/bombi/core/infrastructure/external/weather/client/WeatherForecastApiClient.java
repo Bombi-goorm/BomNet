@@ -34,6 +34,7 @@ public class WeatherForecastApiClient {
 //			+ " WHERE nx = @nx AND ny = @ny"
 //			+ " ";
 			// + " LIMIT 10";
+
 		System.out.println("query");
 		System.out.println(query);
 		System.out.println("==============");
@@ -55,6 +56,7 @@ public class WeatherForecastApiClient {
 			.build();
 
 		System.out.println(QueryParameterValue.string(nx));
+
 		System.out.println(queryConfig);
 
 
@@ -106,14 +108,14 @@ public class WeatherForecastApiClient {
 		LocalDate localDate = LocalDate.now();
 		LocalTime midnight = LocalTime.MIDNIGHT;
 		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
-		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
 	private String getForecastEndTime() {
 		LocalDate localDate = LocalDate.now().plusDays(1);
 		LocalTime midnight = LocalTime.MIDNIGHT;
 		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
-		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
 }
