@@ -97,3 +97,4 @@ export const removeNotificationCondition = async (data: PriceAlertCondition): Pr
   const response = await api.post<CommonResponseDto<PriceAlertCondition[]>>(`/notification/condition`, data);
   return response.data;
 };
+
