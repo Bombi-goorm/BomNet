@@ -3,6 +3,7 @@ package com.bombi.core.infrastructure.external.price.chart.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import com.bombi.core.infrastructure.external.price.chart.dto.ChartNodeInfo;
@@ -20,6 +21,7 @@ public class PriceChartNodeApiClient {
 
 	private final BigQuery bigQuery;
 
+	@Cacheable(value = "ProductChart", key = "#item + '_' + #dateTime + '_node'")
 	public List<ChartNodeInfo> getNodes(String item, String dateTime) {
 		String query = "select * from kma.int_mafra__sankey_nodes"
 			+ " where item = @item and date_time = @date_time"
