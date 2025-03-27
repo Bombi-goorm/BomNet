@@ -36,6 +36,9 @@ public class WeatherForecastApiClient {
 			+ " AND nx = @nx AND ny = @ny"
 			+ " ORDER BY fcst_date_time ASC";
 			// + " LIMIT 10";
+		System.out.println("query");
+		System.out.println(query);
+		System.out.println("==============");
 
 		String startTime = getForecastStartTime();
 		String endTime = getForecastEndTime();
