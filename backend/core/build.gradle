@@ -45,6 +45,9 @@ dependencies {
 	// Redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+	// Cache
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+
 	// MariaDB
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.2'
