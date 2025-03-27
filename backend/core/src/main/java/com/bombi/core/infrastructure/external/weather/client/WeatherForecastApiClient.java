@@ -32,10 +32,10 @@ public class WeatherForecastApiClient {
 		String query = "SELECT"
 			+ " *"
 			+ " FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
-//			+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
-			+ " WHERE nx = @nx AND ny = @ny"
-			+ " ORDER BY fcst_date_time ASC";
-			// + " LIMIT 10";
+			+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
+			+ " AND nx = @nx AND ny = @ny"
+			+ " ORDER BY fcst_date_time ASC"
+			+ " LIMIT 12";
 		System.out.println("query");
 		System.out.println(query);
 		System.out.println("==============");
@@ -56,6 +56,8 @@ public class WeatherForecastApiClient {
 			.setUseLegacySql(false)
 			.build();
 
+		// System.out.println("QueryParameterValue.string(nx) = " + QueryParameterValue.string(nx));
+		// System.out.println("QueryParameterValue.string(ny) = " + QueryParameterValue.string(ny));
 		System.out.println(queryConfig);
 
 
@@ -107,14 +109,14 @@ public class WeatherForecastApiClient {
 		LocalDate localDate = LocalDate.now();
 		LocalTime midnight = LocalTime.MIDNIGHT;
 		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
-		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
 	private String getForecastEndTime() {
 		LocalDate localDate = LocalDate.now().plusDays(1);
 		LocalTime midnight = LocalTime.MIDNIGHT;
 		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
-		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
 }
