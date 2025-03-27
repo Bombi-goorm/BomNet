@@ -118,8 +118,7 @@ pipeline {
                         color: SLACK_SUCCESS_COLOR,
                         message: "ECR에 Image Push를 성공하였습니다."
                     )
-                    sh "docker image rm -f ${IMAGE_NAME}:${currentBuild.number}"
-                    sh "docker image rm -f ${IMAGE_NAME}:latest"
+                    sh "docker image prune -f"
                     sh "echo push success"
                 }
             }
