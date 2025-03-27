@@ -29,15 +29,13 @@ public class WeatherForecastApiClient {
 	 */
 	public WeatherExpection sendWeatherForecast(Region region) {
 
-		String query = "SELECT * FROM `goorm-bomnet.kma.int_kma_pivoted_short` ORDER BY fcst_date_time ASC";
+		String query = "SELECT * FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
 //			+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
+				+ " WHERE fcst_date_time >=2025-03-27 00:00:00 and fcst_date_time <= 2025-03-27 12:00:00"
+				+ " WHERE nx = 60 AND ny = 127"
 //			+ " WHERE nx = @nx AND ny = @ny"
-//			+ " ";
-			// + " LIMIT 10";
-
-		System.out.println("query");
-		System.out.println(query);
-		System.out.println("==============");
+				+ " ORDER BY fcst_date_time ASC"
+				+ " LIMIT 10";
 
 		String startTime = getForecastStartTime();
 		String endTime = getForecastEndTime();
@@ -48,25 +46,17 @@ public class WeatherForecastApiClient {
 		log.info("NX: {}, NY: {}", nx, ny);
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
-			.addNamedParameter("startFcstTime", QueryParameterValue.string(startTime))
-			.addNamedParameter("endFcstTime", QueryParameterValue.string(endTime))
-			.addNamedParameter("nx", QueryParameterValue.string(nx))
-			.addNamedParameter("ny", QueryParameterValue.string(ny))
-			.setUseLegacySql(false)
-			.build();
-
-		System.out.println(QueryParameterValue.string(nx));
+				.addNamedParameter("startFcstTime", QueryParameterValue.string(startTime))
+				.addNamedParameter("endFcstTime", QueryParameterValue.string(endTime))
+				.addNamedParameter("nx", QueryParameterValue.string(nx))
+				.addNamedParameter("ny", QueryParameterValue.string(ny))
+				.setUseLegacySql(false)
+				.build();
 
 		System.out.println(queryConfig);
 
-
-		System.out.println("==========================");
 		try {
 			TableResult tableResult = bigQuery.query(queryConfig);
-			System.out.println("table");
-			System.out.println(tableResult);
-			System.out.println(tableResult.toString());
-			System.out.println(tableResult.getSchema().getFields().toString());
 
 			List<BigqueryForecastResponse> bigqueryForecastResponses = new ArrayList<>();
 			for (FieldValueList fieldValues : tableResult.iterateAll()) {
@@ -80,20 +70,14 @@ public class WeatherForecastApiClient {
 				String humidity = fieldValues.get("REH").getStringValue(); // 습도
 				String precipitationType = fieldValues.get("PTY").getStringValue(); // 강수 형태
 
-				System.out.println(temperature);
-				System.out.println(windSpeed);
-				System.out.println(skyStatus);
-				System.out.println(humidity);
-				System.out.println(precipitationType);
-
 				BigqueryForecastResponse bigqueryForecastResponse = BigqueryForecastResponse.builder()
-					.temperature(temperature)
-					.forecastTime(forecastDateTime)
-					.windSpeed(windSpeed)
-					.weather(skyStatus)
-					.humidity(humidity)
-					.precipitationType(precipitationType)
-					.build();
+						.temperature(temperature)
+						.forecastTime(forecastDateTime)
+						.windSpeed(windSpeed)
+						.weather(skyStatus)
+						.humidity(humidity)
+						.precipitationType(precipitationType)
+						.build();
 				bigqueryForecastResponses.add(bigqueryForecastResponse);
 			}
 
