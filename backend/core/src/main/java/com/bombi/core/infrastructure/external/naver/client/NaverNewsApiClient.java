@@ -2,6 +2,8 @@ package com.bombi.core.infrastructure.external.naver.client;
 
 import java.net.URI;
 
+import org.hibernate.annotations.Cache;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,6 +29,7 @@ public class NaverNewsApiClient {
     private final NaverNewsApiUtil naverNewsApiUtil;
     private final RestTemplate restTemplate;
 
+    @Cacheable(value = "News")
     public NaverNewsResponse sendNews() {
         log.info("NaverNewsApiClient::sendNews START");
         URI uri = naverNewsApiUtil.createNewsUri("10", "1");
