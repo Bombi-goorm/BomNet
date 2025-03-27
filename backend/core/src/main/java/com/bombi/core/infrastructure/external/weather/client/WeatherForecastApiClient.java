@@ -33,7 +33,7 @@ public class WeatherForecastApiClient {
 			+ " *"
 			+ " FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
 //			+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
-			+ " AND nx = @nx AND ny = @ny"
+			+ " WHERE nx = @nx AND ny = @ny"
 			+ " ORDER BY fcst_date_time ASC";
 			// + " LIMIT 10";
 		System.out.println("query");
