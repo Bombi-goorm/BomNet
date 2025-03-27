@@ -10,7 +10,7 @@ export interface HomeRequestDto {
 export interface HomeDto {
     bestItems: BestItems,
     weatherNotice: WeatherNotice[],
-    weatherExpect: WeatherExpections,
+    weatherExpection: WeatherExpections,
     news: News[],
 }
 

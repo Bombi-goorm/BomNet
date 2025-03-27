@@ -86,194 +86,147 @@ export const bestItemsFix: BestItems = {
   }
 
 // 홈화면 샘플 데이터
-export const data: HomeDto =  {
-  bestItems:  // 5개
-    {
-      products: [ //7일
-        {
-          productId: 1,
-          productName: "딸기",
-          imgUrl:
-            "https://your-s3-bucket.s3.amazonaws.com/products/strawberry.jpg",
-            productPrices: [
-            { date: "2025-02-20", price: 8537 },
-            { date: "2025-02-21", price: 8400 },
-            { date: "2025-02-22", price: 8600 },
-            { date: "2025-02-23", price: 8600 },
-            { date: "2025-02-24", price: 8600 },
-            { date: "2025-02-25", price: 8600 },
-            { date: "2025-02-26", price: 8600 },
-          ],
-        },
-        {
-          productId: 2,
-          productName: "사과",
-          imgUrl:
-            "https://your-s3-bucket.s3.amazonaws.com/products/apple.jpg",
-            productPrices: [
-            { date: "2025-02-20", price: 2000 },
-            { date: "2025-02-21", price: 2050 },
-            { date: "2025-02-22", price: 2100 },
-            { date: "2025-02-23", price: 8600 },
-            { date: "2025-02-24", price: 8600 },
-            { date: "2025-02-25", price: 8600 },
-            { date: "2025-02-26", price: 8600 },
-          ],
-        },
-        {
-          productId: 3,
-          productName: "배",
-          imgUrl:
-            "https://your-s3-bucket.s3.amazonaws.com/products/pear.jpg",
-            productPrices: [
-            { date: "2025-02-20", price: 8000 },
-            { date: "2025-02-21", price: 7900 },
-            { date: "2025-02-22", price: 8100 },
-            { date: "2025-02-23", price: 8600 },
-            { date: "2025-02-24", price: 8600 },
-            { date: "2025-02-25", price: 8600 },
-            { date: "2025-02-26", price: 8600 },
-          ],
-        },
-        {
-          productId: 4,
-          productName: "감자",
-          imgUrl:
-            "https://your-s3-bucket.s3.amazonaws.com/products/potato.jpg",
-            productPrices: [
-            { date: "2025-02-20", price: 2000 },
-            { date: "2025-02-21", price: 1950 },
-            { date: "2025-02-22", price: 2100 },
-            { date: "2025-02-23", price: 8600 },
-            { date: "2025-02-24", price: 8600 },
-            { date: "2025-02-25", price: 8600 },
-            { date: "2025-02-26", price: 8600 },
-          ],
-        },
-        {
-          productId: 5,
-          productName: "고구마",
-          imgUrl:
-            "https://your-s3-bucket.s3.amazonaws.com/products/gogu.jpg",
-            productPrices: [
-            { date: "2025-02-20", price: 5000 },
-            { date: "2025-02-21", price: 5200 },
-            { date: "2025-02-22", price: 4800 },
-            { date: "2025-02-23", price: 8600 },
-            { date: "2025-02-24", price: 8600 },
-            { date: "2025-02-25", price: 8600 },
-            { date: "2025-02-26", price: 8600 },
-          ],
-        },
-      ],
-    },
-  weatherNotice: [ // 6개만
-    {
-      dateTime: "2023-02-01T08:00:00Z",
-      location: "서울",
-      content: "강풍 주의보 발령",
-    },
-    {
-      dateTime: "2023-02-01T09:00:00Z",
-      location: "부산",
-      content: "폭우 경보 발령",
-    },
-    {
-      dateTime: "2023-02-01T09:00:00Z",
-      location: "부산",
-      content: "폭우 경보 발령",
-    },
-    {
-      dateTime: "2023-02-01T09:00:00Z",
-      location: "부산",
-      content: "폭우 경보 발령",
-    },
-    {
-      dateTime: "2023-02-01T09:00:00Z",
-      location: "부산",
-      content: "폭우 경보 발령",
-    },
-    {
-      dateTime: "2023-02-01T09:00:00Z",
-      location: "부산",
-      content: "폭우 경보 발령",
-    },
-  ],
-  weatherExpect:  // 6개
-    {
-      location: "서울",
-      weatherInfo: [
-        {
-          weather: "맑음",
-          temperature: "5°C",
-          humidity: "30%",
-          wind: "10km/h",
-          dateTime: "2023-02-01T12:00:00Z",
-        },
-        {
-          weather: "눈",
-          temperature: "-7°C",
-          humidity: "75%",
-          wind: "2km/h",
-          dateTime: "2023-02-01T14:00:00Z",
-        },
-        {
-          weather: "비",
-          temperature: "7°C",
-          humidity: "35%",
-          wind: "8km/h",
-          dateTime: "2023-02-01T15:00:00Z",
-        },
-        {
-          weather: "천둥",
-          temperature: "3°C",
-          humidity: "50%",
-          wind: "22km/h",
-          dateTime: "2023-02-01T16:00:00Z",
-        },
-        {
-          weather: "맑음",
-          temperature: "3°C",
-          humidity: "50%",
-          wind: "22km/h",
-          dateTime: "2023-02-01T16:00:00Z",
-        },
-        {
-          weather: "구름",
-          temperature: "3°C",
-          humidity: "50%",
-          wind: "22km/h",
-          dateTime: "2023-02-01T16:00:00Z",
-        },
-      ],
-    },
-  news: [
-    {
-      title: "농업 혁신, 새로운 시대를 열다",
-      content: "농업 기술의 발전이 새로운 도약을 예고합니다.",
-      dateTime: "2023-02-01T10:00:00Z",
-      newsLink: "https://news.example.com/article/1",
-    },
-    {
-      title: "기후 변화, 농업에 미치는 영향",
-      content: "기후 변화가 농업에 미치는 영향에 대한 심도 있는 분석.",
-      dateTime: "2023-02-01T11:00:00Z",
-      newsLink: "https://news.example.com/article/2",
-    },
-    {
-      title: "기후 변화, 농업에 미치는 영향",
-      content: "기후 변화가 농업에 미치는 영향에 대한 심도 있는 분석.",
-      dateTime: "2023-02-01T11:00:00Z",
-      newsLink: "https://news.example.com/article/2",
-    },
-    {
-      title: "기후 변화, 농업에 미치는 영향",
-      content: "기후 변화가 농업에 미치는 영향에 대한 심도 있는 분석.",
-      dateTime: "2023-02-01T11:00:00Z",
-      newsLink: "https://news.example.com/article/2",
-    },
-  ],
-}
+// export const data: HomeDto =  {
+//   bestItems:  // 5개
+//     {
+//       products: [ //7일
+//         {
+//           productId: 1,
+//           productName: "딸기",
+//           imgUrl:
+//             "https://your-s3-bucket.s3.amazonaws.com/products/strawberry.jpg",
+//             productPrices: [
+//             { date: "2025-02-20", price: 8537 },
+//             { date: "2025-02-21", price: 8400 },
+//             { date: "2025-02-22", price: 8600 },
+//             { date: "2025-02-23", price: 8600 },
+//             { date: "2025-02-24", price: 8600 },
+//             { date: "2025-02-25", price: 8600 },
+//             { date: "2025-02-26", price: 8600 },
+//           ],
+//         },
+//         {
+//           productId: 2,
+//           productName: "사과",
+//           imgUrl:
+//             "https://your-s3-bucket.s3.amazonaws.com/products/apple.jpg",
+//             productPrices: [
+//             { date: "2025-02-20", price: 2000 },
+//             { date: "2025-02-21", price: 2050 },
+//             { date: "2025-02-22", price: 2100 },
+//             { date: "2025-02-23", price: 8600 },
+//             { date: "2025-02-24", price: 8600 },
+//             { date: "2025-02-25", price: 8600 },
+//             { date: "2025-02-26", price: 8600 },
+//           ],
+//         },
+//         {
+//           productId: 3,
+//           productName: "배",
+//           imgUrl:
+//             "https://your-s3-bucket.s3.amazonaws.com/products/pear.jpg",
+//             productPrices: [
+//             { date: "2025-02-20", price: 8000 },
+//             { date: "2025-02-21", price: 7900 },
+//             { date: "2025-02-22", price: 8100 },
+//             { date: "2025-02-23", price: 8600 },
+//             { date: "2025-02-24", price: 8600 },
+//             { date: "2025-02-25", price: 8600 },
+//             { date: "2025-02-26", price: 8600 },
+//           ],
+//         },
+//         {
+//           productId: 4,
+//           productName: "감자",
+//           imgUrl:
+//             "https://your-s3-bucket.s3.amazonaws.com/products/potato.jpg",
+//             productPrices: [
+//             { date: "2025-02-20", price: 2000 },
+//             { date: "2025-02-21", price: 1950 },
+//             { date: "2025-02-22", price: 2100 },
+//             { date: "2025-02-23", price: 8600 },
+//             { date: "2025-02-24", price: 8600 },
+//             { date: "2025-02-25", price: 8600 },
+//             { date: "2025-02-26", price: 8600 },
+//           ],
+//         },
+//         {
+//           productId: 5,
+//           productName: "고구마",
+//           imgUrl:
+//             "https://your-s3-bucket.s3.amazonaws.com/products/gogu.jpg",
+//             productPrices: [
+//             { date: "2025-02-20", price: 5000 },
+//             { date: "2025-02-21", price: 5200 },
+//             { date: "2025-02-22", price: 4800 },
+//             { date: "2025-02-23", price: 8600 },
+//             { date: "2025-02-24", price: 8600 },
+//             { date: "2025-02-25", price: 8600 },
+//             { date: "2025-02-26", price: 8600 },
+//           ],
+//         },
+//       ],
+//     },
+//   weatherNotice: [ // 6개만
+//     {
+//       dateTime: "2023-02-01T08:00:00Z",
+//       location: "서울",
+//       content: "강풍 주의보 발령",
+//     },
+//     {
+//       dateTime: "2023-02-01T09:00:00Z",
+//       location: "부산",
+//       content: "폭우 경보 발령",
+//     },
+//     {
+//       dateTime: "2023-02-01T09:00:00Z",
+//       location: "부산",
+//       content: "폭우 경보 발령",
+//     },
+//     {
+//       dateTime: "2023-02-01T09:00:00Z",
+//       location: "부산",
+//       content: "폭우 경보 발령",
+//     },
+//     {
+//       dateTime: "2023-02-01T09:00:00Z",
+//       location: "부산",
+//       content: "폭우 경보 발령",
+//     },
+//     {
+//       dateTime: "2023-02-01T09:00:00Z",
+//       location: "부산",
+//       content: "폭우 경보 발령",
+//     },
+//   ],
+ 
+//   news: [
+//     {
+//       title: "농업 혁신, 새로운 시대를 열다",
+//       content: "농업 기술의 발전이 새로운 도약을 예고합니다.",
+//       dateTime: "2023-02-01T10:00:00Z",
+//       newsLink: "https://news.example.com/article/1",
+//     },
+//     {
+//       title: "기후 변화, 농업에 미치는 영향",
+//       content: "기후 변화가 농업에 미치는 영향에 대한 심도 있는 분석.",
+//       dateTime: "2023-02-01T11:00:00Z",
+//       newsLink: "https://news.example.com/article/2",
+//     },
+//     {
+//       title: "기후 변화, 농업에 미치는 영향",
+//       content: "기후 변화가 농업에 미치는 영향에 대한 심도 있는 분석.",
+//       dateTime: "2023-02-01T11:00:00Z",
+//       newsLink: "https://news.example.com/article/2",
+//     },
+//     {
+//       title: "기후 변화, 농업에 미치는 영향",
+//       content: "기후 변화가 농업에 미치는 영향에 대한 심도 있는 분석.",
+//       dateTime: "2023-02-01T11:00:00Z",
+//       newsLink: "https://news.example.com/article/2",
+//     },
+//   ],
+// }
 
 // 품목 및 품종 매핑 데이터셋
 export const ITEM_VARIETY_MAP = [
