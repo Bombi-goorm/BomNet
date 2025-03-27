@@ -3,6 +3,7 @@ package com.bombi.core.presentation.dto.member;
 import com.bombi.core.domain.region.model.RegionWeather;
 import com.bombi.core.infrastructure.external.soil.dto.SoilCharacterResponseDto;
 import com.bombi.core.infrastructure.external.soil.dto.SoilChemicalResponseDto;
+import com.bombi.core.infrastructure.external.soil.dto.SoilSectionResponseDto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,8 +31,8 @@ public class FarmInfoResponseDto {
 	public FarmInfoResponseDto(
 		RegionWeather regionWeather,
 		SoilCharacterResponseDto characterResponseDto,
-		SoilChemicalResponseDto chemicalResponseDto
-	) {
+		SoilChemicalResponseDto chemicalResponseDto,
+		SoilSectionResponseDto sectionResponseDto) {
 		this.averageTemperature = String.valueOf(regionWeather.getAverageTemperature());
 		this.minTemperature = String.valueOf(regionWeather.getMinTemperature());
 		this.maxTemperature = String.valueOf(regionWeather.getMaxTemperature());
@@ -39,7 +40,7 @@ public class FarmInfoResponseDto {
 		this.sunlightHours = String.valueOf(regionWeather.getAnnualSunlightHours());
 		this.drainage = characterResponseDto.getSoildraCode().getDescription();
 		this.soilDepth = characterResponseDto.getVldsoildepCode().getDescription();
-		this.slopeDegree = null;
+		this.slopeDegree = sectionResponseDto.getSoilSlope().getDescription();
 		this.soilTexture = characterResponseDto.getSurttureCode().getDescription();
 		this.ph = chemicalResponseDto.getPH();
 		this.organicMatterGPerKg = chemicalResponseDto.getOrganicMatterGPerKg();
