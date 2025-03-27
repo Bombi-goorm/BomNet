@@ -13,9 +13,6 @@ import com.bombi.core.domain.member.model.MemberInfo;
 import com.bombi.core.domain.member.repository.RoleRepository;
 import com.bombi.core.domain.region.model.RegionWeather;
 import com.bombi.core.domain.region.repository.RegionWeatherRepository;
-import com.bombi.core.infrastructure.external.bigquery.client.BigQueryRecommendProductApiClient;
-import com.bombi.core.infrastructure.external.bigquery.dto.BigQueryRecommendProductRequestDto;
-import com.bombi.core.infrastructure.external.bigquery.dto.BigQueryRecommendProductResponseDto;
 import com.bombi.core.infrastructure.external.soil.client.SoilCharacterApiClient;
 import com.bombi.core.infrastructure.external.soil.client.SoilChemicalApiClient;
 import com.bombi.core.infrastructure.external.soil.client.SoilSectionApiClient;
@@ -53,8 +50,8 @@ public class MemberService {
 		}
 
 		// 평균 기온, 평균 강수량
-		String sidoCode = pnuCode.substring(0, 5);
-		RegionWeather regionWeather = regionWeatherRepository.findWeatherInfoByPNU(sidoCode)
+		String siGunGuCode = pnuCode.substring(0, 5);
+		RegionWeather regionWeather = regionWeatherRepository.findWeatherInfoBySiGunGuCode(siGunGuCode)
 			.orElseThrow(() -> new IllegalArgumentException("회원 지역 정보를 찾을 수 없습니다."));
 
 		// 토양 정보 api 호출

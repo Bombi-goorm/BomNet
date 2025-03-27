@@ -11,5 +11,5 @@ import com.bombi.core.domain.region.model.RegionWeather;
 public interface RegionWeatherRepository extends JpaRepository<RegionWeather, Long> {
 
 	@Query("select rw from RegionWeather rw join fetch rw.region r where r.weatherSiGunGuCode = :weatherSiGunGuCode")
-	Optional<RegionWeather> findWeatherInfoByPNU(@Param("weatherSiGunGuCode") String weatherSiGunGuCode);
+	Optional<RegionWeather> findWeatherInfoBySiGunGuCode(@Param("weatherSiGunGuCode") String weatherSiGunGuCode);
 }

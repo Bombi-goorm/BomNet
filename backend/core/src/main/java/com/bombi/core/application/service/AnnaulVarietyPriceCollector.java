@@ -3,6 +3,7 @@ package com.bombi.core.application.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import com.bombi.core.infrastructure.external.price.variety.dto.VarietyPriceInfo;
@@ -26,6 +27,7 @@ public class AnnaulVarietyPriceCollector {
 	 * @param startDate : 오늘부터 30일 전
 	 * @param endDate : 오늘
 	 */
+	@Cacheable(value = "AnnualPrice", key = "#item")
 	public List<VarietyPriceInfo> sendVarietyPriceTrend(String item, String startDate, String endDate) {
 		String query = "SELECT"
 			+ " variety, FORMAT_DATE('%G', date_time) as date, CAST(avg(avg_ppk) as INT64) as avgPrice"

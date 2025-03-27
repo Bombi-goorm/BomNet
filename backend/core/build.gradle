@@ -63,6 +63,7 @@ dependencies {
 
 	//Serialize
 	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.0'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3'
 
 	//bigquery
 	implementation 'com.google.cloud:google-cloud-bigquery:2.28.0'

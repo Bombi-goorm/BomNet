@@ -40,6 +40,10 @@ public class RedisCacheConfig {
 		cacheConfigurationMap.put("MemberInfo", memberInfoCache());
 		cacheConfigurationMap.put("Forecast", forecastCache());
 		cacheConfigurationMap.put("News", naverNewsCache());
+		cacheConfigurationMap.put("AnnualPrice", annualPriceCache());
+		cacheConfigurationMap.put("MonthlyPrice", monthlyPriceCache());
+		cacheConfigurationMap.put("DailyPrice", dailyPriceCache());
+		cacheConfigurationMap.put("RealTimePrice", realTimePriceCache());
 
 		return builder -> {
 			builder.withInitialCacheConfigurations(cacheConfigurationMap);
@@ -80,6 +84,58 @@ public class RedisCacheConfig {
 	}
 
 	private RedisCacheConfiguration naverNewsCache() {
+		return RedisCacheConfiguration.defaultCacheConfig()
+			.computePrefixWith(key -> key + "::")
+			.entryTtl(Duration.ofMinutes(30L))
+			.disableCachingNullValues()
+			.serializeKeysWith(
+				RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
+			)
+			.serializeValuesWith(
+				RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
+			);
+	}
+
+	private RedisCacheConfiguration annualPriceCache() {
+		return RedisCacheConfiguration.defaultCacheConfig()
+			.computePrefixWith(key -> key + "::")
+			.entryTtl(Duration.ofDays(1L))
+			.disableCachingNullValues()
+			.serializeKeysWith(
+				RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
+			)
+			.serializeValuesWith(
+				RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
+			);
+	}
+
+	private RedisCacheConfiguration monthlyPriceCache() {
+		return RedisCacheConfiguration.defaultCacheConfig()
+			.computePrefixWith(key -> key + "::")
+			.entryTtl(Duration.ofDays(1L))
+			.disableCachingNullValues()
+			.serializeKeysWith(
+				RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
+			)
+			.serializeValuesWith(
+				RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
+			);
+	}
+
+	private RedisCacheConfiguration dailyPriceCache() {
+		return RedisCacheConfiguration.defaultCacheConfig()
+			.computePrefixWith(key -> key + "::")
+			.entryTtl(Duration.ofDays(1L))
+			.disableCachingNullValues()
+			.serializeKeysWith(
+				RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
+			)
+			.serializeValuesWith(
+				RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
+			);
+	}
+
+	private RedisCacheConfiguration realTimePriceCache() {
 		return RedisCacheConfiguration.defaultCacheConfig()
 			.computePrefixWith(key -> key + "::")
 			.entryTtl(Duration.ofMinutes(30L))
