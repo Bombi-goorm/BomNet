@@ -32,11 +32,10 @@ public class WeatherForecastApiClient {
 		String query = "SELECT"
 			+ " *"
 			+ " FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
-			// + " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
-			+ " WHERE nx = '60' AND ny = '127'"
-			+ " ORDER BY fcst_date_time ASC"
-			+ " LIMIT 12";
-
+//			+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
+			+ " AND nx = @nx AND ny = @ny"
+			+ " ORDER BY fcst_date_time ASC";
+			// + " LIMIT 10";
 		System.out.println("query");
 		System.out.println(query);
 		System.out.println("==============");
@@ -56,6 +55,9 @@ public class WeatherForecastApiClient {
 			.addNamedParameter("ny", QueryParameterValue.string(ny))
 			.setUseLegacySql(false)
 			.build();
+
+		System.out.println(queryConfig);
+
 
 		System.out.println("==========================");
 		try {
