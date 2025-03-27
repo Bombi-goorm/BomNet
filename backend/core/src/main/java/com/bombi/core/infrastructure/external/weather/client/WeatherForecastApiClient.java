@@ -29,12 +29,10 @@ public class WeatherForecastApiClient {
 	 */
 	public WeatherExpection sendWeatherForecast(Region region) {
 
-		String query = "SELECT"
-			+ " *"
-			+ " FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
+		String query = "SELECT * FROM `goorm-bomnet.kma.int_kma_pivoted_short` ORDER BY fcst_date_time ASC";
 //			+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
-			+ " WHERE nx = @nx AND ny = @ny"
-			+ " ORDER BY fcst_date_time ASC";
+//			+ " WHERE nx = @nx AND ny = @ny"
+//			+ " ";
 			// + " LIMIT 10";
 		System.out.println("query");
 		System.out.println(query);
@@ -56,6 +54,7 @@ public class WeatherForecastApiClient {
 			.setUseLegacySql(false)
 			.build();
 
+		System.out.println(QueryParameterValue.string(nx));
 		System.out.println(queryConfig);
 
 
