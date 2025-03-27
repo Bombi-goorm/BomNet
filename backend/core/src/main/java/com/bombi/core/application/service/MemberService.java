@@ -18,8 +18,10 @@ import com.bombi.core.infrastructure.external.bigquery.dto.BigQueryRecommendProd
 import com.bombi.core.infrastructure.external.bigquery.dto.BigQueryRecommendProductResponseDto;
 import com.bombi.core.infrastructure.external.soil.client.SoilCharacterApiClient;
 import com.bombi.core.infrastructure.external.soil.client.SoilChemicalApiClient;
+import com.bombi.core.infrastructure.external.soil.client.SoilSectionApiClient;
 import com.bombi.core.infrastructure.external.soil.dto.SoilCharacterResponseDto;
 import com.bombi.core.infrastructure.external.soil.dto.SoilChemicalResponseDto;
+import com.bombi.core.infrastructure.external.soil.dto.SoilSectionResponseDto;
 import com.bombi.core.presentation.dto.member.MemberInfoResponseDto;
 import com.bombi.core.presentation.dto.member.PnuRegisterRequestDto;
 
@@ -36,7 +38,7 @@ public class MemberService {
 	private final RegionWeatherRepository regionWeatherRepository;
 	private final SoilCharacterApiClient soilCharacterApiClient;
 	private final SoilChemicalApiClient soilChemicalApiClient;
-	private final BigQueryRecommendProductApiClient bigQueryRecommendProductApiClient;
+	private final SoilSectionApiClient soilSectionApiClient;
 
 	@Transactional(readOnly = true)
 	public MemberInfoResponseDto findMemberInfo(String memberId) {
@@ -58,8 +60,9 @@ public class MemberService {
 		// 토양 정보 api 호출
 		SoilCharacterResponseDto soilCharacterResponse = soilCharacterApiClient.sendSoilCharacter(pnuCode);
 		SoilChemicalResponseDto soilChemicalResponse = soilChemicalApiClient.sendSoilChemical(pnuCode);
+		SoilSectionResponseDto soilSectionResponseDto = soilSectionApiClient.sendSoilSection(pnuCode);
 
-		return new MemberInfoResponseDto(member, regionWeather, soilCharacterResponse, soilChemicalResponse, null);
+		return new MemberInfoResponseDto(member, regionWeather, soilCharacterResponse, soilChemicalResponse, soilSectionResponseDto);
 	}
 
 	@Transactional

@@ -9,6 +9,7 @@ import com.bombi.core.domain.region.model.RegionWeather;
 import com.bombi.core.infrastructure.external.bigquery.dto.BigQueryRecommendProductResponseDto;
 import com.bombi.core.infrastructure.external.soil.dto.SoilCharacterResponseDto;
 import com.bombi.core.infrastructure.external.soil.dto.SoilChemicalResponseDto;
+import com.bombi.core.infrastructure.external.soil.dto.SoilSectionResponseDto;
 import com.bombi.core.presentation.dto.notification.NotificationConditionResponseDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -25,7 +26,6 @@ public class MemberInfoResponseDto {
 	private LocalDateTime joinDate;
 	private String pnu;
 	private FarmInfoResponseDto myFarm;
-	private List<RecommendedProductDto> recommendedProducts;
 	private List<NotificationConditionResponseDto> notificationConditions;
 
 	public MemberInfoResponseDto(
@@ -33,14 +33,13 @@ public class MemberInfoResponseDto {
 		RegionWeather regionWeather,
 		SoilCharacterResponseDto characterResponseDto,
 		SoilChemicalResponseDto chemicalResponseDto,
-		BigQueryRecommendProductResponseDto recommendProductResponseDto)
+		SoilSectionResponseDto sectionResponseDto)
 	{
 		this.memberId = member.getId().toString();
 		this.email = member.getAuthEmail();
 		this.joinDate = member.getCreatedDate();
 		this.pnu = member.getMemberInfo().getPnu();
-		this.myFarm = new FarmInfoResponseDto(regionWeather, characterResponseDto, chemicalResponseDto);
-		this.recommendedProducts = null;
+		this.myFarm = new FarmInfoResponseDto(regionWeather, characterResponseDto, chemicalResponseDto, sectionResponseDto);
 		this.notificationConditions = member.getNotificationConditions().stream()
 			.filter(NotificationCondition::isActive)
 			.map(NotificationConditionResponseDto::new)
@@ -53,7 +52,6 @@ public class MemberInfoResponseDto {
 		this.joinDate = member.getCreatedDate();
 		this.pnu = null;
 		this.myFarm = null;
-		this.recommendedProducts = null;
 		this.notificationConditions = member.getNotificationConditions().stream()
 			.filter(NotificationCondition::isActive)
 			.map(NotificationConditionResponseDto::new)
