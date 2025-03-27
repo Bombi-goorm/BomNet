@@ -37,7 +37,7 @@ const SankeyChart: React.FC<SankeyChartProps> = ({ priceData }) => {
 
   return (
     <div ref={chartRef} className="mb-6">
-      <h2 className="text-xl font-semibold mt-8">생산-유통 흐름</h2>
+      <h2 className="text-xl font-semibold mt-8">생산 유통 흐름</h2>
       <ResponsiveContainer width="100%" height={500}>
         <Sankey
           data={priceData?.sankeyData || { nodes: [], links: [] }}

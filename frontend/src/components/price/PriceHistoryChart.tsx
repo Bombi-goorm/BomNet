@@ -35,6 +35,10 @@ const PriceHistoryChart: React.FC<PriceHistoryChartProps> = ({ priceData }) => {
     return acc;
   }, [] as Record<string, any>[]);
 
+  transformedData.sort(
+    (a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()
+  );
+  
   const uniqueVarieties = [...new Set(rawPriceData.map((item) => item.variety))];
 
   return (
@@ -59,7 +63,7 @@ const PriceHistoryChart: React.FC<PriceHistoryChartProps> = ({ priceData }) => {
       <ResponsiveContainer width="100%" height={400}>
         <LineChart data={transformedData}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="dateTime" tick={{ fontSize: 12 }} />
+          <XAxis dataKey="dateTime" tick={{ fontSize: 12 }} angle={-45} />
           <YAxis />
           <Tooltip />
           <Legend />

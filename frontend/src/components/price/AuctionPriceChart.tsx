@@ -22,6 +22,7 @@ const AuctionPriceChart: React.FC<AuctionPriceChartProps> = ({ priceData }) => {
     return acc;
   }, [] as Record<string, any>[]);
 
+  transformedData.sort((a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime());
   
   const uniqueVarieties = [...new Set(rawLiveChartData.map((item) => item.variety))];
 
@@ -37,6 +38,7 @@ const AuctionPriceChart: React.FC<AuctionPriceChartProps> = ({ priceData }) => {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="datetime"
+            angle={-45}
             tickFormatter={(tick) => new Date(tick).getHours() + ":00"}
           />
           <YAxis />

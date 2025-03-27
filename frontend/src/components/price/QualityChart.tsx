@@ -36,6 +36,10 @@ const QualityChart: React.FC<QualityChartProps> = ({ priceData }) => {
       return acc;
     }, [] as Record<string, any>[]);
 
+    transformedData.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+      
   return (
     <div className="mb-6">
       <div className="flex justify-between items-center mb-4">
@@ -60,7 +64,7 @@ const QualityChart: React.FC<QualityChartProps> = ({ priceData }) => {
       <ResponsiveContainer width="100%" height={400}>
         <LineChart data={transformedData}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
+          <XAxis dataKey="date" angle={-45} />
           <YAxis />
           <Tooltip />
           <Legend />
