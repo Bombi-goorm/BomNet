@@ -39,6 +39,7 @@ export const pushSubscribtion = async (data: HomeRequestDto): Promise<CommonResp
 // 홈화면 정보 요청
 export const getHomeInfo = async (): Promise<CommonResponseDto<HomeDto>> => {
     const response = await api.post<CommonResponseDto<HomeDto>>(`/core/home`);
+    console.log(response.data.data.weatherExpection)
     return response.data;
 };
 

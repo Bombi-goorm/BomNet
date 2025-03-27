@@ -60,6 +60,12 @@ public class WeatherForecastApiClient {
 				String humidity = fieldValues.get("REH").getStringValue(); // 습도
 				String precipitationType = fieldValues.get("PTY").getStringValue(); // 강수 형태
 
+				System.out.println(temperature);
+				System.out.println(windSpeed);
+				System.out.println(skyStatus);
+				System.out.println(humidity);
+				System.out.println(precipitationType);
+
 				BigqueryForecastResponse bigqueryForecastResponse = BigqueryForecastResponse.builder()
 					.temperature(temperature)
 					.forecastTime(forecastDateTime)
