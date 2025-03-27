@@ -100,10 +100,10 @@ public class FarmAnalyzer {
 
 		Map<String, Boolean> chemicalSuitabilityMap = new HashMap<>();
 
-		boolean pHSuitability = productionCondition.isPHSuitable(soilChemicalResponse.getPH());
+		boolean pHSuitability = productionCondition.isPHSuitable(soilChemicalResponse.getPh());
 		boolean organicMatterSuitability = productionCondition.isOrganicMatterSuitable(soilChemicalResponse.getOrganicMatterGPerKg());
 		boolean phosphorusSuitability = productionCondition.isPhosphorusSuitable(soilChemicalResponse.getAvailablePhosphorus());
-		boolean potassiumSuitability = productionCondition.isPotassiumSuitable(soilChemicalResponse.getKCMolPerKg());
+		boolean potassiumSuitability = productionCondition.isPotassiumSuitable(soilChemicalResponse.getKaCMolPerKg());
 		boolean calciumSuitability = productionCondition.isCalciumSuitable(soilChemicalResponse.getCaCMolPerKg());
 		boolean magnesiumSuitability = productionCondition.isMagnesiumSuitable(soilChemicalResponse.getMgCMolPerKg());
 

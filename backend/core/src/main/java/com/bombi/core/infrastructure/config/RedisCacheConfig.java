@@ -44,6 +44,7 @@ public class RedisCacheConfig {
 		cacheConfigurationMap.put("MonthlyPrice", monthlyPriceCache());
 		cacheConfigurationMap.put("DailyPrice", dailyPriceCache());
 		cacheConfigurationMap.put("RealTimePrice", realTimePriceCache());
+		cacheConfigurationMap.put("Soil", soilCache());
 
 		return builder -> {
 			builder.withInitialCacheConfigurations(cacheConfigurationMap);
@@ -73,7 +74,7 @@ public class RedisCacheConfig {
 
 		return RedisCacheConfiguration.defaultCacheConfig()
 			.computePrefixWith(key -> key + "::")
-			.entryTtl(Duration.ofHours(1L))
+			.entryTtl(Duration.ofMinutes(30L))
 			.disableCachingNullValues()
 			.serializeKeysWith(
 				RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
@@ -139,6 +140,19 @@ public class RedisCacheConfig {
 		return RedisCacheConfiguration.defaultCacheConfig()
 			.computePrefixWith(key -> key + "::")
 			.entryTtl(Duration.ofMinutes(30L))
+			.disableCachingNullValues()
+			.serializeKeysWith(
+				RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
+			)
+			.serializeValuesWith(
+				RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
+			);
+	}
+
+	private RedisCacheConfiguration soilCache() {
+		return RedisCacheConfiguration.defaultCacheConfig()
+			.computePrefixWith(key -> key + "::")
+			.entryTtl(Duration.ofDays(7L))
 			.disableCachingNullValues()
 			.serializeKeysWith(
 				RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
