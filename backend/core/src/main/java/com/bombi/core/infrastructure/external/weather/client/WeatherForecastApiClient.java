@@ -45,8 +45,13 @@ public class WeatherForecastApiClient {
 			.setUseLegacySql(false)
 			.build();
 
+		System.out.println("==========================");
 		try {
 			TableResult tableResult = bigQuery.query(queryConfig);
+			System.out.println("table");
+			System.out.println(tableResult);
+			System.out.println(tableResult.toString());
+			System.out.println(tableResult.getSchema().getFields().toString());
 
 			List<BigqueryForecastResponse> bigqueryForecastResponses = new ArrayList<>();
 			for (FieldValueList fieldValues : tableResult.iterateAll()) {
