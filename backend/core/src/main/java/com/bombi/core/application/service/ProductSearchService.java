@@ -36,8 +36,8 @@ public class ProductSearchService {
 			.orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
 		//농장 적합도 FarmSuitability
-		String pnuCode = member.getMemberInfo().getPnu();
-		FarmSuitability farmSuitability = farmAnalyzer.analyzeSuitability(pnuCode, product);
+		// String pnuCode = member.getMemberInfo().getPnu();
+		FarmSuitability farmSuitability = farmAnalyzer.analyzeSuitability(requestDto.getPnu(), product);
 
 		return new ProductSearchResponseDto(product, farmSuitability);
 	}
