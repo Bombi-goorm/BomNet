@@ -12,11 +12,13 @@ from app.dto.request_dto import ChatbotRequestDto
 from app.model.Category import Category
 from app.model.NotificationCondition import NotificationCondition
 
+import logging
+
+logger = logging.getLogger("alert_logger")
+
 alert_router = APIRouter()
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
-# 상수 멤버 ID (예시)
-# MEMBER_ID = "551653fc-8efb-4bc3-8fae-4053231a3233"
 
 def get_category_hierarchy(category: Category, db: Session):
     """부모(상위) 카테고리부터 현재 카테고리까지의 계층을 조회하는 함수"""
@@ -35,12 +37,8 @@ def get_category_hierarchy(category: Category, db: Session):
 
 @alert_router.post("/set")
 async def create_notification(request: Request, data: ChatbotRequestDto, db: Session = Depends(get_db)):
-    # if not data.member_id:
-    #     raise HTTPException(status_code=401, detail="멤버를 찾을 수 없습니다.")
-
     member_id = request.state.member.id
-    # print(member_id)
-    # get_current_member(member_id=data.member_id, db=db)
+    logger.info(f"[알림 등록 요청] member_id={member_id}, input={data.input}")
 
     """자연어 분석 후 NotificationCondition을 DB에 저장하고 저장된 데이터를 반환 (Redis 저장 제거)"""
     try:
@@ -88,7 +86,8 @@ async def create_notification(request: Request, data: ChatbotRequestDto, db: Ses
                                 "type": "string",
                                 "description": "Price direction: 'U' for upward (price above or on target) or 'D' for downward (price below target)"
                             },
-                            "market": {"type": "string", "description": "Optional: Auction market name provided directly"}
+                            "market": {"type": "string",
+                                       "description": "Optional: Auction market name provided directly"}
                         },
                         "required": ["item", "variety", "region", "market"]
                     }
@@ -99,9 +98,11 @@ async def create_notification(request: Request, data: ChatbotRequestDto, db: Ses
 
         # 2. LLM 응답에서 JSON 결과 파싱
         function_call = llm_response.choices[0].message.function_call
+
         if not function_call:
+            logger.error("[ERROR] LLM 응답에서 function_call 없음")
             return CommonResponseDto(status="400", message="❌ LLM 데이터 추출 실패", data=None)
-        print("LLM function_call arguments:", function_call.arguments)
+
         parsed_data = json.loads(function_call.arguments)
         item = parsed_data.get("item")
         variety = parsed_data.get("variety")
@@ -110,7 +111,13 @@ async def create_notification(request: Request, data: ChatbotRequestDto, db: Ses
         market = parsed_data.get("market")
         price_direction = parsed_data.get("price_direction", "U")
 
+        # ✅ region과 market 모두 없을 경우 기본값 '서울'로 설정
+        if not region and not market:
+            logger.warning(f"[지역 미입력] 기본값 '서울' 적용")
+            region = "서울"
+
         if not item or not variety or not region:
+            logger.error("[ERROR] 필수 정보 누락 - item/variety/region 확인")
             return CommonResponseDto(status="400", message="❌ 필수 정보 누락", data=None)
 
         # 2-1. 지역 및 시장 처리:
@@ -164,22 +171,19 @@ async def create_notification(request: Request, data: ChatbotRequestDto, db: Ses
             final_market = "|".join(selected_markets)
             db_region_value = final_market
 
-        print("Selected regions:", selected_regions)
-        print("Selected markets:", selected_markets)
-        print("Final auction market string:", final_market)
-
     except Exception as e:
+        logger.exception(f"[ERROR] LLM 처리 오류: {str(e)}")
         return CommonResponseDto(status="500", message=f"LLM 처리 오류: {str(e)}", data=None)
 
     # 3. DB에서 하위 품종 검색 (예: "홍옥")
     child_category = db.query(Category).filter(Category.name == variety).first()
     if not child_category:
+        logger.warning(f"[지원불가 품종] variety={variety}")
         return CommonResponseDto(status="404", message="지원불가한 상품입니다.", data=None)
-    print("Retrieved child_category:", child_category)
 
     # 4. 하위 품종의 부모 계층(대분류, 중분류 등) 조회
     category_hierarchy = get_category_hierarchy(child_category, db)
-    print("Category hierarchy:", category_hierarchy)
+
     # 최대 3단계 카테고리 이름 저장 (예: {1: '과실류', 2: '사과', 3: '홍옥'})
     category_names = {1: None, 2: None, 3: None}
     for index, cat in enumerate(category_hierarchy, start=1):
@@ -191,61 +195,62 @@ async def create_notification(request: Request, data: ChatbotRequestDto, db: Ses
         NotificationCondition.member_id == member_id,
         NotificationCondition.active == "T"
     ).count()
+
     if user_notification_count >= 5:
+        logger.warning(f"[알림 초과] member_id={member_id}, count={user_notification_count}")
         return CommonResponseDto(
             status="400",
             message="❌ 사용자당 알림은 최대 5개까지 등록할 수 있습니다.",
             data=None
         )
 
-    # 5-1. 가격 조건 처리: 입력 문구에 따라 가격 조건을 문자열로 변환하여 바로 사용 가능한 형식으로 저장
     # "3000원 되면 알려줘" -> "U"
     # "3000원 이상일때 알려줘" -> "U"
     # "3000원 이하일때 알려줘" -> "D"
-    # if "이상" in data.input:
-    #     price_direction = "U"
-    # elif "이하" in data.input:
-    #     price_direction = "D"
-    # else:
-    #     price_direction = "U"
 
     # 6. target_price가 존재할 경우 NotificationCondition 저장
     db_condition = None
-    if target_price is not None:
-        db_condition = NotificationCondition(
-            member_id=member_id,
-            target_price=target_price,  # 가격 조건을 바로 사용할 수 있는 형식으로 저장
-            price_direction=price_direction,
-            active="T",
-            category=category_names.get(1, ""),
-            item=category_names.get(2, ""),
-            variety=category_names.get(3, ""),
-            # 직접 시장명이 제공된 경우에는 region 필드를 빈 문자열로, 아니면 조회된 최종 시장명 사용
-            region=db_region_value
-        )
-        db.add(db_condition)
+    try:
+        if target_price is not None:
+            db_condition = NotificationCondition(
+                member_id=member_id,
+                target_price=target_price,  # 가격 조건을 바로 사용할 수 있는 형식으로 저장
+                price_direction=price_direction,
+                active="T",
+                category=category_names.get(1, ""),
+                item=category_names.get(2, ""),
+                variety=category_names.get(3, ""),
+                # 직접 시장명이 제공된 경우에는 region 필드를 빈 문자열로, 아니면 조회된 최종 시장명 사용
+                region=db_region_value
+            )
+            db.add(db_condition)
 
-    db.commit()
-    db_data = {}
-    if db_condition:
-        db.refresh(db_condition)
-        db_data = {
-            "id": db_condition.id,
-            "target_price": db_condition.target_price,
-            "active": db_condition.active,
-            "category": db_condition.category,
-            "item": db_condition.item,
-            "variety": db_condition.variety,
-            "region": db_condition.region,
-            "member_id": db_condition.member_id,
+        db.commit()
+        db_data = {}
+
+        if db_condition:
+            db.refresh(db_condition)
+            db_data = {
+                "id": db_condition.id,
+                "target_price": db_condition.target_price,
+                "active": db_condition.active,
+                "category": db_condition.category,
+                "item": db_condition.item,
+                "variety": db_condition.variety,
+                "region": db_condition.region,
+                "member_id": db_condition.member_id,
+            }
+
+        return {
+            "status": "200",
+            "message": "✅ 알림 조건이 저장되었습니다.",
+            "data": {
+                "notification_condition": db_data,
+                "selected_regions": selected_regions,
+                "selected_markets": selected_markets
+            }
         }
 
-    return {
-        "status": "200",
-        "message": "✅ 알림 조건이 저장되었습니다.",
-        "data": {
-            "notification_condition": db_data,
-            "selected_regions": selected_regions,
-            "selected_markets": selected_markets
-        }
-    }
+    except Exception as e:
+        logger.exception(f"[ERROR] 알림 조건 DB 저장 실패 - member_id={member_id}, input={data.input}")
+        return CommonResponseDto(status="500", message="알림 조건 저장 중 오류 발생", data=None)

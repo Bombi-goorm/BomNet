@@ -9,7 +9,7 @@ import { getHomeInfo, getMemberInfo, pushSubscribtion } from "../api/core_api";
 import { useQueryClient } from "@tanstack/react-query";
 import { BestItems, HomeRequestDto, News, WeatherExpections, WeatherNotice } from "../types/home_types";
 import { useAuth } from "../conntext_api/AuthProvider";
-import { bestItemsFix, data } from "../data_sample";
+import { bestItemsFix } from "../data_sample";
 
 
 // VAPID 공개 키
@@ -62,10 +62,7 @@ const HomePage = () => {
     if (!("serviceWorker" in navigator)) return null;
   
     try {
-
-      // @Todo 일부 브라우저에서 워커 등록 안되는 문제 있음 
       const registration = await navigator.serviceWorker.ready;
-
 
       const permission = await requestPermissionWithTimeout();
 
@@ -78,6 +75,7 @@ const HomePage = () => {
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
       });
+
 
   
       // 🔹 키 값 확인
@@ -113,9 +111,13 @@ const HomePage = () => {
   };
 
   useEffect(() => {
+    subscribeToPushNotifications();
+  }, []);
+
+  useEffect(() => {
   const fetchUserData = async () => {
     try {
-      await subscribeToPushNotifications();
+      // await subscribeToPushNotifications();
 
       const response = await getHomeInfo();
 
@@ -123,8 +125,9 @@ const HomePage = () => {
 
       queryClient.setQueryData(["products"], bestItemsFix);
       queryClient.setQueryData(["weatherNotice"], response.data.weatherNotice);
-      // queryClient.setQueryData(["weatherExpect"], response.data.weatherExpect);
-      queryClient.setQueryData(["weatherExpect"], data.weatherExpect);
+      queryClient.setQueryData(["weatherExpect"], response.data.weatherExpection);
+      // console.log(response.data.weatherExpect)
+      // queryClient.setQueryData(["weatherExpect"], data.weatherExpect);
       queryClient.setQueryData(["news"], response.data.news);
 
       const memberResponse = await getMemberInfo();

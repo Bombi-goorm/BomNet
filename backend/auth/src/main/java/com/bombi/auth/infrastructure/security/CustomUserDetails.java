@@ -18,13 +18,13 @@ public class CustomUserDetails implements UserDetails {
 
     /**
      * 계정 등록 여부 - 소셜 인증 후 등록 진행 여부
-     * Y : 등록됨
+     * T : 등록됨
      * N : 미등록
      * @return
      */
     @Override
     public boolean isEnabled() {
-        return member.getIsEnabled() != null && member.getIsEnabled().equals('Y');
+        return member.getIsEnabled() != null && member.getIsEnabled().equals('T');
     }
 
     public Member getMember() {
@@ -48,12 +48,12 @@ public class CustomUserDetails implements UserDetails {
 
     /**
      * 계정 잠김 여부
-     * Y : 잠기지 않음
+     * T : 잠기지 않음
      * N : 잠김
      * @return
      */
     @Override
     public boolean isAccountNonLocked() {
-        return this.member.getIsBanned() != null && this.member.getIsBanned().equals('Y');
+        return this.member.getIsBanned() != null && this.member.getIsBanned().equals('T');
     }
 }

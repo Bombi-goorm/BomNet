@@ -39,6 +39,7 @@ export const pushSubscribtion = async (data: HomeRequestDto): Promise<CommonResp
 // 홈화면 정보 요청
 export const getHomeInfo = async (): Promise<CommonResponseDto<HomeDto>> => {
     const response = await api.post<CommonResponseDto<HomeDto>>(`/core/home`);
+    console.log(response.data.data.weatherExpection)
     return response.data;
 };
 
@@ -96,3 +97,4 @@ export const removeNotificationCondition = async (data: PriceAlertCondition): Pr
   const response = await api.post<CommonResponseDto<PriceAlertCondition[]>>(`/notification/condition`, data);
   return response.data;
 };
+

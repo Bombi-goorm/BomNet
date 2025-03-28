@@ -13,6 +13,10 @@ pipeline {
 
         GITCREDENTIAL = 'git_cre'
         DOCKERHUBCREDENTIAL = 'docker_cre'
+        SLACK_CHANNEL = "jenkins"
+        SLACK_START_AND_FINISH_COLOR = "#778899";
+        SLACK_SUCCESS_COLOR = "#2C953C";
+        SLACK_FAIL_COLOR = "#FF3232";
     }
     stages {
         stage('Checkout Github') {
@@ -68,7 +72,6 @@ pipeline {
                     sh "echo image build failed"
                 }
                 success {
-success {
                     slackSend (
                         channel: SLACK_CHANNEL,
                         color: SLACK_SUCCESS_COLOR,
@@ -113,8 +116,7 @@ success {
                         color: SLACK_SUCCESS_COLOR,
                         message: "ECR에 Image Push를 성공하였습니다."
                     )
-                    sh "docker image rm -f ${IMAGE_NAME}:${currentBuild.number}"
-                    sh "docker image rm -f ${IMAGE_NAME}:latest"
+                    sh "docker image prune -f"
                     sh "echo push success"
                 }
             }

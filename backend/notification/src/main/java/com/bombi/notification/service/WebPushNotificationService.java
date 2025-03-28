@@ -6,6 +6,7 @@ import com.bombi.notification.repository.PushSubscriptionRepository;
 import com.bombi.notification.util.MessageFormatter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nl.martijndwars.webpush.Notification;
 import nl.martijndwars.webpush.PushService;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -16,6 +17,7 @@ import java.security.Security;
 import java.util.*;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class WebPushNotificationService {
 
@@ -42,6 +44,7 @@ public class WebPushNotificationService {
             try {
                 this.pushService = new PushService(vapidPublicKey, vapidPrivateKey, vapidSubject);
             } catch (Exception ex) {
+                log.error("PushService 초기화 실패", ex);
                 throw new RuntimeException("Failed to initialize PushService", ex);
             }
         }
@@ -59,11 +62,15 @@ public class WebPushNotificationService {
         for (String message : messages) {
             // 알림 내용 자연어로 변경
             String formattedMessage = "";
-            // 주제에 따라 다른 포매터 적용
-            if ("PRICE".equalsIgnoreCase(type)) {
-                formattedMessage = MessageFormatter.formatPriceMessage(message);
-            } else if ("WEATHER".equalsIgnoreCase(type)) {
-                formattedMessage = MessageFormatter.formatWrnMessage(message);
+            try {
+                if ("PRICE".equalsIgnoreCase(type)) {
+                    formattedMessage = MessageFormatter.formatPriceMessage(message);
+                } else if ("WEATHER".equalsIgnoreCase(type)) {
+                    formattedMessage = MessageFormatter.formatWrnMessage(message);
+                }
+            } catch (Exception e) {
+                log.error("메시지 포맷 실패 - type={}, message={}", type, message, e);
+                continue;  // 해당 메시지 스킵
             }
 
             for (PushSubscription sub : subscriptions) {
@@ -97,28 +104,25 @@ public class WebPushNotificationService {
                     );
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error("푸시 알림 전송 실패 - endpoint={}, memberId={}, type={}",
+                            sub.getEndpoint(), sub.getMember().getId(), type, e);
                 }
             }
         }
 
         // 🔹 알림객체 배치 저장
-        notificationService.notificationBatchSave(notificationEntities);
+        try {
+            notificationService.notificationBatchSave(notificationEntities);
+        } catch (Exception e) {
+            log.error("알림 DB 저장 실패 - count={}, type={}", notificationEntities.size(), type, e);
+        }
     }
 
     private String getTitleByType(String type) {
-        if (type.equals("PRICE")) {
-            return "가격 알림";
-        }else {
-            return "기상 알림";
-        }
+        return "PRICE".equals(type) ? "가격 알림" : "기상 알림";
     }
 
     private NotificationType getNotificationTypeByType(String type) {
-        if(type.equals("PRICE")){
-            return NotificationType.TARGET_PRICE;
-        }else{
-            return NotificationType.WEATHER;
-        }
+        return "PRICE".equals(type) ? NotificationType.TARGET_PRICE : NotificationType.WEATHER;
     }
 }

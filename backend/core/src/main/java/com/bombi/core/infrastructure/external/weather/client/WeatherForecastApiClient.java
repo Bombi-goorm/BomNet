@@ -5,15 +5,18 @@ import com.bombi.core.presentation.dto.home.WeatherExpection;
 import com.bombi.core.presentation.dto.home.BigqueryForecastResponse;
 import com.google.cloud.bigquery.*;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.cache.annotation.Cacheable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class WeatherForecastApiClient {
@@ -27,26 +30,32 @@ public class WeatherForecastApiClient {
 	@Cacheable(key = "#region.id", value = "Forecast")
 	public WeatherExpection sendWeatherForecast(Region region) {
 
-		String query = "SELECT"
-			+ " *"
-			+ " FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
-			+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
-			+ " AND nx = @nx AND ny = @ny"
-			+ " ORDER BY fcst_date_time ASC, PTY DESC"
-			+ " LIMIT 10";
+		String query = "SELECT * FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
+				+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
+				+ " AND nx = @nx AND ny = @ny"
+				+ " ORDER BY fcst_date_time ASC"
+				+ " LIMIT 10";
+
+//		+ " WHERE fcst_date_time >= '2025-03-27 00:00:00' and fcst_date_time <= '2025-03-28 00:00:00'"
+//				+ " WHERE nx = '60' AND ny = '127'"
 
 		String startTime = getForecastStartTime();
 		String endTime = getForecastEndTime();
 		String nx = region.getXx();
 		String ny = region.getYy();
 
+		log.info("Start time: {}, End time : {}", startTime, endTime);
+		log.info("NX: {}, NY: {}", nx, ny);
+
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
-			.addNamedParameter("startFcstTime", QueryParameterValue.string(startTime))
-			.addNamedParameter("endFcstTime", QueryParameterValue.string(endTime))
-			.addNamedParameter("nx", QueryParameterValue.string(nx))
-			.addNamedParameter("ny", QueryParameterValue.string(ny))
-			.setUseLegacySql(false)
-			.build();
+				.addNamedParameter("startFcstTime", QueryParameterValue.string(startTime))
+				.addNamedParameter("endFcstTime", QueryParameterValue.string(endTime))
+				.addNamedParameter("nx", QueryParameterValue.string(nx))
+				.addNamedParameter("ny", QueryParameterValue.string(ny))
+				.setUseLegacySql(false)
+				.build();
+
+		System.out.println(queryConfig);
 
 		try {
 			TableResult tableResult = bigQuery.query(queryConfig);
@@ -64,13 +73,13 @@ public class WeatherForecastApiClient {
 				String precipitationType = fieldValues.get("PTY").getStringValue(); // 강수 형태
 
 				BigqueryForecastResponse bigqueryForecastResponse = BigqueryForecastResponse.builder()
-					.temperature(temperature)
-					.forecastTime(forecastDateTime)
-					.windSpeed(windSpeed)
-					.weather(skyStatus)
-					.humidity(humidity)
-					.precipitationType(precipitationType)
-					.build();
+						.temperature(temperature)
+						.forecastTime(forecastDateTime)
+						.windSpeed(windSpeed)
+						.weather(skyStatus)
+						.humidity(humidity)
+						.precipitationType(precipitationType)
+						.build();
 				bigqueryForecastResponses.add(bigqueryForecastResponse);
 			}
 
@@ -82,12 +91,18 @@ public class WeatherForecastApiClient {
 
 	private String getForecastStartTime() {
 		LocalDateTime localDateTime = LocalDateTime.now();
-		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+// 		LocalDate localDate = LocalDate.now();
+// 		LocalTime midnight = LocalTime.MIDNIGHT;
+// 		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
+		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
 	private String getForecastEndTime() {
-		LocalDateTime localDateTime = LocalDateTime.now().plusHours(6L);
-		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    LocalDateTime localDateTime = LocalDateTime.now().plusHours(6L);
+// 		LocalDate localDate = LocalDate.now().plusDays(1);
+// 		LocalTime midnight = LocalTime.MIDNIGHT;
+// 		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
+		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
 }

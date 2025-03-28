@@ -56,6 +56,8 @@ public class HomeService {
 		// 기상 예보 -> bigquery
 		WeatherExpection weatherExpection = weatherForecastApiClient.sendWeatherForecast(region);
 
+
+
 		// 농산물 뉴스
 		NaverNewsResponse naverNewsResponse = naverNewsApiClient.sendNews();
 

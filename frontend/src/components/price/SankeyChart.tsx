@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Sankey, Tooltip, ResponsiveContainer } from "recharts";
-import { PriceResponse, SankeyLink } from "../../types/price_types";
+import { PriceResponse } from "../../types/price_types";
 
 interface SankeyChartProps {
   priceData: PriceResponse | null;
@@ -13,15 +13,14 @@ const SankeyChart: React.FC<SankeyChartProps> = ({ priceData }) => {
   const [chartWidth, setChartWidth] = useState<number>(800); // 기본값 800px
 
 
-  const linkData = priceData?.sankeyData.links ?? [];
+  // const linkData = priceData?.sankeyData.links ?? [];
 
-  const convertedLinks: SankeyLink[] = linkData.map(link => ({
-    source: Number(link.source),
-    target: Number(link.target),
-    value: Number(link.value),
-  }));
+  // const convertedLinks: SankeyLink[] = linkData.map(link => ({
+  //   source: Number(link.source),
+  //   target: Number(link.target),
+  //   value: Number(link.value),
+  // }));
 
-  console.log(convertedLinks)
   // 🔹 차트 컨테이너의 크기를 감지하여 업데이트
   useEffect(() => {
     const updateSize = () => {
@@ -38,7 +37,7 @@ const SankeyChart: React.FC<SankeyChartProps> = ({ priceData }) => {
 
   return (
     <div ref={chartRef} className="mb-6">
-      <h2 className="text-xl font-semibold mt-8">생산-유통 흐름</h2>
+      <h2 className="text-xl font-semibold mt-8">생산 유통 흐름</h2>
       <ResponsiveContainer width="100%" height={500}>
         <Sankey
           data={priceData?.sankeyData || { nodes: [], links: [] }}

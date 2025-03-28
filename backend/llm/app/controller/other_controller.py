@@ -10,6 +10,9 @@ from app.database import get_db
 from app.dto.common_response_dto import CommonResponseDto
 from app.dto.request_dto import ChatbotRequestDto
 
+import logging
+logger = logging.getLogger("gpt_logger")
+
 other_router = APIRouter()
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
@@ -23,13 +26,6 @@ class GPTResponse(BaseModel):
 
 @other_router.post("/request", response_model=CommonResponseDto[GPTResponse])
 async def ask_other_question(data: ChatbotRequestDto, db: Session = Depends(get_db)):
-
-    # if not data.member_id:
-    #     raise HTTPException(status_code=401, detail="멤버를 찾을 수 없습니다.")
-    # get_current_member(member_id=data.member_id, db=db)
-
-
-
     """🌱 자연어 분석 기반의 GPT API - 다양한 농업 관련 질문 처리"""
 
     try:
@@ -53,7 +49,6 @@ async def ask_other_question(data: ChatbotRequestDto, db: Session = Depends(get_
         )
 
         intent = intent_detection_response.choices[0].message.content.strip().lower()
-        print(f"🔹 Detected Intent: {intent}")
 
         # ✅ 2. 의도별 응답 템플릿 정의 (각 항목 최대 5개 반환)
         response_templates = {
@@ -105,6 +100,7 @@ async def ask_other_question(data: ChatbotRequestDto, db: Session = Depends(get_
         if function_call:
             response_json = json.loads(function_call.arguments)
         else:
+            logger.warning(f"[WARN] function_call 없음 - input={data.input}")
             response_json = {"content": "❌ 응답을 생성하는 데 실패했습니다."}
 
         return CommonResponseDto(
@@ -118,6 +114,7 @@ async def ask_other_question(data: ChatbotRequestDto, db: Session = Depends(get_
         )
 
     except Exception as e:
+        logger.exception(f"[ERROR] GPT 처리 중 예외 발생 - input={data.input}")
         return CommonResponseDto(
             status="500",
             message=f"⛔ GPT API 처리 중 오류 발생: {str(e)}",

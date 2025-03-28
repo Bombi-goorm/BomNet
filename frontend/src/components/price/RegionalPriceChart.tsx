@@ -43,7 +43,7 @@ const RegionalPriceChart: React.FC<RegionalPriceChartProps> = ({ priceData }) =>
       <ResponsiveContainer width="100%" height={400}>
         <BarChart data={filteredData}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="region" />
+          <XAxis dataKey="region" angle={-45} />
           <YAxis />
           <Tooltip />
           <Legend />

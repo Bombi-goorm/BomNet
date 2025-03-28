@@ -60,6 +60,7 @@ public class JwtFilter extends OncePerRequestFilter {
 		try {
 			Cookie[] cookies = request.getCookies();
 			if (cookies == null) {
+				log.warn("인증 실패 - 요청에 쿠키 없음");
 				filterChain.doFilter(request, response);
 				return;
 			}
@@ -100,10 +101,9 @@ public class JwtFilter extends OncePerRequestFilter {
 						return;
 					}
 				} catch (ExpiredJwtException e) {
-					log.warn("Access token expired, fallback to refresh token.");
-					memberId = e.getClaims().getSubject();
+					log.warn("Access 토큰 만료 - fallback to refresh, memberId={}", memberId);
 				} catch (Exception e) {
-					log.error("Access token invalid, fallback to refresh token.", e);
+					log.error("Access 토큰 검증 중 오류 발생", e);
 				}
 			}
 
@@ -138,23 +138,24 @@ public class JwtFilter extends OncePerRequestFilter {
 					filterChain.doFilter(request, response);
 					return;
 				} catch (Exception e) {
-					log.error("Refresh token invalid.", e);
+					log.error("Refresh 토큰 검증 실패 - memberId={}", memberId, e);
 					throw new InvalidTokenException("Refresh token validation failed.");
 				}
 			}
 
 			// Step 3: 둘 다 실패
+			log.warn("인증 실패 - Access/Refresh 토큰 모두 유효하지 않음");
 			throw new InvalidTokenException("No valid tokens found.");
 
 		} catch (InvalidTokenException e) {
-			log.error("Token validation error: {}", e.getMessage());
+			log.error("최종 인증 실패 처리 - {}", e.getMessage());
 			ResponseWriter.writeExceptionResponse(
 					response,
 					HttpServletResponse.SC_UNAUTHORIZED,
 					new CommonResponseDto<>("401", "토큰 검증에 실패했습니다.")
 			);
 		} catch (Exception e) {
-			log.error("Authentication processing error", e);
+			log.error("인증 처리 중 예외 발생", e);
 			ResponseWriter.writeExceptionResponse(
 					response,
 					HttpServletResponse.SC_UNAUTHORIZED,

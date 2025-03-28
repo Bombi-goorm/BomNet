@@ -21,6 +21,6 @@ export const renewAccess = async (): Promise<CommonResponseDto<InfoResponseDto>>
 
 // 로그아웃
 export const logoutMember = async (): Promise<CommonResponseDto<null>> => {
-    const response = await api.post<CommonResponseDto<null>>(`/auth/member/logout`);
+    const response = await api.post<CommonResponseDto<null>>(`/member/logout`);
     return response.data;
 };
