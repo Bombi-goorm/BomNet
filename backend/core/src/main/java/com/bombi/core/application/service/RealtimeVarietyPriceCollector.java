@@ -27,12 +27,13 @@ public class RealtimeVarietyPriceCollector {
 	 * @param startDate : 오늘부터 30일 전
 	 * @param endDate : 오늘
 	 */
-	@Cacheable(value = "RealTime", key = "#item")
+	// @Cacheable(value = "RealTime", key = "#item + '_' + #endDate")
 	public List<VarietyPriceInfo> sendVarietyPriceTrend(String item, String startDate, String endDate) {
 		String query = "SELECT"
 			+ " variety, FORMAT_DATE('%Y-%m-%d %H:%M', DATETIME_TRUNC(date_time, HOUR)) as date, CAST(AVG(rt_price) AS INT64) as average_rt_price"
 			+ " FROM kma.stg_mafra__real_time"
 			+ " WHERE item = @item"
+			+ " AND whsl_mrkt_nm = @market"
 			+ " AND date_time >= @start_date"
 			+ " AND date_time <= @end_date"
 			+ " GROUP BY variety, FORMAT_DATE('%Y-%m-%d %H:%M', DATETIME_TRUNC(date_time, HOUR))"
@@ -40,6 +41,7 @@ public class RealtimeVarietyPriceCollector {
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
 			.addNamedParameter("item", QueryParameterValue.string(item))
+			.addNamedParameter("market", QueryParameterValue.string("서울가락"))
 			.addNamedParameter("start_date", QueryParameterValue.string(startDate))
 			.addNamedParameter("end_date", QueryParameterValue.string(endDate))
 			.setUseLegacySql(false) // 표준 SQL 사용
