@@ -63,13 +63,15 @@ const MyLocalWeather: React.FC<MyLocalWeatherProps> = ({ weatherExpectData }) =>
   const weatherInfoArray: WeatherInfo[] = weatherExpectData.weatherInfo || [];
   const currentWeather: WeatherInfo | undefined =
     weatherInfoArray.length > 0 ? weatherInfoArray[0] : undefined;
-  const forecastList: WeatherInfo[] =
-    weatherInfoArray.length > 1 ? weatherInfoArray.slice(1) : [];
+  // const forecastList: WeatherInfo[] =
+  //   weatherInfoArray.length > 1 ? weatherInfoArray.slice(1) : [];
 
-  const formatTime = (dateTime: string) => {
-    const date = new Date(dateTime);
-    return date.getHours().toString().padStart(2, "0");
-  };
+  const now = new Date();
+
+  const forecastList: WeatherInfo[] = weatherInfoArray
+  .slice(1)
+  .filter((forecast) => new Date(forecast.forecastTime) > now)
+  .slice(0, 5);
 
   return (
     <div className="bg-gradient-to-r from-blue-600 to-blue-400 p-6 rounded-lg shadow-lg text-white">

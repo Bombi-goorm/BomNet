@@ -55,7 +55,6 @@ public class WeatherForecastApiClient {
 				.setUseLegacySql(false)
 				.build();
 
-		System.out.println(queryConfig);
 
 		try {
 			TableResult tableResult = bigQuery.query(queryConfig);
