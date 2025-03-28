@@ -31,7 +31,7 @@ public class WeatherForecastApiClient {
 
 		String query = "SELECT * FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
 				+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
-				+ " WHERE nx = @nx AND ny = @ny"
+				+ " AND nx = @nx AND ny = @ny"
 				+ " ORDER BY fcst_date_time ASC"
 				+ " LIMIT 10";
 
