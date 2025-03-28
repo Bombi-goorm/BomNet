@@ -21,7 +21,7 @@ public class PriceChartNodeApiClient {
 
 	private final BigQuery bigQuery;
 
-	@Cacheable(value = "ProductChart", key = "#item + '_' + #dateTime + '_node'")
+	@Cacheable(value = "ProductChart", key = "'node_' + #item + '_' + #dateTime")
 	public List<ChartNodeInfo> getNodes(String item, String dateTime) {
 		String query = "select * from kma.int_mafra__sankey_nodes"
 			+ " where item = @item and date_time = @date_time"

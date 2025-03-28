@@ -3,6 +3,7 @@ package com.bombi.core.application.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import com.bombi.core.presentation.dto.price.RegionChartData;
@@ -25,6 +26,7 @@ public class RegionVarietyPriceCollector {
 	 *
 	 * @param item : 품목. ex) 사과
 	 */
+	@Cacheable(value = "ProductChart", key = "'region_' + #item")
 	public List<RegionChartData> sendVarietyPriceTrend(String item) {
 		String query = "SELECT"
 			+ " plor_nm, date_time, variety, avg_ppk"

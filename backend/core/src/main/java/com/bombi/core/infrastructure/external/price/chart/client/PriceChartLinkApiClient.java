@@ -21,7 +21,7 @@ public class PriceChartLinkApiClient {
 
 	private final BigQuery bigQuery;
 
-	@Cacheable(value = "ProductChart", key = "#item + '_' + #dateTime + '_link'")
+	@Cacheable(value = "ProductChart", key = "'link_' + #item + '_' + #dateTime")
 	public List<ChartLinkInfo> getLinks(String item, String dateTime) {
 
 		String query = "select"
