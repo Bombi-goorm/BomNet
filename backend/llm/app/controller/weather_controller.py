@@ -94,7 +94,7 @@ async def get_weather(data: ChatbotRequestDto):
                 weather="맑음",
                 temperature="5°C",
                 humidity="30%",
-                wind="10km/h",
+                windSpeed="10km/h",
                 dateTime="2023-02-01T12:00:00Z"
             )
         )

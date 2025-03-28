@@ -30,12 +30,13 @@ public class WeatherForecastApiClient {
 	public WeatherExpection sendWeatherForecast(Region region) {
 
 		String query = "SELECT * FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
-//			+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
-				+ " WHERE fcst_date_time >= \"2025-03-27 00:00:00\" and fcst_date_time <= \"2025-03-28 00:00:00\""
-				+ " WHERE nx = \"60\" AND ny = \"127\""
-//			+ " WHERE nx = @nx AND ny = @ny"
+				+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
+				+ " WHERE nx = @nx AND ny = @ny"
 				+ " ORDER BY fcst_date_time ASC"
 				+ " LIMIT 10";
+
+//		+ " WHERE fcst_date_time >= '2025-03-27 00:00:00' and fcst_date_time <= '2025-03-28 00:00:00'"
+//				+ " WHERE nx = '60' AND ny = '127'"
 
 		String startTime = getForecastStartTime();
 		String endTime = getForecastEndTime();
