@@ -7,26 +7,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SoilChemicalResponseDto {
 
-	private String pH; // 산도
+	private String ph; // 산도
 	private String availablePhosphorus; // 유효인산
 	private String organicMatterGPerKg;
-	private String KCMolPerKg;
-	private String CaCMolPerKg;
-	private String MgCMolPerKg;
+	private String kaCMolPerKg;
+	private String caCMolPerKg;
+	private String mgCMolPerKg;
 
 	public SoilChemicalResponseDto(
-		String pH,
+		String ph,
 		String availablePhosphorus,
 		String organicMatterGPerKg,
-		String KCMolPerKg,
+		String kaCMolPerKg,
 		String caCMolPerKg,
 		String mgCMolPerKg)
 	{
-		this.pH = pH;
+		this.ph = ph;
 		this.availablePhosphorus = availablePhosphorus;
 		this.organicMatterGPerKg = organicMatterGPerKg;
-		this.KCMolPerKg = KCMolPerKg;
-		CaCMolPerKg = caCMolPerKg;
-		MgCMolPerKg = mgCMolPerKg;
+		this.kaCMolPerKg = kaCMolPerKg;
+		this.caCMolPerKg = caCMolPerKg;
+		this.mgCMolPerKg = mgCMolPerKg;
 	}
 }

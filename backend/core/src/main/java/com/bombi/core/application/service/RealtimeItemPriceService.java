@@ -23,7 +23,6 @@ public class RealtimeItemPriceService {
 
 		List<VarietyPriceInfo> varietyPriceInfos = realtimeVarietyPriceCollector.sendVarietyPriceTrend(item, startDateTime, endDateTime);
 		return convertToProductPriceDto(varietyPriceInfos);
-		// return null;
 	}
 
 	private String createStartDate() {

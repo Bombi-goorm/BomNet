@@ -42,10 +42,10 @@ public class FarmInfoResponseDto {
 		this.soilDepth = characterResponseDto.getVldsoildepCode().getDescription();
 		this.slopeDegree = sectionResponseDto.getSoilSlope().getDescription();
 		this.soilTexture = characterResponseDto.getSurttureCode().getDescription();
-		this.ph = chemicalResponseDto.getPH();
+		this.ph = chemicalResponseDto.getPh();
 		this.organicMatterGPerKg = chemicalResponseDto.getOrganicMatterGPerKg();
 		this.avPMgPerKg = chemicalResponseDto.getAvailablePhosphorus();
-		this.kMgPerKg = chemicalResponseDto.getKCMolPerKg();
+		this.kMgPerKg = chemicalResponseDto.getKaCMolPerKg();
 		this.caMgPerKg = chemicalResponseDto.getCaCMolPerKg();
 		this.mgMgPerKg = chemicalResponseDto.getMgCMolPerKg();
 	}

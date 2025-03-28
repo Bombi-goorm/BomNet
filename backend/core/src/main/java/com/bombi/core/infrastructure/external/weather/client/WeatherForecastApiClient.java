@@ -5,8 +5,8 @@ import com.bombi.core.presentation.dto.home.WeatherExpection;
 import com.bombi.core.presentation.dto.home.BigqueryForecastResponse;
 import com.google.cloud.bigquery.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -27,6 +27,7 @@ public class WeatherForecastApiClient {
 	 * 단기 예보 조회
 	 * @return
 	 */
+	@Cacheable(key = "#region.id", value = "Forecast")
 	public WeatherExpection sendWeatherForecast(Region region) {
 
 		String query = "SELECT * FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
@@ -89,17 +90,18 @@ public class WeatherForecastApiClient {
 	}
 
 	private String getForecastStartTime() {
-		// LocalDateTime localDateTime = LocalDateTime.now();
-		LocalDate localDate = LocalDate.now();
-		LocalTime midnight = LocalTime.MIDNIGHT;
-		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
+		LocalDateTime localDateTime = LocalDateTime.now();
+// 		LocalDate localDate = LocalDate.now();
+// 		LocalTime midnight = LocalTime.MIDNIGHT;
+// 		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
 		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
 	private String getForecastEndTime() {
-		LocalDate localDate = LocalDate.now().plusDays(1);
-		LocalTime midnight = LocalTime.MIDNIGHT;
-		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
+    LocalDateTime localDateTime = LocalDateTime.now().plusHours(6L);
+// 		LocalDate localDate = LocalDate.now().plusDays(1);
+// 		LocalTime midnight = LocalTime.MIDNIGHT;
+// 		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
 		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 

@@ -3,6 +3,7 @@ package com.bombi.core.infrastructure.external.soil.client;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -38,6 +39,7 @@ public class SoilChemicalApiClient {
 	@Value("${api.soil.serviceKey}")
 	private String serviceKey;
 
+	@Cacheable(value = "Soil", key = "#pnuCode + '_chemical'")
 	public SoilChemicalResponseDto sendSoilChemical(String pnuCode) {
 		log.info("SoilChemicalApiClient::sendSoilChemical START");
 
