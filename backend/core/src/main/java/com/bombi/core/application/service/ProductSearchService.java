@@ -25,26 +25,6 @@ public class ProductSearchService {
 
 	/**
 	 * 사용자가 검색한 작물 정보와 생산 적합도 판별
-	 * @param midId 중분류
-	 * @param smallId 소분류
-	 */
-	@Transactional(readOnly = true)
-	public ProductSearchResponseDto search(Long midId, Long smallId, String memberId) {
-		//상품 재배 정보 CultivationInfo
-		Product product = productRepository.findProductInfoByCategoryId(midId, smallId)
-			.orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
-		Member member = memberRepository.findMemberAndInfoById(UUID.fromString(memberId))
-			.orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
-
-		//농장 적합도 FarmSuitability
-		String pnuCode = member.getMemberInfo().getPnu();
-		FarmSuitability farmSuitability = farmAnalyzer.analyzeSuitability(pnuCode, product);
-
-		return new ProductSearchResponseDto(product, farmSuitability);
-	}
-
-	/**
-	 * 사용자가 검색한 작물 정보와 생산 적합도 판별
 	 * @param requestDto : 중분류, 소분류
 	 */
 	@Transactional(readOnly = true)

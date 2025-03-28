@@ -5,6 +5,8 @@ import com.bombi.core.presentation.dto.home.WeatherExpection;
 import com.bombi.core.presentation.dto.home.BigqueryForecastResponse;
 import com.google.cloud.bigquery.*;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -22,6 +24,7 @@ public class WeatherForecastApiClient {
 	 * 단기 예보 조회
 	 * @return
 	 */
+	@Cacheable(key = "#region.id", value = "Forecast")
 	public WeatherExpection sendWeatherForecast(Region region) {
 
 		String query = "SELECT"

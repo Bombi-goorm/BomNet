@@ -24,17 +24,6 @@ public class ProductController {
 
 	private final ProductSearchService productSearchService;
 
-
-
-	@GetMapping
-	public ResponseEntity<CoreResponseDto<?>> search(
-		@RequestParam(value = "midId") Long midId,
-		@RequestParam(value = "smallId") Long smallId,
-		@AuthenticationPrincipal UserDetails userDetails) {
-		ProductSearchResponseDto response = productSearchService.search(midId, smallId, userDetails.getUsername());
-		return ResponseEntity.ok(CoreResponseDto.ofSuccess("생산 조건 조회 성공", response));
-	}
-
 	@PostMapping("/item/info")
 	public ResponseEntity<CoreResponseDto<?>> search(
 		@RequestBody ProductSearchRequestDto requestDto,

@@ -45,6 +45,9 @@ dependencies {
 	// Redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+	// Cache
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+
 	// MariaDB
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.2'
@@ -60,6 +63,7 @@ dependencies {
 
 	//Serialize
 	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.0'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3'
 
 	//bigquery
 	implementation 'com.google.cloud:google-cloud-bigquery:2.28.0'

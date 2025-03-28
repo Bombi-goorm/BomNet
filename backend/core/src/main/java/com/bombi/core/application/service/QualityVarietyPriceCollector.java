@@ -3,6 +3,7 @@ package com.bombi.core.application.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import com.bombi.core.presentation.dto.price.QualityChartData;
@@ -26,6 +27,7 @@ public class QualityVarietyPriceCollector {
 	 *
 	 * @param item : 품목. ex) 사과
 	 */
+	@Cacheable(value = "ProductChart", key = "'quality_' + #item + '_' + #startDateTime")
 	public List<QualityChartData> sendVarietyPriceTrend(String item, String startDateTime, String endDateTime) {
 		String query = "SELECT"
 			+ " variety, date_time,"
