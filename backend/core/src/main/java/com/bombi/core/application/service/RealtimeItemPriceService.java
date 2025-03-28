@@ -1,6 +1,8 @@
 package com.bombi.core.application.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,9 @@ public class RealtimeItemPriceService {
 	}
 
 	private String createStartDate() {
-		LocalDateTime localDateTime = LocalDateTime.now().minusHours(24);
+		LocalDate localDate = LocalDate.now().minusDays(2L);
+		LocalTime midnight = LocalTime.MIDNIGHT;
+		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		return localDateTime.format(formatter);
 	}
