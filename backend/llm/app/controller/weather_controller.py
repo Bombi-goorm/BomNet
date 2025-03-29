@@ -36,7 +36,7 @@ TABLE_ID = settings.TABLE_ID
 async def get_weather(data: ChatbotRequestDto, db: Session = Depends(get_db)):
     try:
         # ✅ 1. DB에서 지역 정보 조회
-        region = get_region_by_keyword(db, data.region)
+        region = get_region_by_keyword(db, data.input)
 
         # ✅ 2. BigQuery 날씨 정보 조회
         weather_response = get_weather_forecast(region, client)
@@ -119,7 +119,6 @@ def get_weather_forecast(region: Region, bigquery_client: bigquery.Client) -> Ch
 
 
 def get_region_by_keyword(session: Session, keyword: str) -> Region:
-    print(keyword)
     region = (
         session.query(Region)
         .filter(
