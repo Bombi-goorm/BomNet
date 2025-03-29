@@ -4,6 +4,7 @@ from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 import logging
 
+from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.auth.jwt_filter import JwtFilter
@@ -15,11 +16,6 @@ from app.controller.weather_controller import weather_router
 from app.database import engine, Base
 from app.util.request_interceptor import RequestTimerMiddleware
 
-
-
-
-
-
 # 사용 예시
 logger_names = [
     "alert_logger",
@@ -30,6 +26,7 @@ logger_names = [
     "request_timer_logger",
     "main_logger",
 ]
+
 
 def setup_loggers(logger_names: List[str]):
     formatter = logging.Formatter("%(asctime)s | %(name)s | %(levelname)s | %(message)s")
@@ -44,6 +41,7 @@ def setup_loggers(logger_names: List[str]):
             handler.setFormatter(formatter)
             logger.addHandler(handler)
 
+
 setup_loggers(logger_names)
 
 logger = logging.getLogger("main_logger")
@@ -56,7 +54,7 @@ app.add_middleware(JwtFilter)
 app.add_middleware(RequestTimerMiddleware)
 
 # DB 테이블 생성
-Base.metadata.create_all(bind=engine)
+# Base.metadata.create_all(bind=engine)
 
 # ✅ CORS 설정
 app.add_middleware(
@@ -86,12 +84,10 @@ async def check_db_connection_on_startup():
     logger.info("[서버 시작] DB 연결 확인 중...")
     try:
         with engine.connect() as conn:
-            conn.execute("SELECT 1")  # 연결 테스트 쿼리
+            conn.execute(text("SELECT 1"))
         logger.info("[DB 연결 성공] DB 연결 완료")
     except SQLAlchemyError as e:
         logger.error("[ERROR] DB 연결 실패", exc_info=True)
-
-
 
 
 # FastAPI 실행

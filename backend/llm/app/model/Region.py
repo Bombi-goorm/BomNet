@@ -6,7 +6,7 @@ from app.database import Base
 
 class Region(Base):
     __tablename__ = 'region'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, name='region_id')
     weather_si_do_code = Column(String(20), nullable=False)
     weather_si_gun_gu_code = Column(String(20), nullable=False)
     si_gun_gu_code = Column(String(30), nullable=False)
