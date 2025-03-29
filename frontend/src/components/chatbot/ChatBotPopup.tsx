@@ -211,9 +211,27 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
       
     }
   };
+
+  const getWeatherEmoji = (weather: string): string => {
+    if (!weather) return "❓";
+  
+    const lower = weather.toLowerCase();
+  
+    if (lower.includes("맑음") || lower.includes("clear")) return "☀️";
+    if (lower.includes("흐림") || lower.includes("cloud")) return "☁️";
+    if (lower.includes("구름") || lower.includes("partly")) return "⛅";
+    if (lower.includes("비") || lower.includes("rain")) return "🌧️";
+    if (lower.includes("눈") || lower.includes("snow")) return "❄️";
+    if (lower.includes("소나기") || lower.includes("shower")) return "🌦️";
+    if (lower.includes("안개") || lower.includes("fog")) return "🌫️";
+    
+    return "🌈"; // 기본값 또는 기타
+  };
+  
   
   // 날씨 데이터 포맷팅
   const formatWeatherMessage = (location: string, weatherInfo: WeatherInfo): string => {
+    const weatherEmoji = getWeatherEmoji(weatherInfo.weather.sky);
     return `📍 ${location} 지역 날씨 정보\n\n`
       + `📅 시간: ${new Date(weatherInfo.forecastTime ?? new Date().toISOString()).toLocaleTimeString("ko-KR", {
         hour: "2-digit",
@@ -221,9 +239,9 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
         hour12: true,
       })}\n`
       + `🌦️ 날씨: ${weatherInfo.weather}\n`
-      + `🌡️ 온도: ${weatherInfo.temperature}\n`
-      + `💧 습도: ${weatherInfo.humidity}\n`
-      + `🌬️ 바람: ${weatherInfo.windSpeed}`;
+      + `🌡️ 온도: ${weatherInfo.temperature}°C\n`
+      + `💧 습도: ${weatherInfo.humidity}%\n`
+      + `🌬️ 바람: ${weatherInfo.windSpeed}km/s`;
   };
   
   //  가격 조회 요청 -- 수정필요 ( 품목 전달 )

@@ -12,7 +12,7 @@ from app.config import settings
 from app.database import get_db
 from app.dto.common_response_dto import CommonResponseDto
 from app.dto.request_dto import ChatbotRequestDto
-from app.dto.response_dto import ChatbotResponseDto, WeatherInfo
+from app.dto.response_dto import ChatbotResponseDto, WeatherInfo, Weather
 from app.model.Region import Region
 
 weather_router = APIRouter()
@@ -30,6 +30,21 @@ client = bigquery.Client(credentials=credentials, project=settings.GCP_PROJECT_I
 GCP_PROJECT_ID = settings.GCP_PROJECT_ID
 DATASET_ID = settings.DATASET_ID
 TABLE_ID = settings.TABLE_ID
+
+# 날씨 코드 → 설명 매핑
+SKY_CODE = {
+    "1": "맑음",
+    "3": "구름 많음",
+    "4": "흐림"
+}
+
+PTY_CODE = {
+    "0": "없음",
+    "1": "비",
+    "2": "비/눈",
+    "3": "눈",
+    "4": "소나기"
+}
 
 
 @weather_router.post("/info", response_model=CommonResponseDto[ChatbotResponseDto])
@@ -60,7 +75,7 @@ async def get_weather(data: ChatbotRequestDto, db: Session = Depends(get_db)):
         sample_weather_info = ChatbotResponseDto(
             location="서울",
             weatherInfo=WeatherInfo(
-                weather="맑음",
+                weather=Weather(sky="맑음", wind="약함"),
                 temperature="5°C",
                 humidity="30%",
                 windSpeed="10km/h",
@@ -105,8 +120,22 @@ def get_weather_forecast(region: Region, bigquery_client: bigquery.Client) -> Ch
         raise ValueError("날씨 정보가 없습니다.")
     
     row = results[0]
+
+    # 날씨 코드 → 텍스트 변환
+    sky_code = row.get("SKY", "1")
+    pty_code = row.get("PTY", "0")
+    wsd_value = float(row.get("WSD", "0"))
+
+    sky_text = SKY_CODE.get(sky_code, "맑음")
+    pty_text = PTY_CODE.get(pty_code, "")
+    wind_level = "강함" if wsd_value > 7 else "약함"
+
+    # 결합
+    if pty_text and pty_text != "없음":
+        sky_text = f"{pty_text} / {sky_text}"
+
     weather_info = WeatherInfo(
-        weather=row.get("SKY"),
+        weather=Weather(sky=sky_text, wind=wind_level),
         temperature=row.get("TMP"),
         humidity=row.get("REH"),
         windSpeed=row.get("WSD"),

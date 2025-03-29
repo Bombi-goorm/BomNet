@@ -15,8 +15,13 @@ class OtherResponseDto(BaseModel):
     answer: str
 
 
+class Weather(BaseModel):
+    wind: str
+    sky: str
+
+
 class WeatherInfo(BaseModel):
-    weather: str
+    weather: Weather
     temperature: str
     humidity: str
     windSpeed: str
