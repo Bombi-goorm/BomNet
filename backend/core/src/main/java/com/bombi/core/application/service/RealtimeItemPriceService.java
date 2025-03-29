@@ -23,8 +23,12 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class RealtimeItemPriceService {
+
+	public static final Duration CACHE_DURATION = Duration.ofMinutes(30L);
+	public static final Duration FALLBACK_CACHE_DURATION = Duration.ofHours(24L);
+
 	private final RealtimeVarietyPriceCollector realtimeVarietyPriceCollector;
-	private final RedisTemplate<String, List<VarietyPriceInfo>> redisTemplate;
+	private final RedisCacheService redisCacheService;
 
 	public List<ProductPriceDto> getRealtimeItemPrice(String item) {
 		String startDateTime = createStartDate();
@@ -34,7 +38,7 @@ public class RealtimeItemPriceService {
 
 		// 캐시 조회 후 실제 값 조회에도 데이터가 없다면 fallback 캐시 반환
 		if (varietyPriceInfos == null || varietyPriceInfos.isEmpty()) {
-			List<VarietyPriceInfo> fallbackVarietyPriceInfos = redisTemplate.opsForValue().get("RealTimePrice::" + item + "::fallback");
+			List<VarietyPriceInfo> fallbackVarietyPriceInfos = redisCacheService.getFromCache("RealTimePrice::" + item + "::fallback");
 
 			if(fallbackVarietyPriceInfos == null || fallbackVarietyPriceInfos.isEmpty()) {
 				log.info("Fallback 캐시값도 비어있음. 기본값 반환");
@@ -42,18 +46,17 @@ public class RealtimeItemPriceService {
 			}
 
 			// fallback 캐시 값 expire 추가
-			Long currentTTL = redisTemplate.getExpire("RealTimePrice::" + item + "::fallback", TimeUnit.HOURS);
-			long extendedTTL = (currentTTL != null ? currentTTL : 0) + TimeUnit.HOURS.toHours(1);
-			redisTemplate.expire("RealTimePrice::" + item + "::fallback", extendedTTL, TimeUnit.HOURS);
+			redisCacheService.extendTTL("RealTimePrice::" + item + "::fallback");
 
 			// 기존 캐시에 fallback캐시값을 복사해 저장
-			redisTemplate.opsForValue().set("RealTimePrice::" + item, fallbackVarietyPriceInfos, Duration.ofMinutes(30L));
+			redisCacheService.setCacheWithTime("RealTimePrice::" + item, fallbackVarietyPriceInfos, CACHE_DURATION);
 
 			return convertToProductPriceDto(fallbackVarietyPriceInfos);
 		}
 
 		// 캐시 or 실제 값 조회에 데이터가 존재한다면 fallback 캐시 설정
-		redisTemplate.opsForValue().set("RealTimePrice::" + item + "::fallback", varietyPriceInfos, Duration.ofHours(24L));
+		log.info("Fallback 캐시 업데이트");
+		redisCacheService.setCacheWithTime("RealTimePrice::" + item + "::fallback", varietyPriceInfos, FALLBACK_CACHE_DURATION);
 
 		return convertToProductPriceDto(varietyPriceInfos);
 	}
