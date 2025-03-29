@@ -212,10 +212,10 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
-  const getWeatherEmoji = (weather: string): string => {
-    if (!weather) return "❓";
+  const getWeatherEmoji = (sky: string): string => {
+    if (!sky) return "❓";
   
-    const lower = weather.toLowerCase();
+    const lower = sky.toLowerCase();
   
     if (lower.includes("맑음") || lower.includes("clear")) return "☀️";
     if (lower.includes("흐림") || lower.includes("cloud")) return "☁️";
@@ -224,9 +224,10 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
     if (lower.includes("눈") || lower.includes("snow")) return "❄️";
     if (lower.includes("소나기") || lower.includes("shower")) return "🌦️";
     if (lower.includes("안개") || lower.includes("fog")) return "🌫️";
-    
-    return "🌈"; // 기본값 또는 기타
+  
+    return "🌈"; // 기본값
   };
+  
   
   
   // 날씨 데이터 포맷팅
@@ -238,7 +239,7 @@ const ChatbotPopup = ({ onClose }: { onClose: () => void }) => {
         minute: "2-digit",
         hour12: true,
       })}\n`
-      + `🌦️ 날씨: ${weatherInfo.weather}\n`
+      + `${weatherEmoji} 날씨: ${weatherInfo.weather.sky}\n`
       + `🌡️ 온도: ${weatherInfo.temperature}°C\n`
       + `💧 습도: ${weatherInfo.humidity}%\n`
       + `🌬️ 바람: ${weatherInfo.windSpeed}km/s`;
