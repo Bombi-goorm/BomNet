@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
+import com.bombi.core.common.annotation.CacheableData;
 import com.bombi.core.infrastructure.external.price.variety.dto.VarietyPriceInfo;
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.FieldValueList;
@@ -27,7 +28,8 @@ public class RealtimeVarietyPriceCollector {
 	 * @param startDate : 오늘부터 30일 전
 	 * @param endDate : 오늘
 	 */
-	// @Cacheable(value = "RealTime", key = "#item + '_' + #endDate")
+	// @Cacheable(value = "RealTimePrice", key = "#item + '_' + #endDate")
+	@CacheableData
 	public List<VarietyPriceInfo> sendVarietyPriceTrend(String item, String startDate, String endDate) {
 		String query = "SELECT"
 			+ " whsl_mrkt_nm, variety, FORMAT_DATE('%Y-%m-%d %H:%M', DATETIME_TRUNC(date_time, HOUR)) as date, CAST(AVG(rt_price) AS INT64) as average_rt_price"
