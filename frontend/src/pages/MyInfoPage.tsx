@@ -59,9 +59,11 @@ const MyInfoPage = () => {
       </div>
 
       {/* 내 농장 정보 영역 */}
-      <div className="container mx-auto p-4 space-y-8 max-w-[50rem]">
-        <FarmAssessment farmData={userInfo.myFarm} />
-      </div>
+      {userInfo.myFarm && (
+        <div className="container mx-auto p-4 space-y-8 max-w-[50rem]">
+          <FarmAssessment farmData={userInfo.myFarm} />
+        </div>
+      )}
 
       {/* 추천 생산품 영역 */}
       {/* <div className="container mx-auto p-4 space-y-8 max-w-[30rem]">

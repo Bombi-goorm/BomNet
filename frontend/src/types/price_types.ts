@@ -15,6 +15,7 @@ export interface PriceResponse {
     variety: string;  // 품종명 
     price: number;    // 가격
     dateTime: string; // 발생시간
+    market?: string; // 시장
   }
   
   // 수정된 품질별 가격 데이터 타입 – 각 항목에 품종 정보를 포함
