@@ -5,6 +5,7 @@ from google.cloud import bigquery
 import json
 import logging
 from google.oauth2 import service_account
+from sqlalchemy import or_, func
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -118,11 +119,14 @@ def get_weather_forecast(region: Region, bigquery_client: bigquery.Client) -> Ch
 
 
 def get_region_by_keyword(session: Session, keyword: str) -> Region:
+    print(keyword)
     region = (
         session.query(Region)
         .filter(
-            Region.si_gun_gu_name.ilike(f"%{keyword}%")
-            | Region.special_zone_name.ilike(f"%{keyword}%")
+            or_(
+                func.lower(Region.si_gun_gu_name).like(f"%{keyword}%"),
+                func.lower(Region.special_zone_name).like(f"%{keyword}%")
+            )
         )
         .first()
     )
