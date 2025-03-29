@@ -51,7 +51,7 @@ async def get_weather(data: ChatbotRequestDto, db: Session = Depends(get_db)):
         logger.warning(f"[날씨 조회 실패] 지역 검색 실패 - {ve}")
         return CommonResponseDto(
             status="404",
-            message=str(ve),
+            message="[날씨 조회 실패] 지역 검색 실패",
             data=None
         )
 
@@ -99,8 +99,10 @@ def get_weather_forecast(region: Region, bigquery_client: bigquery.Client) -> Ch
 
     query_job = bigquery_client.query(query, job_config=job_config)
     results = query_job.result()
+    row = next(results, None)
 
-    weather_info_list = []
+    if row is None:
+        raise ValueError("예보 결과가 존재하지 않습니다.")
 
     for row in results:
         weather_info = WeatherInfo(
@@ -110,12 +112,11 @@ def get_weather_forecast(region: Region, bigquery_client: bigquery.Client) -> Ch
             windSpeed=row.get("WSD"),
             dateTime=row.get("fcst_date_time")
         )
-        weather_info_list.append(weather_info)
-
-    return ChatbotResponseDto(
-        location=region.si_gun_gu_name,
-        weatherInfo=weather_info_list
-    )
+        # ✅ 첫 번째 결과만 사용하고 바로 리턴
+        return ChatbotResponseDto(
+            location=region.si_gun_gu_name,
+            weatherInfo=weather_info
+        )
 
 
 def get_region_by_keyword(session: Session, keyword: str) -> Region:
