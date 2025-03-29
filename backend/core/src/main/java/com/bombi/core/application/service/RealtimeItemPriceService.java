@@ -50,7 +50,8 @@ public class RealtimeItemPriceService {
 			int chartIndex = index + 1;
 			ProductPriceDto productPriceDto = new ProductPriceDto(chartIndex, varietyPriceInfo.getVariety(),
 				varietyPriceInfo.getAveragePricePerKg(),
-				varietyPriceInfo.getDateTime());
+				varietyPriceInfo.getDateTime(),
+				varietyPriceInfo.getMarket());
 
 			productPriceDtos.add(productPriceDto);
 		}

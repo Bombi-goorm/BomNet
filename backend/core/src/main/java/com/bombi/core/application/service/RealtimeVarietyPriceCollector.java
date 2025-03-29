@@ -30,14 +30,13 @@ public class RealtimeVarietyPriceCollector {
 	// @Cacheable(value = "RealTime", key = "#item + '_' + #endDate")
 	public List<VarietyPriceInfo> sendVarietyPriceTrend(String item, String startDate, String endDate) {
 		String query = "SELECT"
-			+ " variety, FORMAT_DATE('%Y-%m-%d %H:%M', DATETIME_TRUNC(date_time, HOUR)) as date, CAST(AVG(rt_price) AS INT64) as average_rt_price"
+			+ " whsl_mrkt_nm, variety, FORMAT_DATE('%Y-%m-%d %H:%M', DATETIME_TRUNC(date_time, HOUR)) as date, CAST(AVG(rt_price) AS INT64) as average_rt_price"
 			+ " FROM kma.stg_mafra__real_time"
 			+ " WHERE item = @item"
-			+ " AND whsl_mrkt_nm = @market"
 			+ " AND date_time >= @start_date"
 			+ " AND date_time <= @end_date"
-			+ " GROUP BY variety, FORMAT_DATE('%Y-%m-%d %H:%M', DATETIME_TRUNC(date_time, HOUR))"
-			+ " ORDER BY variety, FORMAT_DATE('%Y-%m-%d %H:%M', DATETIME_TRUNC(date_time, HOUR))";
+			+ " GROUP BY whsl_mrkt_nm, variety, FORMAT_DATE('%Y-%m-%d %H:%M', DATETIME_TRUNC(date_time, HOUR))"
+			+ " ORDER BY whsl_mrkt_nm, variety, FORMAT_DATE('%Y-%m-%d %H:%M', DATETIME_TRUNC(date_time, HOUR))";
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
 			.addNamedParameter("item", QueryParameterValue.string(item))
@@ -53,11 +52,12 @@ public class RealtimeVarietyPriceCollector {
 			List<VarietyPriceInfo> varietyPriceInfos = new ArrayList<>();
 
 			for (FieldValueList value : result.getValues()) {
+				String market = value.get("whsl_mrkt_nm").getStringValue();
 				String varietyValue = value.get("variety").getStringValue();
 				String dateTimeValue = value.get("date").getStringValue();
 				long price = value.get("average_rt_price").getLongValue();
 
-				VarietyPriceInfo varietyPriceInfo = new VarietyPriceInfo(varietyValue, dateTimeValue, price);
+				VarietyPriceInfo varietyPriceInfo = new VarietyPriceInfo(market, varietyValue, dateTimeValue, price);
 
 				varietyPriceInfos.add(varietyPriceInfo);
 			}
