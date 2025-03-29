@@ -1,15 +1,8 @@
 from typing import Optional
 
-from pyasn1_modules.rfc2560 import ResponseData
 from pydantic import BaseModel
 
 from app.model.Notification import NotificationType
-
-
-class ChatbotResponseDto(BaseModel):
-    product_id: int
-    price: int
-    availability: int
 
 
 class PriceResponseDto(BaseModel):
@@ -39,6 +32,10 @@ class NotificationResponseDto(BaseModel):
     is_read: str
 
 
+class ResponseData(BaseModel):
+    content: Optional[str] = None
+
+
 class ChatbotResponseDto(BaseModel):
     crop: Optional[str] = None
     price: Optional[float] = None
@@ -47,3 +44,4 @@ class ChatbotResponseDto(BaseModel):
     weatherInfo: Optional[WeatherInfo] = None
     intent: Optional[str] = None
     response_data: Optional[ResponseData] = None
+
