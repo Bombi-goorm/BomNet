@@ -33,5 +33,5 @@ class RegionWeather(Base):
     annual_sunlight_hours = Column(Integer)
     station_id = Column(String)
     station_name = Column(String)
-    region_id = Column(Integer, ForeignKey('region.id'))
+    region_id = Column(Integer, ForeignKey('region.region_id'))
     region = relationship("Region", back_populates="region_weather")
