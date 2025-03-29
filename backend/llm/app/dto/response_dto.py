@@ -1,5 +1,6 @@
 from typing import Optional
 
+from pyasn1_modules.rfc2560 import ResponseData
 from pydantic import BaseModel
 
 from app.model.Notification import NotificationType
@@ -25,13 +26,8 @@ class WeatherInfo(BaseModel):
     weather: str
     temperature: str
     humidity: str
-    wind: str
+    windSpeed: str
     dateTime: str
-
-
-class WeatherResponseDto(BaseModel):
-    location: str
-    weatherInfo: WeatherInfo
 
 
 class NotificationResponseDto(BaseModel):
@@ -41,3 +37,13 @@ class NotificationResponseDto(BaseModel):
     title: Optional[str]
     message: Optional[str]
     is_read: str
+
+
+class ChatbotResponseDto(BaseModel):
+    crop: Optional[str] = None
+    price: Optional[float] = None
+    answer: Optional[str] = None
+    location: Optional[str] = None
+    weatherInfo: Optional[WeatherInfo] = None
+    intent: Optional[str] = None
+    response_data: Optional[ResponseData] = None
