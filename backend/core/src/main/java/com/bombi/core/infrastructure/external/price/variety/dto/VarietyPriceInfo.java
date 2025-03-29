@@ -7,11 +7,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class VarietyPriceInfo {
 
+	private String market;
 	private String variety;
 	private String dateTime;
 	private long averagePricePerKg;
 
 	public VarietyPriceInfo(String variety, String dateTime, long averagePricePerKg) {
+		this.variety = variety;
+		this.dateTime = dateTime;
+		this.averagePricePerKg = averagePricePerKg;
+	}
+
+	public VarietyPriceInfo(String market, String variety, String dateTime, long averagePricePerKg) {
+		this.market = market;
 		this.variety = variety;
 		this.dateTime = dateTime;
 		this.averagePricePerKg = averagePricePerKg;
