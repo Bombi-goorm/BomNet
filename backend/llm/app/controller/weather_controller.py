@@ -78,7 +78,6 @@ def get_weather_forecast(region: Region, bigquery_client: bigquery.Client) -> Ch
     start_time = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
     end_time = start_time + timedelta(hours=12)
 
-
     query = """
             SELECT fcst_date_time, TMP, REH, WSD, SKY, PTY
             FROM `goorm-bomnet.kma.int_kma_pivoted_short`
@@ -97,26 +96,27 @@ def get_weather_forecast(region: Region, bigquery_client: bigquery.Client) -> Ch
         ]
     )
 
-    query_job = bigquery_client.query(query, job_config=job_config)
-    results = query_job.result()
-    row = next(results, None)
+    # query_job = bigquery_client.query(query, job_config=job_config)
+    # results = query_job.result()
 
-    if row is None:
-        raise ValueError("예보 결과가 존재하지 않습니다.")
+    results = list(bigquery_client.query(query, job_config=job_config).result())  # ✅ 캐싱
 
-    for row in results:
-        weather_info = WeatherInfo(
-            weather=row.get("SKY"),
-            temperature=row.get("TMP"),
-            humidity=row.get("REH"),
-            windSpeed=row.get("WSD"),
-            dateTime=row.get("fcst_date_time")
-        )
-        # ✅ 첫 번째 결과만 사용하고 바로 리턴
-        return ChatbotResponseDto(
-            location=region.si_gun_gu_name,
-            weatherInfo=weather_info
-        )
+    if not results:
+        raise ValueError("날씨 정보가 없습니다.")
+    
+    row = results[0]
+    weather_info = WeatherInfo(
+        weather=row.get("SKY"),
+        temperature=row.get("TMP"),
+        humidity=row.get("REH"),
+        windSpeed=row.get("WSD"),
+        dateTime=row.get("fcst_date_time")
+    )
+    # ✅ 첫 번째 결과만 사용하고 바로 리턴
+    return ChatbotResponseDto(
+        location=region.si_gun_gu_name,
+        weatherInfo=weather_info
+    )
 
 
 def get_region_by_keyword(session: Session, keyword: str) -> Region:
@@ -133,4 +133,3 @@ def get_region_by_keyword(session: Session, keyword: str) -> Region:
     if not region:
         raise ValueError(f"'{keyword}'에 해당하는 지역 정보를 찾을 수 없습니다.")
     return region
-
