@@ -1,17 +1,12 @@
 package com.bombi.core.presentation.controller;
 
-import com.bombi.core.infrastructure.security.authentication.CustomUserDetails;
 import com.bombi.core.presentation.dto.home.HomeRequestDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bombi.core.application.service.HomeService;
+import com.bombi.core.application.service.home.HomeService;
 import com.bombi.core.common.dto.CoreResponseDto;
 import com.bombi.core.presentation.dto.home.HomeResponseDto;
 

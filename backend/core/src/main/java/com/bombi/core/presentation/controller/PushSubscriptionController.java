@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bombi.core.application.service.PushSubscriptionService;
+import com.bombi.core.application.service.push.PushSubscriptionService;
 import com.bombi.core.common.dto.CoreResponseDto;
-import com.bombi.core.domain.member.model.PushSubscription;
 import com.bombi.core.presentation.dto.member.SubscriptionRegisterRequestDto;
 
 import lombok.RequiredArgsConstructor;

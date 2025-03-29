@@ -11,7 +11,7 @@
 //import org.springframework.test.context.ActiveProfiles;
 //import org.springframework.transaction.annotation.Transactional;
 //
-//import com.bombi.core.application.service.NotificationService;
+//import com.bombi.core.application.service.notification.NotificationService;
 //import com.bombi.core.domain.member.model.Member;
 //import com.bombi.core.domain.member.model.Role;
 //import com.bombi.core.domain.notification.model.Notification;
