@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class DailyVarietyPriceCollector {
+public class AnnualVarietyPriceCollector {
 
 	private final BigQuery bigQuery;
 
@@ -29,15 +29,16 @@ public class DailyVarietyPriceCollector {
 	 * @param endDate : 오늘
 	 */
 	@BigQueryData
-	@Cacheable(value = "DailyPrice", key = "#item")
+	@Cacheable(value = "AnnualPrice", key = "#item")
 	public List<VarietyPriceInfo> sendVarietyPriceTrend(String item, String startDate, String endDate) {
 		String query = "SELECT"
-			+ " *"
+			+ " variety, FORMAT_DATE('%G', date_time) as date, CAST(avg(avg_ppk) as INT64) as avgPrice"
 			+ " FROM kma.int_mafra__variety_price_trend"
 			+ " WHERE item = @item"
 			+ " AND date_time >= @start_date"
 			+ " AND date_time <= @end_date"
-			+ " ORDER BY variety, date_time";
+			+ " GROUP BY variety, FORMAT_DATE('%G', date_time)"
+			+ " ORDER BY variety, FORMAT_DATE('%G', date_time)";
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
 			.addNamedParameter("item", QueryParameterValue.string(item))
@@ -53,8 +54,8 @@ public class DailyVarietyPriceCollector {
 
 			for (FieldValueList value : result.getValues()) {
 				String varietyValue = value.get("variety").getStringValue();
-				String dateTimeValue = value.get("date_time").getStringValue();
-				long averagePricePerKgValue = value.get("avg_ppk").getLongValue();
+				String dateTimeValue = value.get("date").getStringValue();
+				long averagePricePerKgValue = value.get("avgPrice").getLongValue();
 
 				VarietyPriceInfo varietyPriceInfo = new VarietyPriceInfo(varietyValue, dateTimeValue, averagePricePerKgValue);
 
@@ -66,5 +67,4 @@ public class DailyVarietyPriceCollector {
 			throw new RuntimeException("BigQuery 쿼리 실행 중 오류 발생", e);
 		}
 	}
-
 }

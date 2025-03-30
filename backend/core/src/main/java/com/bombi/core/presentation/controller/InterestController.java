@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bombi.core.application.service.InterestService;
+import com.bombi.core.application.service.interest.InterestService;
 import com.bombi.core.common.dto.CoreResponseDto;
 import com.bombi.core.presentation.dto.interest.InterestProductResponseDto;
 import com.bombi.core.presentation.dto.interest.RegisterInterestRequestDto;

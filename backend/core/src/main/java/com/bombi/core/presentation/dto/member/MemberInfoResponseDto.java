@@ -6,7 +6,6 @@ import java.util.List;
 import com.bombi.core.domain.member.model.Member;
 import com.bombi.core.domain.notificationcondition.model.NotificationCondition;
 import com.bombi.core.domain.region.model.RegionWeather;
-import com.bombi.core.infrastructure.external.bigquery.dto.BigQueryRecommendProductResponseDto;
 import com.bombi.core.infrastructure.external.soil.dto.SoilCharacterResponseDto;
 import com.bombi.core.infrastructure.external.soil.dto.SoilChemicalResponseDto;
 import com.bombi.core.infrastructure.external.soil.dto.SoilSectionResponseDto;

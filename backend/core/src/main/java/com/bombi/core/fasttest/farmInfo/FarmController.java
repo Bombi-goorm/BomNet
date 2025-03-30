@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bombi.core.application.service.FarmAnalyzer;
+import com.bombi.core.application.service.member.FarmAnalyzer;
 import com.bombi.core.domain.product.ProductRepository;
 import com.bombi.core.domain.product.model.Product;
 import com.bombi.core.presentation.dto.product.FarmSuitability;

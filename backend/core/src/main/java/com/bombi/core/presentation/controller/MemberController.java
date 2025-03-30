@@ -1,6 +1,6 @@
 package com.bombi.core.presentation.controller;
 
-import com.bombi.core.application.service.MemberService;
+import com.bombi.core.application.service.member.MemberService;
 import com.bombi.core.common.dto.CoreResponseDto;
 import com.bombi.core.infrastructure.security.authentication.CustomUserDetails;
 import com.bombi.core.presentation.dto.member.MemberInfoResponseDto;

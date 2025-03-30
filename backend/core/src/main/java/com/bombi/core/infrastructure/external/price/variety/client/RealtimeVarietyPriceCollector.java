@@ -3,10 +3,10 @@ package com.bombi.core.infrastructure.external.price.variety.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import com.bombi.core.common.annotation.BigQueryData;
+import com.bombi.core.common.annotation.CacheableData;
 import com.bombi.core.infrastructure.external.price.variety.dto.VarietyPriceInfo;
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.FieldValueList;
@@ -18,31 +18,33 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class DailyVarietyPriceCollector {
+public class RealtimeVarietyPriceCollector {
 
 	private final BigQuery bigQuery;
 
 	/**
-	 * 30일 동안 품종별 평균 판매 가격 가져오기
+	 * 실시간 품종별 평균 판매 가격 가져오기
 	 * @param item      : 품목. ex) 사과
 	 * @param startDate : 오늘부터 30일 전
 	 * @param endDate : 오늘
 	 */
 	@BigQueryData
-	@Cacheable(value = "DailyPrice", key = "#item")
+	@CacheableData
 	public List<VarietyPriceInfo> sendVarietyPriceTrend(String item, String startDate, String endDate) {
 		String query = "SELECT"
-			+ " *"
-			+ " FROM kma.int_mafra__variety_price_trend"
+			+ " whsl_mrkt_nm, variety, FORMAT_DATE('%Y-%m-%d %H:%M', DATETIME_TRUNC(date_time, HOUR)) as date, CAST(AVG(rt_price) AS INT64) as average_rt_price"
+			+ " FROM kma.stg_mafra__real_time"
 			+ " WHERE item = @item"
 			+ " AND date_time >= @start_date"
 			+ " AND date_time <= @end_date"
-			+ " ORDER BY variety, date_time";
+			+ " GROUP BY whsl_mrkt_nm, variety, FORMAT_DATE('%Y-%m-%d %H:%M', DATETIME_TRUNC(date_time, HOUR))"
+			+ " ORDER BY whsl_mrkt_nm, variety, FORMAT_DATE('%Y-%m-%d %H:%M', DATETIME_TRUNC(date_time, HOUR))";
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
 			.addNamedParameter("item", QueryParameterValue.string(item))
-			.addNamedParameter("start_date", QueryParameterValue.date(startDate))
-			.addNamedParameter("end_date", QueryParameterValue.date(endDate))
+			.addNamedParameter("market", QueryParameterValue.string("서울가락"))
+			.addNamedParameter("start_date", QueryParameterValue.string(startDate))
+			.addNamedParameter("end_date", QueryParameterValue.string(endDate))
 			.setUseLegacySql(false) // 표준 SQL 사용
 			.build();
 
@@ -52,11 +54,12 @@ public class DailyVarietyPriceCollector {
 			List<VarietyPriceInfo> varietyPriceInfos = new ArrayList<>();
 
 			for (FieldValueList value : result.getValues()) {
+				String market = value.get("whsl_mrkt_nm").getStringValue();
 				String varietyValue = value.get("variety").getStringValue();
-				String dateTimeValue = value.get("date_time").getStringValue();
-				long averagePricePerKgValue = value.get("avg_ppk").getLongValue();
+				String dateTimeValue = value.get("date").getStringValue();
+				long price = value.get("average_rt_price").getLongValue();
 
-				VarietyPriceInfo varietyPriceInfo = new VarietyPriceInfo(varietyValue, dateTimeValue, averagePricePerKgValue);
+				VarietyPriceInfo varietyPriceInfo = new VarietyPriceInfo(market, varietyValue, dateTimeValue, price);
 
 				varietyPriceInfos.add(varietyPriceInfo);
 			}

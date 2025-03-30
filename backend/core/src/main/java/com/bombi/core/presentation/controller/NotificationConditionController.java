@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bombi.core.application.service.NotificationConditionService;
+import com.bombi.core.application.service.notification.NotificationConditionService;
 import com.bombi.core.common.dto.CoreResponseDto;
 import com.bombi.core.infrastructure.security.authentication.CustomUserDetails;
 import com.bombi.core.presentation.dto.notification.NotificationConditionResponseDto;
