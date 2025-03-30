@@ -38,14 +38,15 @@ public class RedisCacheConfig {
 	public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
 		Map<String, RedisCacheConfiguration> cacheConfigurationMap = new HashMap<>();
 		cacheConfigurationMap.put("MemberInfo", memberInfoCache());
-		cacheConfigurationMap.put("Forecast", forecastCache());
-		cacheConfigurationMap.put("News", naverNewsCache());
-		cacheConfigurationMap.put("AnnualPrice", annualPriceCache());
-		cacheConfigurationMap.put("MonthlyPrice", monthlyPriceCache());
-		cacheConfigurationMap.put("DailyPrice", dailyPriceCache());
-		cacheConfigurationMap.put("RealTimePrice", realTimePriceCache());
-		cacheConfigurationMap.put("Soil", soilCache());
-		cacheConfigurationMap.put("ProductChart", productChartCache());
+		cacheConfigurationMap.put("Forecast", customRedisCacheConfiguration(Duration.ofMinutes(30L)));
+		cacheConfigurationMap.put("News", customRedisCacheConfiguration(Duration.ofMinutes(30L)));
+		cacheConfigurationMap.put("AnnualPrice", customRedisCacheConfiguration(Duration.ofDays(1L)));
+		cacheConfigurationMap.put("MonthlyPrice", customRedisCacheConfiguration(Duration.ofDays(1L)));
+		cacheConfigurationMap.put("DailyPrice", customRedisCacheConfiguration(Duration.ofDays(1L)));
+		cacheConfigurationMap.put("BestProduct", customRedisCacheConfiguration(Duration.ofMinutes(30L)));
+
+		cacheConfigurationMap.put("Soil", customRedisCacheConfiguration(Duration.ofDays(7L)));
+		cacheConfigurationMap.put("ProductChart", customRedisCacheConfiguration(Duration.ofHours(12L)));
 
 		return builder -> {
 			builder.withInitialCacheConfigurations(cacheConfigurationMap);
@@ -65,114 +66,25 @@ public class RedisCacheConfig {
 			);
 	}
 
-	private RedisCacheConfiguration forecastCache() {
+	private RedisCacheConfiguration customRedisCacheConfiguration(Duration timeToLive) {
 		BasicPolymorphicTypeValidator typeValidator = BasicPolymorphicTypeValidator.builder()
 			.allowIfSubType(Object.class)
 			.build();
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
 		objectMapper.activateDefaultTyping(typeValidator, ObjectMapper.DefaultTyping.NON_FINAL);
 
 		return RedisCacheConfiguration.defaultCacheConfig()
 			.computePrefixWith(key -> key + "::")
-			.entryTtl(Duration.ofMinutes(30L))
+			.entryTtl(timeToLive)
 			.disableCachingNullValues()
 			.serializeKeysWith(
 				RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
 			)
 			.serializeValuesWith(
-				RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper))
-			);
-	}
-
-	private RedisCacheConfiguration naverNewsCache() {
-		return RedisCacheConfiguration.defaultCacheConfig()
-			.computePrefixWith(key -> key + "::")
-			.entryTtl(Duration.ofMinutes(30L))
-			.disableCachingNullValues()
-			.serializeKeysWith(
-				RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
-			)
-			.serializeValuesWith(
-				RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
-			);
-	}
-
-	private RedisCacheConfiguration annualPriceCache() {
-		return RedisCacheConfiguration.defaultCacheConfig()
-			.computePrefixWith(key -> key + "::")
-			.entryTtl(Duration.ofDays(1L))
-			.disableCachingNullValues()
-			.serializeKeysWith(
-				RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
-			)
-			.serializeValuesWith(
-				RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
-			);
-	}
-
-	private RedisCacheConfiguration monthlyPriceCache() {
-		return RedisCacheConfiguration.defaultCacheConfig()
-			.computePrefixWith(key -> key + "::")
-			.entryTtl(Duration.ofDays(1L))
-			.disableCachingNullValues()
-			.serializeKeysWith(
-				RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
-			)
-			.serializeValuesWith(
-				RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
-			);
-	}
-
-	private RedisCacheConfiguration dailyPriceCache() {
-		return RedisCacheConfiguration.defaultCacheConfig()
-			.computePrefixWith(key -> key + "::")
-			.entryTtl(Duration.ofDays(1L))
-			.disableCachingNullValues()
-			.serializeKeysWith(
-				RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
-			)
-			.serializeValuesWith(
-				RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
-			);
-	}
-
-	private RedisCacheConfiguration realTimePriceCache() {
-		return RedisCacheConfiguration.defaultCacheConfig()
-			.computePrefixWith(key -> key + "::")
-			.entryTtl(Duration.ofMinutes(30L))
-			.disableCachingNullValues()
-			.serializeKeysWith(
-				RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
-			)
-			.serializeValuesWith(
-				RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
-			);
-	}
-
-	private RedisCacheConfiguration soilCache() {
-		return RedisCacheConfiguration.defaultCacheConfig()
-			.computePrefixWith(key -> key + "::")
-			.entryTtl(Duration.ofDays(7L))
-			.disableCachingNullValues()
-			.serializeKeysWith(
-				RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
-			)
-			.serializeValuesWith(
-				RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
-			);
-	}
-
-	private RedisCacheConfiguration productChartCache() {
-		return RedisCacheConfiguration.defaultCacheConfig()
-			.computePrefixWith(key -> key + "::")
-			.entryTtl(Duration.ofHours(12L))
-			.disableCachingNullValues()
-			.serializeKeysWith(
-				RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
-			)
-			.serializeValuesWith(
-				RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
+				RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer(
+					objectMapper))
 			);
 	}
 

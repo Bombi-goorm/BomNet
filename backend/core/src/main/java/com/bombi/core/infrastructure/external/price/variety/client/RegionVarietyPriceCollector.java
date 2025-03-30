@@ -1,4 +1,4 @@
-package com.bombi.core.infrastructure.external.price.chart.client;
+package com.bombi.core.infrastructure.external.price.variety.client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import com.bombi.core.common.annotation.BigQueryData;
-import com.bombi.core.infrastructure.external.price.chart.dto.ChartLinkInfo;
+import com.bombi.core.presentation.dto.price.RegionChartData;
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.FieldValueList;
 import com.google.cloud.bigquery.QueryJobConfiguration;
@@ -18,38 +18,43 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class PriceChartLinkApiClient {
+public class RegionVarietyPriceCollector {
 
 	private final BigQuery bigQuery;
 
+	/**
+	 * 지역별 품종별 판매 가격 가져오기
+	 *
+	 * @param item : 품목. ex) 사과
+	 */
 	@BigQueryData
-	@Cacheable(value = "ProductChart", key = "'link_' + #item + '_' + #dateTime")
-	public List<ChartLinkInfo> getLinks(String item, String dateTime) {
-
-		String query = "select"
-			+ " *"
-			+ " from kma.int_mafra__sankey_links"
-			+ " where item = @item and date_time = @date_time";
+	@Cacheable(value = "ProductChart", key = "'region_' + #item")
+	public List<RegionChartData> sendVarietyPriceTrend(String item) {
+		String query = "SELECT"
+			+ " plor_nm, date_time, variety, avg_ppk"
+			+ " FROM kma.int_mafra__price_by_plor"
+			+ " WHERE item = @item"
+			+ " ORDER BY variety, date_time, plor_nm";
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
 			.addNamedParameter("item", QueryParameterValue.string(item))
-			.addNamedParameter("date_time", QueryParameterValue.date(dateTime))
 			.setUseLegacySql(false)
 			.build();
 
 		try {
 			TableResult result = bigQuery.query(queryConfig);
 
-			List<ChartLinkInfo> linkInfos = new ArrayList<>();
+			List<RegionChartData> regionChartData = new ArrayList<>();
 
 			for (FieldValueList value : result.getValues()) {
-				long src = value.get("src").getLongValue();
-				long target = value.get("tgt").getLongValue();
-				String val = value.get("val").getStringValue();
+				String varietyValue = value.get("variety").getStringValue();
+				String regionName = value.get("plor_nm").getStringValue();
+				long averagePricePerKg = value.get("avg_ppk").getLongValue();
 
-				linkInfos.add(new ChartLinkInfo(src, target, val));
+				RegionChartData data = new RegionChartData(varietyValue, regionName, averagePricePerKg);
+				regionChartData.add(data);
 			}
-			return linkInfos;
+			return regionChartData;
 		}
 		catch (InterruptedException e) {
 			throw new RuntimeException("BigQuery 쿼리 실행 중 오류 발생", e);

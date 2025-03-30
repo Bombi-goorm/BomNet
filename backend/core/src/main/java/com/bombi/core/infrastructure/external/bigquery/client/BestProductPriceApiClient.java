@@ -7,8 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
+import com.bombi.core.common.annotation.BigQueryData;
+import com.bombi.core.common.annotation.CacheableData;
 import com.bombi.core.presentation.dto.home.ProductPriceInfo;
 import com.bombi.core.presentation.dto.home.ProductPriceResponse;
 import com.google.cloud.bigquery.BigQuery;
@@ -25,6 +28,8 @@ public class BestProductPriceApiClient {
 
 	private final BigQuery bigQuery;
 
+	@BigQueryData
+	@Cacheable(value = "BestProduct", key = "#productCodes")
 	public List<ProductPriceResponse> callBestProductPrice(List<String> productCodes) {
 
 		String query = "SELECT"

@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.bombi.core.common.annotation.BigQueryData;
 import com.bombi.core.infrastructure.external.weather.dto.SpecialWeatherReport;
 import com.bombi.core.infrastructure.external.weather.dto.SpecialWeatherReportResponse;
 import com.google.cloud.bigquery.BigQuery;
@@ -29,6 +30,7 @@ public class SpecialWeatherReportApiClient {
 	 * pnu코드를 기반으로 region테이블에서 stationId을 기반으로 조회
 	 * @return
 	 */
+	@BigQueryData
 	public SpecialWeatherReportResponse sendSpecialWeatherReport() {
 		String query = "select stn_nm, title, fcst_date_time"
 			+ " from kma.int_kma__wrn_alarm"

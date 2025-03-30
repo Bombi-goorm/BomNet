@@ -1,5 +1,6 @@
 package com.bombi.core.infrastructure.external.weather.client;
 
+import com.bombi.core.common.annotation.BigQueryData;
 import com.bombi.core.domain.region.model.Region;
 import com.bombi.core.presentation.dto.home.WeatherExpection;
 import com.bombi.core.presentation.dto.home.BigqueryForecastResponse;
@@ -27,6 +28,7 @@ public class WeatherForecastApiClient {
 	 * 단기 예보 조회
 	 * @return
 	 */
+	@BigQueryData
 	@Cacheable(key = "#region.id", value = "Forecast")
 	public WeatherExpection sendWeatherForecast(Region region) {
 
