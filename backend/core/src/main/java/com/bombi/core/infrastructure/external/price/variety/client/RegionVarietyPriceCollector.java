@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
+import com.bombi.core.common.annotation.BigQueryData;
 import com.bombi.core.presentation.dto.price.RegionChartData;
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.FieldValueList;
@@ -26,6 +27,7 @@ public class RegionVarietyPriceCollector {
 	 *
 	 * @param item : 품목. ex) 사과
 	 */
+	@BigQueryData
 	@Cacheable(value = "ProductChart", key = "'region_' + #item")
 	public List<RegionChartData> sendVarietyPriceTrend(String item) {
 		String query = "SELECT"

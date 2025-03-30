@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.bombi.core.infrastructure.external.price.variety.client.AnnaulVarietyPriceCollector;
+import com.bombi.core.infrastructure.external.price.variety.client.AnnualVarietyPriceCollector;
 import com.bombi.core.infrastructure.external.price.variety.dto.VarietyPriceInfo;
 import com.bombi.core.presentation.dto.price.ProductPriceDto;
 
@@ -17,13 +17,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AnnualItemPriceService {
 
-	private final AnnaulVarietyPriceCollector annaulVarietyPriceCollector;
+	private final AnnualVarietyPriceCollector annualVarietyPriceCollector;
 
 	public List<ProductPriceDto> getAnnualItemPrice(String item) {
 		String startDate = createStartDate();
 		String endDate = createEndDate();
 
-		List<VarietyPriceInfo> varietyPriceInfos = annaulVarietyPriceCollector.sendVarietyPriceTrend(item, startDate, endDate);
+		List<VarietyPriceInfo> varietyPriceInfos = annualVarietyPriceCollector.sendVarietyPriceTrend(item, startDate, endDate);
 
 		return convertToProductPriceDto(varietyPriceInfos);
 	}

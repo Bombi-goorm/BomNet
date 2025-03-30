@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
+import com.bombi.core.common.annotation.BigQueryData;
 import com.bombi.core.infrastructure.external.price.chart.dto.ChartLinkInfo;
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.FieldValueList;
@@ -21,6 +22,7 @@ public class PriceChartLinkApiClient {
 
 	private final BigQuery bigQuery;
 
+	@BigQueryData
 	@Cacheable(value = "ProductChart", key = "'link_' + #item + '_' + #dateTime")
 	public List<ChartLinkInfo> getLinks(String item, String dateTime) {
 

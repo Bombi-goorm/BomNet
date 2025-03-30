@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.bombi.core.common.annotation.BigQueryData;
 import com.bombi.core.common.annotation.CacheableData;
 import com.bombi.core.infrastructure.external.price.variety.dto.VarietyPriceInfo;
 import com.google.cloud.bigquery.BigQuery;
@@ -27,7 +28,7 @@ public class RealtimeVarietyPriceCollector {
 	 * @param startDate : 오늘부터 30일 전
 	 * @param endDate : 오늘
 	 */
-	// @Cacheable(value = "RealTimePrice", key = "#item + '_' + #endDate")
+	@BigQueryData
 	@CacheableData
 	public List<VarietyPriceInfo> sendVarietyPriceTrend(String item, String startDate, String endDate) {
 		String query = "SELECT"
