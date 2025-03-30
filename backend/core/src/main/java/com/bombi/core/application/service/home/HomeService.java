@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.bombi.core.application.service.news.NewsService;
+import com.bombi.core.application.service.price.BestProductPriceService;
+import com.bombi.core.application.service.region.RegionService;
+import com.bombi.core.application.service.weather.forecast.WeatherForecastService;
+import com.bombi.core.application.service.weather.special.SpecialWeatherReportService;
 import com.bombi.core.domain.product.ProductRepository;
 import com.bombi.core.domain.product.model.Product;
 import com.bombi.core.domain.region.model.Region;
@@ -30,51 +35,29 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class HomeService {
 
-	private final RegionRepository regionRepository;
-	private final ProductRepository productRepository;
-	private final BestProductPriceApiClient bestProductApiClient;
-	private final SpecialWeatherReportApiClient specialWeatherReportApiClient;
-	private final WeatherForecastApiClient weatherForecastApiClient;
-	private final NaverNewsApiClient naverNewsApiClient;
+	private final RegionService regionService;
+	private final BestProductPriceService bestProductPriceService;
+	private final SpecialWeatherReportService specialWeatherReportService;
+	private final WeatherForecastService weatherForecastService;
+	private final NewsService newsService;
 
 	@Transactional(readOnly = true)
 	public HomeResponseDto homeInfo(HomeRequestDto requestDto) {
-		Region region = findRegionInfo(requestDto);
+		Region region = regionService.findRegionInfo(requestDto);
 
 		// 인기/관심 상품 가격 추이 :: BestProductApiClient -> bigquery
-		PageRequest pageRequest = PageRequest.of(0, 5, Sort.by("id"));
-		List<Product> bestProducts = productRepository.findTop5ByCategoryId(pageRequest);
-		List<String> midCategoryNames = bestProducts.stream()
-			.map(product -> product.getCategory().getParent().getName())
-			.collect(Collectors.toList());
-
-		List<ProductPriceResponse> productPriceResponses = bestProductApiClient.callBestProductPrice(midCategoryNames);
+		List<ProductPriceResponse> productPriceResponses = bestProductPriceService.getBestProductPrice();
 
 		// 기상 특보
-		SpecialWeatherReportResponse specialWeatherReportResponse = specialWeatherReportApiClient.sendSpecialWeatherReport();
+		SpecialWeatherReportResponse specialWeatherReportResponse = specialWeatherReportService.getSpecialWeatherReport();
 
 		// 기상 예보 -> bigquery
-		WeatherExpection weatherExpection = weatherForecastApiClient.sendWeatherForecast(region);
-
-
+		WeatherExpection weatherExpection = weatherForecastService.getWeatherForecast(region);
 
 		// 농산물 뉴스
-		NaverNewsResponse naverNewsResponse = naverNewsApiClient.sendNews();
+		NaverNewsResponse naverNewsResponse = newsService.getNews();
 
 		return new HomeResponseDto(productPriceResponses, specialWeatherReportResponse, weatherExpection, naverNewsResponse);
-	}
-
-	private Region findRegionInfo(HomeRequestDto requestDto) {
-
-		if(requestDto == null || !StringUtils.hasText(requestDto.getPnu())) {
-			return regionRepository.findByStationName("서울")
-				.orElseThrow(() -> new IllegalArgumentException("서울 지역 정보를 찾을 없습니다."));
-		}
-
-		String weatherSiGunGuCode = requestDto.getPnu().substring(0, 5);
-
-		return regionRepository.findByWeatherSiGunGuCode(weatherSiGunGuCode)
-			.orElseThrow(() -> new IllegalArgumentException("해당 시군구 코드를 가지는 지역 정보를 찾을 수 없습니다."));
 	}
 
 }
