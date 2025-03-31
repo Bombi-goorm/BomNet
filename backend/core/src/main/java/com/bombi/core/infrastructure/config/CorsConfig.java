@@ -19,6 +19,8 @@ public class CorsConfig {
         // 리소스 허용할 URL
         List<String> allowedOriginPatterns = new ArrayList<>();
         allowedOriginPatterns.add("https://bomnet.shop");
+        allowedOriginPatterns.add("https://auth.bomnet.shop");
+
         config.setAllowedOriginPatterns(allowedOriginPatterns);
 
         // 허용 Http Method 지정
