@@ -24,9 +24,8 @@ public class ProductController {
 
 	@PostMapping("/item/info")
 	public ResponseEntity<CoreResponseDto<?>> search(
-		@RequestBody ProductSearchRequestDto requestDto,
-		@AuthenticationPrincipal UserDetails userDetails) {
-		ProductSearchResponseDto response = productSearchService.search(requestDto, userDetails.getUsername());
+		@RequestBody ProductSearchRequestDto requestDto) {
+		ProductSearchResponseDto response = productSearchService.search(requestDto);
 		return ResponseEntity.ok(CoreResponseDto.ofSuccess("생산 조건 조회 성공", response));
 	}
 }
