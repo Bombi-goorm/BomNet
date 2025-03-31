@@ -19,6 +19,9 @@ AUTH_SERVER_URL = settings.AUTH_SERVER_URL
 JWT_SECRET = settings.JWT_SECRET
 JWT_ALGORITHM = settings.JWT_ALGORITHM
 
+print("JWT_SECRET::", JWT_SECRET)
+print("JWT_ALGORITHM::",JWT_ALGORITHM)
+
 
 def get_db():
     db = SessionLocal()
