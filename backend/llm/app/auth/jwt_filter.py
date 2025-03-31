@@ -96,7 +96,10 @@ class JwtFilter(BaseHTTPMiddleware):
             raise HTTPException(status_code=500, detail="AUTH_SERVER_URL is not set")
 
         refresh_url = f"{AUTH_SERVER_URL}/member/renew"
-        response = requests.post(refresh_url, json={"refresh_token": refresh_token})
+        response = requests.post(
+            refresh_url,
+            cookies={"refresh_token": refresh_token}
+        )
 
         if response.status_code != 200:
             logger.error(f":: Token refresh failed - status={str(response.status_code)}")
