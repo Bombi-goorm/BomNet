@@ -37,7 +37,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static final long ACCESS_TOKEN_COOKIE_AGE = 60L;
     private static final List<String> EXCLUDED_PATHS = Arrays.asList(
         "/core/health", "/bigquery/data", "/gcs/data", "/weather/special", "/naver/news", "/best/price", "/core/home", "/weather/forecast", "/soil/character", "/soil/chemical",
-        "/farm", "/product/chart/node", "/product/chart/link", "/product/chart", "/core/item/price", "/price/variety"
+        "/farm", "/product/chart/node", "/product/chart/link", "/product/chart", "/core/item/price", "/price/variety",
+        "/core/item/info"
     );
 
     private final JwtProvider jwtProvider;
