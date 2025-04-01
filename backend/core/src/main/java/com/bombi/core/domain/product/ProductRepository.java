@@ -14,18 +14,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	@Query("select p from Product p join fetch p.category sc"
 		+ " join fetch sc.parent mc"
 		+ " join fetch mc.parent lc"
-		+ " where sc.code = :smallCategoryCode and mc.code = :midCategoryCode")
-	Optional<Product> findOneByCategoryId(String midCategoryCode, String smallCategoryCode);
-
-	@Query("select p from Product p join fetch p.category sc"
-		+ " join fetch sc.parent mc"
-		+ " join fetch mc.parent lc"
-		+ " where sc.id = :smallCategoryId and mc.id = :midCategoryId")
-	Optional<Product> findOneByCategoryId(Long midCategoryId, Long smallCategoryId);
-
-	@Query("select p from Product p join fetch p.category sc"
-		+ " join fetch sc.parent mc"
-		+ " join fetch mc.parent lc"
 		+ " join fetch p.cultivation culti"
 		+ " join fetch culti.productionCondition"
 		+ " where mc.id = :midCategoryId and sc.id = :smallCategoryId")

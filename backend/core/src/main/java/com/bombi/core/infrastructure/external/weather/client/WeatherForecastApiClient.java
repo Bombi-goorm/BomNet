@@ -10,9 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +28,7 @@ public class WeatherForecastApiClient {
 	 */
 	@BigQueryData
 	@Cacheable(key = "#region.id", value = "Forecast")
-	public WeatherExpection sendWeatherForecast(Region region) {
+	public WeatherExpection sendWeatherForecast(Region region, String startTime, String endTime) {
 
 		String query = "SELECT * FROM `goorm-bomnet.kma.int_kma_pivoted_short`"
 				+ " WHERE fcst_date_time >= @startFcstTime and fcst_date_time <= @endFcstTime"
@@ -40,13 +38,13 @@ public class WeatherForecastApiClient {
 //		+ " WHERE fcst_date_time >= '2025-03-27 00:00:00' and fcst_date_time <= '2025-03-28 00:00:00'"
 //				+ " WHERE nx = '60' AND ny = '127'"
 
-		String startTime = getForecastStartTime();
-		String endTime = getForecastEndTime();
+		// String startTime = getForecastStartTime();
+		// String endTime = getForecastEndTime();
 		String nx = region.getXx();
 		String ny = region.getYy();
 
-		log.info("Start time: {}, End time : {}", startTime, endTime);
-		log.info("NX: {}, NY: {}", nx, ny);
+		// log.info("Start time: {}, End time : {}", startTime, endTime);
+		// log.info("NX: {}, NY: {}", nx, ny);
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
 				.addNamedParameter("startFcstTime", QueryParameterValue.string(startTime))

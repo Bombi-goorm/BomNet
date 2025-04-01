@@ -31,7 +31,7 @@ public class SpecialWeatherReportApiClient {
 	 * @return
 	 */
 	@BigQueryData
-	public SpecialWeatherReportResponse sendSpecialWeatherReport() {
+	public SpecialWeatherReportResponse sendSpecialWeatherReport(String todayDateTime, String tomorrowDateTime) {
 		String query = "select stn_nm, title, fcst_date_time"
 			+ " from kma.int_kma__wrn_alarm"
 			+ " where fcst_date_time > @startTmFc"
@@ -39,12 +39,9 @@ public class SpecialWeatherReportApiClient {
 			+ " order by fcst_date_time desc"
 			+ " limit 6";
 
-		String today = getTodayDateTime();
-		String tomorrow = getTomorrowDateTime();
-
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
-			.addNamedParameter("startTmFc", QueryParameterValue.string(today))
-			.addNamedParameter("endTmFc", QueryParameterValue.string(tomorrow))
+			.addNamedParameter("startTmFc", QueryParameterValue.string(todayDateTime))
+			.addNamedParameter("endTmFc", QueryParameterValue.string(tomorrowDateTime))
 			.setUseLegacySql(false)
 			.build();
 
@@ -57,23 +54,6 @@ public class SpecialWeatherReportApiClient {
 		} catch (Exception e) {
 			throw new RuntimeException("BigQuery 쿼리 실행 중 오류 발생", e);
 		}
-	}
-
-	private String getTodayDateTime() {
-		LocalDate today = LocalDate.now();
-		LocalTime localTime = LocalTime.of(3, 0, 0);
-
-		LocalDateTime localDateTime = LocalDateTime.of(today, localTime);
-
-		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-	}
-
-	private String getTomorrowDateTime() {
-		LocalDate tomorrow = LocalDate.now().plusDays(1L);
-		LocalTime localTime = LocalTime.of(3, 0);
-		LocalDateTime localDateTime = LocalDateTime.of(tomorrow, localTime);
-
-		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
 	private List<SpecialWeatherReport> extractWeatherReport(TableResult result) {
