@@ -13,7 +13,7 @@ module "vpc" {
   azs             = ["ap-northeast-2a", "ap-northeast-2c"]
   public_subnets = ["10.0.18.0/24", "10.0.19.0/24"]
   private_subnets = ["10.0.20.0/24", "10.0.21.0/24"]
-  database_subnets = ["10.0.22.0/24", "10.0.23.0/24"]
+  # database_subnets = ["10.0.22.0/24", "10.0.23.0/24"]
 
   create_igw              = true
   enable_nat_gateway      = true
@@ -21,8 +21,8 @@ module "vpc" {
   enable_dns_hostnames    = true
   enable_dns_support      = true
   map_public_ip_on_launch = true
-  create_database_subnet_group = true
-  create_database_subnet_route_table = true
+  # create_database_subnet_group = true
+  # create_database_subnet_route_table = true
 
   # Manage so we can name
   manage_default_network_acl    = true

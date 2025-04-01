@@ -1,0 +1,98 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: eks-alb
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/load-balancer-name: eks-alb
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:575108933149:certificate/59249c06-77f2-4142-9bf8-43ca7363dec3
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-2-2017-01
+    # 쿠키 관련 설정
+    # alb.ingress.kubernetes.io/load-balancer-attributes: routing.http.drop_invalid_header_fields.enabled=true
+    # alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.type=app_cookie,stickiness.app_cookie.cookie_name=JSESSIONID
+    alb.ingress.kubernetes.io/actions.ssl-redirect: >
+      {"Type": "redirect", "RedirectConfig": {
+        "Protocol": "HTTPS",
+        "Port": "443",
+        "StatusCode": "HTTP_301"
+      }}
+    # # CORS 설정
+    # alb.ingress.kubernetes.io/cors-enabled: "true"
+    # alb.ingress.kubernetes.io/cors-allow-credentials: "true"
+    # alb.ingress.kubernetes.io/cors-allow-headers: "Authorization,Content-Type,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,Cookie"
+    # alb.ingress.kubernetes.io/cors-allow-origins: "https://bomnet.shop"
+    # alb.ingress.kubernetes.io/healthcheck-path: /auth/health
+    alb.ingress.kubernetes.io/healthcheck-path-pattern: >
+      {
+        "llm.bomnet.shop": "/llm/base/health",
+        "auth.bomnet.shop": "/auth/health",
+        "core.bomnet.shop": "/core/health",
+        "notification.bomnet.shop": "/noti/health"
+      }
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ssl-redirect
+                port:
+                  name: use-annotation
+    - host: bomnet.shop
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: front-server-service
+                port:
+                  number: 8185
+    - host: auth.bomnet.shop
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-server-service
+                port:
+                  number: 8180
+
+    - host: llm.bomnet.shop
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: llm-server-service
+                port:
+                  number: 8182
+
+    - host: core.bomnet.shop
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: core-server-service
+                port:
+                  number: 8181
+
+    - host: notification.bomnet.shop
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: notification-server-service
+                port:
+                  number: 8184

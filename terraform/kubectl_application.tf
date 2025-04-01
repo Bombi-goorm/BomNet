@@ -11,3 +11,9 @@ resource "kubectl_manifest" "applications" {
     module.eks
   ]
 }
+
+#resource "kubernetes_manifest" "application_manifests" {
+#  for_each = data.local_file.application_files
+#  manifest = yamldecode(each.value.content)
+#  depends_on = [module.eks, data.local_file.application_files, module.eks_blueprints_addons]
+#}

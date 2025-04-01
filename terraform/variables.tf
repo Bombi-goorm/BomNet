@@ -48,7 +48,7 @@ variable "aws_load_balancer_controller_image_tag" {
 variable "eks_managed_nodes_instance_types" {
   description = "Desired instance type(s) to use as worker node(s)"
   type        = list(string)
-  default     = ["t3.medium", "t3a.medium"]
+  default     = ["m5.xlarge", "m5a.xlarge"]
 }
 
 variable "eks_managed_nodes_capacity_type" {
@@ -150,4 +150,30 @@ variable "db_name" {
   description = "Database name"
   type        = string
   default     = "bombi"
+}
+
+variable "domain_name" {
+  description = "Doamin name"
+  type        = string
+  default     = "bomnet.shop"
+}
+
+variable "certificate_arn" {
+  description = "ARN of ACM certificate"
+  type        = string
+}
+
+variable "db_host" {
+  description = "db host name"
+  type        = string
+}
+
+variable "aws_access_key_id" {
+  description = "aws access key id"
+  type = string
+}
+
+variable "aws_secret_access_key" {
+  description = "aws secret access key"
+  type = string 
 }
