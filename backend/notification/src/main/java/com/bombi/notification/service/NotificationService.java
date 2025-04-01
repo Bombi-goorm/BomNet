@@ -40,7 +40,7 @@ public class NotificationService {
                     .notificationType(type)
                     .title(title)
                     .message(message)
-                    .isRead("N")
+                    .isRead("F")
                     .build();
             Notification saved = notificationRepository.save(notification);
             log.debug("알림 저장 성공 - memberId={}, type={}", member.getId(), type);
