@@ -48,7 +48,7 @@ export interface Conditions {
     sunlightHours: string;      // 일조량 (시간)
     drainage: string;           // 배수 등급 ("양호", "불량" 등)
     soilDepth: string;          // 유효 토심 (cm)
-    pH: string;                 // 토양 산도 (pH)
+    ph: string;                 // 토양 산도 (pH)
 }
 
 
