@@ -31,7 +31,7 @@ const ProductConditions: React.FC<ProductConditionsProps> = ({ productData }) =>
           <ul className="list-disc list-inside space-y-2">
             <li>🌡️ 기온: {conditions.avgTemperatureC}°C (최저 {conditions.minTemperatureC}°C, 최고 {conditions.maxTemperatureC}°C)</li>
             <li>☀️ 일조량: {conditions.sunlightHours}시간</li>
-            <li>🌱 토양 pH: {conditions.pH}</li>
+            <li>🌱 토양 pH: {conditions.ph}</li>
             <li>💧 배수: {conditions.drainage}</li>
             <li>📏 토심: {conditions.soilDepth}cm</li>
           </ul>
