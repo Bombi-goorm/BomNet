@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: notification
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL_TYPE}
+
+gcp:
+  projectId: ${PROJECT_ID}
+  pubsub:
+    credentials: ${GOOGLE_APPLICATION_CREDENTIALS}
+  sub:
+    price: ${PRICE_SUBSCRIPTION_ID}
+    weather: ${WEATHER_SUBSCRIPTION_ID}
+
+server:
+  port: ${NOTI_PORT}
+
+vapid:
+  public: ${VAPID_PUBLIC}
+  private: ${VAPID_PRIVATE}
