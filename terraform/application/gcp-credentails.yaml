@@ -1,0 +1,17 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: gcp-credentials
+  namespace: default
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-secret-store
+    kind: SecretStore
+  target:
+    name: gcp-credentials
+    creationPolicy: Owner
+  data:
+    - secretKey: credentials.json
+      remoteRef:
+        key: gcp_credentials 

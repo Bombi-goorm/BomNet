@@ -1,0 +1,77 @@
+# external-secret.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: core-app-config
+  namespace: default
+spec:
+  secretStoreRef:
+    name: aws-secret-store
+    kind: SecretStore
+  target:
+    name: core-app-config
+  data:
+    - secretKey: DB_HOST
+      remoteRef:
+        key: sususu/core
+        property: DB_HOST
+    - secretKey: DB_PORT
+      remoteRef:
+        key: sususu/core
+        property: DB_PORT
+    - secretKey: DB_NAME
+      remoteRef:
+        key: sususu/core
+        property: DB_NAME
+    - secretKey: DB_USER
+      remoteRef:
+        key: sususu/core
+        property: DB_USER
+    - secretKey: DB_PASS
+      remoteRef:
+        key: sususu/core
+        property: DB_PASS
+    - secretKey: REDIS_HOST
+      remoteRef:
+        key: sususu/core
+        property: REDIS_HOST
+    - secretKey: REDIS_PORT
+      remoteRef:
+        key: sususu/core
+        property: REDIS_PORT
+    - secretKey: JWT_SECRET
+      remoteRef:
+        key: sususu/core
+        property: JWT_SECRET
+    - secretKey: NAVER_ID
+      remoteRef:
+        key: sususu/core
+        property: NAVER_ID
+    - secretKey: NAVER_SECRET
+      remoteRef:
+        key: sususu/core
+        property: NAVER_SECRET
+    - secretKey: NAVER_NEWS_URL
+      remoteRef:
+        key: sususu/core
+        property: NAVER_NEWS_URL
+    - secretKey: GCP_PROJECT_ID
+      remoteRef:
+        key: sususu/core
+        property: GCP_PROJECT_ID
+    # - secretKey: GCS_CREDENTIAL
+    #   remoteRef:
+    #     key: sususu/core
+    #     property: GCS_CREDENTIAL
+    - secretKey: BIGQUERY_CREDENTIAL
+      remoteRef:
+        key: sususu/core
+        property: BIGQUERY_CREDENTIAL
+    - secretKey: AUTH_URL
+      remoteRef:
+        key: sususu/core
+        property: AUTH_URL
+    - secretKey: SOIL_API_KEY
+      remoteRef:
+        key: sususu/core
+        property: SOIL_API_KEY

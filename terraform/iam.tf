@@ -61,38 +61,53 @@
    value       = module.admin_team.iam_role_unique_id
  }
 
- resource "aws_iam_policy" "ecr_access_policy" {
-  name        = "ECRAccessPolicy"
-  description = "Policy granting ECR access to admin users"
 
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect   = "Allow"
-        Action = [
-          "ecr:BatchGetImage",
-          "ecr:BatchGetImage",
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:InitiateLayerUpload",
-          "ecr:UploadLayerPart",
-          "ecr:CompleteLayerUpload",
-          "ecr:PutImage",
-          "ecr:InitiateLayerUpload",
-          "ecr:UploadLayerPart",
-          "ecr:CompleteLayerUpload",
-          "ecr:GetAuthorizationToken"
-        ]
-        Resource = "*"
-      }
-    ]
-  })
+data "aws_iam_policy" "existing_ecr_access_policy" {
+  name = "ECRAccessPolicy"
 }
 
-resource "aws_iam_user_policy_attachment" "ecr_access_attachment" {
-  for_each = toset(var.admin_users)
 
-  user       = each.key
-  policy_arn = aws_iam_policy.ecr_access_policy.arn
-}
+# resource "aws_iam_policy" "ecr_access_policy" {
+#   count = length(data.aws_iam_policy.existing_ecr_access_policy.name) > 0 ? 0 : 1
+
+#   name        = "ECRAccessPolicy"
+#   description = "Policy granting ECR access to admin users"
+
+#   policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [{
+#       Effect = "Allow"
+#       Action = [
+#         "ecr:BatchGetImage",
+#         "ecr:BatchCheckLayerAvailability",
+#         "ecr:GetDownloadUrlForLayer",
+#         "ecr:InitiateLayerUpload",
+#         "ecr:UploadLayerPart",
+#         "ecr:CompleteLayerUpload",
+#         "ecr:PutImage",
+#         "ecr:GetAuthorizationToken"
+#       ]
+#       Resource = "*"
+#     }]
+#   })
+
+#   lifecycle {
+#     create_before_destroy = true
+#     ignore_changes = [name]  # 이름 변경을 무시
+
+#   } 
+# }
+
+# resource "aws_iam_user_policy_attachment" "ecr_access_attachment" {
+#   for_each = toset(var.admin_users)
+
+#   user       = each.key
+#   policy_arn = coalesce(
+#     length(aws_iam_policy.ecr_access_policy) > 0 ? aws_iam_policy.ecr_access_policy[0].arn : "",
+#     data.aws_iam_policy.existing_ecr_access_policy.arn
+#   )
+
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
