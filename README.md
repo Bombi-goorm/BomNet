@@ -1,19 +1,42 @@
-![](docs/title.png)
+<p align="center">
+  <img src="docs/title.png" width="1000"/>
+</p>
 
 
-# 💁‍♂️ 팀원
-|                     PM/TL                      |                      Data                      |                     Dev                      |                     Infra                      |
-|:----------------------------------------------:|:----------------------------------------------:|:--------------------------------------------:|:----------------------------------------------:|
-| ![](https://github.com/klolarion.png?size=120) | ![](https://github.com/why-arong.png?size=120) | ![](https://github.com/ostar11.png?size=120) | ![](https://github.com/hansususu.png?size=120) |
-|      [김재근](https://github.com/klolarion)       |      [김필모](https://github.com/why-arong)       |      [조정완](https://github.com/ostar11)       |      [한수빈](https://github.com/hansususu)       |
 
+<h2>💁‍♂️ 팀원</h2>
+
+<table align="center">
+  <thead>
+    <tr>
+      <th>PM/TL</th>
+      <th>Data</th>
+      <th>Dev</th>
+      <th>Infra</th>
+    </tr>
+  </thead>
+  <tbody align="center">
+    <tr>
+      <td><img src="https://github.com/klolarion.png?size=120" width="100"/></td>
+      <td><img src="https://github.com/why-arong.png?size=120" width="100"/></td>
+      <td><img src="https://github.com/ostar11.png?size=120" width="100"/></td>
+      <td><img src="https://github.com/hansususu.png?size=120" width="100"/></td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/klolarion">김재근</a></td>
+      <td><a href="https://github.com/why-arong">김필모</a></td>
+      <td><a href="https://github.com/ostar11">조정완</a></td>
+      <td><a href="https://github.com/hansususu">한수빈</a></td>
+    </tr>
+  </tbody>
+</table>
+
+---
 
 #  📝 프로젝트 개요
-- ### 프로젝트 이름: 봄넷
 농업 생산자들이 시장 가격, 재배 정보, 날씨 정보를 쉽게 확인할 수 있는 서비스를 제공합니다.<br/>
-기존의 복잡한 정보 검색 과정 없이, <br/>
-시각화된 데이터와 챗봇 기반 질문 응답을 통해 누구나 쉽게 의사결정을 할 수 있도록 돕습니다.
----
+기존의 복잡한 정보 검색 과정 없이, 시각화된 데이터와 챗봇 기반 질문 응답을 통해 누구나 쉽게 의사결정을 할 수 있도록 돕습니다.
+
 # 💻 주요 기능
 - **로그인**:
   - 소셜인증 후 JWT기반 인증 관리
