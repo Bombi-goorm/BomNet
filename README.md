@@ -1,9 +1,19 @@
 ![](docs/title.png)
----
+
+
+# 💁‍♂️ 팀원
+|                     PM/TL                      |                      Data                      |                     Dev                      |                     Infra                      |
+|:----------------------------------------------:|:----------------------------------------------:|:--------------------------------------------:|:----------------------------------------------:|
+| ![](https://github.com/klolarion.png?size=120) | ![](https://github.com/why-arong.png?size=120) | ![](https://github.com/ostar11.png?size=120) | ![](https://github.com/hansususu.png?size=120) |
+|      [김재근](https://github.com/klolarion)       |      [김필모](https://github.com/why-arong)       |      [조정완](https://github.com/ostar11)       |      [한수빈](https://github.com/hansususu)       |
+
+
 #  📝 프로젝트 개요
 - ### 프로젝트 이름: 봄넷
-- ### 프로젝트 설명: 농업 생산자를 위한 종합 데이터 분석 서비스
-
+농업 생산자들이 시장 가격, 재배 정보, 날씨 정보를 쉽게 확인할 수 있는 서비스를 제공합니다.<br/>
+기존의 복잡한 정보 검색 과정 없이, <br/>
+시각화된 데이터와 챗봇 기반 질문 응답을 통해 누구나 쉽게 의사결정을 할 수 있도록 돕습니다.
+---
 # 💻 주요 기능
 - **로그인**:
   - 소셜인증 후 JWT기반 인증 관리
@@ -20,66 +30,69 @@
 
 - **시각화된 가격정보**:
   - 년/월/일 단위의 가격추이
-  - 실시강 경락가
+  - 실시간 경락가
   - 품질(특,상,중,등외)별 가격
   - 지역별 가격
   - 품종별 생산지 -> 판매지 흐름 분석
 
-- ****:
-  - 연동된 계좌에서 대상 계좌로 송금할 수 있습니다.
+- **적합도 분석**:
+  - 대상 농지의 토양,기상 특성과 작물의 재배특성으로 재배 적합도 분석
 
 - **푸시 알림**:
   - 기상 특보
   - 목표 경락가 도달
 
+---
 # 📱 주요 화면 구성
 
-![](docs/asset/openbanking.png)
-![](docs/asset/settlement.png)
+![](docs/page/home.png)
+![](docs/page/realtime.png)
+![](docs/page/chart2.png)
+![](docs/page/product.png)
+![](docs/page/info.png)
+![](docs/page/noti.png)
 
-
-# 💁‍♂️ 팀원
-|                     PM/TL                      |                      Data                      |                     Dev                      |                     Infra                      |
-|:----------------------------------------------:|:----------------------------------------------:|:--------------------------------------------:|:----------------------------------------------:|
-| ![](https://github.com/klolarion.png?size=120) | ![](https://github.com/why-arong.png?size=120) | ![](https://github.com/ostar11.png?size=120) | ![](https://github.com/hansususu.png?size=120) |
-|      [김재근](https://github.com/klolarion)       |      [김필모](https://github.com/why-arong)       |      [조정완](https://github.com/ostar11)       |      [한수빈](https://github.com/hansususu)       |
-<br/>
-
+---
 
 # ⚙ 기술 스택
 
 ### Frontend
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=white)
-![ReactQuery](https://img.shields.io/badge/ReactQuery-FF4154?logo=reactquery&logoColor=white)
-![ContextAPI](https://img.shields.io/badge/ContextAPI-61DAFB?logoColor=white)
 
 ### Backend
 ![SpringBoot](https://img.shields.io/badge/SpringBoot-6DB33F?logo=springboot&logoColor=white)
-![JPA](https://img.shields.io/badge/JPA-6DB33F?&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-6DB33F?&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
 ![Redis](https://img.shields.io/badge/Redis-FF4438?logo=redis&logoColor=white)
 ![MariaDB](https://img.shields.io/badge/MariaDB-003545?logo=mariadb&logoColor=white)
 
 ### Infra
-![Helm](https://img.shields.io/badge/Helm-0F1689?logo=helm&logoColor=white)
-![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?logo=kubernetes&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-232F3E?logo=amazonwebservices&logoColor=white)
+![EKS](https://img.shields.io/badge/EKS-FF9900?logo=amazoneks&logoColor=white)
+![GCP](https://img.shields.io/badge/GCP-4285F4?logo=googlecloud&logoColor=white)
+![Terraform](https://img.shields.io/badge/Terraform-844FBA?logo=terraform&logoColor=white)
+
+### CD/CI
+![Github](https://img.shields.io/badge/Github-181717?logo=github&logoColor=white)
 ![Jenkins](https://img.shields.io/badge/Jenkins-D24939?logo=jenkins&logoColor=white)
-![ArgoCD](https://img.shields.io/badge/ArgoCD-D24939?logo=argo&logoColor=white)
+![ArgoCD](https://img.shields.io/badge/ArgoCD-EF7B4D?logo=argo&logoColor=white)
+![Helm](https://img.shields.io/badge/Helm-0F1689?logo=helm&logoColor=white)
+
 ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?logo=prometheus&logoColor=white)
 ![Grafana](https://img.shields.io/badge/Grafana-F46800?logo=grafana&logoColor=white)
+![FluentBit](https://img.shields.io/badge/FluentBit-49BDA5?logo=fluentbit&logoColor=white)
+![ElasticSearch](https://img.shields.io/badge/ElasticSearch-005571?logo=elasticsearch&logoColor=white)
+![Kibana](https://img.shields.io/badge/Kibana-005571?logo=kibana&logoColor=white)
 
-![AWS](https://img.shields.io/badge/AWS-FF9900?logoColor=white)
-![EKS](https://img.shields.io/badge/EKS-FF9900?logoColor=white)
 
 
 ### Data
-![GCP](https://img.shields.io/badge/GCP-8C4FFF?logoColor=white)
-![AirFlow](https://img.shields.io/badge/AirFlow-8C4FFF?logoColor=white)
-![DBT](https://img.shields.io/badge/DBT-8C4FFF?logoColor=white)
+![BigQuery](https://img.shields.io/badge/BigQuery-669DF6?logo=googlebigquery&logoColor=white)
+![AirFlow](https://img.shields.io/badge/AirFlow-017CEE?logo=apacheairflow&logoColor=white)
+![DBT](https://img.shields.io/badge/DBT-FF694B?logo=dbt&logoColor=white)
+![PubSub](https://img.shields.io/badge/PubSub-AECBFA?logo=googlepubsub&logoColor=white)
 
 ### Tools
-![Github](https://img.shields.io/badge/Github-181717?logo=github&logoColor=white)
 ![Slack](https://img.shields.io/badge/Slack-4A154B?logo=slack&logoColor=white)
 ![Notion](https://img.shields.io/badge/Notion-000000?logo=notion&logoColor=white)
 ![DrawIO](https://img.shields.io/badge/DrawIO-F08705?logo=diagramsdotnet&logoColor=white)
@@ -87,12 +100,10 @@
 
 
 ### API
-![NaverSMS](https://img.shields.io/badge/NaverSearch-03C75A?logo=naver&logoColor=white)
-![KAMIS](https://img.shields.io/badge/KAMIS-0052CC?logoColor=white)
-![KMA](https://img.shields.io/badge/KMA-0052CC?logoColor=white)
-![MAFRA](https://img.shields.io/badge/MAFRA-0052CC?logoColor=white)
+![NaverSearch](https://img.shields.io/badge/NaverSearch-03C75A?logo=naver&logoColor=white)
+![DataGO](https://img.shields.io/badge/DataGO-0052CC?logoColor=white)
 
-
+---
 # 📦 프로젝트 구조
 ```plaintext
 
@@ -131,30 +142,28 @@ elt-pipeline/                # 데이터 파이프라인
 └── README.md                
 
 ```
-
-<br/>
-
-
-## Github 브랜치 관리
-- dev → 개인브랜치(작업용) → dev 병합
-- 개인브랜치 명명 규칙
-  - 이름(닉네임)-작업할 모듈(Frontend, Core-Server)-작업목적
-    - ex) JK-Frontend-상품페이지 구현
-
 ---
 
-## Github 커밋 규칙
-- 목적/해당 모듈-이름(닉네임)
+## 🔁 Git Workflow
+### Github 브랜치 관리
+- 브랜치 흐름
+  - dev → 개인 브랜치(작업) → dev 병합
+
+- 브랜치 네이밍 규칙
+  - 이름(닉네임)-모듈-작업내용
+  - ex) JK-Frontend-상품페이지구현
+
+### Github 커밋 메시지
+- 형식
+  - 목적/해당 모듈-이름(닉네임)
   - ex) feat/AuthService-JK
-- 목적 리스트
+- Prefix
   - feat/ - 신규 개발
   - up/ - 기존 코드 수정
   - fix/ - 오류 수정
   - docs/ - 문서 관련 작업
 
----
-
-PR 템플릿
+### PR 템플릿
 
 ✨ 작업 개요 (Overview)
 
@@ -164,8 +173,20 @@ PR 템플릿
 
 📝 기타 (Notes)
 
+---
 
 # 🛠️ 프로젝트 아키텍처
-![](docs/시스템 아키텍처.png)
-
-<br/>
+- ### Cloud
+![](docs/archi.png)
+- ### EKS
+![](docs/eks.png)
+- ### CD/CI
+![](docs/cdci.png)
+- ### DR
+![](docs/dr.png)
+- ### Service
+![](docs/service.png)
+- ### Cache
+![](docs/cache.png)
+- ### Data
+![](docs/data.png)
