@@ -33,13 +33,11 @@ public class BestProductPriceApiClient {
 	public List<ProductPriceResponse> callBestProductPrice(List<String> productCodes) {
 
 		String query = "SELECT"
-			// + " *"
 			+ "    SALEDATE,"
 			+ "    avg_cost_per_kg AS price,"
 			+ "    MIDNAME"
 			+ " FROM `goorm-bomnet.mafra.trans_auction`"
 			+ " WHERE MIDNAME IN ('사과', '블루베리', '딸기', '참외', '오이')"
-			// + " WHERE MIDNAME IN UNNEST(@productNames)"
 			+ " ORDER BY SALEDATE;";
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
@@ -77,7 +75,6 @@ public class BestProductPriceApiClient {
 
 		long index = 1L;
 		for (Map.Entry<String, List<ProductPriceInfo>> entry : resultMap.entrySet()) {
-			// ProductPriceResponse productPriceResponse = new ProductPriceResponse(entry.getKey(), entry.getValue());
 			ProductPriceResponse productPriceResponse = new ProductPriceResponse(index, entry.getKey(), entry.getValue());
 			index++;
 			responses.add(productPriceResponse);

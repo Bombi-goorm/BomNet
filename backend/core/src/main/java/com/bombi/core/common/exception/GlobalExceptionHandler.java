@@ -141,4 +141,11 @@ public class GlobalExceptionHandler {
         CoreResponseDto response = new CoreResponseDto("FAILURE", "서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
+
+    @ExceptionHandler(EntityNotFoundByPropertyException.class)
+    public ResponseEntity<?> handleEntityNotFoundByPropertyException(EntityNotFoundByPropertyException e) {
+        log.warn("EntityNotFoundByPropertyException - " + e.getMessage());
+        CoreResponseDto response = new CoreResponseDto("FAILURE", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
 }
