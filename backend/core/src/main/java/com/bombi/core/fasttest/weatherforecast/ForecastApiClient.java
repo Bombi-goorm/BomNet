@@ -11,7 +11,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.bombi.core.common.exception.NewsFailedException;
+import com.bombi.core.common.exception.NaverOpenApiException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +54,7 @@ public class ForecastApiClient {
 
 			// 응답 결과가 실패인 경우
 			if (responseEntity.getStatusCode() != HttpStatus.OK) {
-				throw new NewsFailedException("응답이 null이거나 유효하지 않습니다.");
+				throw new IllegalStateException("응답이 null이거나 유효하지 않습니다.");
 			}
 
 			log.info("ForecastApiClient::sendWeatherForecast END");

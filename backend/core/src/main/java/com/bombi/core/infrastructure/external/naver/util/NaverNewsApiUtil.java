@@ -16,6 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class NaverNewsApiUtil {
 
+    private static final String NAVER_OPENAPI_URI = "https://openapi.naver.com";
+    private static final String NAVER_OPENAPI_NEWS_PATH = "/v1/search/news.json";
+
     @Value("${naver.news.api.url}")
     private String NAVER_OCR_API_URL;
 
@@ -26,33 +29,23 @@ public class NaverNewsApiUtil {
     private String NAVER_CLIENT_SECRET;
 
     public HttpHeaders createNewsHeader() {
-        log.info("NaverApiUtil::createNewsHeader START");
         HttpHeaders headers = new HttpHeaders();
 
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("X-Naver-Client-Id", NAVER_CLIENT_ID);
         headers.set("X-Naver-Client-Secret", NAVER_CLIENT_SECRET);
 
-        log.info("NaverApiUtil::createNewsHeader END");
-
         return headers;
     }
 
     public URI createNewsUri(String display, String start) {
-        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.set("query", "농산물");
-        queryParams.set("display", display);
-        queryParams.set("start", start);
-        queryParams.set("sort", "sim");
-
         return UriComponentsBuilder
-            .fromUriString("https://openapi.naver.com")
-            .path("/v1/search/news.json")
-            // .queryParams(queryParams)
+            .fromUriString(NAVER_OPENAPI_URI)
+            .path(NAVER_OPENAPI_NEWS_PATH)
             .queryParam("query", "농산물")
             .queryParam("sort", "sim")
-            .queryParam("display", 10)
-            .queryParam("start", 1)
+            .queryParam("display", display)
+            .queryParam("start", start)
             .encode()
             .build()
             .toUri();
