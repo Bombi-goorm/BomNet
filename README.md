@@ -1,7 +1,12 @@
 <p align="center">
-  <img src="docs/title.png" width="1000"/>
+  <img src="docs/gp.png" width="1000"/>
 </p>
 
+---
+
+<p align="center">
+  <img src="docs/title.png" width="1000"/>
+</p>
 
 
 <h2>💁‍♂️ 팀원</h2>
