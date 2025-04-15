@@ -5,31 +5,39 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.bombi.core.common.utils.TimeUtil;
+import com.bombi.core.common.utils.time.TimePolicy;
 import com.bombi.core.infrastructure.external.price.variety.client.RealtimeVarietyPriceCollector;
 import com.bombi.core.application.service.cache.RedisCacheService;
 import com.bombi.core.infrastructure.external.price.variety.dto.VarietyPriceInfo;
 import com.bombi.core.presentation.dto.price.ProductPriceDto;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class RealtimeItemPriceService {
 
 	public static final Duration CACHE_DURATION = Duration.ofMinutes(30L);
 	public static final Duration FALLBACK_CACHE_DURATION = Duration.ofHours(24L);
 
+	private final TimePolicy timePolicy;
 	private final RealtimeVarietyPriceCollector realtimeVarietyPriceCollector;
 	private final RedisCacheService redisCacheService;
 
+	public RealtimeItemPriceService(@Qualifier("realtimePriceTimePolicy") TimePolicy timePolicy,
+		RealtimeVarietyPriceCollector realtimeVarietyPriceCollector,
+		RedisCacheService redisCacheService) {
+		this.timePolicy = timePolicy;
+		this.realtimeVarietyPriceCollector = realtimeVarietyPriceCollector;
+		this.redisCacheService = redisCacheService;
+	}
+
 	public List<ProductPriceDto> getRealtimeItemPrice(String item) {
-		String startDateTime = TimeUtil.getRealtimePriceStartTime();
-		String endDateTime = TimeUtil.getRealtimePriceEndTime();
+		String startDateTime = timePolicy.getStartTime();
+		String endDateTime = timePolicy.getEndTime();
 
 		List<VarietyPriceInfo> varietyPriceInfos = realtimeVarietyPriceCollector.sendVarietyPriceTrend(item, startDateTime, endDateTime);
 

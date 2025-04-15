@@ -1,24 +1,29 @@
 package com.bombi.core.application.service.weather.special;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.bombi.core.common.utils.TimeUtil;
+import com.bombi.core.common.utils.time.TimePolicy;
 import com.bombi.core.infrastructure.external.weather.client.SpecialWeatherReportApiClient;
 import com.bombi.core.infrastructure.external.weather.dto.SpecialWeatherReportResponse;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class SpecialWeatherReportService {
 
+	private final TimePolicy timePolicy;
 	private final SpecialWeatherReportApiClient apiClient;
 
-	public SpecialWeatherReportResponse getSpecialWeatherReport() {
-		String todayDateTime = TimeUtil.getSpecialWeatherReportStartTime();
-		String tomorrowDateTime = TimeUtil.getSpecialWeatherReportEndTime();
+	public SpecialWeatherReportService(@Qualifier("specialReportTimePolicy") TimePolicy timePolicy,
+		SpecialWeatherReportApiClient apiClient) {
+		this.timePolicy = timePolicy;
+		this.apiClient = apiClient;
+	}
 
-		return apiClient.sendSpecialWeatherReport(todayDateTime, tomorrowDateTime);
+	public SpecialWeatherReportResponse getSpecialWeatherReport() {
+		String startTime = timePolicy.getStartTime();
+		String endTime = timePolicy.getEndTime();
+
+		return apiClient.sendSpecialWeatherReport(startTime, endTime);
 	}
 
 }
