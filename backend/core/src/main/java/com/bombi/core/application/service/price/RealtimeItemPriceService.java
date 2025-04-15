@@ -1,16 +1,13 @@
 package com.bombi.core.application.service.price;
 
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.bombi.core.common.utils.TimeUtil;
 import com.bombi.core.infrastructure.external.price.variety.client.RealtimeVarietyPriceCollector;
 import com.bombi.core.application.service.cache.RedisCacheService;
 import com.bombi.core.infrastructure.external.price.variety.dto.VarietyPriceInfo;
@@ -31,8 +28,8 @@ public class RealtimeItemPriceService {
 	private final RedisCacheService redisCacheService;
 
 	public List<ProductPriceDto> getRealtimeItemPrice(String item) {
-		String startDateTime = createStartDate();
-		String endDateTime = createEndDate();
+		String startDateTime = TimeUtil.getRealtimePriceStartTime();
+		String endDateTime = TimeUtil.getRealtimePriceEndTime();
 
 		List<VarietyPriceInfo> varietyPriceInfos = realtimeVarietyPriceCollector.sendVarietyPriceTrend(item, startDateTime, endDateTime);
 
@@ -59,20 +56,6 @@ public class RealtimeItemPriceService {
 		redisCacheService.setCacheWithTime("RealTimePrice::" + item + "::fallback", varietyPriceInfos, FALLBACK_CACHE_DURATION);
 
 		return convertToProductPriceDto(varietyPriceInfos);
-	}
-
-	private String createStartDate() {
-		LocalDate localDate = LocalDate.now().minusDays(2L);
-		LocalTime midnight = LocalTime.MIDNIGHT;
-		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		return localDateTime.format(formatter);
-	}
-
-	private String createEndDate() {
-		LocalDateTime localDateTime = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		return localDateTime.format(formatter);
 	}
 
 	private List<ProductPriceDto> convertToProductPriceDto(List<VarietyPriceInfo> varietyPriceInfos) {

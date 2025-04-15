@@ -18,16 +18,4 @@ public class RegionItemPriceService {
 	public List<RegionChartData> getRegionItemPrice(String item) {
 		return regionVarietyPriceCollector.sendVarietyPriceTrend(item);
 	}
-
-	// private String createStartDate() {
-	// 	LocalDateTime localDateTime = LocalDateTime.now().minusDays(7);
-	// 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	// 	return localDateTime.format(formatter);
-	// }
-	//
-	// private String createEndDate() {
-	// 	LocalDateTime localDateTime = LocalDateTime.now();
-	// 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	// 	return localDateTime.format(formatter);
-	// }
 }

@@ -35,16 +35,8 @@ public class WeatherForecastApiClient {
 				+ " AND nx = @nx AND ny = @ny"
 				+ " ORDER BY fcst_date_time ASC";
 
-//		+ " WHERE fcst_date_time >= '2025-03-27 00:00:00' and fcst_date_time <= '2025-03-28 00:00:00'"
-//				+ " WHERE nx = '60' AND ny = '127'"
-
-		// String startTime = getForecastStartTime();
-		// String endTime = getForecastEndTime();
 		String nx = region.getXx();
 		String ny = region.getYy();
-
-		// log.info("Start time: {}, End time : {}", startTime, endTime);
-		// log.info("NX: {}, NY: {}", nx, ny);
 
 		QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
 				.addNamedParameter("startFcstTime", QueryParameterValue.string(startTime))
@@ -85,22 +77,6 @@ public class WeatherForecastApiClient {
 		} catch (Exception e) {
 			throw new RuntimeException("BigQuery 쿼리 실행 중 오류 발생", e);
 		}
-	}
-
-	private String getForecastStartTime() {
-		LocalDateTime localDateTime = LocalDateTime.now();
-// 		LocalDate localDate = LocalDate.now();
-// 		LocalTime midnight = LocalTime.MIDNIGHT;
-// 		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
-		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-	}
-
-	private String getForecastEndTime() {
-    LocalDateTime localDateTime = LocalDateTime.now().plusHours(6L);
-// 		LocalDate localDate = LocalDate.now().plusDays(1);
-// 		LocalTime midnight = LocalTime.MIDNIGHT;
-// 		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
-		return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 
 }
