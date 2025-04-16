@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.bombi.core.common.utils.ChartDtoConverter;
 import com.bombi.core.common.utils.time.TimePolicy;
 import com.bombi.core.infrastructure.external.price.variety.client.RealtimeVarietyPriceCollector;
 import com.bombi.core.application.service.cache.RedisCacheService;
@@ -56,31 +57,14 @@ public class RealtimeItemPriceService {
 			// 기존 캐시에 fallback캐시값을 복사해 저장
 			redisCacheService.setCacheWithTime("RealTimePrice::" + item, fallbackVarietyPriceInfos, CACHE_DURATION);
 
-			return convertToProductPriceDto(fallbackVarietyPriceInfos);
+			return ChartDtoConverter.convertToProductPriceDto(fallbackVarietyPriceInfos);
 		}
 
 		// 캐시 or 실제 값 조회에 데이터가 존재한다면 fallback 캐시 설정
 		log.info("Fallback 캐시 업데이트");
 		redisCacheService.setCacheWithTime("RealTimePrice::" + item + "::fallback", varietyPriceInfos, FALLBACK_CACHE_DURATION);
 
-		return convertToProductPriceDto(varietyPriceInfos);
+		return ChartDtoConverter.convertToProductPriceDto(varietyPriceInfos);
 	}
 
-	private List<ProductPriceDto> convertToProductPriceDto(List<VarietyPriceInfo> varietyPriceInfos) {
-		List<ProductPriceDto> productPriceDtos = new ArrayList<>();
-
-		for (int index = 0; index < varietyPriceInfos.size(); index++) {
-			VarietyPriceInfo varietyPriceInfo = varietyPriceInfos.get(index);
-
-			int chartIndex = index + 1;
-			ProductPriceDto productPriceDto = new ProductPriceDto(chartIndex, varietyPriceInfo.getVariety(),
-				varietyPriceInfo.getAveragePricePerKg(),
-				varietyPriceInfo.getDateTime(),
-				varietyPriceInfo.getMarket());
-
-			productPriceDtos.add(productPriceDto);
-		}
-
-		return productPriceDtos;
-	}
 }
