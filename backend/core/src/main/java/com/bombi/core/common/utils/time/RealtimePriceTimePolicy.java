@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 
 import org.springframework.stereotype.Component;
 
+import com.bombi.core.common.constants.TimeConstants;
+
 @Component
 public class RealtimePriceTimePolicy implements TimePolicy {
 
@@ -15,14 +17,14 @@ public class RealtimePriceTimePolicy implements TimePolicy {
 		LocalDate localDate = LocalDate.now().minusDays(2L);
 		LocalTime midnight = LocalTime.MIDNIGHT;
 		LocalDateTime localDateTime = LocalDateTime.of(localDate, midnight);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_STRING);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TimeConstants.LOCAL_DATE_TIME_STRING);
 		return localDateTime.format(formatter);
 	}
 
 	@Override
 	public String getEndTime() {
 		LocalDateTime localDateTime = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_STRING);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TimeConstants.LOCAL_DATE_TIME_STRING);
 		return localDateTime.format(formatter);
 	}
 }

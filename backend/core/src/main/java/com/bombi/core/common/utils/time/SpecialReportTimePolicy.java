@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 
 import org.springframework.stereotype.Component;
 
+import com.bombi.core.common.constants.TimeConstants;
+
 @Component
 public class SpecialReportTimePolicy implements TimePolicy {
 
@@ -17,7 +19,7 @@ public class SpecialReportTimePolicy implements TimePolicy {
 
 		LocalDateTime localDateTime = LocalDateTime.of(today, localTime);
 
-		return localDateTime.format(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_STRING));
+		return localDateTime.format(DateTimeFormatter.ofPattern(TimeConstants.LOCAL_DATE_TIME_STRING));
 	}
 
 	@Override
@@ -27,6 +29,6 @@ public class SpecialReportTimePolicy implements TimePolicy {
 
 		LocalDateTime localDateTime = LocalDateTime.of(tomorrow, localTime);
 
-		return localDateTime.format(DateTimeFormatter.ofPattern(LOCAL_DATE_TIME_STRING));
+		return localDateTime.format(DateTimeFormatter.ofPattern(TimeConstants.LOCAL_DATE_TIME_STRING));
 	}
 }
