@@ -1,39 +1,31 @@
 package com.bombi.core.application.service.price;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.bombi.core.common.utils.time.TimePolicy;
 import com.bombi.core.infrastructure.external.price.variety.client.QualityVarietyPriceCollector;
 import com.bombi.core.presentation.dto.price.QualityChartData;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class QualityItemPriceService {
 
+	private final TimePolicy timePolicy;
 	private final QualityVarietyPriceCollector qualityVarietyPriceCollector;
 
+	public QualityItemPriceService(@Qualifier("dailyPriceTimePolicy") TimePolicy timePolicy,
+		QualityVarietyPriceCollector qualityVarietyPriceCollector) {
+		this.timePolicy = timePolicy;
+		this.qualityVarietyPriceCollector = qualityVarietyPriceCollector;
+	}
+
 	public List<QualityChartData> getQualityItemPrice(String item) {
-		String startDateTime = createStartDate();
-		String endDateTime = createEndDate();
+		String startDateTime = timePolicy.getStartTime();
+		String endDateTime = timePolicy.getEndTime();
 
 		return qualityVarietyPriceCollector.sendVarietyPriceTrend(item, startDateTime, endDateTime);
-	}
-
-	private String createStartDate() {
-		LocalDateTime localDateTime = LocalDateTime.now().minusDays(30);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		return localDateTime.format(formatter);
-	}
-
-	private String createEndDate() {
-		LocalDateTime localDateTime = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		return localDateTime.format(formatter);
 	}
 
 }
