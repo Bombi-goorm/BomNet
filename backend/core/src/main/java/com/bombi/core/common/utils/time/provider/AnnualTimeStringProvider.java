@@ -20,13 +20,13 @@ public class AnnualTimeStringProvider implements TimeStringProvider {
 	@Override
 	public String getStartDateString() {
 		LocalDateTime startDate = timeGenerator.generateStartTime();
-		return TimeFormatter.formatToDateTimeString(startDate);
+		return TimeFormatter.formatToDateString(startDate);
 	}
 
 	@Override
 	public String getEndDateString() {
 		LocalDateTime endDate = timeGenerator.generateEndTime();
-		return TimeFormatter.formatToDateTimeString(endDate);
+		return TimeFormatter.formatToDateString(endDate);
 	}
 
 }
