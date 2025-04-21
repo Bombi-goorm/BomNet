@@ -19,7 +19,8 @@ public class SpecialReportTimePolicy implements TimePolicy {
 
 		LocalDateTime localDateTime = LocalDateTime.of(today, localTime);
 
-		return localDateTime.format(DateTimeFormatter.ofPattern(TimeConstants.LOCAL_DATE_TIME_STRING));
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TimeConstants.LOCAL_DATE_TIME_STRING);
+		return localDateTime.format(formatter);
 	}
 
 	@Override
