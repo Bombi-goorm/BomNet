@@ -1,7 +1,6 @@
 package com.bombi.core.application.service.price;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,7 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.bombi.core.common.utils.ChartDtoConverter;
-import com.bombi.core.common.utils.time.TimePolicy;
+import com.bombi.core.common.utils.time.provider.TimeStringProvider;
 import com.bombi.core.infrastructure.external.price.variety.client.RealtimeVarietyPriceCollector;
 import com.bombi.core.application.service.cache.RedisCacheService;
 import com.bombi.core.infrastructure.external.price.variety.dto.VarietyPriceInfo;
@@ -24,21 +23,21 @@ public class RealtimeItemPriceService {
 	public static final Duration CACHE_DURATION = Duration.ofMinutes(30L);
 	public static final Duration FALLBACK_CACHE_DURATION = Duration.ofHours(24L);
 
-	private final TimePolicy timePolicy;
+	private final TimeStringProvider timeStringProvider;
 	private final RealtimeVarietyPriceCollector realtimeVarietyPriceCollector;
 	private final RedisCacheService redisCacheService;
 
-	public RealtimeItemPriceService(@Qualifier("realtimePriceTimePolicy") TimePolicy timePolicy,
+	public RealtimeItemPriceService(@Qualifier("realtimeStringProvider") TimeStringProvider timeStringProvider,
 		RealtimeVarietyPriceCollector realtimeVarietyPriceCollector,
 		RedisCacheService redisCacheService) {
-		this.timePolicy = timePolicy;
+		this.timeStringProvider = timeStringProvider;
 		this.realtimeVarietyPriceCollector = realtimeVarietyPriceCollector;
 		this.redisCacheService = redisCacheService;
 	}
 
 	public List<ProductPriceDto> getRealtimeItemPrice(String item) {
-		String startDateTime = timePolicy.getStartTime();
-		String endDateTime = timePolicy.getEndTime();
+		String startDateTime = timeStringProvider.getStartDateString();
+		String endDateTime = timeStringProvider.getEndDateString();
 
 		List<VarietyPriceInfo> varietyPriceInfos = realtimeVarietyPriceCollector.sendVarietyPriceTrend(item, startDateTime, endDateTime);
 
