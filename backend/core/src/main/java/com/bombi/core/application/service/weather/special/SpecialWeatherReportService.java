@@ -3,25 +3,25 @@ package com.bombi.core.application.service.weather.special;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.bombi.core.common.utils.time.TimePolicy;
+import com.bombi.core.common.utils.time.provider.TimeStringProvider;
 import com.bombi.core.infrastructure.external.weather.client.SpecialWeatherReportApiClient;
 import com.bombi.core.infrastructure.external.weather.dto.SpecialWeatherReportResponse;
 
 @Service
 public class SpecialWeatherReportService {
 
-	private final TimePolicy timePolicy;
+	private final TimeStringProvider timeStringProvider;
 	private final SpecialWeatherReportApiClient apiClient;
 
-	public SpecialWeatherReportService(@Qualifier("specialReportTimePolicy") TimePolicy timePolicy,
+	public SpecialWeatherReportService(@Qualifier("specialWeatherTimeStringProvider") TimeStringProvider timeStringProvider,
 		SpecialWeatherReportApiClient apiClient) {
-		this.timePolicy = timePolicy;
+		this.timeStringProvider = timeStringProvider;
 		this.apiClient = apiClient;
 	}
 
 	public SpecialWeatherReportResponse getSpecialWeatherReport() {
-		String startTime = timePolicy.getStartTime();
-		String endTime = timePolicy.getEndTime();
+		String startTime = timeStringProvider.getStartDateString();
+		String endTime = timeStringProvider.getEndDateString();
 
 		return apiClient.sendSpecialWeatherReport(startTime, endTime);
 	}
